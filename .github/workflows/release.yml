@@ -3,7 +3,7 @@ name: Build and Release
 on:
   push:
     tags:
-      - 'v*.*.*'  # Triggers only on version tags like v1.0.0, v1.2.3
+      - 'v*.*.*'
 
 env:
   PROJECT_PATH: ./digital-wellbeing-app.csproj
@@ -25,20 +25,20 @@ jobs:
           dotnet-version: '9.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore ${{ env.PROJECT_PATH }}
+        run: dotnet restore "${{ env.PROJECT_PATH }}"
 
       - name: Set version from tag
         run: |
           $version = "${{ github.ref_name }}".TrimStart("v")
-          (Get-Content $env:PROJECT_PATH) -replace '<Version>.*</Version>', "<Version>$version</Version>" |
-            Set-Content $env:PROJECT_PATH
+          (Get-Content "${{ env.PROJECT_PATH }}") -replace '<Version>.*</Version>', "<Version>$version</Version>" |
+            Set-Content "${{ env.PROJECT_PATH }}"
           echo "Version set to $version"
 
       - name: Publish EXE (Self-contained)
-        run: dotnet publish $env:PROJECT_PATH -c Release -r win-x64 --self-contained true -o $env:PUBLISH_DIR
+        run: dotnet publish "${{ env.PROJECT_PATH }}" -c Release -r win-x64 --self-contained true -o "${{ env.PUBLISH_DIR }}"
 
       - name: Zip the published folder
-        run: Compress-Archive -Path "${{ env:PUBLISH_DIR }}\*" -DestinationPath "${{ env:ZIP_NAME }}"
+        run: Compress-Archive -Path "${{ env.PUBLISH_DIR }}\*" -DestinationPath "${{ env.ZIP_NAME }}"
 
       - name: Read CHANGELOG
         id: changelog
@@ -61,6 +61,6 @@ jobs:
           tag_name: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
           body: ${{ steps.changelog.outputs.body }}
-          files: digital-wellbeing-app.zip
+          files: ${{ env.ZIP_NAME }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
