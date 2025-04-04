@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*.*.*'
 
+permissions:
+    contents: write
+
 env:
   PROJECT_PATH: ./digital-wellbeing-app/digital-wellbeing-app.csproj
   PUBLISH_DIR: ./publish
