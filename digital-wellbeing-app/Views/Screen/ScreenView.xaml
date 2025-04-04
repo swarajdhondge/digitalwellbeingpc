@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="digital_wellbeing_app.Views.Screen.ScreenView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:digital_wellbeing_app.ViewModels"
+             Loaded="UserControl_Loaded">
+
+    <UserControl.DataContext>
+        <vm:ScreenViewModel />
+    </UserControl.DataContext>
+
+    <StackPanel Margin="20">
+        <TextBlock Text="Today's Screen Time Timeline:" FontSize="16" Margin="0,0,0,5"/>
+
+        <Grid Background="LightGray" Height="25">
+            <Canvas x:Name="TimeCanvas" />
+        </Grid>
+
+        <UniformGrid Columns="9" Margin="0,2,0,0">
+            <TextBlock Text="12 AM" HorizontalAlignment="Center" />
+            <TextBlock Text="3 AM" HorizontalAlignment="Center" />
+            <TextBlock Text="6 AM" HorizontalAlignment="Center" />
+            <TextBlock Text="9 AM" HorizontalAlignment="Center" />
+            <TextBlock Text="12 PM" HorizontalAlignment="Center" />
+            <TextBlock Text="3 PM" HorizontalAlignment="Center" />
+            <TextBlock Text="6 PM" HorizontalAlignment="Center" />
+            <TextBlock Text="9 PM" HorizontalAlignment="Center" />
+            <TextBlock Text="12 AM" HorizontalAlignment="Center" />
+        </UniformGrid>
+
+        <TextBlock x:Name="TodayTimeText" FontSize="16" Margin="0,10,0,0"/>
+
+        <TextBlock Text="This Week's Screen Time:" FontSize="16" Margin="20,20,0,5"/>
+        <ListBox ItemsSource="{Binding WeeklyUsage}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Day}" Width="100"/>
+                        <TextBlock Text="{Binding Usage}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </StackPanel>
+</UserControl>

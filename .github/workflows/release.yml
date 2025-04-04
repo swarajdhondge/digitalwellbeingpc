@@ -1,0 +1,52 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Trigger only on version tags like v1.0.0, v1.2.3
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+       
+      - name: Set version from tag
+        run: |
+            $version = "${{ github.ref_name }}".TrimStart("v")
+            (Get-Content digital-wellbeing-app.csproj) -replace '<Version>.*</Version>', "<Version>$version</Version>" |
+              Set-Content digital-wellbeing-app.csproj
+            echo "🔖 Version set to $version"
+
+      - name: Publish .exe (Self-contained)
+        run: |
+          dotnet publish -c Release -r win-x64 --self-contained true -o publish
+
+      - name: Zip the published folder
+        run: Compress-Archive -Path publish\* -DestinationPath digital-wellbeing-app.zip
+
+      - name: Read Changelog
+        id: changelog
+        run: |
+          $log = Get-Content CHANGELOG.md | Out-String
+          echo "::set-output name=body::$log"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          body: ${{ steps.changelog.outputs.body }}
+          files: digital-wellbeing-app.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
