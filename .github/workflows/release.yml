@@ -43,8 +43,9 @@ jobs:
       - name: Upload ZIP as artifact
         uses: actions/upload-artifact@v3
         with:
-          name: release-zip
-          path: ${{ env.ZIP_NAME }}
+            name: release-zip
+            path: ${{ env.ZIP_NAME }}
+
 
   release:
     name: Create GitHub Release
