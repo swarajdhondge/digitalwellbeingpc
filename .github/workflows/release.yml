@@ -25,12 +25,12 @@ jobs:
         run: |
             $version = "${{ github.ref_name }}".TrimStart("v")
             (Get-Content digital-wellbeing-app.csproj) -replace '<Version>.*</Version>', "<Version>$version</Version>" |
-              Set-Content digital-wellbeing-app.csproj
+                Set-Content digital-wellbeing-app.csproj
             echo "🔖 Version set to $version"
 
       - name: Publish .exe (Self-contained)
         run: |
-          dotnet publish -c Release -r win-x64 --self-contained true -o publish
+          dotnet publish ./digital-wellbeing-app.csproj -c Release -r win-x64 --self-contained true -o publish
 
       - name: Zip the published folder
         run: Compress-Archive -Path publish\* -DestinationPath digital-wellbeing-app.zip
