@@ -40,11 +40,11 @@ jobs:
       - name: Zip the published folder
         run: Compress-Archive -Path "${{ env.PUBLISH_DIR }}\*" -DestinationPath "${{ env.ZIP_NAME }}"
 
-      - name: Read CHANGELOG
-        id: changelog
-        run: |
-          $log = Get-Content CHANGELOG.md | Out-String
-          echo "::set-output name=body::$log"
+      - name: Upload ZIP as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: release-zip
+          path: ${{ env.ZIP_NAME }}
 
   release:
     name: Create GitHub Release
@@ -55,12 +55,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Download built zip
+        uses: actions/download-artifact@v3
+        with:
+          name: release-zip
+
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
-          body: ${{ steps.changelog.outputs.body }}
           files: ${{ env.ZIP_NAME }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
