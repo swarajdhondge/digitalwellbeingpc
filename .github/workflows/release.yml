@@ -6,7 +6,7 @@ on:
       - 'v*.*.*'
 
 env:
-  PROJECT_PATH: ./MainWindow/digital-wellbeing-app.csproj
+  PROJECT_PATH: ./digital-wellbeing-app/digital-wellbeing-app.csproj
   PUBLISH_DIR: ./publish
   ZIP_NAME: digital-wellbeing-app.zip
 
