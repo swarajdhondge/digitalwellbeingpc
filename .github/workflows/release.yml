@@ -30,12 +30,12 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore "${{ env.PROJECT_PATH }}"
 
-      - name: Set version from tag
-        run: |
-          $version = "${{ github.ref_name }}".TrimStart("v")
-          (Get-Content "${{ env.PROJECT_PATH }}") -replace '<Version>.*</Version>', "<Version>$version</Version>" |
-            Set-Content "${{ env.PROJECT_PATH }}"
-          echo "Version set to $version"
+      # - name: Set version from tag
+      #   run: |
+      #     $version = "${{ github.ref_name }}".TrimStart("v")
+      #     (Get-Content "${{ env.PROJECT_PATH }}") -replace '<Version>.*</Version>', "<Version>$version</Version>" |
+      #       Set-Content "${{ env.PROJECT_PATH }}"
+      #     echo "Version set to $version"
 
       - name: Publish EXE (Self-contained)
         run: dotnet publish "${{ env.PROJECT_PATH }}" -c Release -r win-x64 --self-contained true -o "${{ env.PUBLISH_DIR }}"
