@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Timers;
 using digital_wellbeing_app.Platform.Windows;
-using digital_wellbeing_app.Services;
 using digital_wellbeing_app.Resources;
+using digital_wellbeing_app.Models;
+using digital_wellbeing_app.Services;
 
 namespace digital_wellbeing_app.CoreLogic
 {
@@ -10,19 +11,23 @@ namespace digital_wellbeing_app.CoreLogic
     {
         private readonly System.Timers.Timer _timer;
         private TimeSpan _activeTime;
-        private DateTime _lastSaved;
         private DateTime _sessionStartTime;
+        private DateTime _lastSaved;
 
-        public TimeSpan CurrentActiveTime => _activeTime + (DateTime.Now - _lastSaved);
+        public TimeSpan CurrentActiveTime => _activeTime;
         public DateTime SessionStartTime => _sessionStartTime;
 
         public ScreenTimeTracker()
         {
-            _activeTime = LoadSessionData();
-            _sessionStartTime = DateTime.Now;
+            var (initialActive, start) = LoadSessionData();
+            _activeTime = initialActive;
+            _sessionStartTime = start;
             _lastSaved = DateTime.Now;
 
-            _timer = new System.Timers.Timer(60000); // 1 minute
+            _timer = new System.Timers.Timer(1_000)  // 1 Hz tick
+            {
+                AutoReset = true
+            };
             _timer.Elapsed += CheckActivity;
         }
 
@@ -31,73 +36,65 @@ namespace digital_wellbeing_app.CoreLogic
         public void Stop()
         {
             _timer.Stop();
-            SaveSessionData(); // Final write
+            SaveSessionData();  // final flush on exit
         }
 
         private void CheckActivity(object? sender, ElapsedEventArgs e)
         {
-            var idle = WindowsIdleTimeHelper.GetIdleTime();
+            // **always** add one second per tick, no idle check
+            _activeTime = _activeTime.Add(TimeSpan.FromSeconds(1));
 
-            if (idle.TotalSeconds < Constants.IdleThresholdSeconds)
-            {
-                _activeTime = _activeTime.Add(TimeSpan.FromMinutes(1));
-            }
-
-            if ((DateTime.Now - _lastSaved).TotalMinutes >= 15)
+            // every 15 min, persist
+            var now = DateTime.Now;
+            if ((now - _lastSaved).TotalMinutes >= 15)
             {
                 SaveSessionData();
-                _lastSaved = DateTime.Now;
+                _lastSaved = now;
             }
         }
 
-        private static TimeSpan LoadSessionData()
+        private static (TimeSpan initialActive, DateTime sessionStart) LoadSessionData()
         {
             var db = DatabaseService.GetConnection();
-            var today = DateTime.Now.ToString("yyyy-MM-dd");
-
-            var entry = db.Table<ScreenTimeSession>()
-                          .FirstOrDefault(x => x.SessionDate == today);
+            var todayKey = DateTime.Now.ToString("yyyy-MM-dd");
+            var entry = db.Table<ScreenTimePeriod>()
+                             .FirstOrDefault(x => x.SessionDate == todayKey);
 
             if (entry == null)
             {
-                entry = new()
+                // first run today → sessionStart = system boot time
+                var bootTime = DateTime.Now
+                             - TimeSpan.FromMilliseconds(Environment.TickCount64);
+
+                entry = new ScreenTimePeriod
                 {
-                    SessionDate = today,
-                    SessionStartTime = DateTime.Now.ToString("hh:mm tt"),
-                    LastRecordedTime = DateTime.Now.ToString("hh:mm tt"),
+                    SessionDate = todayKey,
+                    SessionStartTime = bootTime.ToString("o"),
+                    LastRecordedTime = DateTime.Now.ToString("o"),
                     AccumulatedActiveSeconds = 0
                 };
                 db.Insert(entry);
-                return TimeSpan.Zero;
+                return (TimeSpan.Zero, bootTime);
             }
-
-            return TimeSpan.FromSeconds(entry.AccumulatedActiveSeconds);
+            else
+            {
+                var start = DateTime.Parse(entry.SessionStartTime);
+                var active = TimeSpan.FromSeconds(entry.AccumulatedActiveSeconds);
+                return (active, start);
+            }
         }
 
         private void SaveSessionData()
         {
             var db = DatabaseService.GetConnection();
-            var today = DateTime.Now.ToString("yyyy-MM-dd");
+            var todayKey = DateTime.Now.ToString("yyyy-MM-dd");
+            var entry = db.Table<ScreenTimePeriod>()
+                             .FirstOrDefault(x => x.SessionDate == todayKey);
+            if (entry == null) return;
 
-            var entry = db.Table<ScreenTimeSession>()
-                          .FirstOrDefault(x => x.SessionDate == today);
-
-            if (entry != null)
-            {
-                entry.LastRecordedTime = DateTime.Now.ToString("hh:mm tt");
-                entry.AccumulatedActiveSeconds = (int)_activeTime.TotalSeconds;
-                db.Update(entry);
-            }
+            entry.AccumulatedActiveSeconds = (int)_activeTime.TotalSeconds;
+            entry.LastRecordedTime = DateTime.Now.ToString("o");
+            db.Update(entry);
         }
-    }
-
-    public class ScreenTimeSession
-    {
-        [SQLite.PrimaryKey, SQLite.AutoIncrement]
-        public int Id { get; set; }
-        public string SessionDate { get; set; } = string.Empty;
-        public string SessionStartTime { get; set; } = string.Empty;
-        public string LastRecordedTime { get; set; } = string.Empty;
-        public int AccumulatedActiveSeconds { get; set; }
     }
 }
