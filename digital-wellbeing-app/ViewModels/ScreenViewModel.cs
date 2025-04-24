@@ -24,7 +24,7 @@ namespace digital_wellbeing_app.ViewModels
                 DateTime day = monday.AddDays(i);
                 string dateKey = day.ToString("yyyy-MM-dd");
 
-                var entry = db.Table<ScreenTimeSession>()
+                var entry = db.Table<ScreenTimePeriod>()
                               .FirstOrDefault(x => x.SessionDate == dateKey);
 
                 int seconds = entry?.AccumulatedActiveSeconds ?? 0;

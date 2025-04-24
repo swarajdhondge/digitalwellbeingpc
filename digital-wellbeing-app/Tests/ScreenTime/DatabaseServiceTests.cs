@@ -3,6 +3,7 @@ using System.Linq;
 using Xunit;
 using digital_wellbeing_app.Services;
 using digital_wellbeing_app.CoreLogic;
+using digital_wellbeing_app.Models;
 
 namespace digital_wellbeing_app.Tests.ScreenTime
 {
@@ -26,13 +27,13 @@ namespace digital_wellbeing_app.Tests.ScreenTime
             var testDate = "9999-12-31"; // hopefully doesn't collide with real data
 
             // Clean up any existing
-            conn.Table<ScreenTimeSession>()
+            conn.Table<ScreenTimePeriod>()
                 .Where(x => x.SessionDate == testDate)
                 .ToList()
                 .ForEach(item => conn.Delete(item));
 
             // Act
-            var newSession = new ScreenTimeSession
+            var newSession = new ScreenTimePeriod
             {
                 SessionDate = testDate,
                 SessionStartTime = "01:23 PM",
@@ -43,7 +44,7 @@ namespace digital_wellbeing_app.Tests.ScreenTime
             conn.Insert(newSession);
 
             // Assert
-            var saved = conn.Table<ScreenTimeSession>()
+            var saved = conn.Table<ScreenTimePeriod>()
                             .FirstOrDefault(x => x.SessionDate == testDate);
             Assert.NotNull(saved);
             Assert.Equal(999, saved.AccumulatedActiveSeconds);

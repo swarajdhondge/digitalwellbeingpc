@@ -12,37 +12,41 @@ namespace digital_wellbeing_app.Views.Screen
     public partial class ScreenView : UserControl
     {
         private readonly ScreenViewModel _vm = new();
-        private readonly ScreenTimeTracker _tracker = new();
-        private DispatcherTimer? _timer;
+        private readonly ScreenTimeTracker _tracker;
+        private readonly DispatcherTimer _uiTimer = new() { Interval = TimeSpan.FromSeconds(1) };
 
         public ScreenView()
         {
             InitializeComponent();
+
+            _tracker = (Application.Current as App)!.ScreenTracker;
+
+            Loaded += ScreenView_Loaded;
+            Unloaded += (_, __) => _uiTimer.Stop();  // only stop the UI refresh
         }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        private void ScreenView_Loaded(object sender, RoutedEventArgs e)
         {
             DataContext = _vm;
-            _tracker.Start();
             _vm.LoadWeeklyUsage();
 
-            TimeCanvas.SizeChanged += (_, __) => UpdateUI(null, null);
+            TimeCanvas.SizeChanged += (_, __) => RenderTodayTimeline();
 
-            _timer = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromSeconds(1)
-            };
-            _timer.Tick += UpdateUI;
-            _timer.Start();
+            _uiTimer.Tick += (_, __) => UpdateUI();
+            _uiTimer.Start();
 
-            UpdateUI(null, null);
+            UpdateUI();
         }
 
-        private void UpdateUI(object? sender, EventArgs? e)
+        private void UpdateUI()
         {
             var ts = _tracker.CurrentActiveTime;
-            TodayTimeText.Text = $"{(int)ts.TotalHours} hr {ts.Minutes} min {ts.Seconds} sec";
+            var totalSec = (int)ts.TotalSeconds;
+            var hours = totalSec / 3600;
+            var minutes = (totalSec % 3600) / 60;
+            var seconds = totalSec % 60;
 
+            TodayTimeText.Text = $"{hours} hr {minutes} min {seconds} sec";
             RenderTodayTimeline();
         }
 
@@ -50,28 +54,34 @@ namespace digital_wellbeing_app.Views.Screen
         {
             TimeCanvas.Children.Clear();
 
-            var sessionStart = _tracker.SessionStartTime;
-            var totalActiveTime = _tracker.CurrentActiveTime;
-            double durationSeconds = totalActiveTime.TotalSeconds;
-            if (durationSeconds <= 0) return;
+            // how many seconds we've tracked so far
+            var activeSeconds = _tracker.CurrentActiveTime.TotalSeconds;
 
-            const double daySeconds = 24 * 60 * 60;
-            double barWidth = TimeCanvas.ActualWidth > 0 ? TimeCanvas.ActualWidth : 500;
+            const double daySecs = 24 * 60 * 60.0;
+            
+            var width = TimeCanvas.ActualWidth > 0 ? TimeCanvas.ActualWidth : 500;
 
-            double startSec = (sessionStart - DateTime.Today).TotalSeconds;
-            double left = Math.Max(0, (startSec / daySeconds) * barWidth);
-            double width = Math.Min(barWidth - left, (durationSeconds / daySeconds) * barWidth);
+            // how many seconds have elapsed since midnight
+            var nowSecs = (DateTime.Now - DateTime.Today).TotalSeconds;
 
-            var highlight = new Rectangle
+            
+            var startSecs = Math.Max(0, nowSecs - activeSeconds);
+
+            // translate into pixels
+            var offset = (startSecs / daySecs) * width;
+            var barLen = Math.Min(width - offset, (activeSeconds / daySecs) * width);
+
+            var rect = new Rectangle
             {
                 Height = TimeCanvas.ActualHeight,
-                Width = width,
+                Width = barLen,
                 Fill = Brushes.Green
             };
 
-            Canvas.SetLeft(highlight, left);
-            Canvas.SetTop(highlight, 0);
-            TimeCanvas.Children.Add(highlight);
+            Canvas.SetLeft(rect, offset);
+            Canvas.SetTop(rect, 0);
+            TimeCanvas.Children.Add(rect);
         }
+
     }
 }
