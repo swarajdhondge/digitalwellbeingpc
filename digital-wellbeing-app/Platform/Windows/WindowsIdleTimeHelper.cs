@@ -28,5 +28,11 @@ namespace digital_wellbeing_app.Platform.Windows
             uint idleTimeMs = (uint)Environment.TickCount - lastInputInfo.dwTime;
             return TimeSpan.FromMilliseconds(idleTimeMs);
         }
+
+        public static bool IsUserIdle(int thresholdInSeconds)
+        {
+            TimeSpan idleTime = GetIdleTime();
+            return idleTime.TotalSeconds > thresholdInSeconds;
+        }
     }
 }

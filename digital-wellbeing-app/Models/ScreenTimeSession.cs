@@ -1,10 +1,9 @@
 ﻿namespace digital_wellbeing_app.Models
 {
-    public class ScreenTimeSession
+    public class ScreenTimePeriod
     {
         [SQLite.PrimaryKey, SQLite.AutoIncrement]
         public int Id { get; set; }
-
         public string SessionDate { get; set; } = string.Empty;
         public string SessionStartTime { get; set; } = string.Empty;
         public string LastRecordedTime { get; set; } = string.Empty;
