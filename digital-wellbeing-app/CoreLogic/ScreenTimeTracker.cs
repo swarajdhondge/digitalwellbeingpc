@@ -24,7 +24,7 @@ namespace digital_wellbeing_app.CoreLogic
             _sessionStartTime = start;
             _lastSaved = DateTime.Now;
 
-            _timer = new System.Timers.Timer(1_000)  // 1 Hz tick
+            _timer = new System.Timers.Timer(1_000)
             {
                 AutoReset = true
             };
@@ -36,15 +36,13 @@ namespace digital_wellbeing_app.CoreLogic
         public void Stop()
         {
             _timer.Stop();
-            SaveSessionData();  // final flush on exit
+            SaveSessionData();
         }
 
         private void CheckActivity(object? sender, ElapsedEventArgs e)
         {
-            // **always** add one second per tick, no idle check
             _activeTime = _activeTime.Add(TimeSpan.FromSeconds(1));
 
-            // every 15 min, persist
             var now = DateTime.Now;
             if ((now - _lastSaved).TotalMinutes >= 15)
             {
@@ -58,11 +56,10 @@ namespace digital_wellbeing_app.CoreLogic
             var db = DatabaseService.GetConnection();
             var todayKey = DateTime.Now.ToString("yyyy-MM-dd");
             var entry = db.Table<ScreenTimePeriod>()
-                             .FirstOrDefault(x => x.SessionDate == todayKey);
+                          .FirstOrDefault(x => x.SessionDate == todayKey);
 
             if (entry == null)
             {
-                // first run today → sessionStart = system boot time
                 var bootTime = DateTime.Now
                              - TimeSpan.FromMilliseconds(Environment.TickCount64);
 
@@ -89,7 +86,7 @@ namespace digital_wellbeing_app.CoreLogic
             var db = DatabaseService.GetConnection();
             var todayKey = DateTime.Now.ToString("yyyy-MM-dd");
             var entry = db.Table<ScreenTimePeriod>()
-                             .FirstOrDefault(x => x.SessionDate == todayKey);
+                          .FirstOrDefault(x => x.SessionDate == todayKey);
             if (entry == null) return;
 
             entry.AccumulatedActiveSeconds = (int)_activeTime.TotalSeconds;

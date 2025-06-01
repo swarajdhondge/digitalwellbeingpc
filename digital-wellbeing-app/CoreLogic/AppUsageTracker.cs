@@ -17,7 +17,19 @@ namespace digital_wellbeing_app.CoreLogic
         }
 
         public void Start() => _focusListener.Start();
-        public void Stop() => _focusListener.Stop();
+
+        public void Stop()
+        {
+            // End any in‐flight session
+            if (_currentSession != null)
+            {
+                _currentSession.EndTime = DateTime.Now;
+                DatabaseService.SaveAppUsageSession(_currentSession);
+                _currentSession = null;
+            }
+
+            _focusListener.Stop();
+        }
 
         private void OnAppChanged(Process? process)
         {
@@ -27,7 +39,7 @@ namespace digital_wellbeing_app.CoreLogic
 
             var now = DateTime.Now;
 
-            // End old session
+            // End previous session if exists
             if (_currentSession != null)
             {
                 _currentSession.EndTime = now;
@@ -49,26 +61,14 @@ namespace digital_wellbeing_app.CoreLogic
 
         private static string SafeGetPath(Process proc)
         {
-            try
-            {
-                return proc.MainModule?.FileName ?? string.Empty;
-            }
-            catch
-            {
-                return string.Empty;
-            }
+            try { return proc.MainModule?.FileName ?? string.Empty; }
+            catch { return string.Empty; }
         }
 
         private static string SafeGetWindowTitle(Process proc)
         {
-            try
-            {
-                return proc.MainWindowTitle;
-            }
-            catch
-            {
-                return string.Empty;
-            }
+            try { return proc.MainWindowTitle; }
+            catch { return string.Empty; }
         }
     }
 }
