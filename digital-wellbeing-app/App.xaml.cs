@@ -1,14 +1,14 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;                     // ← we want the WPF Application
 using digital_wellbeing_app.CoreLogic;
 using digital_wellbeing_app.Services;
 
 namespace digital_wellbeing_app
 {
-    public partial class App : Application
+    public partial class App : System.Windows.Application
     {
         public ScreenTimeTracker ScreenTracker { get; private set; } = null!;
         public AppUsageTracker AppTracker { get; private set; } = null!;
-
         private SoundMonitoringService? _soundService;
 
         protected override void OnStartup(StartupEventArgs e)

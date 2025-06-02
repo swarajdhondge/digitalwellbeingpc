@@ -9,7 +9,7 @@ using digital_wellbeing_app.ViewModels;
 
 namespace digital_wellbeing_app.Views.Screen
 {
-    public partial class ScreenView : UserControl
+    public partial class ScreenView : System.Windows.Controls.UserControl
     {
         private readonly ScreenViewModel _vm = new();
         private readonly ScreenTimeTracker _tracker;
@@ -18,11 +18,11 @@ namespace digital_wellbeing_app.Views.Screen
         public ScreenView()
         {
             InitializeComponent();
-
-            _tracker = (Application.Current as App)!.ScreenTracker;
+            _tracker = (System.Windows.Application.Current as App)!.ScreenTracker;
 
             Loaded += ScreenView_Loaded;
-            Unloaded += (_, __) => _uiTimer.Stop();  // only stop the UI refresh
+            // Stop timer when the control is unloaded:
+            Unloaded += (_, __) => _uiTimer.Stop();
         }
 
         private void ScreenView_Loaded(object sender, RoutedEventArgs e)
@@ -54,34 +54,26 @@ namespace digital_wellbeing_app.Views.Screen
         {
             TimeCanvas.Children.Clear();
 
-            // how many seconds we've tracked so far
-            var activeSeconds = _tracker.CurrentActiveTime.TotalSeconds;
-
-            const double daySecs = 24 * 60 * 60.0;
-            
-            var width = TimeCanvas.ActualWidth > 0 ? TimeCanvas.ActualWidth : 500;
-
-            // how many seconds have elapsed since midnight
             var nowSecs = (DateTime.Now - DateTime.Today).TotalSeconds;
+            var activeSeconds = _tracker.CurrentActiveTime.TotalSeconds;
+            const double daySecs = 24 * 60 * 60.0;
 
-            
+            var width = TimeCanvas.ActualWidth > 0 ? TimeCanvas.ActualWidth : 500;
             var startSecs = Math.Max(0, nowSecs - activeSeconds);
 
-            // translate into pixels
             var offset = (startSecs / daySecs) * width;
             var barLen = Math.Min(width - offset, (activeSeconds / daySecs) * width);
 
-            var rect = new Rectangle
+            var rect = new System.Windows.Shapes.Rectangle
             {
                 Height = TimeCanvas.ActualHeight,
                 Width = barLen,
-                Fill = Brushes.Green
+                Fill = System.Windows.Media.Brushes.Green
             };
 
             Canvas.SetLeft(rect, offset);
             Canvas.SetTop(rect, 0);
             TimeCanvas.Children.Add(rect);
         }
-
     }
 }
