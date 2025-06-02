@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -6,7 +7,7 @@ using digital_wellbeing_app.ViewModels;
 
 namespace digital_wellbeing_app.Views.Sound
 {
-    public partial class SoundTimelineView : UserControl
+    public partial class SoundTimelineView : System.Windows.Controls.UserControl
     {
         private SoundTimelineViewModel ViewModel => (SoundTimelineViewModel)DataContext!;
 
@@ -20,7 +21,7 @@ namespace digital_wellbeing_app.Views.Sound
             ViewModel.RefreshData();
             DrawTimeline();
 
-            // At startup: hide the DataGrid, set button text
+            // Hide the DataGrid at startup
             DetailsDataGrid.Visibility = Visibility.Collapsed;
             ToggleDetailsButton.Content = "Show detailed tracking";
         }
@@ -39,16 +40,16 @@ namespace digital_wellbeing_app.Views.Sound
                 return;
             }
 
-            // 1) Light background covering full width
-            var bgRect = new Rectangle
+            // Light background covering full width
+            var bgRect = new System.Windows.Shapes.Rectangle
             {
                 Width = w,
                 Height = h,
-                Fill = Brushes.WhiteSmoke
+                Fill = System.Windows.Media.Brushes.WhiteSmoke
             };
             FullTimelineCanvas.Children.Add(bgRect);
 
-            // 2) Draw each session as a gray bar + red overlay
+            // Draw each session as a gray bar + red overlay
             foreach (var bar in ViewModel.Bars)
             {
                 double x1 = bar.StartFrac * w;
@@ -56,12 +57,12 @@ namespace digital_wellbeing_app.Views.Sound
                 double width = x2 - x1;
                 if (width < 2) width = 2; // minimal width
 
-                // Light gray safe segment
-                var safeRect = new Rectangle
+                // Light gray “safe” segment
+                var safeRect = new System.Windows.Shapes.Rectangle
                 {
                     Width = width,
                     Height = h * 0.6,
-                    Fill = Brushes.LightGray,
+                    Fill = System.Windows.Media.Brushes.LightGray,
                     ToolTip = $"{bar.SessionLabel} ({bar.DeviceName})"
                 };
                 Canvas.SetLeft(safeRect, x1);
@@ -75,11 +76,11 @@ namespace digital_wellbeing_app.Views.Sound
                     if (harmWidth > 1)
                     {
                         double harmStart = x2 - harmWidth;
-                        var harmRect = new Rectangle
+                        var harmRect = new System.Windows.Shapes.Rectangle
                         {
                             Width = harmWidth,
                             Height = h * 0.6,
-                            Fill = Brushes.IndianRed,
+                            Fill = System.Windows.Media.Brushes.IndianRed,
                             ToolTip = $"Harmful: {bar.SessionLabel}"
                         };
                         Canvas.SetLeft(harmRect, harmStart);
@@ -94,13 +95,11 @@ namespace digital_wellbeing_app.Views.Sound
         {
             if (DetailsDataGrid.Visibility == Visibility.Collapsed)
             {
-                // Show the DataGrid
                 DetailsDataGrid.Visibility = Visibility.Visible;
                 ToggleDetailsButton.Content = "Hide detailed tracking";
             }
             else
             {
-                // Hide the DataGrid
                 DetailsDataGrid.Visibility = Visibility.Collapsed;
                 ToggleDetailsButton.Content = "Show detailed tracking";
             }

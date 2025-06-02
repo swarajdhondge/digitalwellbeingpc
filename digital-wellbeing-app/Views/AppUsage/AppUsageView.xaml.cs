@@ -2,7 +2,7 @@
 
 namespace digital_wellbeing_app.Views.AppUsage
 {
-    public partial class AppUsageView : UserControl
+    public partial class AppUsageView : System.Windows.Controls.UserControl
     {
         public AppUsageView()
         {

@@ -1,10 +1,10 @@
-﻿<Application x:Class="digital_wellbeing_app.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             StartupUri="MainWindow/MainWindow.xaml"
-             ShutdownMode="OnLastWindowClose">
-
+﻿<Application
+    x:Class="digital_wellbeing_app.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    StartupUri="MainWindow/MainWindow.xaml"
+    ShutdownMode="OnLastWindowClose">
     <Application.Resources>
-         
+        <!-- No HandyControl merges or themes here—just leave this empty or add your own brushes later -->
     </Application.Resources>
 </Application>

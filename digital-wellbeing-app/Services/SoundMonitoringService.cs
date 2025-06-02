@@ -20,7 +20,7 @@ namespace digital_wellbeing_app.Services
             _exposureManager = new SoundExposureManager();
             _exposureManager.OnThresholdExceeded += (_, __) =>
             {
-                MessageBox.Show(
+                System.Windows.MessageBox.Show(
                     "You have been listening above the threshold.\n" +
                     "Lower your volume to protect your hearing.",
                     "Hearing Alert",
