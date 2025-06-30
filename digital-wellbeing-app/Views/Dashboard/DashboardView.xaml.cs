@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿// File: Views/Dashboard/DashboardView.xaml.cs
+using System.Windows.Controls;  // only WPF’s UserControl
 
 namespace digital_wellbeing_app.Views.Dashboard
 {
@@ -7,6 +8,7 @@ namespace digital_wellbeing_app.Views.Dashboard
         public DashboardView()
         {
             InitializeComponent();
+            DataContext = new digital_wellbeing_app.ViewModels.DashboardViewModel();
         }
     }
 }
