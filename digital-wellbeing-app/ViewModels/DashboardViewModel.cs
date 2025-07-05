@@ -101,7 +101,7 @@ namespace digital_wellbeing_app.ViewModels
                 (sum, s) => sum + (s.EndTime - s.StartTime));
             AppTime = Format(tsApp);
 
-            if (appSessions.Any())
+            if (appSessions.Count > 0)
             {
                 var top = appSessions
                     .GroupBy(s => s.ExecutablePath)
@@ -123,6 +123,7 @@ namespace digital_wellbeing_app.ViewModels
                 TopAppDuration = "0:00:00";
                 TopAppIcon = null!;
             }
+            await Task.CompletedTask;
         }
 
         private static string Format(TimeSpan ts)

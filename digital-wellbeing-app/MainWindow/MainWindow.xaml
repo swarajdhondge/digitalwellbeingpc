@@ -9,7 +9,8 @@
     WindowStartupLocation="CenterScreen"
     FontFamily="Segoe UI"
     StateChanged="Window_StateChanged"
-    Closing="Window_Closing">
+    Closing="Window_Closing"
+    Style="{StaticResource MaterialDesignWindow}">
 
     <Grid>
         <!-- Title / Content rows -->
@@ -37,7 +38,6 @@
             <TextBlock
           Text="Digital Wellbeing"
           VerticalAlignment="Center"
-          Foreground="White"
           FontSize="16"
           Margin="8,0,0,0"/>
         </DockPanel>
