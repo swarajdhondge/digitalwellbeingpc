@@ -1,79 +1,65 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Shapes;
-using System.Windows.Threading;
-using digital_wellbeing_app.CoreLogic;
-using digital_wellbeing_app.ViewModels;
-
-namespace digital_wellbeing_app.Views.Screen
+﻿namespace digital_wellbeing_app.Views.Screen
 {
     public partial class ScreenView : System.Windows.Controls.UserControl
     {
-        private readonly ScreenViewModel _vm = new();
-        private readonly ScreenTimeTracker _tracker;
-        private readonly DispatcherTimer _uiTimer = new() { Interval = TimeSpan.FromSeconds(1) };
+        private readonly System.Windows.Threading.DispatcherTimer _realTimeTimer = new()
+        {
+            Interval = System.TimeSpan.FromSeconds(1)
+        };
+
 
         public ScreenView()
         {
             InitializeComponent();
-            _tracker = (System.Windows.Application.Current as App)!.ScreenTracker;
 
-            Loaded += ScreenView_Loaded;
-            // Stop timer when the control is unloaded:
-            Unloaded += (_, __) => _uiTimer.Stop();
+            var vm = new digital_wellbeing_app.ViewModels.ScreenViewModel();
+            this.DataContext = vm;
+
+            this.Loaded += OnLoaded;
+            this.Unloaded += (s, e) => vm.Dispose();
         }
 
-        private void ScreenView_Loaded(object sender, RoutedEventArgs e)
+        private void OnLoaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            DataContext = _vm;
-            _vm.LoadWeeklyUsage();
-
-            TimeCanvas.SizeChanged += (_, __) => RenderTodayTimeline();
-
-            _uiTimer.Tick += (_, __) => UpdateUI();
-            _uiTimer.Start();
-
-            UpdateUI();
+            _realTimeTimer.Tick += (s, args) => RenderRealTimeCanvas();
+            _realTimeTimer.Start();
+            RenderRealTimeCanvas();
         }
 
-        private void UpdateUI()
+        private void RenderRealTimeCanvas()
         {
-            var ts = _tracker.CurrentActiveTime;
-            var totalSec = (int)ts.TotalSeconds;
-            var hours = totalSec / 3600;
-            var minutes = (totalSec % 3600) / 60;
-            var seconds = totalSec % 60;
+            if (this.DataContext is not digital_wellbeing_app.ViewModels.ScreenViewModel vm)
+                return;
 
-            TodayTimeText.Text = $"{hours} hr {minutes} min {seconds} sec";
-            RenderTodayTimeline();
-        }
+            RealTimeCanvas.Children.Clear();
 
-        private void RenderTodayTimeline()
-        {
-            TimeCanvas.Children.Clear();
+            double width = RealTimeCanvas.ActualWidth;
+            double height = RealTimeCanvas.ActualHeight;
+            if (width <= 0 || height <= 0) return;
 
-            var nowSecs = (DateTime.Now - DateTime.Today).TotalSeconds;
-            var activeSeconds = _tracker.CurrentActiveTime.TotalSeconds;
-            const double daySecs = 24 * 60 * 60.0;
+            // Try to get the material brush; fallback to System.Windows.Media.Brushes.Green
+            var brush = this.TryFindResource("PrimaryHueMidBrush") as System.Windows.Media.Brush
+                        ?? System.Windows.Media.Brushes.Green;
 
-            var width = TimeCanvas.ActualWidth > 0 ? TimeCanvas.ActualWidth : 500;
-            var startSecs = Math.Max(0, nowSecs - activeSeconds);
-
-            var offset = (startSecs / daySecs) * width;
-            var barLen = Math.Min(width - offset, (activeSeconds / daySecs) * width);
-
-            var rect = new System.Windows.Shapes.Rectangle
+            foreach (var seg in vm.TimelineSegments)
             {
-                Height = TimeCanvas.ActualHeight,
-                Width = barLen,
-                Fill = System.Windows.Media.Brushes.Green
-            };
+                // Create a Rectangle segment
+                var rect = new System.Windows.Shapes.Rectangle
+                {
+                    Width = seg.WidthPercent * width,
+                    Height = height,
+                    RadiusX = 2,
+                    RadiusY = 2,
+                    Fill = brush
+                };
 
-            Canvas.SetLeft(rect, offset);
-            Canvas.SetTop(rect, 0);
-            TimeCanvas.Children.Add(rect);
+                // Position it on the canvas
+                System.Windows.Controls.Canvas.SetLeft(rect, seg.StartPercent * width);
+                System.Windows.Controls.Canvas.SetTop(rect, 0);
+
+                // Add to the canvas
+                RealTimeCanvas.Children.Add(rect);
+            }
         }
     }
 }

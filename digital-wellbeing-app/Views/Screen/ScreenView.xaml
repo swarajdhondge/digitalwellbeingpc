@@ -4,63 +4,147 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:digital_wellbeing_app.ViewModels"
     mc:Ignorable="d"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
-    Loaded="ScreenView_Loaded">
+    d:DesignHeight="600" d:DesignWidth="800"
+    Background="{DynamicResource MaterialDesignPaper}">
 
-    <Grid Background="#F0F0F0">
+    <UserControl.Resources>
+        <vm:TimelineWidthConverter    x:Key="TimelineWidthConverter" />
+        <vm:HourToOffsetConverter     x:Key="HourToOffsetConverter" />
+        <vm:HourDynamicLabelConverter x:Key="HourDynamicLabelConverter" />
+        <vm:HourVisibilityConverter   x:Key="HourVisibilityConverter" />
+    </UserControl.Resources>
+
+    <Grid Background="{DynamicResource MaterialDesignPaper}">
         <StackPanel Margin="20">
 
-            <!-- Header -->
+            <!-- 1) Header & live total -->
             <TextBlock
         Text="📊 Detailed Screen Time"
-        FontSize="22"
-        FontWeight="Bold"
-        Foreground="#222"/>
-
-            <!-- Today’s active‐time text -->
+        FontSize="22" FontWeight="Bold"
+        Foreground="{DynamicResource MaterialDesignBody}" />
             <TextBlock
-        x:Name="TodayTimeText"
-        Text="00 hr 00 min 00 sec"
-        FontSize="18"
-        FontWeight="SemiBold"
-        Foreground="#4caf50"
-        Margin="0,8,0,12"/>
+        Text="{Binding TodayTimeText}"
+        FontSize="18" FontWeight="SemiBold"
+        Foreground="{DynamicResource MaterialDesignGreen}"
+        Margin="0,4,0,12" />
 
-            <!-- Timeline Canvas (green bar) -->
+            <!-- 2) Timeline border & live canvas -->
             <Border
-        Height="40"
-        Background="#DDD"
-        Margin="0,0,0,16">
+        x:Name="TimelineBorder"
+        Height="80"
+        Background="{DynamicResource MaterialDesignCardBackground}"
+        CornerRadius="6"
+        Margin="0,0,0,4">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="8" ShadowDepth="2" Opacity="0.2"/>
+                </Border.Effect>
                 <Canvas
-          x:Name="TimeCanvas"
-          Height="40"
+          x:Name="RealTimeCanvas"
           Background="Transparent"/>
             </Border>
 
-            <!-- Weekly Usage Table  -->
-            <DataGrid
-        ItemsSource="{Binding WeeklyUsage}"
-        AutoGenerateColumns="False"
-        HeadersVisibility="Column"
-        CanUserResizeColumns="False"
-        CanUserSortColumns="False"
-        RowHeight="32"
-        GridLinesVisibility="None"
-        IsReadOnly="True"
-        Background="White">
-                <DataGrid.Columns>
-                    <DataGridTextColumn
-            Header="Day"
-            Binding="{Binding Day}"
-            Width="*"/>
-                    <DataGridTextColumn
-            Header="Usage"
-            Binding="{Binding Usage}"
-            Width="2*"/>
-                </DataGrid.Columns>
-            </DataGrid>
+            <!-- 3) Responsive hour labels -->
+            <ItemsControl
+        ItemsSource="{Binding HourMarkers}"
+        Margin="0,0,0,16"
+        Width="{Binding ActualWidth, ElementName=TimelineBorder}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Rows="1" Columns="24"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock
+              FontSize="10"
+              Foreground="{DynamicResource MaterialDesignBodySecondary}"
+              HorizontalAlignment="Center">
+                            <TextBlock.Text>
+                                <MultiBinding Converter="{StaticResource HourDynamicLabelConverter}">
+                                    <Binding/>
+                                    <Binding ElementName="TimelineBorder" Path="ActualWidth"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                            <TextBlock.Visibility>
+                                <MultiBinding Converter="{StaticResource HourVisibilityConverter}">
+                                    <Binding/>
+                                    <Binding ElementName="TimelineBorder" Path="ActualWidth"/>
+                                </MultiBinding>
+                            </TextBlock.Visibility>
+                        </TextBlock>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- 4) Weekly usage table -->
+            <Border
+        Background="{DynamicResource MaterialDesignCardBackground}"
+        CornerRadius="6"
+        Padding="16"
+        Margin="0,0,0,0">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="8" ShadowDepth="2" Opacity="0.2"/>
+                </Border.Effect>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Header Row -->
+                    <TextBlock
+            Grid.Row="0" Grid.Column="0"
+            Text="Day"
+            FontSize="16" FontWeight="Bold"
+            Foreground="{DynamicResource MaterialDesignBody}" />
+                    <TextBlock
+            Grid.Row="0" Grid.Column="1"
+            Text="Usage"
+            FontSize="16" FontWeight="Bold"
+            Foreground="{DynamicResource MaterialDesignBody}"
+            HorizontalAlignment="Left"
+            Margin="8,0,0,0" />
+
+                    <!-- Data Rows -->
+                    <ScrollViewer
+            Grid.Row="1"
+            VerticalScrollBarVisibility="Auto"
+            MaxHeight="200"
+            Margin="0,8,0,0">
+                        <ItemsControl ItemsSource="{Binding WeeklyUsage}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,4,0,4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                      Grid.Column="0"
+                      Text="{Binding Day}"
+                      FontSize="14" FontWeight="SemiBold"
+                      Foreground="{DynamicResource MaterialDesignBody}" />
+                                        <TextBlock
+                      Grid.Column="1"
+                      Text="{Binding Usage}"
+                      FontSize="14" FontWeight="SemiBold"
+                      Foreground="{DynamicResource MaterialDesignBody}"
+                      HorizontalAlignment="Left"
+                      Margin="8,0,0,0"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
 
         </StackPanel>
     </Grid>

@@ -8,103 +8,94 @@
     mc:Ignorable="d"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    Loaded="OnLoaded">
+    Loaded="OnLoaded"
+    Background="{DynamicResource MaterialDesignPaper}">
 
     <UserControl.DataContext>
         <vm:SoundTimelineViewModel/>
     </UserControl.DataContext>
 
-    <Grid Background="#F0F0F0">
+    <Grid>
         <StackPanel Margin="20">
 
             <!-- Header -->
             <TextBlock
-        Text="🔈 Detailed Sound Output"
-        FontSize="22"
-        FontWeight="Bold"
-        Foreground="#222"/>
+                Text="🔈 Detailed Sound Output"
+                FontSize="22"
+                FontWeight="Bold"
+                Foreground="{DynamicResource MaterialDesignBody}"
+                Margin="0,0,0,8"/>
 
             <!-- Totals Card -->
             <Border
-        Padding="16"
-        Background="White"
-        Margin="0,8,0,16">
-                <Border.Effect>
-                    <DropShadowEffect
-            Color="#000"
-            BlurRadius="10"
-            ShadowDepth="2"
-            Opacity="0.2"/>
-                </Border.Effect>
+                Padding="16"
+                Background="{DynamicResource MaterialDesignCardBackground}"
+                Margin="0,8,0,16"
+                Effect="{DynamicResource MaterialDesignElevation2}">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
                     <StackPanel Margin="0,0,20,0">
-                        <TextBlock Text="Total Listening" FontSize="14" Foreground="#555"/>
+                        <TextBlock Text="Total Listening" FontSize="14" Foreground="{DynamicResource MaterialDesignBody}"/>
                         <TextBlock
-              Text="{Binding TotalListeningTime}"
-              FontSize="16"
-              FontWeight="Bold"
-              Foreground="#4caf50"/>
+                            Text="{Binding TotalListeningTime}"
+                            FontSize="16"
+                            FontWeight="Bold"
+                            Foreground="{DynamicResource MaterialDesignGreen}"/>
                     </StackPanel>
                     <StackPanel>
-                        <TextBlock Text="Total Harmful" FontSize="14" Foreground="#555"/>
+                        <TextBlock Text="Total Harmful" FontSize="14" Foreground="{DynamicResource MaterialDesignBody}"/>
                         <TextBlock
-              Text="{Binding TotalHarmfulTime}"
-              FontSize="16"
-              FontWeight="Bold"
-              Foreground="#e57373"/>
+                            Text="{Binding TotalHarmfulTime}"
+                            FontSize="16"
+                            FontWeight="Bold"
+                            Foreground="{DynamicResource MaterialDesignRed}"/>
                     </StackPanel>
                 </StackPanel>
             </Border>
 
             <!-- Timeline Canvas (white background + bars) -->
             <Border
-        Padding="4"
-        Background="White"
-        Margin="0,0,0,16">
-                <Border.Effect>
-                    <DropShadowEffect
-            Color="#000"
-            BlurRadius="10"
-            ShadowDepth="2"
-            Opacity="0.2"/>
-                </Border.Effect>
+                Padding="4"
+                Background="{DynamicResource MaterialDesignCardBackground}"
+                Margin="0,0,0,16"
+                Effect="{DynamicResource MaterialDesignElevation1}">
                 <Canvas
-          x:Name="FullTimelineCanvas"
-          Height="80"
-          Background="Transparent"/>
+                    x:Name="FullTimelineCanvas"
+                    Height="80"
+                    Background="Transparent"/>
             </Border>
 
             <!-- Toggle Details Button -->
             <Button
-        x:Name="ToggleDetailsButton"
-        Content="Show detailed tracking"
-        Width="180"
-        Height="32"
-        Click="ToggleDetailsButton_Click"
-        HorizontalAlignment="Left"
-        Margin="0,0,0,8"/>
+                x:Name="ToggleDetailsButton"
+                Content="Show detailed tracking"
+                Width="180"
+                Height="32"
+                Click="ToggleDetailsButton_Click"
+                HorizontalAlignment="Left"
+                Margin="0,0,0,8"
+                Style="{StaticResource MaterialDesignOutlinedButton}"/>
 
             <!-- Detailed DataGrid (initially visible=false) -->
             <DataGrid
-        x:Name="DetailsDataGrid"
-        ItemsSource="{Binding Sessions}"
-        AutoGenerateColumns="False"
-        IsReadOnly="True"
-        HeadersVisibility="Column"
-        CanUserResizeColumns="False"
-        CanUserSortColumns="False"
-        GridLinesVisibility="None"
-        Height="200"
-        Background="White">
+                x:Name="DetailsDataGrid"
+                ItemsSource="{Binding Sessions}"
+                AutoGenerateColumns="False"
+                IsReadOnly="True"
+                HeadersVisibility="Column"
+                CanUserResizeColumns="False"
+                CanUserSortColumns="False"
+                GridLinesVisibility="None"
+                Height="200"
+                Background="{DynamicResource MaterialDesignPaper}">
                 <DataGrid.Columns>
                     <DataGridTextColumn
-            Header="Time"
-            Binding="{Binding SessionLabel}"
-            Width="2*"/>
+                        Header="Time"
+                        Binding="{Binding SessionLabel}"
+                        Width="2*"/>
                     <DataGridTextColumn
-            Header="Device"
-            Binding="{Binding DeviceName}"
-            Width="*"/>
+                        Header="Device"
+                        Binding="{Binding DeviceName}"
+                        Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
 

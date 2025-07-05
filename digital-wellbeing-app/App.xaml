@@ -11,12 +11,12 @@
             <ResourceDictionary.MergedDictionaries>
 
                 <!-- BundledTheme = Light + Teal + Lime -->
-                <md:BundledTheme BaseTheme="Light"
-                         PrimaryColor="Teal"
-                         SecondaryColor="Lime" />
+                <md:BundledTheme
+                    BaseTheme="Inherit"
+                    PrimaryColor="DeepPurple"
+                    SecondaryColor="Indigo"/>
 
-                <!-- Core Material2 styles (Cards, Drawers, Buttons, etc.) -->
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

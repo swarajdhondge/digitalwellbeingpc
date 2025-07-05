@@ -30,6 +30,7 @@ namespace digital_wellbeing_app.Services
         {
             _database?.CreateTable<AppUsageSession>();
             _database?.CreateTable<ScreenTimePeriod>();
+            _database?.CreateTable<ScreenTimeSession>();
             _database?.CreateTable<SoundUsageSession>();
         }
 
@@ -63,6 +64,20 @@ namespace digital_wellbeing_app.Services
             var today = DateTime.Now.ToString("yyyy-MM-dd");
             return conn.Table<ScreenTimePeriod>()
                        .FirstOrDefault(x => x.SessionDate == today);
+        }
+        public static void SaveScreenTimeSession(ScreenTimeSession session)
+        {
+            var conn = GetConnection();
+            conn.Insert(session);
+        }
+
+        public static List<ScreenTimeSession> GetScreenTimeSessionsForDate(DateTime date)
+        {
+            var conn = GetConnection();
+            string dateKey = date.ToString("yyyy-MM-dd");
+            return conn.Table<ScreenTimeSession>()
+                       .Where(x => x.SessionDate == dateKey)
+                       .ToList();
         }
 
         // --- Sound Usage ---
