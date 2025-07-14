@@ -6,62 +6,84 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    d:DesignHeight="450"
+    d:DesignHeight="600"
     d:DesignWidth="800"
-    >
+    Background="{DynamicResource MaterialDesignPaper}">
 
     <UserControl.DataContext>
         <vm:AppUsageViewModel/>
     </UserControl.DataContext>
 
-    <Grid Background="#F0F0F0">
-        <StackPanel Margin="20">
-            <TextBlock
-        Text="📱 Today's App Usage"
-        FontSize="22"
-        FontWeight="Bold"
-        Foreground="#222" />
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-            <ListView
+        <!-- Header -->
+        <TextBlock
+      Text="📱 Today's App Usage"
+      FontSize="22"
+      FontWeight="Bold"
+      Foreground="{DynamicResource MaterialDesignBody}"
+      Margin="0,0,0,12"/>
+
+        <!-- Table -->
+        <Border
+      Grid.Row="1"
+      Background="{DynamicResource MaterialDesignCardBackground}"
+      CornerRadius="6"
+      Padding="12"
+      Effect="{DynamicResource MaterialDesignElevation2}">
+
+            <DataGrid
         ItemsSource="{Binding TodaysUsage}"
-        AlternationCount="2"
-        Background="White">
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="Padding" Value="8"/>
-                    </Style>
-                </ListView.ItemContainerStyle>
+        AutoGenerateColumns="False"
+        IsReadOnly="True"
+        HeadersVisibility="Column"
+        GridLinesVisibility="None"
+        CanUserResizeColumns="False"
+        CanUserSortColumns="False"
+        Background="{DynamicResource MaterialDesignPaper}"
+        RowBackground="{DynamicResource MaterialDesignCardBackground}"
+        AlternatingRowBackground="{DynamicResource MaterialDesignPaper}"
+        RowHeight="56"
+        ScrollViewer.VerticalScrollBarVisibility="Auto"
+        HorizontalScrollBarVisibility="Disabled">
 
-                <ListView.View>
-                    <GridView>
-                        <!-- Icon Column -->
-                        <GridViewColumn Width="48">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
+                <DataGrid.Columns>
+                    <!-- Icon -->
+                    <DataGridTemplateColumn Width="72">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border
+                  Width="40" Height="40"
+                  Background="White"
+                  CornerRadius="20"
+                  VerticalAlignment="Center"
+                  HorizontalAlignment="Center">
                                     <Image
                     Source="{Binding Icon}"
-                    Width="24"
-                    Height="24"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Center"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
+                    Width="32" Height="32"
+                    Stretch="Uniform"/>
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                        <!-- App Name Column -->
-                        <GridViewColumn
-              Header="Application"
-              DisplayMemberBinding="{Binding AppName}"
-              Width="240"/>
+                    <!-- Application Name -->
+                    <DataGridTextColumn
+            Header="Application"
+            Binding="{Binding AppName}"
+            Width="*"/>
 
-                        <!-- Duration Column -->
-                        <GridViewColumn
-              Header="Duration"
-              DisplayMemberBinding="{Binding DurationFormatted}"
-              Width="100"/>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </StackPanel>
+                    <!-- Duration -->
+                    <DataGridTextColumn
+            Header="Duration"
+            Binding="{Binding DurationFormatted}"
+            Width="120"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
     </Grid>
 </UserControl>

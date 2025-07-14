@@ -9,16 +9,17 @@ namespace digital_wellbeing_app.CoreLogic
         private SoundUsageSession? _currentSession;
         private bool _alertRaised;
 
-        // dB threshold (20.0 for testing; change to 85.0 for real use)
-        public double ThresholdDb { get; set; } = 85.0;
+        public double ThresholdDb { get; set; } = 85.0;                 // real use
+        public TimeSpan ThresholdTime { get; set; } = TimeSpan.FromMinutes(1); // testing
 
-        // Duration above threshold before firing alert (10s for testing)
-        public TimeSpan ThresholdTime { get; set; } = TimeSpan.FromHours(4);
-
-        private readonly int _pollIntervalSeconds = 10;
-
+        private readonly int _pollIntervalSeconds = 1;
 
         public event EventHandler? OnThresholdExceeded;
+
+        /// <summary>
+        /// Expose the live session if it exists.
+        /// </summary>
+        public SoundUsageSession? CurrentSession => _currentSession;
 
         public void HandleDeviceChange(string newDeviceName, string newDeviceType)
         {
@@ -36,20 +37,13 @@ namespace digital_wellbeing_app.CoreLogic
             _alertRaised = false;
         }
 
-        public void HandleVolumeChange(
-            double volumeScalar,
-            string deviceName,
-            string deviceType,
-            float peakValue
-        )
+        public void HandleVolumeChange(double volumeScalar, string deviceName, string deviceType, float peakValue)
         {
             if (_currentSession == null)
-            {
                 HandleDeviceChange(deviceName, deviceType);
-            }
 
-            bool isActivePlayback = peakValue > 0.01f;
-            if (!isActivePlayback) return;
+            if (peakValue <= 0.01f)
+                return;
 
             var session = _currentSession!;
             session.AvgVolume = session.AvgVolume == 0.0
@@ -60,12 +54,13 @@ namespace digital_wellbeing_app.CoreLogic
             double estimatedSPL = volumeScalar * baseSPL;
             session.EstimatedMaxSPL = Math.Max(session.EstimatedMaxSPL, estimatedSPL);
 
-            if (estimatedSPL >= ThresholdDb)
+            // only accumulate **before** the alert
+            if (estimatedSPL >= ThresholdDb && !_alertRaised)
             {
                 session.WasHarmful = true;
                 session.HarmfulDuration += TimeSpan.FromSeconds(_pollIntervalSeconds);
 
-                if (!_alertRaised && session.HarmfulDuration >= ThresholdTime)
+                if (session.HarmfulDuration >= ThresholdTime)
                 {
                     _alertRaised = true;
                     OnThresholdExceeded?.Invoke(this, EventArgs.Empty);
@@ -77,9 +72,7 @@ namespace digital_wellbeing_app.CoreLogic
         {
             if (_currentSession == null) return;
             if (peakValue < 0.01f)
-            {
                 EndCurrentSession();
-            }
         }
 
         private void EndCurrentSession()
@@ -93,16 +86,13 @@ namespace digital_wellbeing_app.CoreLogic
             }
         }
 
-        private static double GetBaseSPL(string deviceType)
+        private static double GetBaseSPL(string deviceType) => deviceType switch
         {
-            return deviceType switch
-            {
-                "Headphones" => 100.0,
-                "Earphones" => 102.0,
-                "Headsets" => 98.0,
-                "Speakers" => 90.0,
-                _ => 95.0
-            };
-        }
+            "Headphones" => 100.0,
+            "Earphones" => 102.0,
+            "Headsets" => 98.0,
+            "Speakers" => 90.0,
+            _ => 95.0
+        };
     }
 }
