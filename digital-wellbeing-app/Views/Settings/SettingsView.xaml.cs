@@ -1,8 +1,5 @@
-﻿using System.Windows;
-using System.Windows.Controls;
+﻿// File: Views/Settings/SettingsView.xaml.cs
 using MaterialDesignThemes.Wpf;
-using digital_wellbeing_app.Services;
-using digital_wellbeing_app.ViewModels;
 
 namespace digital_wellbeing_app.Views.Settings
 {
@@ -11,42 +8,61 @@ namespace digital_wellbeing_app.Views.Settings
         public SettingsView()
         {
             InitializeComponent();
-
-            // Initialize the radio buttons to the saved theme
-            var svc = new ThemeService();
-            var mode = svc.Load();
-            LightRadio.IsChecked = mode == AppTheme.Light;
-            DarkRadio.IsChecked = mode == AppTheme.Dark;
-            AutoRadio.IsChecked = mode == AppTheme.Auto;
+            // seed the radio to whatever you like; 
+            // for now we'll default to "Auto"
+            AutoRadio.IsChecked = true;
         }
 
-        private void ThemeRadio_Checked(object sender, RoutedEventArgs e)
+        private void ThemeRadio_Checked(object sender, System.Windows.RoutedEventArgs e)
         {
-            var svc = new ThemeService();
-            var picker = new PaletteHelper();
+            // grab the global MaterialDesign theme
+            var paletteHelper = new MaterialDesignThemes.Wpf.PaletteHelper();
+            var theme = paletteHelper.GetTheme();
 
-            // Determine which is selected
-            bool isDark;
             if (LightRadio.IsChecked == true)
             {
-                svc.Save(AppTheme.Light);
-                isDark = false;
+                theme.SetBaseTheme(MaterialDesignThemes.Wpf.BaseTheme.Light);
             }
             else if (DarkRadio.IsChecked == true)
             {
-                svc.Save(AppTheme.Dark);
-                isDark = true;
+                theme.SetBaseTheme(MaterialDesignThemes.Wpf.BaseTheme.Dark);
             }
-            else
+            else // Auto
             {
-                svc.Save(AppTheme.Auto);
-                isDark = svc.IsSystemInDarkMode();
+                bool isDark = IsWindowsInDarkMode();
+                theme.SetBaseTheme(isDark
+                    ? MaterialDesignThemes.Wpf.BaseTheme.Dark
+                    : MaterialDesignThemes.Wpf.BaseTheme.Light);
             }
 
-            // Apply immediately
-            var theme = picker.GetTheme();
-            theme.SetBaseTheme(isDark ? BaseTheme.Dark : BaseTheme.Light);
-            picker.SetTheme(theme);
+            // apply it
+            paletteHelper.SetTheme(theme);
+        }
+
+        /// <summary>
+        /// Reads HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize\AppsUseLightTheme.
+        /// 0 = dark, 1 = light.
+        /// </summary>
+        private bool IsWindowsInDarkMode()
+        {
+            try
+            {
+                using var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(
+                    @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize",
+                    writable: false);
+                if (key?.GetValue("AppsUseLightTheme") is int val)
+                    return val == 0;
+            }
+            catch { }
+            // fallback to light
+            return false;
+        }
+
+        // (StartupCheckBox handlers left untouched)
+        private void StartupCheckBox_Checked(object sender, System.Windows.RoutedEventArgs e)
+        {
+            bool enable = (StartupCheckBox.IsChecked == true);
+            Services.StartupService.Enable(enable);
         }
     }
 }

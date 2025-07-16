@@ -1,5 +1,4 @@
-﻿<!-- MainWindow.xaml -->
-<Window
+﻿<Window
     x:Class="digital_wellbeing_app.MainWindow.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -18,6 +17,7 @@
             <RowDefinition Height="48"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+
         <!-- Nav / Divider / Main columns -->
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="NavColumn" Width="160"/>
@@ -25,25 +25,42 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- TITLE BAR -->
-        <DockPanel Grid.Row="0" Grid.ColumnSpan="3" Background="{DynamicResource PrimaryHueMidBrush}">
+        <!-- TITLE BAR (still accent color) -->
+        <DockPanel
+            Grid.Row="0"
+            Grid.ColumnSpan="3"
+            Background="{DynamicResource PrimaryHueMidBrush}">
             <ToggleButton
-          x:Name="Hamburger"
-          Style="{StaticResource MaterialDesignHamburgerToggleButton}"
-          Width="32" Height="32"
-          Margin="8,8,0,8"
-          Checked="Hamburger_Checked"
-          Unchecked="Hamburger_Unchecked"
-          VerticalAlignment="Center"/>
+                x:Name="Hamburger"
+                Style="{StaticResource MaterialDesignHamburgerToggleButton}"
+                Width="32" Height="32"
+                Margin="8"
+                Checked="Hamburger_Checked"
+                Unchecked="Hamburger_Unchecked"
+                VerticalAlignment="Center"/>
             <TextBlock
-          Text="Digital Wellbeing"
-          VerticalAlignment="Center"
-          FontSize="16"
-          Margin="8,0,0,0"/>
+                Text="Digital Wellbeing"
+                VerticalAlignment="Center"
+                FontSize="16"
+                Margin="8,0,0,0"
+                Foreground="White"/>
         </DockPanel>
 
-        <!-- NAVIGATION RAIL -->
-        <Grid Grid.Row="1" Grid.Column="0" Background="{DynamicResource PrimaryHueMidBrush}">
+        <!-- NAVIGATION RAIL (theme-aware surface + body text) -->
+        <Grid
+            Grid.Row="1"
+            Grid.Column="0"
+            Background="{DynamicResource MaterialDesignPaper}">
+            <Grid.Resources>
+                <!-- All buttons in here will inherit Foreground -->
+                <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
+                    <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
+                </Style>
+                <Style TargetType="md:PackIcon">
+                    <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
+                </Style>
+            </Grid.Resources>
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -52,37 +69,25 @@
 
             <!-- Top nav buttons -->
             <StackPanel Grid.Row="0" Margin="0,8,0,0">
-                <Button Style="{StaticResource MaterialDesignFlatButton}"
-                Height="48" Padding="8"
-                HorizontalContentAlignment="Left"
-                Click="Dashboard_Click">
+                <Button Height="48" Padding="8" HorizontalContentAlignment="Left" Click="Dashboard_Click">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <md:PackIcon Kind="ViewDashboardOutline" Width="24" Height="24" Margin="0,0,12,0"/>
                         <TextBlock Text="Dashboard" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
-                <Button Style="{StaticResource MaterialDesignFlatButton}"
-                Height="48" Padding="8"
-                HorizontalContentAlignment="Left"
-                Click="ScreenTime_Click">
+                <Button Height="48" Padding="8" HorizontalContentAlignment="Left" Click="ScreenTime_Click">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <md:PackIcon Kind="Monitor" Width="24" Height="24" Margin="0,0,12,0"/>
                         <TextBlock Text="Screen Time" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
-                <Button Style="{StaticResource MaterialDesignFlatButton}"
-                Height="48" Padding="8"
-                HorizontalContentAlignment="Left"
-                Click="Sound_Click">
+                <Button Height="48" Padding="8" HorizontalContentAlignment="Left" Click="Sound_Click">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <md:PackIcon Kind="VolumeHigh" Width="24" Height="24" Margin="0,0,12,0"/>
                         <TextBlock Text="Sound Output" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
-                <Button Style="{StaticResource MaterialDesignFlatButton}"
-                Height="48" Padding="8"
-                HorizontalContentAlignment="Left"
-                Click="AppUsage_Click">
+                <Button Height="48" Padding="8" HorizontalContentAlignment="Left" Click="AppUsage_Click">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <md:PackIcon Kind="ChartBar" Width="24" Height="24" Margin="0,0,12,0"/>
                         <TextBlock Text="App Usage" VerticalAlignment="Center"/>
@@ -92,19 +97,13 @@
 
             <!-- Bottom nav: Settings & Exit -->
             <StackPanel Grid.Row="2" Margin="0,0,0,16">
-                <Button Style="{StaticResource MaterialDesignFlatButton}"
-                Height="48" Padding="8"
-                HorizontalContentAlignment="Left"
-                Click="Settings_Click">
+                <Button Height="48" Padding="8" HorizontalContentAlignment="Left" Click="Settings_Click">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <md:PackIcon Kind="Cog" Width="24" Height="24" Margin="0,0,12,0"/>
                         <TextBlock Text="Settings" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
-                <Button Style="{StaticResource MaterialDesignFlatButton}"
-                Height="48" Padding="8"
-                HorizontalContentAlignment="Left"
-                Click="Exit_Click">
+                <Button Height="48" Padding="8" HorizontalContentAlignment="Left" Click="Exit_Click">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <md:PackIcon Kind="LogoutVariant" Width="24" Height="24" Margin="0,0,12,0"/>
                         <TextBlock Text="Exit" VerticalAlignment="Center"/>
@@ -115,16 +114,15 @@
 
         <!-- DARK DIVIDER -->
         <Border
-        Grid.Row="1"
-        Grid.Column="1"
-        Background="{DynamicResource PrimaryHueDarkBrush}"
-        />
+            Grid.Row="1"
+            Grid.Column="1"
+            Background="{DynamicResource PrimaryHueDarkBrush}"/>
 
         <!-- MAIN CONTENT AREA -->
         <ContentControl
-        x:Name="MainContent"
-        Grid.Row="1"
-        Grid.Column="2"
-        Margin="16"/>
+            x:Name="MainContent"
+            Grid.Row="1"
+            Grid.Column="2"
+            Margin="16"/>
     </Grid>
 </Window>

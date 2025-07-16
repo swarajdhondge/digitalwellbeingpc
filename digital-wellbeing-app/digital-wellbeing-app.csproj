@@ -8,16 +8,16 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
 
-    <!-- Allow the LibraryImport‐generated code (NativeMethods) to compile -->
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
-    <!-- Ensure these match your code’s namespace -->
     <RootNamespace>digital_wellbeing_app</RootNamespace>
     <AssemblyName>digital_wellbeing_app</AssemblyName>
+
+    <ApplicationIcon>Resources\Icons\digital-balance-icon.ico</ApplicationIcon>
+    <Win32Icon>Resources\Icons\digital-balance-icon.ico</Win32Icon>
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Your original NuGet packages (no HandyControl) -->
     <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
     <PackageReference Include="xunit.abstractions" Version="2.0.3" />
     <PackageReference Include="xunit.assert" Version="2.9.3" />
@@ -29,7 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- Copy your tray‐icon files to output -->
     <Content Include="Resources\Icons\digital-balance-icon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -37,7 +36,5 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-
-  <!-- Let the SDK implicitly include all .cs and .xaml. -->
 
 </Project>
