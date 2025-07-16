@@ -1,11 +1,9 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using SQLite;
 using digital_wellbeing_app.Models;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace digital_wellbeing_app.Services
 {
@@ -13,14 +11,32 @@ namespace digital_wellbeing_app.Services
     {
         private static SQLiteConnection? _database;
 
+        // folder & filename constants
+        private const string AppFolderName = "Digital Wellbeing";
+        private const string DbFileName = "digital_wellbeing.db";
+
+        // full path to the DB, under %LocalAppData%
+        private static string DbPath
+        {
+            get
+            {
+                var localAppData = Environment.GetFolderPath(
+                    Environment.SpecialFolder.LocalApplicationData);
+                var folder = Path.Combine(localAppData, AppFolderName);
+
+                // ensure the folder exists
+                if (!Directory.Exists(folder))
+                    Directory.CreateDirectory(folder);
+
+                return Path.Combine(folder, DbFileName);
+            }
+        }
+
         public static SQLiteConnection GetConnection()
         {
             if (_database is null)
             {
-                var folderPath = Environment.GetFolderPath(
-                    Environment.SpecialFolder.LocalApplicationData);
-                var dbPath = Path.Combine(folderPath, "digital_wellbeing.db");
-                _database = new SQLiteConnection(dbPath);
+                _database = new SQLiteConnection(DbPath);
                 InitializeTables();
             }
             return _database;
@@ -37,8 +53,7 @@ namespace digital_wellbeing_app.Services
         // --- App Usage ---
         public static void SaveAppUsageSession(AppUsageSession session)
         {
-            var conn = GetConnection();
-            conn.Insert(session);
+            GetConnection().Insert(session);
         }
 
         public static List<AppUsageSession> GetAppUsageSessionsForDate(DateTime date)
@@ -46,6 +61,7 @@ namespace digital_wellbeing_app.Services
             var conn = GetConnection();
             var dayStart = date.Date;
             var dayEnd = dayStart.AddDays(1);
+
             return conn.Table<AppUsageSession>()
                        .Where(s => s.StartTime >= dayStart && s.StartTime < dayEnd)
                        .ToList();
@@ -54,37 +70,35 @@ namespace digital_wellbeing_app.Services
         // --- Screen Time ---
         public static void SaveScreenTimePeriod(ScreenTimePeriod sts)
         {
-            var conn = GetConnection();
-            conn.InsertOrReplace(sts);
+            GetConnection().InsertOrReplace(sts);
         }
 
         public static ScreenTimePeriod? GetScreenTimePeriodForToday()
         {
-            var conn = GetConnection();
-            var today = DateTime.Now.ToString("yyyy-MM-dd");
-            return conn.Table<ScreenTimePeriod>()
-                       .FirstOrDefault(x => x.SessionDate == today);
+            var todayKey = DateTime.Now.ToString("yyyy-MM-dd");
+            return GetConnection()
+                   .Table<ScreenTimePeriod>()
+                   .FirstOrDefault(x => x.SessionDate == todayKey);
         }
+
         public static void SaveScreenTimeSession(ScreenTimeSession session)
         {
-            var conn = GetConnection();
-            conn.Insert(session);
+            GetConnection().Insert(session);
         }
 
         public static List<ScreenTimeSession> GetScreenTimeSessionsForDate(DateTime date)
         {
-            var conn = GetConnection();
-            string dateKey = date.ToString("yyyy-MM-dd");
-            return conn.Table<ScreenTimeSession>()
-                       .Where(x => x.SessionDate == dateKey)
-                       .ToList();
+            var dateKey = date.ToString("yyyy-MM-dd");
+            return GetConnection()
+                   .Table<ScreenTimeSession>()
+                   .Where(x => x.SessionDate == dateKey)
+                   .ToList();
         }
 
         // --- Sound Usage ---
         public static void SaveSoundSession(SoundUsageSession session)
         {
-            var conn = GetConnection();
-            conn.Insert(session);
+            GetConnection().Insert(session);
         }
 
         public static List<SoundUsageSession> GetSoundSessionsForDate(DateTime date)
@@ -92,6 +106,7 @@ namespace digital_wellbeing_app.Services
             var conn = GetConnection();
             var dayStart = date.Date;
             var dayEnd = dayStart.AddDays(1);
+
             return conn.Table<SoundUsageSession>()
                        .Where(s => s.StartTime >= dayStart && s.StartTime < dayEnd)
                        .ToList();

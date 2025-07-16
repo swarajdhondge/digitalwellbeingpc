@@ -10,7 +10,6 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
 
-                <!-- BundledTheme = Light + Teal + Lime -->
                 <md:BundledTheme
                     BaseTheme="Inherit"
                     PrimaryColor="DeepPurple"
