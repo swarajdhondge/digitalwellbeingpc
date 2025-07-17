@@ -1,4 +1,4 @@
-# 🧭 Digital Wellbeing PC — Bring balance to your Windows usage
+# 🧭 Digital Wellbeing PC — Windows variant of Android's Digital Wellbeing
 
 **Digital Wellbeing PC** is an open-source project that brings the core features of Android's Digital Wellbeing to Windows desktops. It tracks your screen time, app usage, and audio exposure, while staying lightweight and respectful of your privacy.
 
@@ -46,7 +46,7 @@
 To promote safe listening habits, audio exposure is tracked and limited. The current logic:
 
 ```csharp
-ThresholdDb = 85.0                   // Real-world exposure limit
+ThresholdDb = 75.0                   // Real-world exposure limit
 ThresholdTime = 30 mins			// Set low for testing
 ```
 
