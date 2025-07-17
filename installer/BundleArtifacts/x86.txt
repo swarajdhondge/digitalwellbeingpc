@@ -1,0 +1,2 @@
+MainPackage=D:\Projects\Windows Digital Wellbeing\pulse-panel\installer\bin\x86\Release\installer_1.0.10.0_x86.appx
+SymbolPackage=D:\Projects\Windows Digital Wellbeing\pulse-panel\installer\obj\x86\Release\Symbols\installer_1.0.10.0_x86.appxsym

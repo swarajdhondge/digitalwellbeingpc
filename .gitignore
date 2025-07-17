@@ -1,30 +1,37 @@
-# Build files
-bin/
-obj/
-*.user
+# >>> .gitignore for Digital Balance solution <<<
+# See https://github.com/github/gitignore/blob/main/VisualStudio.gitignore for reference
+
+# Build outputs
+**/bin/
+**/obj/
+
+# Publish folders
+/publish/
+
+# MSIX packaging outputs
+/installer/bin/
+/installer/obj/
+/installer/AppPackages/
+
+# Certificates and signing keys
+*.pfx
+*.cer
+Add-AppDevPackage.ps1
+
+# Visual Studio workspace & user files
 *.suo
+*.user
 *.userosscache
 *.sln.docstates
-
-# VS Code
-.vscode/
-.vs/
-
-# Logs
-*.log
-
-# Windows
-Thumbs.db
-ehthumbs.db
-Desktop.ini
 
 # Rider
 .idea/
 
-# Dotnet CLI
-project.lock.json
-project.fragment.lock.json
-artifacts/
+# VS Code
+.vscode/
+
+# Visual Studio itself
+.vs/
 
 # NuGet
 *.nupkg
@@ -33,7 +40,25 @@ artifacts/
 .nuget/
 packages/
 
-# Others
-*.db
+# Dotnet CLI
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Test results / coverage
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# Logs
+*.log
+
+# OS junk
+Thumbs.db
+ehthumbs.db
+Desktop.ini
 *.DS_Store
+
+# Swap files, temp
 *.swp
