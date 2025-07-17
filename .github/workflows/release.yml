@@ -1,4 +1,4 @@
-name: Build and Release
+name: Build and Release MSIX
 
 on:
   push:
@@ -6,69 +6,87 @@ on:
       - 'v*.*.*'
 
 permissions:
-    contents: write
+  contents: write
 
 env:
-  PROJECT_PATH: ./digital-wellbeing-app/digital-wellbeing-app.csproj
-  PUBLISH_DIR: ./publish
-  ZIP_NAME: digital-wellbeing-app.zip
+  SOLUTION: 'digital-wellbeing-app/digital-wellbeing-app.sln'
+  INSTALLER_PROJECT: 'installer/installer.wapproj'
+  CONFIGURATION: 'Release'
+  PLATFORM: 'x86'
+  PACKAGE_ROOT: 'installer/AppPackages'
+  PACKAGE_NAME: 'DigitalWellbeingPC'
 
 jobs:
-  build:
-    name: Build EXE
+  build-installer:
     runs-on: windows-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup .NET
+      - name: Setup .NET 9.0
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '9.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore "${{ env.PROJECT_PATH }}"
+        run: dotnet restore ${{ env.SOLUTION }}
 
-      # - name: Set version from tag
-      #   run: |
-      #     $version = "${{ github.ref_name }}".TrimStart("v")
-      #     (Get-Content "${{ env.PROJECT_PATH }}") -replace '<Version>.*</Version>', "<Version>$version</Version>" |
-      #       Set-Content "${{ env.PROJECT_PATH }}"
-      #     echo "Version set to $version"
+      - name: Trust test certificate
+        shell: powershell
+        env:
+          PFX_PASSWORD: ${{ secrets.TEST_CERT_PASSWORD }}
+        run: |
+          $pwd = ConvertTo-SecureString -String $env:PFX_PASSWORD -AsPlainText -Force
+          Import-PfxCertificate `
+            -FilePath installer/installer_TemporaryKey.pfx `
+            -CertStoreLocation Cert:\CurrentUser\My `
+            -Password $pwd
 
-      - name: Publish EXE (Self-contained)
-        run: dotnet publish "${{ env.PROJECT_PATH }}" -c Release -r win-x64 --self-contained true -o "${{ env.PUBLISH_DIR }}"
+      - name: Publish MSIX package
+        shell: powershell
+        run: |
+          & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe" `
+            ${{ env.INSTALLER_PROJECT }} `
+            /t:Publish `
+            /p:Configuration=${{ env.CONFIGURATION }} `
+            /p:Platform=${{ env.PLATFORM }}
 
-      - name: Zip the published folder
-        run: Compress-Archive -Path "${{ env.PUBLISH_DIR }}\*" -DestinationPath "${{ env.ZIP_NAME }}"
+      - name: Rename output folder and archive
+        shell: powershell
+        run: |
+          $version = '${{ github.ref_name }}'.TrimStart('v')
+          $packageName = '${{ env.PACKAGE_NAME }}'
+          $source = Get-ChildItem '${{ env.PACKAGE_ROOT }}' -Directory |
+                    Where-Object { $_.Name -like "$($packageName)*Test" }
+          $destination = Join-Path '${{ env.PACKAGE_ROOT }}' "$packageName`_$version"
+          Move-Item $source.FullName $destination
+          $zipName = "$($packageName)_$version.zip"
+          Compress-Archive -Path "$destination\*" -DestinationPath $zipName
+          Write-Host "Created archive: $zipName"
 
-      - name: Upload ZIP as artifact
+      - name: Upload installer archive
         uses: actions/upload-artifact@v4
         with:
-            name: release-zip
-            path: ${{ env.ZIP_NAME }}
+          name: msix-installer
+          path: '*.zip'
 
-
-  release:
-    name: Create GitHub Release
+  create-release:
+    needs: build-installer
     runs-on: windows-latest
-    needs: build
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Download built zip
+      - name: Download installer archive
         uses: actions/download-artifact@v4
         with:
-          name: release-zip
+          name: msix-installer
 
-      - name: Upload to GitHub Release
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
-          files: ${{ env.ZIP_NAME }}
+          files: '*.zip'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

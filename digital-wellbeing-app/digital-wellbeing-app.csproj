@@ -1,33 +1,41 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net9.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
-    <RootNamespace>digital_wellbeing_app</RootNamespace>
-    <AssemblyName>digital_wellbeing_app</AssemblyName>
+    <UseWindowsForms>true</UseWindowsForms>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <ApplicationIcon>Resources\Icons\digital-balance-icon.ico</ApplicationIcon>
+
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DisableImplicitRIDInference>true</DisableImplicitRIDInference>
+
+    <RootNamespace>digital_wellbeing_app</RootNamespace>
+    <AssemblyName>digital_wellbeing_app</AssemblyName>
+
+    <ApplicationIcon>Resources\Icons\digital-balance-icon.ico</ApplicationIcon>
+    <Win32Icon>Resources\Icons\digital-balance-icon.ico</Win32Icon>
+
   </PropertyGroup>
-  
-  <ItemGroup>
-    <Resource Include="Resources\Icons\digital-balance-icon-16.png" />
-    <Resource Include="Resources\Icons\digital-balance-icon-32.png" />
-    <Resource Include="Resources\Icons\digital-balance-icon-48.png" />
-    <Resource Include="Resources\Icons\digital-balance-icon-64.png" />
-    <Resource Include="Resources\Icons\digital-balance-icon-128.png" />
-    <Resource Include="Resources\Icons\digital-balance-icon-256.png" />
-    <Resource Include="Resources\Icons\digital-balance-icon.ico" />
-  </ItemGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
     <PackageReference Include="xunit.abstractions" Version="2.0.3" />
     <PackageReference Include="xunit.assert" Version="2.9.3" />
     <PackageReference Include="xunit.extensibility.core" Version="2.9.3" />
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+    <PackageReference Include="NAudio" Version="2.1.0" />
+    <PackageReference Include="MaterialDesignThemes" Version="5.2.1" />
+    <PackageReference Include="MaterialDesignColors" Version="5.2.1" />
   </ItemGroup>
-  
+
+  <ItemGroup>
+    <Content Include="Resources\Icons\digital-balance-icon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Icons\digital-balance-icon-32.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
