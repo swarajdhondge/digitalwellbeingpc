@@ -1,0 +1,135 @@
+﻿<UserControl
+    x:Class="digital_wellbeing_app.Views.Sound.SoundTimelineView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="clr-namespace:digital_wellbeing_app.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    Background="{DynamicResource MaterialDesignPaper}">
+
+    <UserControl.DataContext>
+        <vm:SoundTimelineViewModel/>
+    </UserControl.DataContext>
+
+    <UserControl.Resources>
+        <vm:TimelineWidthConverter    x:Key="TimelineWidthConverter" />
+        <vm:HourToOffsetConverter     x:Key="HourToOffsetConverter" />
+        <vm:HourDynamicLabelConverter x:Key="HourDynamicLabelConverter" />
+        <vm:HourVisibilityConverter   x:Key="HourVisibilityConverter" />
+    </UserControl.Resources>
+
+    <Grid>
+        <StackPanel Margin="20">
+
+            <!-- Header -->
+            <TextBlock Text="🔈 Detailed Sound Output"
+                 FontSize="22"
+                 FontWeight="Bold"
+                 Foreground="{DynamicResource MaterialDesignBody}"
+                 Margin="0,0,0,8"/>
+
+            <!-- Totals -->
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                <StackPanel Margin="0,0,20,0">
+                    <TextBlock Text="Total Listening"
+                     FontSize="14"
+                     Foreground="{DynamicResource MaterialDesignBody}" />
+                    <TextBlock x:Name="TotalListeningTextBlock"
+                     Text="{Binding TotalListeningText}"
+                     FontSize="16"
+                     FontWeight="Bold"
+                     Foreground="{DynamicResource MaterialDesignGreen}" />
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Total Harmful"
+                     FontSize="14"
+                     Foreground="{DynamicResource MaterialDesignBody}" />
+                    <TextBlock x:Name="TotalHarmfulTextBlock"
+                     Text="{Binding TotalHarmfulText}"
+                     FontSize="16"
+                     FontWeight="Bold"
+                     Foreground="{DynamicResource MaterialDesignRed}" />
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Timeline -->
+            <Border x:Name="TimelineBorder"
+              Height="80"
+              Background="{DynamicResource MaterialDesignCardBackground}"
+              CornerRadius="6"
+              Margin="0,0,0,4">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black"
+                            BlurRadius="8"
+                            ShadowDepth="2"
+                            Opacity="0.2"/>
+                </Border.Effect>
+                <Canvas x:Name="RealTimeCanvas"
+                Background="Transparent"/>
+            </Border>
+
+            <!-- Hour Markers -->
+            <ItemsControl ItemsSource="{Binding HourMarkers}"
+                    Width="{Binding ActualWidth, ElementName=TimelineBorder}"
+                    Margin="0,0,0,16">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Rows="1" Columns="24"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock FontSize="10"
+                       Foreground="{DynamicResource MaterialDesignBodySecondary}"
+                       HorizontalAlignment="Center">
+                            <TextBlock.Text>
+                                <MultiBinding Converter="{StaticResource HourDynamicLabelConverter}">
+                                    <Binding/>
+                                    <Binding ElementName="TimelineBorder" Path="ActualWidth"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                            <TextBlock.Visibility>
+                                <MultiBinding Converter="{StaticResource HourVisibilityConverter}">
+                                    <Binding/>
+                                    <Binding ElementName="TimelineBorder" Path="ActualWidth"/>
+                                </MultiBinding>
+                            </TextBlock.Visibility>
+                        </TextBlock>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- Toggle + Details -->
+            <Button x:Name="ToggleDetailsButton"
+              Content="Show detailed tracking"
+              Width="180" Height="32"
+              Click="ToggleDetailsButton_Click"
+              Style="{StaticResource MaterialDesignOutlinedButton}"
+              HorizontalAlignment="Left"
+              Margin="0,0,0,8"/>
+            <DataGrid x:Name="DetailsDataGrid"
+                ItemsSource="{Binding Sessions}"
+                AutoGenerateColumns="False"
+                IsReadOnly="True"
+                HeadersVisibility="Column"
+                CanUserResizeColumns="False"
+                CanUserSortColumns="False"
+                GridLinesVisibility="None"
+                Height="200"
+                Background="{DynamicResource MaterialDesignPaper}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Time"
+                              Binding="{Binding SessionLabel}"
+                              Width="2*"/>
+                    <DataGridTextColumn Header="Device"
+                              Binding="{Binding DeviceName}"
+                              Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+        </StackPanel>
+    </Grid>
+</UserControl>
