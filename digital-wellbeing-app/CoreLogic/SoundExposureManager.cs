@@ -9,8 +9,8 @@ namespace digital_wellbeing_app.CoreLogic
         private SoundUsageSession? _currentSession;
         private bool _alertRaised;
 
-        public double ThresholdDb { get; set; } = 85.0;                 // real use
-        public TimeSpan ThresholdTime { get; set; } = TimeSpan.FromMinutes(1); // testing
+        public double ThresholdDb { get; set; } = 75.0;                 // real use
+        public TimeSpan ThresholdTime { get; set; } = TimeSpan.FromMinutes(30); // testing
 
         private readonly int _pollIntervalSeconds = 1;
 

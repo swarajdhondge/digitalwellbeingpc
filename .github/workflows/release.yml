@@ -1,9 +1,9 @@
-name: Build and Release MSIX
+# name: Build and Release MSIX
 
-on:
-  push:
-    tags:
-      - 'v*.*.*'
+# on:
+#   push:
+#     tags:
+#       - 'v*.*.*'
 
 permissions:
   contents: write
@@ -37,8 +37,10 @@ jobs:
           PFX_PASSWORD: ${{ secrets.TEST_CERT_PASSWORD }}
         run: |
           $pwd = ConvertTo-SecureString -String $env:PFX_PASSWORD -AsPlainText -Force
+          $pfx = Join-Path $Env:GITHUB_WORKSPACE 'installer\installer_TemporaryKey.pfx'
+          if (-Not (Test-Path $pfx)) { throw "PFX not found at $pfx" }
           Import-PfxCertificate `
-            -FilePath installer/installer_TemporaryKey.pfx `
+            -FilePath $pfx `
             -CertStoreLocation Cert:\CurrentUser\My `
             -Password $pwd
 
