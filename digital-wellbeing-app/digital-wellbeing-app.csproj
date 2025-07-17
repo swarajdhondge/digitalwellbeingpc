@@ -15,6 +15,7 @@
 
     <ApplicationIcon>Resources\Icons\digital-balance-icon.ico</ApplicationIcon>
     <Win32Icon>Resources\Icons\digital-balance-icon.ico</Win32Icon>
+
   </PropertyGroup>
 
   <ItemGroup>
