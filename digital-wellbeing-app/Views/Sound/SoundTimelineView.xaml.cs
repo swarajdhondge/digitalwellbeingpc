@@ -19,8 +19,6 @@ namespace digital_wellbeing_app.Views.Sound
             _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
             _timer.Tick += (_, __) => {
                 ViewModel.RefreshData();
-                TotalListeningTextBlock.Text = ViewModel.TotalListeningText;
-                TotalHarmfulTextBlock.Text = ViewModel.TotalHarmfulText;
                 RenderCanvas();
             };
 
@@ -32,8 +30,6 @@ namespace digital_wellbeing_app.Views.Sound
         {
             // First draw
             ViewModel.RefreshData();
-            TotalListeningTextBlock.Text = ViewModel.TotalListeningText;
-            TotalHarmfulTextBlock.Text = ViewModel.TotalHarmfulText;
             RenderCanvas();
 
             DetailsDataGrid.Visibility = Visibility.Collapsed;
@@ -49,9 +45,9 @@ namespace digital_wellbeing_app.Views.Sound
             double h = canvas.ActualHeight;
             if (w <= 0 || h <= 0) return;
 
-            var safeBrush = TryFindResource("MaterialDesignGreen") as System.Windows.Media.Brush
-                            ?? System.Windows.Media.Brushes.LightGreen;
-            var harmBrush = TryFindResource("MaterialDesignRed") as System.Windows.Media.Brush
+            var safeBrush = TryFindResource("Accent.Primary") as System.Windows.Media.Brush
+                            ?? System.Windows.Media.Brushes.Teal;
+            var harmBrush = TryFindResource("Status.Danger") as System.Windows.Media.Brush
                             ?? System.Windows.Media.Brushes.IndianRed;
 
             foreach (var seg in ViewModel.Bars)

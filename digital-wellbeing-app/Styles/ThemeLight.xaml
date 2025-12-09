@@ -1,0 +1,77 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- 
+    ============================================
+    LIGHT THEME - Slate + Teal Palette
+    ============================================
+    -->
+
+    <!-- Background Colors (Light Slate) -->
+    <Color x:Key="Bg.PrimaryColor">#F8FAFC</Color>         <!-- Slate 50 - Main background -->
+    <Color x:Key="Bg.SecondaryColor">#F1F5F9</Color>       <!-- Slate 100 - Sidebar -->
+    <Color x:Key="Bg.CardColor">#FFFFFF</Color>            <!-- White - Cards -->
+    <Color x:Key="Bg.ElevatedColor">#E2E8F0</Color>        <!-- Slate 200 - Hover states -->
+
+    <!-- Border Colors -->
+    <Color x:Key="Border.DefaultColor">#E2E8F0</Color>     <!-- Slate 200 -->
+    <Color x:Key="Border.SubtleColor">#F1F5F9</Color>      <!-- Slate 100 -->
+
+    <!-- Text Colors -->
+    <Color x:Key="Text.PrimaryColor">#0F172A</Color>       <!-- Slate 950 - Headings, body -->
+    <Color x:Key="Text.SecondaryColor">#475569</Color>     <!-- Slate 600 - Labels -->
+    <Color x:Key="Text.MutedColor">#94A3B8</Color>         <!-- Slate 400 - Hints, disabled -->
+
+    <!-- Accent Colors (Slightly Darker Teal for Light BG) -->
+    <Color x:Key="Accent.PrimaryColor">#14B8A6</Color>     <!-- Teal 500 -->
+    <Color x:Key="Accent.HoverColor">#0D9488</Color>       <!-- Teal 600 -->
+    <Color x:Key="Accent.SubtleColor">#CCFBF1</Color>      <!-- Teal 100 - Icon badges -->
+    <Color x:Key="Accent.OnAccentColor">#FFFFFF</Color>    <!-- White - Text on accent -->
+
+    <!-- Status Colors (Same as dark) -->
+    <Color x:Key="Status.SuccessColor">#22C55E</Color>     <!-- Green 500 -->
+    <Color x:Key="Status.WarningColor">#F59E0B</Color>     <!-- Amber 500 -->
+    <Color x:Key="Status.DangerColor">#EF4444</Color>      <!-- Red 500 -->
+    <Color x:Key="Status.InfoColor">#3B82F6</Color>        <!-- Blue 500 -->
+
+    <!-- ============================================ -->
+    <!-- BRUSHES -->
+    <!-- ============================================ -->
+
+    <!-- Background Brushes -->
+    <SolidColorBrush x:Key="Bg.Primary" Color="{StaticResource Bg.PrimaryColor}"/>
+    <SolidColorBrush x:Key="Bg.Secondary" Color="{StaticResource Bg.SecondaryColor}"/>
+    <SolidColorBrush x:Key="Bg.Card" Color="{StaticResource Bg.CardColor}"/>
+    <SolidColorBrush x:Key="Bg.Elevated" Color="{StaticResource Bg.ElevatedColor}"/>
+
+    <!-- Border Brushes -->
+    <SolidColorBrush x:Key="Border.Default" Color="{StaticResource Border.DefaultColor}"/>
+    <SolidColorBrush x:Key="Border.Subtle" Color="{StaticResource Border.SubtleColor}"/>
+
+    <!-- Text Brushes -->
+    <SolidColorBrush x:Key="Text.Primary" Color="{StaticResource Text.PrimaryColor}"/>
+    <SolidColorBrush x:Key="Text.Secondary" Color="{StaticResource Text.SecondaryColor}"/>
+    <SolidColorBrush x:Key="Text.Muted" Color="{StaticResource Text.MutedColor}"/>
+
+    <!-- Accent Brushes -->
+    <SolidColorBrush x:Key="Accent.Primary" Color="{StaticResource Accent.PrimaryColor}"/>
+    <SolidColorBrush x:Key="Accent.Hover" Color="{StaticResource Accent.HoverColor}"/>
+    <SolidColorBrush x:Key="Accent.Subtle" Color="{StaticResource Accent.SubtleColor}"/>
+    <SolidColorBrush x:Key="Accent.OnAccent" Color="{StaticResource Accent.OnAccentColor}"/>
+
+    <!-- Status Brushes -->
+    <SolidColorBrush x:Key="Status.Success" Color="{StaticResource Status.SuccessColor}"/>
+    <SolidColorBrush x:Key="Status.Warning" Color="{StaticResource Status.WarningColor}"/>
+    <SolidColorBrush x:Key="Status.Danger" Color="{StaticResource Status.DangerColor}"/>
+    <SolidColorBrush x:Key="Status.Info" Color="{StaticResource Status.InfoColor}"/>
+
+    <!-- ============================================ -->
+    <!-- SHADOWS (Lighter for light theme) -->
+    <!-- ============================================ -->
+    <DropShadowEffect x:Key="Shadow.SM" BlurRadius="4" ShadowDepth="1" Opacity="0.1" Color="#000000"/>
+    <DropShadowEffect x:Key="Shadow.MD" BlurRadius="8" ShadowDepth="2" Opacity="0.15" Color="#000000"/>
+    <DropShadowEffect x:Key="Shadow.LG" BlurRadius="16" ShadowDepth="4" Opacity="0.2" Color="#000000"/>
+
+</ResourceDictionary>
+

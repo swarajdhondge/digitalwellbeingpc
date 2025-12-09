@@ -1,0 +1,109 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- 
+    ============================================
+    TYPOGRAPHY STYLES
+    Uses tokens from ThemeDark/ThemeLight
+    ============================================
+    -->
+
+    <!-- Heading Styles -->
+    <Style x:Key="HeadingHero" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Font.Hero}"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Primary}"/>
+    </Style>
+
+    <Style x:Key="HeadingLarge" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Font.XXL}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Primary}"/>
+    </Style>
+
+    <Style x:Key="HeadingMedium" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Font.XL}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Primary}"/>
+    </Style>
+
+    <Style x:Key="HeadingSmall" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Font.LG}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Primary}"/>
+    </Style>
+
+    <!-- Body Text Styles -->
+    <Style x:Key="BodyLarge" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Font.LG}"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Primary}"/>
+    </Style>
+
+    <Style x:Key="BodyMedium" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Font.MD}"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Primary}"/>
+    </Style>
+
+    <Style x:Key="BodySmall" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Font.SM}"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Secondary}"/>
+    </Style>
+
+    <!-- Label Styles -->
+    <Style x:Key="LabelPrimary" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Font.MD}"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Primary}"/>
+    </Style>
+
+    <Style x:Key="LabelSecondary" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Font.SM}"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Secondary}"/>
+    </Style>
+
+    <Style x:Key="LabelMuted" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Font.XS}"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Muted}"/>
+    </Style>
+
+    <!-- Stat/Number Display -->
+    <Style x:Key="StatNumber" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Font.XXXL}"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{DynamicResource Accent.Primary}"/>
+    </Style>
+
+    <Style x:Key="StatLabel" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Font.SM}"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Secondary}"/>
+    </Style>
+
+    <!-- Section Header (uppercase, muted) -->
+    <Style x:Key="NavSectionHeader" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Font.XS}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Muted}"/>
+        <Setter Property="Margin" Value="24,16,16,8"/>
+    </Style>
+
+</ResourceDictionary>

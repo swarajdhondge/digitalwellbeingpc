@@ -1,43 +1,151 @@
 ﻿<UserControl
-  x:Class="digital_wellbeing_app.Views.Settings.SettingsView"
-  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  Height="Auto"
-  Width="Auto">
-    <StackPanel Margin="24">
+    x:Class="digital_wellbeing_app.Views.Settings.SettingsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    Background="Transparent">
 
-        <!-- Theme selection -->
-        <TextBlock
-      Text="Select Theme:"
-      FontSize="16"
-      FontWeight="SemiBold"
-      Margin="0,0,0,12"/>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="8">
 
-        <RadioButton
-      x:Name="LightRadio"
-      Content="Light"
-      Margin="0,0,0,8"
-      Checked="ThemeRadio_Checked"/>
+            <!-- Page Header -->
+            <TextBlock Text="Settings"
+                       Style="{StaticResource HeadingLarge}"
+                       Margin="0,0,0,24"/>
 
-        <RadioButton
-      x:Name="DarkRadio"
-      Content="Dark"
-      Margin="0,0,0,8"
-      Checked="ThemeRadio_Checked"/>
+            <!-- Appearance Section -->
+            <TextBlock Text="APPEARANCE"
+                       Style="{StaticResource NavSectionHeader}"
+                       Margin="0,0,0,12"/>
 
-        <RadioButton
-      x:Name="AutoRadio"
-      Content="Auto"
-      Checked="ThemeRadio_Checked"/>
+            <Border Style="{StaticResource CardBase}" Margin="0,0,0,24">
+                <StackPanel>
+                    <TextBlock Text="Theme"
+                               Style="{StaticResource HeadingSmall}"
+                               Margin="0,0,0,16"/>
 
-        <Separator Margin="0,16"/>
+                    <StackPanel Orientation="Horizontal">
+                        <!-- Light Theme Option -->
+                        <Border x:Name="LightThemeOption"
+                                Background="{DynamicResource Bg.Elevated}"
+                                CornerRadius="8"
+                                Padding="16,12"
+                                Margin="0,0,12,0"
+                                Cursor="Hand"
+                                MouseLeftButtonDown="LightTheme_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <md:PackIcon Kind="WeatherSunny" Width="20" Height="20"
+                                             Foreground="{DynamicResource Text.Secondary}"
+                                             VerticalAlignment="Center"/>
+                                <TextBlock Text="Light"
+                                           Style="{StaticResource BodyMedium}"
+                                           Margin="8,0,0,0"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
 
-        <!-- Launch on startup -->
-        <CheckBox
-      x:Name="StartupCheckBox"
-      Content="Launch on Windows startup"
-      Checked="StartupCheckBox_Checked"
-      Unchecked="StartupCheckBox_Checked"/>
+                        <!-- Dark Theme Option -->
+                        <Border x:Name="DarkThemeOption"
+                                Background="{DynamicResource Accent.Primary}"
+                                CornerRadius="8"
+                                Padding="16,12"
+                                Margin="0,0,12,0"
+                                Cursor="Hand"
+                                MouseLeftButtonDown="DarkTheme_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <md:PackIcon Kind="WeatherNight" Width="20" Height="20"
+                                             Foreground="{DynamicResource TextOnAccentBrush}"
+                                             VerticalAlignment="Center"/>
+                                <TextBlock Text="Dark"
+                                           Foreground="{DynamicResource TextOnAccentBrush}"
+                                           FontSize="14"
+                                           Margin="8,0,0,0"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
 
-    </StackPanel>
+                        <!-- Auto Theme Option -->
+                        <Border x:Name="AutoThemeOption"
+                                Background="{DynamicResource Bg.Elevated}"
+                                CornerRadius="8"
+                                Padding="16,12"
+                                Cursor="Hand"
+                                MouseLeftButtonDown="AutoTheme_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <md:PackIcon Kind="ThemeLightDark" Width="20" Height="20"
+                                             Foreground="{DynamicResource Text.Secondary}"
+                                             VerticalAlignment="Center"/>
+                                <TextBlock Text="Auto"
+                                           Style="{StaticResource BodyMedium}"
+                                           Margin="8,0,0,0"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Startup Section -->
+            <TextBlock Text="STARTUP"
+                       Style="{StaticResource NavSectionHeader}"
+                       Margin="0,0,0,12"/>
+
+            <Border Style="{StaticResource CardBase}" Margin="0,0,0,24">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                        <TextBlock Text="Launch on Windows startup"
+                                   Style="{StaticResource BodyMedium}"
+                                   FontWeight="SemiBold"/>
+                        <TextBlock Text="Start Digital Wellbeing when you log in"
+                                   Style="{StaticResource LabelSecondary}"
+                                   Margin="0,4,0,0"/>
+                    </StackPanel>
+
+                    <CheckBox x:Name="StartupCheckBox"
+                              Grid.Column="1"
+                              Checked="StartupCheckBox_Checked"
+                              Unchecked="StartupCheckBox_Checked"
+                              VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+
+            <!-- About Section -->
+            <TextBlock Text="ABOUT"
+                       Style="{StaticResource NavSectionHeader}"
+                       Margin="0,0,0,12"/>
+
+            <Border Style="{StaticResource CardFlat}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                        <Image Source="/Resources/Icons/digital-balance-icon-32.png"
+                               Width="32" Height="32"
+                               RenderOptions.BitmapScalingMode="HighQuality"/>
+                        <StackPanel Margin="12,0,0,0" VerticalAlignment="Center">
+                            <TextBlock Text="Digital Wellbeing"
+                                       Style="{StaticResource HeadingSmall}"/>
+                            <TextBlock Text="Version 1.1.0"
+                                       Style="{StaticResource LabelSecondary}"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <TextBlock Text="Track your screen time, app usage, and audio exposure to maintain a healthy digital lifestyle."
+                               Style="{StaticResource BodySmall}"
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Hidden radio buttons for backward compatibility -->
+            <StackPanel Visibility="Collapsed">
+                <RadioButton x:Name="LightRadio" Checked="ThemeRadio_Checked"/>
+                <RadioButton x:Name="DarkRadio" Checked="ThemeRadio_Checked"/>
+                <RadioButton x:Name="AutoRadio" Checked="ThemeRadio_Checked"/>
+            </StackPanel>
+
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

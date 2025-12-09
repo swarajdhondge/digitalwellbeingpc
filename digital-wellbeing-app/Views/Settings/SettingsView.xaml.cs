@@ -1,68 +1,109 @@
-﻿// File: Views/Settings/SettingsView.xaml.cs
-using MaterialDesignThemes.Wpf;
+﻿using System.Windows;
+using System.Windows.Input;
+using digital_wellbeing_app.Services;
+using digital_wellbeing_app.ViewModels;
 
 namespace digital_wellbeing_app.Views.Settings
 {
     public partial class SettingsView : System.Windows.Controls.UserControl
     {
+        private readonly ThemeService _themeService = new();
+
         public SettingsView()
         {
             InitializeComponent();
-            // seed the radio to whatever you like; 
-            // for now we'll default to "Auto"
+            
+            // Load saved theme preference
+            var savedTheme = _themeService.Load();
+            switch (savedTheme)
+            {
+                case AppTheme.Light:
+                    LightRadio.IsChecked = true;
+                    UpdateThemeSelection("Light");
+                    break;
+                case AppTheme.Dark:
+                    DarkRadio.IsChecked = true;
+                    UpdateThemeSelection("Dark");
+                    break;
+                default: // Auto
+                    AutoRadio.IsChecked = true;
+                    UpdateThemeSelection("Auto");
+                    break;
+            }
+            
+            // Load startup preference
+            StartupCheckBox.IsChecked = StartupService.IsEnabled();
+        }
+
+        private void UpdateThemeSelection(string selectedTheme)
+        {
+            // Reset all to default style
+            var defaultBrush = (System.Windows.Media.Brush)FindResource("Bg.Elevated");
+            LightThemeOption.Background = defaultBrush;
+            DarkThemeOption.Background = defaultBrush;
+            AutoThemeOption.Background = defaultBrush;
+
+            // Highlight selected
+            var accentBrush = (System.Windows.Media.Brush)FindResource("Accent.Primary");
+            switch (selectedTheme)
+            {
+                case "Light":
+                    LightThemeOption.Background = accentBrush;
+                    break;
+                case "Dark":
+                    DarkThemeOption.Background = accentBrush;
+                    break;
+                case "Auto":
+                    AutoThemeOption.Background = accentBrush;
+                    break;
+            }
+        }
+
+        private void LightTheme_Click(object sender, MouseButtonEventArgs e)
+        {
+            LightRadio.IsChecked = true;
+            UpdateThemeSelection("Light");
+            ApplyTheme(AppTheme.Light);
+        }
+
+        private void DarkTheme_Click(object sender, MouseButtonEventArgs e)
+        {
+            DarkRadio.IsChecked = true;
+            UpdateThemeSelection("Dark");
+            ApplyTheme(AppTheme.Dark);
+        }
+
+        private void AutoTheme_Click(object sender, MouseButtonEventArgs e)
+        {
             AutoRadio.IsChecked = true;
+            UpdateThemeSelection("Auto");
+            ApplyTheme(AppTheme.Auto);
         }
 
-        private void ThemeRadio_Checked(object sender, System.Windows.RoutedEventArgs e)
+        private void ThemeRadio_Checked(object sender, RoutedEventArgs e)
         {
-            // grab the global MaterialDesign theme
-            var paletteHelper = new MaterialDesignThemes.Wpf.PaletteHelper();
-            var theme = paletteHelper.GetTheme();
-
+            // This is called during initialization, skip if not loaded yet
+            if (!IsLoaded) return;
+            
             if (LightRadio.IsChecked == true)
-            {
-                theme.SetBaseTheme(MaterialDesignThemes.Wpf.BaseTheme.Light);
-            }
+                ApplyTheme(AppTheme.Light);
             else if (DarkRadio.IsChecked == true)
-            {
-                theme.SetBaseTheme(MaterialDesignThemes.Wpf.BaseTheme.Dark);
-            }
-            else // Auto
-            {
-                bool isDark = IsWindowsInDarkMode();
-                theme.SetBaseTheme(isDark
-                    ? MaterialDesignThemes.Wpf.BaseTheme.Dark
-                    : MaterialDesignThemes.Wpf.BaseTheme.Light);
-            }
-
-            // apply it
-            paletteHelper.SetTheme(theme);
+                ApplyTheme(AppTheme.Dark);
+            else
+                ApplyTheme(AppTheme.Auto);
         }
 
-        /// <summary>
-        /// Reads HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize\AppsUseLightTheme.
-        /// 0 = dark, 1 = light.
-        /// </summary>
-        private bool IsWindowsInDarkMode()
+        private void ApplyTheme(AppTheme theme)
         {
-            try
-            {
-                using var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(
-                    @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize",
-                    writable: false);
-                if (key?.GetValue("AppsUseLightTheme") is int val)
-                    return val == 0;
-            }
-            catch { }
-            // fallback to light
-            return false;
+            // Save and apply using ThemeService
+            _themeService.Save(theme);
+            _themeService.ApplyTheme(theme);
         }
 
-        // (StartupCheckBox handlers left untouched)
-        private void StartupCheckBox_Checked(object sender, System.Windows.RoutedEventArgs e)
+        private void StartupCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             bool enable = (StartupCheckBox.IsChecked == true);
-            Services.StartupService.Enable(enable);
+            StartupService.Enable(enable);
         }
     }
 }

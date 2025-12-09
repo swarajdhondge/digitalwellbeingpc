@@ -4,52 +4,88 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:vm="clr-namespace:digital_wellbeing_app.ViewModels"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:conv="clr-namespace:digital_wellbeing_app.Converters"
     mc:Ignorable="d"
     d:DesignHeight="600" d:DesignWidth="800"
-    Background="{DynamicResource MaterialDesignPaper}">
+    Background="Transparent">
 
     <UserControl.Resources>
-        <vm:TimelineWidthConverter    x:Key="TimelineWidthConverter" />
-        <vm:HourToOffsetConverter     x:Key="HourToOffsetConverter" />
-        <vm:HourDynamicLabelConverter x:Key="HourDynamicLabelConverter" />
-        <vm:HourVisibilityConverter   x:Key="HourVisibilityConverter" />
+        <conv:TimelineWidthConverter    x:Key="TimelineWidthConverter" />
+        <conv:HourToOffsetConverter     x:Key="HourToOffsetConverter" />
+        <conv:HourDynamicLabelConverter x:Key="HourDynamicLabelConverter" />
+        <conv:HourVisibilityConverter   x:Key="HourVisibilityConverter" />
+        <conv:UsageToWidthConverter     x:Key="UsageToWidthConverter" />
     </UserControl.Resources>
 
-    <Grid Background="{DynamicResource MaterialDesignPaper}">
-        <StackPanel Margin="20">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="8">
 
-            <!-- 1) Header & live total -->
-            <TextBlock
-        Text="📊 Detailed Screen Time"
-        FontSize="22" FontWeight="Bold"
-        Foreground="{DynamicResource MaterialDesignBody}" />
-            <TextBlock
-        Text="{Binding TodayTimeText}"
-        FontSize="18" FontWeight="SemiBold"
-        Foreground="{DynamicResource MaterialDesignGreen}"
-        Margin="0,4,0,12" />
+            <!-- Page Header -->
+            <TextBlock Text="Screen Time"
+                       Style="{StaticResource HeadingLarge}"
+                       Margin="0,0,0,24"/>
 
-            <!-- 2) Timeline border & live canvas -->
-            <Border
-        x:Name="TimelineBorder"
-        Height="80"
-        Background="{DynamicResource MaterialDesignCardBackground}"
-        CornerRadius="6"
-        Margin="0,0,0,4">
-                <Border.Effect>
-                    <DropShadowEffect Color="Black" BlurRadius="8" ShadowDepth="2" Opacity="0.2"/>
-                </Border.Effect>
-                <Canvas
-          x:Name="RealTimeCanvas"
-          Background="Transparent"/>
+            <!-- Today's Stats Card -->
+            <Border Style="{StaticResource CardBase}" Margin="0,0,0,24">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Icon -->
+                    <Border Grid.Column="0"
+                            Background="{DynamicResource Accent.Primary}"
+                            CornerRadius="8"
+                            Padding="12"
+                            VerticalAlignment="Center">
+                        <md:PackIcon Kind="Monitor" Width="28" Height="28"
+                                     Foreground="{DynamicResource TextOnAccentBrush}"/>
+                    </Border>
+
+                    <!-- Stats -->
+                    <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
+                        <TextBlock Text="Today's Screen Time"
+                                   Style="{StaticResource LabelSecondary}"/>
+                        <TextBlock Text="{Binding TodayTimeText}"
+                                   Style="{StaticResource StatNumber}"
+                                   Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Grid>
             </Border>
 
-            <!-- 3) Responsive hour labels -->
-            <ItemsControl
-        ItemsSource="{Binding HourMarkers}"
-        Margin="0,0,0,16"
-        Width="{Binding ActualWidth, ElementName=TimelineBorder}">
+            <!-- Timeline Section -->
+            <TextBlock Text="TODAY'S ACTIVITY"
+                       Style="{StaticResource NavSectionHeader}"
+                       Margin="0,0,0,12"/>
+
+            <!-- Timeline -->
+            <Border x:Name="TimelineBorder"
+                    Style="{StaticResource CardBase}"
+                    Padding="16"
+                    Margin="0,0,0,8">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="60"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Timeline Bar -->
+                    <Border Grid.Row="1"
+                            Background="{DynamicResource Bg.Elevated}"
+                            CornerRadius="4"
+                            Height="40"
+                            VerticalAlignment="Center">
+                        <Canvas x:Name="RealTimeCanvas" Background="Transparent"/>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- Hour Labels -->
+            <ItemsControl ItemsSource="{Binding HourMarkers}"
+                          Margin="16,0,16,24"
+                          Width="{Binding ActualWidth, ElementName=TimelineBorder}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <UniformGrid Rows="1" Columns="24"/>
@@ -57,10 +93,8 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock
-              FontSize="10"
-              Foreground="{DynamicResource MaterialDesignBodySecondary}"
-              HorizontalAlignment="Center">
+                        <TextBlock Style="{StaticResource LabelMuted}"
+                                   HorizontalAlignment="Center">
                             <TextBlock.Text>
                                 <MultiBinding Converter="{StaticResource HourDynamicLabelConverter}">
                                     <Binding/>
@@ -78,74 +112,54 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
 
-            <!-- 4) Weekly usage table -->
-            <Border
-        Background="{DynamicResource MaterialDesignCardBackground}"
-        CornerRadius="6"
-        Padding="16"
-        Margin="0,0,0,0">
-                <Border.Effect>
-                    <DropShadowEffect Color="Black" BlurRadius="8" ShadowDepth="2" Opacity="0.2"/>
-                </Border.Effect>
+            <!-- Weekly Usage Section -->
+            <TextBlock Text="THIS WEEK"
+                       Style="{StaticResource NavSectionHeader}"
+                       Margin="0,0,0,12"/>
 
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+            <Border Style="{StaticResource CardBase}">
+                <ItemsControl ItemsSource="{Binding WeeklyUsage}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
 
-                    <!-- Header Row -->
-                    <TextBlock
-            Grid.Row="0" Grid.Column="0"
-            Text="Day"
-            FontSize="16" FontWeight="Bold"
-            Foreground="{DynamicResource MaterialDesignBody}" />
-                    <TextBlock
-            Grid.Row="0" Grid.Column="1"
-            Text="Usage"
-            FontSize="16" FontWeight="Bold"
-            Foreground="{DynamicResource MaterialDesignBody}"
-            HorizontalAlignment="Left"
-            Margin="8,0,0,0" />
+                                <!-- Day Name -->
+                                <TextBlock Grid.Column="0"
+                                           Text="{Binding Day}"
+                                           Style="{StaticResource BodyMedium}"
+                                           VerticalAlignment="Center"/>
 
-                    <!-- Data Rows -->
-                    <ScrollViewer
-            Grid.Row="1"
-            VerticalScrollBarVisibility="Auto"
-            MaxHeight="200"
-            Margin="0,8,0,0">
-                        <ItemsControl ItemsSource="{Binding WeeklyUsage}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid Margin="0,4,0,4">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="2*"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock
-                      Grid.Column="0"
-                      Text="{Binding Day}"
-                      FontSize="14" FontWeight="SemiBold"
-                      Foreground="{DynamicResource MaterialDesignBody}" />
-                                        <TextBlock
-                      Grid.Column="1"
-                      Text="{Binding Usage}"
-                      FontSize="14" FontWeight="SemiBold"
-                      Foreground="{DynamicResource MaterialDesignBody}"
-                      HorizontalAlignment="Left"
-                      Margin="8,0,0,0"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
-                </Grid>
+                                <!-- Progress Bar -->
+                                <Border Grid.Column="1"
+                                        Background="{DynamicResource Bg.Elevated}"
+                                        CornerRadius="4"
+                                        Height="8"
+                                        Margin="16,0"
+                                        VerticalAlignment="Center">
+                                    <Border Background="{DynamicResource Accent.Primary}"
+                                            CornerRadius="4"
+                                            HorizontalAlignment="Left"
+                                            Width="{Binding Usage, Converter={StaticResource UsageToWidthConverter}}"/>
+                                </Border>
+
+                                <!-- Duration -->
+                                <TextBlock Grid.Column="2"
+                                           Text="{Binding Usage}"
+                                           Style="{StaticResource LabelPrimary}"
+                                           VerticalAlignment="Center"
+                                           MinWidth="80"
+                                           TextAlignment="Right"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </Border>
 
         </StackPanel>
-    </Grid>
+    </ScrollViewer>
 </UserControl>
