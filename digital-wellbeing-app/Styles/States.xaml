@@ -1,0 +1,115 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- 
+    ============================================
+    UI STATES - Empty, Loading, Error
+    Uses tokens from ThemeDark/ThemeLight
+    ============================================
+    -->
+
+    <!-- Empty State Container -->
+    <Style x:Key="EmptyStateContainer" TargetType="StackPanel">
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="32"/>
+    </Style>
+
+    <!-- Empty State Icon -->
+    <Style x:Key="EmptyStateIcon" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="48"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,0,0,16"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Muted}"/>
+        <Setter Property="Opacity" Value="0.5"/>
+    </Style>
+
+    <!-- Empty State Title -->
+    <Style x:Key="EmptyStateTitle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Secondary}"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,0,0,8"/>
+    </Style>
+
+    <!-- Empty State Description -->
+    <Style x:Key="EmptyStateDescription" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Muted}"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="TextAlignment" Value="Center"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="MaxWidth" Value="300"/>
+    </Style>
+
+    <!-- Loading Spinner -->
+    <Style x:Key="LoadingSpinner" TargetType="ProgressBar">
+        <Setter Property="IsIndeterminate" Value="True"/>
+        <Setter Property="Width" Value="40"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Foreground" Value="{DynamicResource Accent.Primary}"/>
+    </Style>
+
+    <!-- Loading Text -->
+    <Style x:Key="LoadingText" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Secondary}"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,12,0,0"/>
+    </Style>
+
+    <!-- Error State Container -->
+    <Style x:Key="ErrorStateContainer" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Bg.Card}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Status.Danger}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.MD}"/>
+        <Setter Property="Padding" Value="16"/>
+        <Setter Property="Margin" Value="16"/>
+    </Style>
+
+    <!-- Error Icon -->
+    <Style x:Key="ErrorIcon" TargetType="TextBlock">
+        <Setter Property="Text" Value="⚠"/>
+        <Setter Property="FontSize" Value="24"/>
+        <Setter Property="Foreground" Value="{DynamicResource Status.Danger}"/>
+        <Setter Property="Margin" Value="0,0,12,0"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <!-- Error Title -->
+    <Style x:Key="ErrorTitle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{DynamicResource Status.Danger}"/>
+    </Style>
+
+    <!-- Error Message -->
+    <Style x:Key="ErrorMessage" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Secondary}"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="Margin" Value="0,4,0,0"/>
+    </Style>
+
+    <!-- Success Notification -->
+    <Style x:Key="SuccessNotification" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Bg.Card}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Status.Success}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.SM}"/>
+        <Setter Property="Padding" Value="12,8"/>
+    </Style>
+
+    <!-- Warning Notification -->
+    <Style x:Key="WarningNotification" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Bg.Card}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Status.Warning}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.SM}"/>
+        <Setter Property="Padding" Value="12,8"/>
+    </Style>
+
+</ResourceDictionary>

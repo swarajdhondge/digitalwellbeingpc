@@ -1,0 +1,76 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- 
+    ============================================
+    DIALOG / MODAL STYLES
+    Uses tokens from ThemeDark/ThemeLight
+    ============================================
+    -->
+
+    <!-- Dialog Overlay -->
+    <Style x:Key="DialogOverlay" TargetType="Border">
+        <Setter Property="Background" Value="#80000000"/>
+    </Style>
+
+    <!-- Dialog Container -->
+    <Style x:Key="DialogContainer" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Bg.Card}"/>
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.LG}"/>
+        <Setter Property="Padding" Value="24"/>
+        <Setter Property="MinWidth" Value="400"/>
+        <Setter Property="MaxWidth" Value="500"/>
+        <Setter Property="Effect" Value="{DynamicResource Shadow.LG}"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <!-- Dialog Title -->
+    <Style x:Key="DialogTitle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Primary}"/>
+        <Setter Property="Margin" Value="0,0,0,8"/>
+    </Style>
+
+    <!-- Dialog Message -->
+    <Style x:Key="DialogMessage" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Secondary}"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="Margin" Value="0,0,0,24"/>
+    </Style>
+
+    <!-- Dialog Button Container -->
+    <Style x:Key="DialogButtonContainer" TargetType="StackPanel">
+        <Setter Property="Orientation" Value="Horizontal"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+    </Style>
+
+    <!-- Tooltip Style -->
+    <Style x:Key="TooltipStyle" TargetType="ToolTip">
+        <Setter Property="Background" Value="{DynamicResource Bg.Card}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Primary}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="8,6"/>
+        <Setter Property="FontSize" Value="12"/>
+    </Style>
+
+    <!-- Context Menu Style -->
+    <Style x:Key="ContextMenuStyle" TargetType="ContextMenu">
+        <Setter Property="Background" Value="{DynamicResource Bg.Card}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="4"/>
+    </Style>
+
+    <!-- Menu Item Style -->
+    <Style x:Key="MenuItemStyle" TargetType="MenuItem">
+        <Setter Property="Foreground" Value="{DynamicResource Text.Primary}"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Padding" Value="12,8"/>
+    </Style>
+
+</ResourceDictionary>

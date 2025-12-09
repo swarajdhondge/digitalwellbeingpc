@@ -3,78 +3,127 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:vm="clr-namespace:digital_wellbeing_app.ViewModels"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:conv="clr-namespace:digital_wellbeing_app.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    d:DesignHeight="450"
+    d:DesignHeight="500"
     d:DesignWidth="800"
-    Background="{DynamicResource MaterialDesignPaper}">
+    Background="Transparent">
 
     <UserControl.DataContext>
         <vm:SoundTimelineViewModel/>
     </UserControl.DataContext>
 
     <UserControl.Resources>
-        <vm:TimelineWidthConverter    x:Key="TimelineWidthConverter" />
-        <vm:HourToOffsetConverter     x:Key="HourToOffsetConverter" />
-        <vm:HourDynamicLabelConverter x:Key="HourDynamicLabelConverter" />
-        <vm:HourVisibilityConverter   x:Key="HourVisibilityConverter" />
+        <conv:TimelineWidthConverter    x:Key="TimelineWidthConverter" />
+        <conv:HourToOffsetConverter     x:Key="HourToOffsetConverter" />
+        <conv:HourDynamicLabelConverter x:Key="HourDynamicLabelConverter" />
+        <conv:HourVisibilityConverter   x:Key="HourVisibilityConverter" />
     </UserControl.Resources>
 
-    <Grid>
-        <StackPanel Margin="20">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="8">
 
-            <!-- Header -->
-            <TextBlock Text="🔈 Detailed Sound Output"
-                 FontSize="22"
-                 FontWeight="Bold"
-                 Foreground="{DynamicResource MaterialDesignBody}"
-                 Margin="0,0,0,8"/>
+            <!-- Page Header -->
+            <TextBlock Text="Sound Output"
+                       Style="{StaticResource HeadingLarge}"
+                       Margin="0,0,0,24"/>
 
-            <!-- Totals -->
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
-                <StackPanel Margin="0,0,20,0">
-                    <TextBlock Text="Total Listening"
-                     FontSize="14"
-                     Foreground="{DynamicResource MaterialDesignBody}" />
-                    <TextBlock x:Name="TotalListeningTextBlock"
-                     Text="{Binding TotalListeningText}"
-                     FontSize="16"
-                     FontWeight="Bold"
-                     Foreground="{DynamicResource MaterialDesignGreen}" />
-                </StackPanel>
-                <StackPanel>
-                    <TextBlock Text="Total Harmful"
-                     FontSize="14"
-                     Foreground="{DynamicResource MaterialDesignBody}" />
-                    <TextBlock x:Name="TotalHarmfulTextBlock"
-                     Text="{Binding TotalHarmfulText}"
-                     FontSize="16"
-                     FontWeight="Bold"
-                     Foreground="{DynamicResource MaterialDesignRed}" />
-                </StackPanel>
-            </StackPanel>
+            <!-- Stats Cards Row -->
+            <WrapPanel Orientation="Horizontal" Margin="0,0,0,24">
+
+                <!-- Total Listening Card -->
+                <Border Style="{StaticResource CardStat}" MinWidth="180">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0" Orientation="Horizontal">
+                            <Border Background="{DynamicResource InfoBrush}"
+                                    CornerRadius="6" Padding="6">
+                                <md:PackIcon Kind="VolumeHigh" Width="16" Height="16"
+                                             Foreground="{DynamicResource TextOnAccentBrush}"/>
+                            </Border>
+                            <TextBlock Text="Listening"
+                                       Style="{StaticResource LabelPrimary}"
+                                       Margin="10,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <TextBlock Grid.Row="1"
+                                   Text="{Binding TotalListeningText}"
+                                   Style="{StaticResource StatNumber}"
+                                   VerticalAlignment="Center"
+                                   Margin="0,12,0,0"/>
+                    </Grid>
+                </Border>
+
+                <!-- Harmful Exposure Card -->
+                <Border Style="{StaticResource CardStat}"
+                        MinWidth="180"
+                        BorderBrush="{DynamicResource DangerBrush}"
+                        BorderThickness="0,0,0,3">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0" Orientation="Horizontal">
+                            <Border Background="{DynamicResource DangerBrush}"
+                                    CornerRadius="6" Padding="6">
+                                <md:PackIcon Kind="VolumeOff" Width="16" Height="16"
+                                             Foreground="{DynamicResource TextOnAccentBrush}"/>
+                            </Border>
+                            <TextBlock Text="Harmful"
+                                       Style="{StaticResource LabelPrimary}"
+                                       Margin="10,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <TextBlock Grid.Row="1"
+                                   Text="{Binding TotalHarmfulText}"
+                                   FontFamily="{StaticResource Font.Primary}"
+                                   FontSize="32"
+                                   FontWeight="Bold"
+                                   Foreground="{DynamicResource DangerBrush}"
+                                   VerticalAlignment="Center"
+                                   Margin="0,12,0,0"/>
+                    </Grid>
+                </Border>
+
+            </WrapPanel>
+
+            <!-- Timeline Section -->
+            <TextBlock Text="TODAY'S ACTIVITY"
+                       Style="{StaticResource NavSectionHeader}"
+                       Margin="0,0,0,12"/>
 
             <!-- Timeline -->
             <Border x:Name="TimelineBorder"
-              Height="80"
-              Background="{DynamicResource MaterialDesignCardBackground}"
-              CornerRadius="6"
-              Margin="0,0,0,4">
-                <Border.Effect>
-                    <DropShadowEffect Color="Black"
-                            BlurRadius="8"
-                            ShadowDepth="2"
-                            Opacity="0.2"/>
-                </Border.Effect>
-                <Canvas x:Name="RealTimeCanvas"
-                Background="Transparent"/>
+                    Style="{StaticResource CardBase}"
+                    Padding="16"
+                    Margin="0,0,0,8">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="60"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Background="{DynamicResource Bg.Elevated}"
+                            CornerRadius="4"
+                            Height="40"
+                            VerticalAlignment="Center">
+                        <Canvas x:Name="RealTimeCanvas" Background="Transparent"/>
+                    </Border>
+                </Grid>
             </Border>
 
-            <!-- Hour Markers -->
+            <!-- Hour Labels -->
             <ItemsControl ItemsSource="{Binding HourMarkers}"
-                    Width="{Binding ActualWidth, ElementName=TimelineBorder}"
-                    Margin="0,0,0,16">
+                          Margin="16,0,16,24"
+                          Width="{Binding ActualWidth, ElementName=TimelineBorder}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <UniformGrid Rows="1" Columns="24"/>
@@ -82,9 +131,8 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock FontSize="10"
-                       Foreground="{DynamicResource MaterialDesignBodySecondary}"
-                       HorizontalAlignment="Center">
+                        <TextBlock Style="{StaticResource LabelMuted}"
+                                   HorizontalAlignment="Center">
                             <TextBlock.Text>
                                 <MultiBinding Converter="{StaticResource HourDynamicLabelConverter}">
                                     <Binding/>
@@ -102,34 +150,43 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
 
-            <!-- Toggle + Details -->
-            <Button x:Name="ToggleDetailsButton"
-              Content="Show detailed tracking"
-              Width="180" Height="32"
-              Click="ToggleDetailsButton_Click"
-              Style="{StaticResource MaterialDesignOutlinedButton}"
-              HorizontalAlignment="Left"
-              Margin="0,0,0,8"/>
-            <DataGrid x:Name="DetailsDataGrid"
-                ItemsSource="{Binding Sessions}"
-                AutoGenerateColumns="False"
-                IsReadOnly="True"
-                HeadersVisibility="Column"
-                CanUserResizeColumns="False"
-                CanUserSortColumns="False"
-                GridLinesVisibility="None"
-                Height="200"
-                Background="{DynamicResource MaterialDesignPaper}">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Time"
-                              Binding="{Binding SessionLabel}"
-                              Width="2*"/>
-                    <DataGridTextColumn Header="Device"
-                              Binding="{Binding DeviceName}"
-                              Width="*"/>
-                </DataGrid.Columns>
-            </DataGrid>
+            <!-- Session Details Section -->
+            <TextBlock Text="SESSION DETAILS"
+                       Style="{StaticResource NavSectionHeader}"
+                       Margin="0,0,0,12"/>
+
+            <Border Style="{StaticResource CardBase}">
+                <StackPanel>
+                    <Button x:Name="ToggleDetailsButton"
+                            Content="Show detailed tracking"
+                            Click="ToggleDetailsButton_Click"
+                            Style="{StaticResource ButtonSecondary}"
+                            HorizontalAlignment="Left"
+                            Margin="0,0,0,16"/>
+
+                    <DataGrid x:Name="DetailsDataGrid"
+                              ItemsSource="{Binding Sessions}"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              HeadersVisibility="Column"
+                              CanUserResizeColumns="False"
+                              CanUserSortColumns="False"
+                              GridLinesVisibility="None"
+                              MaxHeight="200"
+                              Background="Transparent"
+                              Foreground="{DynamicResource Text.Primary}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Time"
+                                                Binding="{Binding SessionLabel}"
+                                                Width="2*"/>
+                            <DataGridTextColumn Header="Device"
+                                                Binding="{Binding DeviceName}"
+                                                Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Border>
 
         </StackPanel>
-    </Grid>
+    </ScrollViewer>
 </UserControl>

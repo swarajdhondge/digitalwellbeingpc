@@ -1,15 +1,14 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace digital_wellbeing_app.ViewModels
+namespace digital_wellbeing_app.Converters
 {
     public class HourToOffsetConverter : IValueConverter
     {
-        // value = int hour (0–23), parameter = totalWidth (e.g. 360)
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(value is int hour)) return 0d;
+            if (value is not int hour) return 0d;
             double width = 360;
             if (parameter != null && double.TryParse(parameter.ToString(), out double w))
                 width = w;
@@ -20,3 +19,4 @@ namespace digital_wellbeing_app.ViewModels
             => throw new NotImplementedException();
     }
 }
+

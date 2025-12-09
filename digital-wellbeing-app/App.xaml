@@ -10,12 +10,27 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
 
+                <!-- MaterialDesign Base (keep for compatibility during transition) -->
                 <md:BundledTheme
                     BaseTheme="Inherit"
                     PrimaryColor="DeepPurple"
                     SecondaryColor="Indigo"/>
-
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
+
+                <!-- Shared Design Tokens -->
+                <ResourceDictionary Source="Styles/Theme.xaml"/>
+                
+                <!-- Theme Palette (Dark by default - swapped by ThemeService) -->
+                <ResourceDictionary x:Name="ThemePalette" Source="Styles/ThemeDark.xaml"/>
+
+                <!-- Component Styles -->
+                <ResourceDictionary Source="Styles/Typography.xaml"/>
+                <ResourceDictionary Source="Styles/Cards.xaml"/>
+                <ResourceDictionary Source="Styles/Buttons.xaml"/>
+                <ResourceDictionary Source="Styles/Navigation.xaml"/>
+                <ResourceDictionary Source="Styles/States.xaml"/>
+                <ResourceDictionary Source="Styles/Dialogs.xaml"/>
+                <ResourceDictionary Source="Styles/Transitions.xaml"/>
 
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

@@ -1,0 +1,40 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- 
+    ============================================
+    PAGE TRANSITIONS
+    ============================================
+    -->
+
+    <!-- Easing Functions (must be defined first) -->
+    <CubicEase x:Key="EaseOut" EasingMode="EaseOut"/>
+    <CubicEase x:Key="EaseIn" EasingMode="EaseIn"/>
+    <CubicEase x:Key="EaseInOut" EasingMode="EaseInOut"/>
+
+    <!-- Simple Fade In Animation (opacity only - more stable) -->
+    <Storyboard x:Key="PageFadeIn">
+        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                         From="0" To="1"
+                         Duration="0:0:0.2">
+            <DoubleAnimation.EasingFunction>
+                <CubicEase EasingMode="EaseOut"/>
+            </DoubleAnimation.EasingFunction>
+        </DoubleAnimation>
+    </Storyboard>
+
+    <!-- Fade Out Animation for Page Content -->
+    <Storyboard x:Key="PageFadeOut">
+        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                         From="1" To="0"
+                         Duration="0:0:0.15"/>
+    </Storyboard>
+
+    <!-- Content Host Style with Transition Support -->
+    <Style x:Key="AnimatedContentControl" TargetType="ContentControl">
+        <Setter Property="Opacity" Value="1"/>
+    </Style>
+
+</ResourceDictionary>
+
