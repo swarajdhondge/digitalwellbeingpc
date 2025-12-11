@@ -92,6 +92,87 @@
                 </StackPanel>
             </Border>
 
+            <!-- Hearing Protection Section (Coming Soon - Blurred) -->
+            <TextBlock Text="HEARING PROTECTION"
+                       Style="{StaticResource NavSectionHeader}"
+                       Margin="0,0,0,12"/>
+
+            <Border Style="{StaticResource CardBase}" Margin="0,0,0,24" IsEnabled="False">
+                <Grid>
+                    <!-- Content (blurred/disabled) -->
+                    <StackPanel Opacity="0.4">
+                        <TextBlock Text="Volume Threshold"
+                                   Style="{StaticResource HeadingSmall}"
+                                   Margin="0,0,0,12"/>
+                        
+                        <TextBlock Text="Get notified when listening above this level for extended periods."
+                                   Style="{StaticResource LabelSecondary}"
+                                   TextWrapping="Wrap"
+                                   Margin="0,0,0,16"/>
+
+                        <!-- Slider with value display -->
+                        <Grid Margin="0,0,0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Slider x:Name="ThresholdSlider"
+                                    Style="{StaticResource SliderThemed}"
+                                    Minimum="60"
+                                    Maximum="100"
+                                    Value="75"
+                                    TickFrequency="5"
+                                    IsSnapToTickEnabled="True"
+                                    IsEnabled="False"
+                                    VerticalAlignment="Center"/>
+
+                            <TextBlock Grid.Column="1"
+                                       x:Name="ThresholdValueText"
+                                       Text="75 dB"
+                                       Style="{StaticResource HeadingSmall}"
+                                       Foreground="{DynamicResource Text.Muted}"
+                                       Margin="16,0,0,0"
+                                       MinWidth="50"
+                                       TextAlignment="Right"
+                                       VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- Scale labels -->
+                        <Grid Margin="0,0,66,12">
+                            <TextBlock Text="60 dB"
+                                       Style="{StaticResource LabelMuted}"
+                                       HorizontalAlignment="Left"/>
+                            <TextBlock Text="100 dB"
+                                       Style="{StaticResource LabelMuted}"
+                                       HorizontalAlignment="Right"/>
+                        </Grid>
+
+                        <!-- Recommendation -->
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="ShieldCheck" Width="16" Height="16"
+                                         Foreground="{DynamicResource Text.Muted}"
+                                         VerticalAlignment="Center"/>
+                            <TextBlock Text="Default: 75 dB"
+                                       Style="{StaticResource LabelSecondary}"
+                                       Margin="8,0,0,0"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Coming Soon Overlay -->
+                    <Border Background="{DynamicResource Bg.Card}" 
+                            Opacity="0.7"
+                            CornerRadius="8"
+                            Margin="-16"/>
+                    <TextBlock Text="Coming Soon"
+                               Style="{StaticResource LabelSecondary}"
+                               FontWeight="SemiBold"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+
             <!-- Appearance Section -->
             <TextBlock Text="APPEARANCE"
                        Style="{StaticResource NavSectionHeader}"

@@ -35,7 +35,7 @@
                                     CornerRadius="6"
                                     Padding="6">
                                 <md:PackIcon Kind="Monitor" Width="16" Height="16"
-                                             Foreground="{DynamicResource TextOnAccentBrush}"/>
+                                             Foreground="{DynamicResource Accent.OnAccent}"/>
                             </Border>
                             <TextBlock Text="Screen Time"
                                        Style="{StaticResource LabelPrimary}"
@@ -70,11 +70,11 @@
 
                         <!-- Header -->
                         <StackPanel Grid.Row="0" Orientation="Horizontal">
-                            <Border Background="{DynamicResource InfoBrush}"
+                            <Border Background="{DynamicResource Status.Info}"
                                     CornerRadius="6"
                                     Padding="6">
                                 <md:PackIcon Kind="VolumeHigh" Width="16" Height="16"
-                                             Foreground="{DynamicResource TextOnAccentBrush}"/>
+                                             Foreground="{DynamicResource Accent.OnAccent}"/>
                             </Border>
                             <TextBlock Text="Sound Output"
                                        Style="{StaticResource LabelPrimary}"
@@ -100,7 +100,7 @@
 
                 <!-- Harmful Sound Card -->
                 <Border Style="{StaticResource CardStat}"
-                        BorderBrush="{DynamicResource DangerBrush}"
+                        BorderBrush="{DynamicResource Status.Danger}"
                         BorderThickness="0,0,0,3">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -111,11 +111,11 @@
 
                         <!-- Header -->
                         <StackPanel Grid.Row="0" Orientation="Horizontal">
-                            <Border Background="{DynamicResource DangerBrush}"
+                            <Border Background="{DynamicResource Status.Danger}"
                                     CornerRadius="6"
                                     Padding="6">
                                 <md:PackIcon Kind="VolumeOff" Width="16" Height="16"
-                                             Foreground="{DynamicResource TextOnAccentBrush}"/>
+                                             Foreground="{DynamicResource Accent.OnAccent}"/>
                             </Border>
                             <TextBlock Text="Harmful Exposure"
                                        Style="{StaticResource LabelPrimary}"
@@ -129,14 +129,14 @@
                                    FontFamily="{StaticResource Font.Primary}"
                                    FontSize="32"
                                    FontWeight="Bold"
-                                   Foreground="{DynamicResource DangerBrush}"
+                                   Foreground="{DynamicResource Status.Danger}"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Center"
                                    Margin="0,16,0,8"/>
 
                         <!-- Label -->
                         <TextBlock Grid.Row="2"
-                                   Text="ABOVE 75 dB"
+                                   Text="{Binding ThresholdLabel}"
                                    Style="{StaticResource LabelSecondary}"
                                    HorizontalAlignment="Center"/>
                     </Grid>
@@ -153,11 +153,11 @@
 
                         <!-- Header -->
                         <StackPanel Grid.Row="0" Orientation="Horizontal">
-                            <Border Background="{DynamicResource WarningBrush}"
+                            <Border Background="{DynamicResource Status.Warning}"
                                     CornerRadius="6"
                                     Padding="6">
                                 <md:PackIcon Kind="Star" Width="16" Height="16"
-                                             Foreground="{DynamicResource TextOnAccentBrush}"/>
+                                             Foreground="{DynamicResource Accent.OnAccent}"/>
                             </Border>
                             <TextBlock Text="Most Used App"
                                        Style="{StaticResource LabelPrimary}"

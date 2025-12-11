@@ -4,16 +4,21 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using System.Windows.Threading;
 using digital_wellbeing_app.Models;
 using digital_wellbeing_app.Services;
 
 namespace digital_wellbeing_app.ViewModels
 {
-    public class DashboardViewModel : INotifyPropertyChanged
+    public class DashboardViewModel : INotifyPropertyChanged, IDisposable
     {
+        private readonly SettingsService _settingsService = new();
+        private readonly DispatcherTimer _refreshTimer;
+        
         private string _screenTime = string.Empty;
         private string _soundTime = string.Empty;
         private string _soundHarmfulTime = string.Empty;
+        private string _thresholdLabel = string.Empty;
         private string _appTime = string.Empty;
         private ImageSource _topAppIcon = null!;
         private string _topAppName = string.Empty;
@@ -37,6 +42,13 @@ namespace digital_wellbeing_app.ViewModels
         {
             get => _soundHarmfulTime;
             set { if (_soundHarmfulTime != value) { _soundHarmfulTime = value; OnPropertyChanged(); } }
+        }
+
+        /// <summary>Dynamic threshold label based on settings</summary>
+        public string ThresholdLabel
+        {
+            get => _thresholdLabel;
+            set { if (_thresholdLabel != value) { _thresholdLabel = value; OnPropertyChanged(); } }
         }
 
         public string AppTime
@@ -65,12 +77,30 @@ namespace digital_wellbeing_app.ViewModels
 
         public DashboardViewModel()
         {
+            // Initial load
+            RefreshData();
+
+            // Set up timer for periodic refresh (every 2 seconds)
+            _refreshTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
+            _refreshTimer.Tick += (_, __) => RefreshData();
+            _refreshTimer.Start();
+        }
+
+        /// <summary>
+        /// Public method to refresh all dashboard data including threshold from settings
+        /// </summary>
+        public void RefreshData()
+        {
             _ = LoadTodayAsync();
         }
 
         private async Task LoadTodayAsync()
         {
             var today = DateTime.Today;
+
+            // — Load threshold from settings —
+            var threshold = _settingsService.LoadHarmfulThreshold();
+            ThresholdLabel = $"ABOVE {(int)threshold} dB";
 
             // — Screen Time —
             var period = DatabaseService.GetScreenTimePeriodForToday();
@@ -82,10 +112,10 @@ namespace digital_wellbeing_app.ViewModels
             // — Sound Sessions —
             var soundSessions = DatabaseService.GetSoundSessionsForDate(today);
 
-            // total listening
+            // total listening (use ActualListeningDuration, not wall-clock time)
             var tsSound = soundSessions.Aggregate(
                 TimeSpan.Zero,
-                (sum, s) => sum + (s.EndTime - s.StartTime));
+                (sum, s) => sum + s.ActualListeningDuration);
             SoundTime = Format(tsSound);
 
             // total harmful
@@ -132,5 +162,11 @@ namespace digital_wellbeing_app.ViewModels
         public event PropertyChangedEventHandler? PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string? n = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(n));
+
+        public void Dispose()
+        {
+            _refreshTimer.Stop();
+            GC.SuppressFinalize(this);
+        }
     }
 }

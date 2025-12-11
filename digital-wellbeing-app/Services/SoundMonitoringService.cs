@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Threading;
 using digital_wellbeing_app.CoreLogic;
@@ -10,10 +11,11 @@ namespace digital_wellbeing_app.Services
     public class SoundMonitoringService : IDisposable
     {
         private readonly MMDeviceEnumerator _deviceEnumerator;
-        private MMDevice _currentDevice;
+        private MMDevice? _currentDevice;
         private readonly DispatcherTimer _dispatcherTimer;
         private readonly SoundExposureManager _exposureManager;
-        private string _lastDeviceId;
+        private string? _lastDeviceId;
+        private bool _hasAudioDevice;
 
         public SoundMonitoringService()
         {
@@ -30,10 +32,23 @@ namespace digital_wellbeing_app.Services
             };
 
             _deviceEnumerator = new MMDeviceEnumerator();
-            _currentDevice = _deviceEnumerator.GetDefaultAudioEndpoint(
-                DataFlow.Render, Role.Multimedia);
-            _lastDeviceId = _currentDevice.ID;
-            SubscribeToDevice(_currentDevice);
+            
+            // Try to get default audio device (may not exist)
+            try
+            {
+                _currentDevice = _deviceEnumerator.GetDefaultAudioEndpoint(
+                    DataFlow.Render, Role.Multimedia);
+                _lastDeviceId = _currentDevice.ID;
+                SubscribeToDevice(_currentDevice);
+                _hasAudioDevice = true;
+            }
+            catch (COMException)
+            {
+                // No audio device available
+                _currentDevice = null;
+                _lastDeviceId = null;
+                _hasAudioDevice = false;
+            }
 
             _dispatcherTimer = new DispatcherTimer
             {
@@ -59,45 +74,90 @@ namespace digital_wellbeing_app.Services
 
         private void OnVolumeNotification(AudioVolumeNotificationData data)
         {
-            float peak = _currentDevice.AudioMeterInformation.MasterPeakValue;
-            double volumeScalar = _currentDevice.AudioEndpointVolume.MasterVolumeLevelScalar;
+            if (_currentDevice == null) return;
 
-            _exposureManager.HandleVolumeChange(
-                volumeScalar,
-                _currentDevice.FriendlyName,
-                IdentifyDeviceType(_currentDevice.FriendlyName),
-                peak
-            );
+            try
+            {
+                float peak = _currentDevice.AudioMeterInformation.MasterPeakValue;
+                double volumeScalar = _currentDevice.AudioEndpointVolume.MasterVolumeLevelScalar;
+
+                _exposureManager.HandleVolumeChange(
+                    volumeScalar,
+                    _currentDevice.FriendlyName,
+                    IdentifyDeviceType(_currentDevice.FriendlyName),
+                    peak
+                );
+            }
+            catch (COMException)
+            {
+                // Device disconnected, ignore
+            }
         }
 
         private void OnDispatcherTimerTick(object? sender, EventArgs e)
         {
-            var defaultDevice = _deviceEnumerator.GetDefaultAudioEndpoint(
-                DataFlow.Render, Role.Multimedia);
-
-            if (defaultDevice.ID != _lastDeviceId)
+            try
             {
-                UnsubscribeFromDevice(_currentDevice);
-                _exposureManager.HandleDeviceChange(
+                MMDevice? defaultDevice = null;
+                try
+                {
+                    defaultDevice = _deviceEnumerator.GetDefaultAudioEndpoint(
+                        DataFlow.Render, Role.Multimedia);
+                }
+                catch (COMException)
+                {
+                    // No audio device available
+                    if (_hasAudioDevice && _currentDevice != null)
+                    {
+                        // Device was just disconnected
+                        UnsubscribeFromDevice(_currentDevice);
+                        _currentDevice = null;
+                        _lastDeviceId = null;
+                        _hasAudioDevice = false;
+                    }
+                    return;
+                }
+
+                if (defaultDevice == null) return;
+
+                // Check if device changed
+                if (defaultDevice.ID != _lastDeviceId)
+                {
+                    if (_currentDevice != null)
+                    {
+                        UnsubscribeFromDevice(_currentDevice);
+                        _exposureManager.HandleDeviceChange(
+                            _currentDevice.FriendlyName,
+                            IdentifyDeviceType(_currentDevice.FriendlyName)
+                        );
+                    }
+                    _currentDevice = defaultDevice;
+                    _lastDeviceId = _currentDevice.ID;
+                    SubscribeToDevice(_currentDevice);
+                    _hasAudioDevice = true;
+                }
+
+                if (_currentDevice == null) return;
+
+                double currentVolume = _currentDevice.AudioEndpointVolume.MasterVolumeLevelScalar;
+                float peakVal = _currentDevice.AudioMeterInformation.MasterPeakValue;
+
+                _exposureManager.HandleVolumeChange(
+                    currentVolume,
                     _currentDevice.FriendlyName,
-                    IdentifyDeviceType(_currentDevice.FriendlyName)
+                    IdentifyDeviceType(_currentDevice.FriendlyName),
+                    peakVal
                 );
-                _currentDevice = defaultDevice;
-                _lastDeviceId = _currentDevice.ID;
-                SubscribeToDevice(_currentDevice);
+
+                _exposureManager.CheckPlaybackActivity(peakVal);
             }
-
-            double currentVolume = _currentDevice.AudioEndpointVolume.MasterVolumeLevelScalar;
-            float peakVal = _currentDevice.AudioMeterInformation.MasterPeakValue;
-
-            _exposureManager.HandleVolumeChange(
-                currentVolume,
-                _currentDevice.FriendlyName,
-                IdentifyDeviceType(_currentDevice.FriendlyName),
-                peakVal
-            );
-
-            _exposureManager.CheckPlaybackActivity(peakVal);
+            catch (COMException)
+            {
+                // Device disconnected mid-operation, will retry on next tick
+                _currentDevice = null;
+                _lastDeviceId = null;
+                _hasAudioDevice = false;
+            }
         }
 
         private static string IdentifyDeviceType(string friendlyName)
@@ -115,11 +175,21 @@ namespace digital_wellbeing_app.Services
             _dispatcherTimer.Tick -= OnDispatcherTimerTick;
             _dispatcherTimer.Stop();
 
-            UnsubscribeFromDevice(_currentDevice);
-            _exposureManager.HandleDeviceChange(
-                _currentDevice.FriendlyName,
-                IdentifyDeviceType(_currentDevice.FriendlyName)
-            );
+            if (_currentDevice != null)
+            {
+                try
+                {
+                    UnsubscribeFromDevice(_currentDevice);
+                    _exposureManager.HandleDeviceChange(
+                        _currentDevice.FriendlyName,
+                        IdentifyDeviceType(_currentDevice.FriendlyName)
+                    );
+                }
+                catch (COMException)
+                {
+                    // Device already disconnected, ignore
+                }
+            }
 
             _deviceEnumerator.Dispose();
             GC.SuppressFinalize(this);

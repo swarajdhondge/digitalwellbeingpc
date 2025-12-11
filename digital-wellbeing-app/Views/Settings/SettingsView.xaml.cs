@@ -38,6 +38,9 @@ namespace digital_wellbeing_app.Views.Settings
 
             // Load goal settings
             LoadGoalSettings();
+
+            // Note: Hearing Protection threshold is disabled (Coming Soon)
+            // Default is 75 dB, set in SettingsService.LoadHarmfulThreshold()
         }
 
         #region Goal Settings
