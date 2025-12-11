@@ -1,5 +1,6 @@
 ﻿// File: App.xaml.cs
 using System.Threading;
+using Microsoft.Win32;
 
 namespace digital_wellbeing_app
 {
@@ -43,10 +44,66 @@ namespace digital_wellbeing_app
             AppTracker = new CoreLogic.AppUsageTracker();
             AppTracker.Start();
             _soundService = new Services.SoundMonitoringService();
+
+            // Subscribe to system events for pause/resume tracking
+            SystemEvents.SessionSwitch += OnSessionSwitch;
+            SystemEvents.PowerModeChanged += OnPowerModeChanged;
+        }
+
+        /// <summary>
+        /// Handles session switch events (lock/unlock, logoff, etc.)
+        /// </summary>
+        private void OnSessionSwitch(object sender, SessionSwitchEventArgs e)
+        {
+            switch (e.Reason)
+            {
+                case SessionSwitchReason.SessionLock:
+                case SessionSwitchReason.SessionLogoff:
+                case SessionSwitchReason.ConsoleDisconnect:
+                case SessionSwitchReason.RemoteDisconnect:
+                    // Screen locked or user logged off - pause tracking
+                    ScreenTracker?.Pause();
+                    AppTracker?.Stop();
+                    break;
+
+                case SessionSwitchReason.SessionUnlock:
+                case SessionSwitchReason.SessionLogon:
+                case SessionSwitchReason.ConsoleConnect:
+                case SessionSwitchReason.RemoteConnect:
+                    // Screen unlocked or user logged on - resume tracking
+                    ScreenTracker?.Resume();
+                    AppTracker?.Start();
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Handles power mode changes (sleep, hibernate, resume)
+        /// </summary>
+        private void OnPowerModeChanged(object sender, PowerModeChangedEventArgs e)
+        {
+            switch (e.Mode)
+            {
+                case PowerModes.Suspend:
+                    // PC going to sleep/hibernate - pause tracking
+                    ScreenTracker?.Pause();
+                    AppTracker?.Stop();
+                    break;
+
+                case PowerModes.Resume:
+                    // PC waking up - resume tracking
+                    ScreenTracker?.Resume();
+                    AppTracker?.Start();
+                    break;
+            }
         }
 
         protected override void OnExit(System.Windows.ExitEventArgs e)
         {
+            // Unsubscribe from system events
+            SystemEvents.SessionSwitch -= OnSessionSwitch;
+            SystemEvents.PowerModeChanged -= OnPowerModeChanged;
+
             ScreenTracker?.Stop();
             AppTracker?.Stop();
             _soundService?.Dispose();
