@@ -9,8 +9,8 @@ namespace digital_wellbeing_app.CoreLogic
         private SoundUsageSession? _currentSession;
         private bool _alertRaised;
 
-        public double ThresholdDb { get; set; } = 75.0;                 // real use
-        public TimeSpan ThresholdTime { get; set; } = TimeSpan.FromMinutes(30); // testing
+        public double ThresholdDb { get; set; } = 75.0;
+        public TimeSpan ThresholdTime { get; set; } = TimeSpan.FromMinutes(30);
 
         private readonly int _pollIntervalSeconds = 1;
 
@@ -20,6 +20,13 @@ namespace digital_wellbeing_app.CoreLogic
         /// Expose the live session if it exists.
         /// </summary>
         public SoundUsageSession? CurrentSession => _currentSession;
+
+        public SoundExposureManager()
+        {
+            // Load threshold from settings
+            var settingsService = new SettingsService();
+            ThresholdDb = settingsService.LoadHarmfulThreshold();
+        }
 
         public void HandleDeviceChange(string newDeviceName, string newDeviceType)
         {
@@ -32,7 +39,8 @@ namespace digital_wellbeing_app.CoreLogic
                 AvgVolume = 0.0,
                 EstimatedMaxSPL = 0.0,
                 WasHarmful = false,
-                HarmfulDuration = TimeSpan.Zero
+                HarmfulDuration = TimeSpan.Zero,
+                ActualListeningDuration = TimeSpan.Zero
             };
             _alertRaised = false;
         }
@@ -42,10 +50,15 @@ namespace digital_wellbeing_app.CoreLogic
             if (_currentSession == null)
                 HandleDeviceChange(deviceName, deviceType);
 
+            // Only count listening time when audio is actually playing
             if (peakValue <= 0.01f)
                 return;
 
             var session = _currentSession!;
+            
+            // Increment actual listening duration (only when audio is playing)
+            session.ActualListeningDuration += TimeSpan.FromSeconds(_pollIntervalSeconds);
+            
             session.AvgVolume = session.AvgVolume == 0.0
                 ? volumeScalar
                 : (session.AvgVolume + volumeScalar) / 2.0;
@@ -54,7 +67,7 @@ namespace digital_wellbeing_app.CoreLogic
             double estimatedSPL = volumeScalar * baseSPL;
             session.EstimatedMaxSPL = Math.Max(session.EstimatedMaxSPL, estimatedSPL);
 
-            // only accumulate **before** the alert
+            // only accumulate harmful time **before** the alert
             if (estimatedSPL >= ThresholdDb && !_alertRaised)
             {
                 session.WasHarmful = true;

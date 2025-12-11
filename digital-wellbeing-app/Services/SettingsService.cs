@@ -73,5 +73,24 @@
             _values["LaunchAtStartup"] = enabled;
             SaveToDisk();
         }
+
+        // --- Harmful threshold persistence ---
+        public double LoadHarmfulThreshold()
+        {
+            if (_values.TryGetValue("HarmfulThreshold", out var val))
+            {
+                if (val is double d)
+                    return d;
+                if (val is System.Text.Json.JsonElement je && je.TryGetDouble(out var dVal))
+                    return dVal;
+            }
+            return 75.0; // Default recommended threshold
+        }
+
+        public void SaveHarmfulThreshold(double dB)
+        {
+            _values["HarmfulThreshold"] = dB;
+            SaveToDisk();
+        }
     }
 }

@@ -32,7 +32,7 @@ namespace digital_wellbeing_app.Views.Sound
             ViewModel.RefreshData();
             RenderCanvas();
 
-            DetailsDataGrid.Visibility = Visibility.Collapsed;
+            SessionsList.Visibility = Visibility.Collapsed;
             ToggleDetailsButton.Content = "Show detailed tracking";
         }
 
@@ -86,14 +86,14 @@ namespace digital_wellbeing_app.Views.Sound
 
         private void ToggleDetailsButton_Click(object sender, RoutedEventArgs e)
         {
-            if (DetailsDataGrid.Visibility == Visibility.Collapsed)
+            if (SessionsList.Visibility == Visibility.Collapsed)
             {
-                DetailsDataGrid.Visibility = Visibility.Visible;
+                SessionsList.Visibility = Visibility.Visible;
                 ToggleDetailsButton.Content = "Hide detailed tracking";
             }
             else
             {
-                DetailsDataGrid.Visibility = Visibility.Collapsed;
+                SessionsList.Visibility = Visibility.Collapsed;
                 ToggleDetailsButton.Content = "Show detailed tracking";
             }
         }

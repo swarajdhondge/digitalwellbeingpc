@@ -28,5 +28,26 @@ namespace digital_wellbeing_app.Models
 
         // Total duration during this session above threshold
         public TimeSpan HarmfulDuration { get; set; }
+
+        // Actual time audio was playing (peakValue > 0.01)
+        public TimeSpan ActualListeningDuration { get; set; }
+
+        // --- Computed properties for UI display ---
+
+        [Ignore]
+        public string SessionLabel => $"{StartTime:HH:mm}–{EndTime:HH:mm}";
+
+        [Ignore]
+        public string PeakSPLText => $"{EstimatedMaxSPL:F0} dB";
+
+        [Ignore]
+        public string DeviceTypeIcon => DeviceType switch
+        {
+            "Headphones" => "Headphones",
+            "Earphones" => "HeadphonesBluetooth",
+            "Headsets" => "HeadsetMic",
+            "Speakers" => "VolumeHigh",
+            _ => "Speaker"
+        };
     }
 }
