@@ -218,6 +218,7 @@ namespace digital_wellbeing_app.MainWindow
                 {
                     // Fallback: just change content without animation
                     MainContent.Content = newContent;
+                    MainContent.Opacity = 1;
                 }
             }
             catch

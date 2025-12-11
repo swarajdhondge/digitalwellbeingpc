@@ -62,3 +62,8 @@ Desktop.ini
 
 # Swap files, temp
 *.swp
+
+# Documentation and planning files
+docs/
+
+.cursor/
