@@ -8,6 +8,8 @@ namespace digital_wellbeing_app.Views.Settings
     public partial class SettingsView : System.Windows.Controls.UserControl
     {
         private readonly ThemeService _themeService = new();
+        private readonly GoalService _goalService = new();
+        private bool _isLoadingGoal;
 
         public SettingsView()
         {
@@ -33,7 +35,104 @@ namespace digital_wellbeing_app.Views.Settings
             
             // Load startup preference
             StartupCheckBox.IsChecked = StartupService.IsEnabled();
+
+            // Load goal settings
+            LoadGoalSettings();
         }
+
+        #region Goal Settings
+
+        private void LoadGoalSettings()
+        {
+            _isLoadingGoal = true;
+            
+            var goal = _goalService.GetDailyScreenTimeGoal();
+            GoalEnabledCheckBox.IsChecked = goal.HasValue;
+            GoalInputPanel.Visibility = goal.HasValue ? Visibility.Visible : Visibility.Collapsed;
+
+            if (goal.HasValue)
+            {
+                GoalHoursTextBox.Text = (goal.Value / 60).ToString();
+                GoalMinutesTextBox.Text = (goal.Value % 60).ToString();
+                UpdateCurrentGoalText(goal.Value);
+            }
+            else
+            {
+                GoalHoursTextBox.Text = "8";
+                GoalMinutesTextBox.Text = "0";
+                CurrentGoalText.Text = "No goal set";
+            }
+
+            _isLoadingGoal = false;
+        }
+
+        private void GoalEnabledCheckBox_Changed(object sender, RoutedEventArgs e)
+        {
+            if (_isLoadingGoal) return;
+
+            bool enabled = GoalEnabledCheckBox.IsChecked == true;
+            GoalInputPanel.Visibility = enabled ? Visibility.Visible : Visibility.Collapsed;
+
+            if (enabled)
+            {
+                SaveGoal();
+            }
+            else
+            {
+                _goalService.SetDailyScreenTimeGoal(null);
+                CurrentGoalText.Text = "No goal set";
+            }
+        }
+
+        private void GoalInput_Changed(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            if (_isLoadingGoal) return;
+            if (GoalEnabledCheckBox.IsChecked != true) return;
+
+            SaveGoal();
+        }
+
+        private void SaveGoal()
+        {
+            if (!int.TryParse(GoalHoursTextBox.Text, out int hours))
+                hours = 0;
+            if (!int.TryParse(GoalMinutesTextBox.Text, out int minutes))
+                minutes = 0;
+
+            // Clamp values
+            hours = System.Math.Max(0, System.Math.Min(24, hours));
+            minutes = System.Math.Max(0, System.Math.Min(59, minutes));
+
+            int totalMinutes = (hours * 60) + minutes;
+
+            if (totalMinutes > 0)
+            {
+                _goalService.SetDailyScreenTimeGoal(totalMinutes);
+                UpdateCurrentGoalText(totalMinutes);
+            }
+            else
+            {
+                _goalService.SetDailyScreenTimeGoal(null);
+                CurrentGoalText.Text = "Goal must be greater than 0";
+            }
+        }
+
+        private void UpdateCurrentGoalText(int totalMinutes)
+        {
+            var hours = totalMinutes / 60;
+            var mins = totalMinutes % 60;
+            
+            if (hours > 0 && mins > 0)
+                CurrentGoalText.Text = $"Goal: {hours} hours {mins} minutes per day";
+            else if (hours > 0)
+                CurrentGoalText.Text = $"Goal: {hours} hours per day";
+            else
+                CurrentGoalText.Text = $"Goal: {mins} minutes per day";
+        }
+
+        #endregion
+
+        #region Theme Settings
 
         private void UpdateThemeSelection(string selectedTheme)
         {
@@ -100,10 +199,16 @@ namespace digital_wellbeing_app.Views.Settings
             _themeService.ApplyTheme(theme);
         }
 
+        #endregion
+
+        #region Startup Settings
+
         private void StartupCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             bool enable = (StartupCheckBox.IsChecked == true);
             StartupService.Enable(enable);
         }
+
+        #endregion
     }
 }
