@@ -48,6 +48,7 @@ namespace digital_wellbeing_app.Services
             _database?.CreateTable<ScreenTimePeriod>();
             _database?.CreateTable<ScreenTimeSession>();
             _database?.CreateTable<SoundUsageSession>();
+            _database?.CreateTable<UserSettings>();
         }
 
         // --- App Usage ---

@@ -282,7 +282,7 @@
                                     <TextBlock.FontWeight>
                                         <Binding Path="IsToday">
                                             <Binding.Converter>
-                                                <conv:BoolToVisibilityConverter/>
+                                                <conv:BoolToFontWeightConverter/>
                                             </Binding.Converter>
                                         </Binding>
                                     </TextBlock.FontWeight>
