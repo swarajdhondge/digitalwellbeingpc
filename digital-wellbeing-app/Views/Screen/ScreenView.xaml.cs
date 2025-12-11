@@ -7,41 +7,52 @@
             Interval = System.TimeSpan.FromSeconds(1)
         };
 
+        private readonly digital_wellbeing_app.ViewModels.ScreenViewModel _vm;
+        private bool _timerEventAttached;
 
         public ScreenView()
         {
             InitializeComponent();
 
-            var vm = new digital_wellbeing_app.ViewModels.ScreenViewModel();
-            this.DataContext = vm;
+            _vm = new digital_wellbeing_app.ViewModels.ScreenViewModel();
+            this.DataContext = _vm;
 
             this.Loaded += OnLoaded;
-            this.Unloaded += (s, e) => vm.Dispose();
+            this.Unloaded += OnUnloaded;
         }
 
         private void OnLoaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            _realTimeTimer.Tick += (s, args) => RenderRealTimeCanvas();
+            // Only attach the tick event once
+            if (!_timerEventAttached)
+            {
+                _realTimeTimer.Tick += (s, args) => RenderRealTimeCanvas();
+                _timerEventAttached = true;
+            }
             _realTimeTimer.Start();
             RenderRealTimeCanvas();
         }
 
+        private void OnUnloaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+            // Just stop the timer when navigating away, don't dispose the ViewModel
+            // The ViewModel needs to stay alive to receive goal change events
+            _realTimeTimer.Stop();
+        }
+
         private void RenderRealTimeCanvas()
         {
-            if (this.DataContext is not digital_wellbeing_app.ViewModels.ScreenViewModel vm)
-                return;
-
             RealTimeCanvas.Children.Clear();
 
             double width = RealTimeCanvas.ActualWidth;
             double height = RealTimeCanvas.ActualHeight;
             if (width <= 0 || height <= 0) return;
 
-            // Try to get the material brush; fallback to System.Windows.Media.Brushes.Green
-            var brush = this.TryFindResource("PrimaryHueMidBrush") as System.Windows.Media.Brush
+            // Use the correct design system brush; fallback to green
+            var brush = this.TryFindResource("Accent.Primary") as System.Windows.Media.Brush
                         ?? System.Windows.Media.Brushes.Green;
 
-            foreach (var seg in vm.TimelineSegments)
+            foreach (var seg in _vm.TimelineSegments)
             {
                 // Create a Rectangle segment
                 var rect = new System.Windows.Shapes.Rectangle
