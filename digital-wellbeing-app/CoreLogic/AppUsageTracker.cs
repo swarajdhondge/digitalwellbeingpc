@@ -11,6 +11,16 @@ namespace digital_wellbeing_app.CoreLogic
         private AppUsageSession? _currentSession;
         private readonly FocusChangeListener _focusListener;
 
+        /// <summary>
+        /// The currently active app session (null if no app is focused or user is idle)
+        /// </summary>
+        public AppUsageSession? CurrentSession => _currentSession;
+
+        /// <summary>
+        /// Fired when the focused app changes
+        /// </summary>
+        public event Action? OnAppSwitched;
+
         public AppUsageTracker()
         {
             _focusListener = new FocusChangeListener(OnAppChanged);
@@ -57,6 +67,9 @@ namespace digital_wellbeing_app.CoreLogic
                 WindowTitle = SafeGetWindowTitle(process),
                 StartTime = now
             };
+
+            // Notify subscribers
+            OnAppSwitched?.Invoke();
         }
 
         private static string SafeGetPath(Process proc)
