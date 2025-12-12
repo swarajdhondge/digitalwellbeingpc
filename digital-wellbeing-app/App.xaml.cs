@@ -1,6 +1,7 @@
-﻿// File: App.xaml.cs
+// File: App.xaml.cs
 using System.Threading;
 using Microsoft.Win32;
+using Velopack;
 
 namespace digital_wellbeing_app
 {
@@ -17,6 +18,9 @@ namespace digital_wellbeing_app
 
         protected override void OnStartup(System.Windows.StartupEventArgs e)
         {
+            // Velopack update hooks - must be first
+            VelopackApp.Build().Run();
+
             // Single instance check
             _mutex = new Mutex(true, MutexName, out bool isNewInstance);
             if (!isNewInstance)
