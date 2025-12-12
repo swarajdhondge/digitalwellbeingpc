@@ -8,6 +8,11 @@ namespace digital_wellbeing_app.CoreLogic
     {
         private SoundUsageSession? _currentSession;
         private bool _alertRaised;
+        private readonly System.Timers.Timer _periodicSaveTimer;
+        private DateTime _lastSaved = DateTime.Now;
+
+        // Save interval matches ScreenTimeTracker (5 minutes)
+        private const int SaveIntervalMinutes = 5;
 
         public double ThresholdDb { get; set; } = 75.0;
         public TimeSpan ThresholdTime { get; set; } = TimeSpan.FromMinutes(30);
@@ -26,6 +31,14 @@ namespace digital_wellbeing_app.CoreLogic
             // Load threshold from settings
             var settingsService = new SettingsService();
             ThresholdDb = settingsService.LoadHarmfulThreshold();
+
+            // Periodic save timer to prevent data loss on crash
+            _periodicSaveTimer = new System.Timers.Timer(60_000) // Check every minute
+            {
+                AutoReset = true
+            };
+            _periodicSaveTimer.Elapsed += OnPeriodicSave;
+            _periodicSaveTimer.Start();
         }
 
         public void HandleDeviceChange(string newDeviceName, string newDeviceType)
@@ -97,6 +110,45 @@ namespace digital_wellbeing_app.CoreLogic
                 _currentSession = null;
                 _alertRaised = false;
             }
+        }
+
+        /// <summary>
+        /// Periodically saves the current session to prevent data loss on crash.
+        /// Saves a completed segment and starts a new one for the same device.
+        /// </summary>
+        private void OnPeriodicSave(object? sender, System.Timers.ElapsedEventArgs e)
+        {
+            var now = DateTime.Now;
+
+            // Only save every SaveIntervalMinutes
+            if ((now - _lastSaved).TotalMinutes < SaveIntervalMinutes)
+                return;
+
+            if (_currentSession == null)
+                return;
+
+            // Skip very short sessions (less than 30 seconds of actual listening)
+            if (_currentSession.ActualListeningDuration.TotalSeconds < 30)
+                return;
+
+            // Save the current session segment
+            _currentSession.EndTime = now;
+            DatabaseService.SaveSoundSession(_currentSession);
+
+            // Start a new session segment for the same device (seamless continuation)
+            _currentSession = new SoundUsageSession
+            {
+                StartTime = now,
+                DeviceName = _currentSession.DeviceName,
+                DeviceType = _currentSession.DeviceType,
+                AvgVolume = 0.0,
+                EstimatedMaxSPL = 0.0,
+                WasHarmful = false,
+                HarmfulDuration = TimeSpan.Zero,
+                ActualListeningDuration = TimeSpan.Zero
+            };
+
+            _lastSaved = now;
         }
 
         private static double GetBaseSPL(string deviceType) => deviceType switch
