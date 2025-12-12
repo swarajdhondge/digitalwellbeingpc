@@ -27,7 +27,7 @@ if ($LASTEXITCODE -ne 0) { throw "Build failed" }
 
 # Package with Velopack
 Write-Host "Creating Velopack package..." -ForegroundColor Yellow
-vpk pack -u $appId -v $Version -p $publishDir -o $releasesDir
+vpk pack -u $appId -v $Version -p $publishDir -o $releasesDir --mainExe DigitalWellbeing.exe
 if ($LASTEXITCODE -ne 0) { throw "Velopack packaging failed" }
 
 # Create GitHub release and upload

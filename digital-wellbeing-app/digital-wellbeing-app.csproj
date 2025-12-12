@@ -11,7 +11,8 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
     <RootNamespace>digital_wellbeing_app</RootNamespace>
-    <AssemblyName>digital_wellbeing_app</AssemblyName>
+    <AssemblyName>DigitalWellbeing</AssemblyName>
+    <Product>Digital Wellbeing</Product>
 
     <ApplicationIcon>Resources\Icons\digital-balance-icon.ico</ApplicationIcon>
     <Win32Icon>Resources\Icons\digital-balance-icon.ico</Win32Icon>
