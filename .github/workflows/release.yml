@@ -1,94 +1,51 @@
-# name: Build and Release MSIX
+name: Build and Release
 
-# on:
-#   push:
-#     tags:
-#       - 'v*.*.*'
+on:
+  push:
+    tags:
+      - 'v*.*.*'
 
 permissions:
   contents: write
 
 env:
-  SOLUTION: 'digital-wellbeing-app/digital-wellbeing-app.sln'
-  INSTALLER_PROJECT: 'installer/installer.wapproj'
-  CONFIGURATION: 'Release'
-  PLATFORM: 'x86'
-  PACKAGE_ROOT: 'installer/AppPackages'
+  PROJECT: 'digital-wellbeing-app/digital-wellbeing-app.csproj'
   PACKAGE_NAME: 'DigitalWellbeingPC'
 
 jobs:
-  build-installer:
+  build-and-release:
     runs-on: windows-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup .NET 9.0
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x'
 
-      - name: Restore dependencies
-        run: dotnet restore ${{ env.SOLUTION }}
+      - name: Install Velopack CLI
+        run: dotnet tool install -g vpk
 
-      - name: Trust test certificate
-        shell: powershell
-        env:
-          PFX_PASSWORD: ${{ secrets.TEST_CERT_PASSWORD }}
-        run: |
-          $pwd = ConvertTo-SecureString -String $env:PFX_PASSWORD -AsPlainText -Force
-          $pfx = Join-Path $Env:GITHUB_WORKSPACE 'installer\installer_TemporaryKey.pfx'
-          if (-Not (Test-Path $pfx)) { throw "PFX not found at $pfx" }
-          Import-PfxCertificate `
-            -FilePath $pfx `
-            -CertStoreLocation Cert:\CurrentUser\My `
-            -Password $pwd
-
-      - name: Publish MSIX package
-        shell: powershell
-        run: |
-          & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe" `
-            ${{ env.INSTALLER_PROJECT }} `
-            /t:Publish `
-            /p:Configuration=${{ env.CONFIGURATION }} `
-            /p:Platform=${{ env.PLATFORM }}
-
-      - name: Rename output folder and archive
+      - name: Get version from tag
+        id: version
         shell: powershell
         run: |
           $version = '${{ github.ref_name }}'.TrimStart('v')
-          $packageName = '${{ env.PACKAGE_NAME }}'
-          $source = Get-ChildItem '${{ env.PACKAGE_ROOT }}' -Directory |
-                    Where-Object { $_.Name -like "$($packageName)*Test" }
-          $destination = Join-Path '${{ env.PACKAGE_ROOT }}' "$packageName`_$version"
-          Move-Item $source.FullName $destination
-          $zipName = "$($packageName)_$version.zip"
-          Compress-Archive -Path "$destination\*" -DestinationPath $zipName
-          Write-Host "Created archive: $zipName"
+          echo "VERSION=$version" >> $env:GITHUB_OUTPUT
 
-      - name: Upload installer archive
-        uses: actions/upload-artifact@v4
-        with:
-          name: msix-installer
-          path: '*.zip'
+      - name: Publish application
+        run: dotnet publish ${{ env.PROJECT }} -c Release -o ./publish
 
-  create-release:
-    needs: build-installer
-    runs-on: windows-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Download installer archive
-        uses: actions/download-artifact@v4
-        with:
-          name: msix-installer
+      - name: Create Velopack release
+        run: vpk pack -u ${{ env.PACKAGE_NAME }} -v ${{ steps.version.outputs.VERSION }} -p ./publish -o ./releases
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
-          files: '*.zip'
+          generate_release_notes: true
+          files: ./releases/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
