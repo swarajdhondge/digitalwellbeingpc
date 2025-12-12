@@ -1,69 +1,150 @@
-# 🧭 Digital Wellbeing PC — Windows variant of Android's Digital Wellbeing
+# Digital Wellbeing for Windows
 
-**Digital Wellbeing PC** is an open-source project that brings the core features of Android's Digital Wellbeing to Windows desktops. It tracks your screen time, app usage, and audio exposure, while staying lightweight and respectful of your privacy.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![.NET 9](https://img.shields.io/badge/.NET-9.0-purple.svg)](https://dotnet.microsoft.com/)
+[![Platform](https://img.shields.io/badge/Platform-Windows-0078D6.svg)](https://www.microsoft.com/windows)
+[![GitHub release](https://img.shields.io/github/v/release/swarajdhondge/digitalwellbeingpc)](https://github.com/swarajdhondge/digitalwellbeingpc/releases)
+[![Downloads](https://img.shields.io/github/downloads/swarajdhondge/digitalwellbeingpc/total)](https://github.com/swarajdhondge/digitalwellbeingpc/releases)
 
----
+A privacy-focused desktop app that brings Android's Digital Wellbeing experience to Windows. Track your screen time, monitor app usage, and protect your hearing — all without sending any data to the cloud.
 
-## ✨ Features
-
-- 🖥️ **Screen Time Tracking** – Daily + per-session activity tracking
-- 📊 **App Usage Monitoring** – Foreground app usage time (like Android)
-- 🔊 **Audio Exposure Tracking** – Warns if you're exposed to loud sound
-- 🧠 **Break Reminders** – (Coming soon) Health-focused nudges
-- 🧱 **Modular WPF Architecture** – CoreLogic + Platform layers
-- 📦 **Clean MSIX Installer** – Local certificate and sideload ready
-- 💽 **Local SQLite Storage** – All data is stored on your machine
+<p align="center">
+  <img src=".github/screenshots/dashboard.png" alt="Dashboard" width="800"/>
+</p>
 
 ---
 
-## 📦 How to Install (Manual)
+## Features
 
-1. Visit the [Releases](https://github.com/swarajdhondge/digitalwellbeingpc/releases) page.
-2. Download the latest `.zip` file (e.g. `DigitalWellbeingPC_v1.x.x.zip`).
-3. Extract the contents. You should see:
-   - `installer_<version>_x86.appxbundle`
-   - `installer_<version>_x86.appxsym`
-   - `installer_<version>_x86` (Security Certificate)
-   - `Add-AppDevPackage.ps1`
-4. Install the certificate:
-   - Right-click on `installer_<version>_x86` → **Install Certificate**
-   - Select **Current User**
-   - Choose **Place all certificates in the following store**
-   - Select **Trusted People**, then finish.
-5. Right-click `Add-AppDevPackage.ps1` → **Run with PowerShell** as Administrator.
-6. After the script completes, **double-click `installer_<version>_x86.appxbundle`** to launch the installer and complete setup.
-7. Open **Digital Wellbeing PC** from the Start Menu.
+**Screen Time Tracking**
+See exactly how long you've been at your computer. View daily timelines, weekly breakdowns, and track your longest sessions.
+
+**App Usage Monitoring**
+Know which apps you spend the most time in. Get real-time tracking with focus metrics like app switches and average focus duration.
+
+**Sound Exposure Alerts**
+Protect your hearing. The app monitors audio output levels and warns you when you've been exposed to loud sound for too long.
+
+**Daily Goals**
+Set screen time limits and track your progress throughout the day.
+
+**Themes**
+Choose between Light, Dark, or Auto theme to match your preference or system settings.
+
+<p align="center">
+  <img src=".github/screenshots/dashboard-light.png" alt="Light Theme" width="400"/>
+  <img src=".github/screenshots/dashboard.png" alt="Dark Theme" width="400"/>
+</p>
+
+**Privacy First**
+All data stays on your machine in a local SQLite database. No accounts, no cloud sync, no telemetry.
+
+**Auto Updates**
+The app checks for updates automatically and installs them seamlessly.
 
 ---
 
-✅ The app will run in the system tray and begin tracking usage.  
-⚠️ **Ensure only one instance is running** — multiple instances may corrupt usage data.
+## Screenshots
+
+<details>
+<summary>Screen Time View</summary>
+<p align="center">
+  <img src=".github/screenshots/screentime.png" alt="Screen Time" width="800"/>
+</p>
+</details>
+
+<details>
+<summary>App Usage View</summary>
+<p align="center">
+  <img src=".github/screenshots/appusage.png" alt="App Usage" width="800"/>
+</p>
+</details>
+
+<details>
+<summary>Settings</summary>
+<p align="center">
+  <img src=".github/screenshots/settings-light.png" alt="Settings" width="800"/>
+</p>
+</details>
 
 ---
 
-## 🔊 Audio Safety Thresholds
+## Installation
 
-To promote safe listening habits, audio exposure is tracked and limited. The current logic:
+### Download (Recommended)
 
-```csharp
-ThresholdDb = 75.0                   // Real-world exposure limit
-ThresholdTime = 30 mins			// Set low for testing
+1. Go to the [Releases](https://github.com/swarajdhondge/digitalwellbeingpc/releases) page
+2. Download `Setup.exe` from the latest release
+3. Run it — that's it!
+
+The app installs without admin rights and updates automatically.
+
+### Run from Source
+
+If you want to build it yourself:
+
+```bash
+# Clone the repo
+git clone https://github.com/swarajdhondge/digitalwellbeingpc.git
+cd digitalwellbeingpc
+
+# Run the app
+dotnet run --project digital-wellbeing-app
 ```
 
----
+**Requirements:**
 
-## 🛠️ How This App Was Built
-
-**Digital Wellbeing PC** is a real-world example of modern app development with and through AI.
-Most of the design, debugging, and problem-solving work for this project was done using **ChatGPT o3 mini high** and **o4 mini high** — not just for code, but for exploring packaging issues, .NET migration, and feature scoping.
-
-Instead of traditional “code-first” engineering, this project was shaped by prompt engineering — using natural language to outline problems, design UIs, fix packaging bugs, and test edge cases. This allowed rapid iterations, bug fixes, and research, all within a single conversation. Most core technical issues (MSIX packaging, SQLite quirks, WPF/Tray bugs, installer design) were solved via AI-powered prompts.
-
-The ultimate goal:
-**Bring the best features of Android’s Digital Wellbeing to Windows**, making it possible for anyone to monitor screen time, app usage, and audio exposure — all in a privacy-focused desktop tool.
+- [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
+- Windows 10/11
 
 ---
 
-### This app is still in active development.
-Expect incomplete features, bugs, and evolving design — but the core is already usable.
-This project demonstrates that with prompt engineering and modern AI, anyone can build and ship a full-featured Windows app, no matter their starting point.
+## How It Works
+
+The app runs quietly in your system tray and tracks:
+
+- **Screen time** — Active vs away time based on mouse/keyboard activity
+- **App usage** — Which window is in the foreground and for how long
+- **Audio levels** — System audio output to detect harmful exposure
+
+All tracking pauses automatically when you lock your screen or your PC goes to sleep.
+
+---
+
+## Contributing
+
+Contributions are welcome! Here's how you can help:
+
+1. **Fork** the repository
+2. **Create a branch** for your feature (`git checkout -b feature/my-feature`)
+3. **Commit** your changes (`git commit -m "Add my feature"`)
+4. **Push** to your branch (`git push origin feature/my-feature`)
+5. **Open a Pull Request**
+
+### Ideas for Contributions
+
+- Break reminders / Pomodoro timer
+- Usage reports and exports
+- Focus mode (block distracting apps)
+- Improved sound monitoring UI
+
+---
+
+## Tech Stack
+
+- **WPF** with Material Design
+- **SQLite** for local storage
+- **.NET 9**
+- **Velopack** for updates and installation
+
+---
+
+## About This Project
+
+A Windows variant of Android's Digital Wellbeing — bringing screen time tracking, app usage monitoring, and hearing protection to your desktop. Built for anyone who wants to be more mindful of their computer usage without sacrificing privacy.
+
+---
+
+## License
+
+[MIT](LICENSE) — use it however you like.
