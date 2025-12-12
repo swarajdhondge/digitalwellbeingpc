@@ -1,4 +1,4 @@
-﻿namespace digital_wellbeing_app.Services
+namespace digital_wellbeing_app.Services
 {
     public class SettingsService
     {
@@ -51,7 +51,7 @@
             {
                 return mode;
             }
-            return ViewModels.AppTheme.Auto;
+            return ViewModels.AppTheme.Dark;
         }
 
         public void SaveTheme(ViewModels.AppTheme mode)

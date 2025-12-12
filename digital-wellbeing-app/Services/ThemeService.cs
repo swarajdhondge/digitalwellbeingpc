@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -23,7 +23,7 @@ namespace digital_wellbeing_app.Services
 
         public AppTheme Load()
         {
-            if (!File.Exists(FileName)) return AppTheme.Auto;
+            if (!File.Exists(FileName)) return AppTheme.Dark;
             try
             {
                 using var json = JsonDocument.Parse(File.ReadAllText(FileName));
@@ -32,7 +32,7 @@ namespace digital_wellbeing_app.Services
                     return m;
             }
             catch { }
-            return AppTheme.Auto;
+            return AppTheme.Dark;
         }
 
         public bool IsSystemInDarkMode()
