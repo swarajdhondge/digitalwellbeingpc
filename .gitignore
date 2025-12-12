@@ -7,6 +7,7 @@
 
 # Publish folders
 /publish/
+/releases/
 
 # MSIX packaging outputs
 /installer/bin/
@@ -65,5 +66,4 @@ Desktop.ini
 
 # Documentation and planning files
 docs/
-
 .cursor/
