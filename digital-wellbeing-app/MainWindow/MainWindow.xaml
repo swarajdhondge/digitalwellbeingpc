@@ -164,6 +164,17 @@
                                     <TextBlock Text="App Usage" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
+
+                            <TextBlock Text="PRODUCTIVITY" Style="{StaticResource NavSectionHeader}"/>
+
+                            <Button x:Name="NavFocus"
+                                    Style="{StaticResource NavItem}"
+                                    Click="Focus_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <md:PackIcon Kind="Target" Width="20" Height="20" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Focus Mode" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
                         </StackPanel>
 
                         <!-- Bottom Navigation -->
@@ -188,7 +199,7 @@
                             </Button>
 
                             <!-- Version -->
-                            <TextBlock Text="v1.3.0"
+                            <TextBlock Text="v1.4.0"
                                        Style="{StaticResource LabelMuted}"
                                        Margin="24,16,0,0"/>
                         </StackPanel>
@@ -315,6 +326,208 @@
                                    FontSize="13"
                                    Cursor="Hand"
                                    MouseLeftButtonDown="TurnOffLink_Click"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- ============================================ -->
+            <!-- FOCUS MODE WARNING OVERLAY -->
+            <!-- ============================================ -->
+            <Grid x:Name="FocusWarningOverlay" 
+                  Grid.RowSpan="2" 
+                  Visibility="Collapsed"
+                  Panel.ZIndex="1001">
+                
+                <!-- Semi-transparent backdrop -->
+                <Border x:Name="FocusBackdrop"
+                        Background="#80000000"
+                        MouseLeftButtonDown="FocusBackdrop_Click"/>
+                
+                <!-- Centered warning dialog -->
+                <Border Background="{DynamicResource Bg.Card}"
+                        CornerRadius="16"
+                        Padding="40"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        MinWidth="420"
+                        MaxWidth="520">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="30" ShadowDepth="0" Opacity="0.5" Color="Black"/>
+                    </Border.Effect>
+                    
+                    <StackPanel>
+                        <!-- Icon -->
+                        <md:PackIcon Kind="AlertCircle"
+                                     Width="48"
+                                     Height="48"
+                                     Foreground="{DynamicResource Status.Warning}"
+                                     HorizontalAlignment="Center"
+                                     Margin="0,0,0,16"/>
+                        
+                        <!-- Title -->
+                        <TextBlock Text="Focus Mode Active"
+                                   Style="{StaticResource HeadingLarge}"
+                                   Foreground="{DynamicResource Text.Primary}"
+                                   TextAlignment="Center"
+                                   Margin="0,0,0,12"/>
+                        
+                        <!-- App Name -->
+                        <TextBlock x:Name="DistractingAppName"
+                                   Text="Chrome"
+                                   Style="{StaticResource HeadingMedium}"
+                                   Foreground="{DynamicResource Status.Danger}"
+                                   TextAlignment="Center"
+                                   Margin="0,0,0,8"/>
+                        
+                        <!-- Message -->
+                        <TextBlock Text="This app is marked as Entertainment. Stay focused on your work!"
+                                   Style="{StaticResource BodyMedium}"
+                                   Foreground="{DynamicResource Text.Secondary}"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   Margin="0,0,0,32"/>
+                        
+                        <!-- Buttons -->
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center">
+                            <!-- Back to Work Button -->
+                            <Button x:Name="BackToWorkButton"
+                                    Content="Back to Work"
+                                    Click="BackToWorkButton_Click"
+                                    Background="{DynamicResource Accent.Primary}"
+                                    Foreground="{DynamicResource Accent.OnAccent}"
+                                    BorderThickness="0"
+                                    Padding="24,12"
+                                    FontSize="14"
+                                    Cursor="Hand"
+                                    Margin="0,0,12,0">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border Background="{TemplateBinding Background}"
+                                                            CornerRadius="8"
+                                                            Padding="{TemplateBinding Padding}">
+                                                        <ContentPresenter HorizontalAlignment="Center" 
+                                                                        VerticalAlignment="Center"/>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            
+                            <!-- Continue Anyway Button -->
+                            <Button x:Name="ContinueAnywayButton"
+                                    Content="Continue Anyway"
+                                    Click="ContinueAnywayButton_Click"
+                                    Style="{StaticResource ButtonSecondary}"
+                                    Padding="24,12"
+                                    FontSize="14"/>
+                        </StackPanel>
+                        
+                        <!-- Time Remaining -->
+                        <TextBlock x:Name="FocusTimeRemaining"
+                                   Text="24:35 remaining in focus session"
+                                   Foreground="{DynamicResource Text.Muted}"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,24,0,0"
+                                   FontSize="12"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- ============================================ -->
+            <!-- END SESSION CONFIRMATION OVERLAY -->
+            <!-- ============================================ -->
+            <Grid x:Name="EndSessionOverlay" 
+                  Grid.RowSpan="2" 
+                  Visibility="Collapsed"
+                  Panel.ZIndex="1002">
+                
+                <!-- Semi-transparent backdrop -->
+                <Border Background="#80000000"
+                        MouseLeftButtonDown="EndSessionBackdrop_Click"/>
+                
+                <!-- Centered confirmation dialog -->
+                <Border Background="{DynamicResource Bg.Card}"
+                        CornerRadius="16"
+                        Padding="40"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        MinWidth="400"
+                        MaxWidth="480">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="30" ShadowDepth="0" Opacity="0.5" Color="Black"/>
+                    </Border.Effect>
+                    
+                    <StackPanel>
+                        <!-- Icon -->
+                        <md:PackIcon Kind="TimerOff"
+                                     Width="48"
+                                     Height="48"
+                                     Foreground="{DynamicResource Status.Warning}"
+                                     HorizontalAlignment="Center"
+                                     Margin="0,0,0,16"/>
+                        
+                        <!-- Title -->
+                        <TextBlock Text="End Focus Session?"
+                                   Style="{StaticResource HeadingLarge}"
+                                   Foreground="{DynamicResource Text.Primary}"
+                                   TextAlignment="Center"
+                                   Margin="0,0,0,12"/>
+                        
+                        <!-- Message -->
+                        <TextBlock x:Name="EndSessionMessage"
+                                   Text="You still have 15:30 remaining. Are you sure you want to end early?"
+                                   Style="{StaticResource BodyMedium}"
+                                   Foreground="{DynamicResource Text.Secondary}"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   Margin="0,0,0,32"/>
+                        
+                        <!-- Buttons -->
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center">
+                            <!-- Keep Going Button -->
+                            <Button x:Name="KeepGoingButton"
+                                    Content="Keep Going"
+                                    Click="KeepGoingButton_Click"
+                                    Background="{DynamicResource Accent.Primary}"
+                                    Foreground="{DynamicResource Accent.OnAccent}"
+                                    BorderThickness="0"
+                                    Padding="24,12"
+                                    FontSize="14"
+                                    Cursor="Hand"
+                                    Margin="0,0,12,0">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border Background="{TemplateBinding Background}"
+                                                            CornerRadius="8"
+                                                            Padding="{TemplateBinding Padding}">
+                                                        <ContentPresenter HorizontalAlignment="Center" 
+                                                                        VerticalAlignment="Center"/>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            
+                            <!-- End Session Button -->
+                            <Button x:Name="ConfirmEndSessionButton"
+                                    Content="End Session"
+                                    Click="ConfirmEndSessionButton_Click"
+                                    Style="{StaticResource ButtonSecondary}"
+                                    Padding="24,12"
+                                    FontSize="14"/>
+                        </StackPanel>
                     </StackPanel>
                 </Border>
             </Grid>

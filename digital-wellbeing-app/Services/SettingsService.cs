@@ -157,5 +157,102 @@ namespace digital_wellbeing_app.Services
         {
             return new System.Collections.Generic.Dictionary<string, object>(_values);
         }
+
+        // --- Focus Session persistence ---
+        public Models.FocusEnforcementLevel LoadFocusEnforcementLevel()
+        {
+            if (_values.TryGetValue(Models.FocusSessionKeys.EnforcementLevel, out var val))
+            {
+                if (val is int i)
+                    return (Models.FocusEnforcementLevel)i;
+                if (val is System.Text.Json.JsonElement je && je.TryGetInt32(out var intVal))
+                    return (Models.FocusEnforcementLevel)intVal;
+            }
+            return Models.FocusEnforcementLevel.Warn; // Default: Warn
+        }
+
+        public void SaveFocusEnforcementLevel(Models.FocusEnforcementLevel level)
+        {
+            _values[Models.FocusSessionKeys.EnforcementLevel] = (int)level;
+            SaveToDisk();
+        }
+
+        public int LoadFocusDefaultDuration()
+        {
+            if (_values.TryGetValue(Models.FocusSessionKeys.DefaultDurationMinutes, out var val))
+            {
+                if (val is int i)
+                    return i;
+                if (val is System.Text.Json.JsonElement je && je.TryGetInt32(out var intVal))
+                    return intVal;
+            }
+            return 25; // Default: 25 minutes (Pomodoro)
+        }
+
+        public void SaveFocusDefaultDuration(int minutes)
+        {
+            _values[Models.FocusSessionKeys.DefaultDurationMinutes] = minutes;
+            SaveToDisk();
+        }
+
+        public bool LoadFocusBlockEntertainment()
+        {
+            if (_values.TryGetValue(Models.FocusSessionKeys.BlockEntertainment, out var val))
+            {
+                if (val is bool b)
+                    return b;
+                if (val is System.Text.Json.JsonElement je && je.ValueKind == System.Text.Json.JsonValueKind.True)
+                    return true;
+                if (val is System.Text.Json.JsonElement je2 && je2.ValueKind == System.Text.Json.JsonValueKind.False)
+                    return false;
+            }
+            return true; // Default: block entertainment apps
+        }
+
+        public void SaveFocusBlockEntertainment(bool block)
+        {
+            _values[Models.FocusSessionKeys.BlockEntertainment] = block;
+            SaveToDisk();
+        }
+
+        public bool LoadFocusAllowWorkApps()
+        {
+            if (_values.TryGetValue(Models.FocusSessionKeys.AllowWorkApps, out var val))
+            {
+                if (val is bool b)
+                    return b;
+                if (val is System.Text.Json.JsonElement je && je.ValueKind == System.Text.Json.JsonValueKind.True)
+                    return true;
+                if (val is System.Text.Json.JsonElement je2 && je2.ValueKind == System.Text.Json.JsonValueKind.False)
+                    return false;
+            }
+            return true; // Default: allow work apps
+        }
+
+        public void SaveFocusAllowWorkApps(bool allow)
+        {
+            _values[Models.FocusSessionKeys.AllowWorkApps] = allow;
+            SaveToDisk();
+        }
+
+        public bool LoadFocusSoundOnComplete()
+        {
+            if (_values.TryGetValue("Focus_SoundOnComplete", out var val))
+            {
+                if (val is bool b)
+                    return b;
+                if (val is System.Text.Json.JsonElement je && je.ValueKind == System.Text.Json.JsonValueKind.True)
+                    return true;
+                if (val is System.Text.Json.JsonElement je2 && je2.ValueKind == System.Text.Json.JsonValueKind.False)
+                    return false;
+            }
+            return true; // Default: play sound on complete
+        }
+
+        public void SaveFocusSoundOnComplete(bool sound)
+        {
+            _values["Focus_SoundOnComplete"] = sound;
+            SaveToDisk();
+        }
     }
 }

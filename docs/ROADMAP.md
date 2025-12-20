@@ -8,7 +8,7 @@
 
 ---
 
-## Current State (v1.2)
+## Current State (v1.4)
 
 - [x] Core tracking (Screen Time, Sound, App Usage)
 - [x] Modern UI redesign (Material Design)
@@ -18,6 +18,8 @@
 - [x] Screen time timeline rendering
 - [x] App usage real-time refresh
 - [x] System tray with minimize
+- [x] Break reminders (20-20-20 rule)
+- [x] Focus Sessions with app blocking
 
 ---
 
@@ -44,28 +46,38 @@
 ---
 
 ## v1.4 - Focus Sessions
-**Priority: HIGH | Status: Next**
+**Priority: HIGH | Status: COMPLETED**
 
 Windows-native Focus Mode with user-controlled enforcement:
 
 | Mode | Behavior |
 |------|----------|
-| Warn | Popup when opening distracting app (allow override) |
-| Block | Prevent launch during focus time |
-| Hide | Remove from taskbar/Start (softest) |
+| Warn | Tray balloon notification with "Allow" / "Back to Work" options |
+| Block | Auto-minimize distracting apps (fallback to Warn if app resists) |
+| Hide | Remove from taskbar/Start (softest) - Future |
 
-- [ ] Focus Session service with timer
-- [ ] App categorization (Work/Entertainment/Uncategorized)
-- [ ] Start/stop UI in sidebar or Dashboard
-- [ ] Per-app category assignment
-- [ ] Focus history tracking
+- [x] Focus Session service with timer
+- [x] App categorization (Work/Entertainment/Neutral)
+- [x] Start/stop UI with custom confirmation dialog
+- [x] Per-app category assignment (last 7 days, sorted by usage)
+- [x] Focus history tracking with completion status
+- [x] Tray balloon notifications for distraction warnings
+- [x] Enforcement level selection (Warn/Block)
+- [x] Cooldown-based warning system (30s Warn, 5s Block)
+- [x] Per-app session override ("Allow This App" for session)
+- [x] System app exclusion list (explorer, Task Manager, etc.)
+- [x] Fallback to Warn mode for apps that resist minimize
+- [x] Theme-aware button states for duration/enforcement selection
 
 **Components:**
-- `Services/FocusSessionService.cs`
-- `Models/AppCategory.cs`
-- `Models/FocusSession.cs`
-- `Views/Focus/FocusView.xaml`
-- Settings: enforcement level, app selection
+- `Services/FocusSessionService.cs` - Timer, enforcement, app blocking, cooldowns
+- `Models/AppCategory.cs` - Per-app category storage
+- `Models/FocusSession.cs` - Session tracking model
+- `Models/FocusSessionSettings.cs` - Settings keys
+- `Views/Focus/FocusView.xaml` - Full focus UI with timer, categories, history
+- `Platform/Windows/NativeMethods.cs` - Window minimize APIs
+- Focus warning overlay in MainWindow.xaml
+- End session confirmation overlay in MainWindow.xaml
 
 ---
 
@@ -163,8 +175,8 @@ Per-app daily limits with user-controlled enforcement:
 
 ## Priority Order
 
-1. v1.3 Break Reminders - Quick win, high impact
-2. v1.4 Focus Sessions - Flagship feature
+1. ~~v1.3 Break Reminders - Quick win, high impact~~ ✓ DONE
+2. ~~v1.4 Focus Sessions - Flagship feature~~ ✓ DONE
 3. v1.5 Wind Down - Unique differentiator
 4. v1.6 Weekly Reports - User-facing value
 5. v1.7 App Limits - Core wellbeing feature

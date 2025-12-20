@@ -1,0 +1,588 @@
+<UserControl x:Class="digital_wellbeing_app.Views.Focus.FocusView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d"
+             d:DesignHeight="600" d:DesignWidth="800"
+             Background="Transparent">
+
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                  VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="8">
+
+            <!-- Page Header -->
+            <TextBlock Text="Focus Mode"
+                       Style="{StaticResource HeadingLarge}"
+                       Margin="0,0,0,24"/>
+
+            <!-- ============================================ -->
+            <!-- FOCUS SESSION CARD -->
+            <!-- ============================================ -->
+            <Border Style="{StaticResource CardBase}" Margin="0,0,0,24">
+                <Grid>
+                    <!-- Inactive State -->
+                    <StackPanel x:Name="FocusInactivePanel" Visibility="Visible">
+                        <!-- Header -->
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                            <Border Background="{DynamicResource Accent.Primary}"
+                                    CornerRadius="6"
+                                    Padding="6">
+                                <md:PackIcon Kind="Target" Width="20" Height="20"
+                                             Foreground="{DynamicResource Accent.OnAccent}"/>
+                            </Border>
+                            <TextBlock Text="Start a Focus Session"
+                                       Style="{StaticResource HeadingSmall}"
+                                       Margin="12,0,0,0"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <TextBlock Text="Block distracting apps and stay focused on your work. Choose your session duration and enforcement level."
+                                   Style="{StaticResource LabelSecondary}"
+                                   TextWrapping="Wrap"
+                                   Margin="0,0,0,24"/>
+
+                        <!-- Duration Selection -->
+                        <TextBlock Text="DURATION"
+                                   Style="{StaticResource NavSectionHeader}"
+                                   Margin="0,0,0,8"/>
+                        
+                        <WrapPanel Margin="0,0,0,24">
+                            <Button x:Name="Duration15Btn" Content="15 min"
+                                    Style="{StaticResource ButtonSecondary}"
+                                    Margin="0,0,8,8"
+                                    Click="DurationButton_Click" Tag="15"/>
+                            <Button x:Name="Duration25Btn" Content="25 min"
+                                    Style="{StaticResource ButtonPrimary}"
+                                    Margin="0,0,8,8"
+                                    Click="DurationButton_Click" Tag="25"/>
+                            <Button x:Name="Duration45Btn" Content="45 min"
+                                    Style="{StaticResource ButtonSecondary}"
+                                    Margin="0,0,8,8"
+                                    Click="DurationButton_Click" Tag="45"/>
+                            <Button x:Name="Duration60Btn" Content="60 min"
+                                    Style="{StaticResource ButtonSecondary}"
+                                    Margin="0,0,8,8"
+                                    Click="DurationButton_Click" Tag="60"/>
+                            <Button x:Name="Duration90Btn" Content="90 min"
+                                    Style="{StaticResource ButtonSecondary}"
+                                    Margin="0,0,8,8"
+                                    Click="DurationButton_Click" Tag="90"/>
+                            <Button x:Name="DurationCustomBtn" Content="Custom..."
+                                    Style="{StaticResource ButtonGhost}"
+                                    Margin="0,0,8,8"
+                                    Click="CustomDuration_Click"/>
+                        </WrapPanel>
+
+                        <!-- Custom Duration Input (hidden by default) -->
+                        <StackPanel x:Name="CustomDurationPanel" 
+                                    Orientation="Horizontal" 
+                                    Visibility="Collapsed"
+                                    Margin="0,0,0,24">
+                            <TextBox x:Name="CustomDurationTextBox"
+                                     Width="80"
+                                     Padding="12,8"
+                                     TextAlignment="Center"
+                                     FontSize="16"
+                                     Background="{DynamicResource Bg.Elevated}"
+                                     Foreground="{DynamicResource Text.Primary}"
+                                     BorderThickness="0"
+                                     Text="30"/>
+                            <TextBlock Text="minutes"
+                                       Style="{StaticResource BodyMedium}"
+                                       VerticalAlignment="Center"
+                                       Margin="8,0,0,0"/>
+                        </StackPanel>
+
+                        <!-- Start Button -->
+                        <Button x:Name="StartFocusButton"
+                                Content="Start Focus Session"
+                                Style="{StaticResource ButtonPrimary}"
+                                Padding="32,14"
+                                FontSize="16"
+                                HorizontalAlignment="Left"
+                                Click="StartFocusButton_Click">
+                            <Button.ContentTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <md:PackIcon Kind="Play" Width="18" Height="18"
+                                                     VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                        <TextBlock Text="{Binding}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </Button.ContentTemplate>
+                        </Button>
+                    </StackPanel>
+
+                    <!-- Active State (shown during focus session) -->
+                    <StackPanel x:Name="FocusActivePanel" Visibility="Collapsed">
+                        <!-- Header with pulsing indicator -->
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,24">
+                            <Border Background="{DynamicResource Status.Success}"
+                                    CornerRadius="999"
+                                    Width="12" Height="12"
+                                    Margin="0,0,12,0"
+                                    VerticalAlignment="Center">
+                                <Border.Triggers>
+                                    <EventTrigger RoutedEvent="Loaded">
+                                        <BeginStoryboard>
+                                            <Storyboard RepeatBehavior="Forever">
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                                 From="1" To="0.4"
+                                                                 Duration="0:0:1"
+                                                                 AutoReverse="True"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                </Border.Triggers>
+                            </Border>
+                            <TextBlock Text="Focus Session Active"
+                                       Style="{StaticResource HeadingSmall}"
+                                       Foreground="{DynamicResource Status.Success}"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <!-- Large Timer Display -->
+                        <TextBlock x:Name="TimerDisplay"
+                                   Text="25:00"
+                                   FontFamily="{StaticResource Font.Primary}"
+                                   FontSize="72"
+                                   FontWeight="Bold"
+                                   Foreground="{DynamicResource Accent.Primary}"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,0,0,8"/>
+
+                        <TextBlock x:Name="TimerSubtext"
+                                   Text="remaining"
+                                   Style="{StaticResource LabelSecondary}"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,0,0,24"/>
+
+                        <!-- Progress Bar -->
+                        <Grid Margin="0,0,0,24">
+                            <Border Background="{DynamicResource Bg.Elevated}"
+                                    CornerRadius="4"
+                                    Height="8"/>
+                            <Border x:Name="ProgressBar"
+                                    Background="{DynamicResource Accent.Primary}"
+                                    CornerRadius="4"
+                                    Height="8"
+                                    HorizontalAlignment="Left"
+                                    Width="0"/>
+                        </Grid>
+
+                        <!-- Session Info -->
+                        <Grid Margin="0,0,0,24">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                                <TextBlock x:Name="DistractionsCount"
+                                           Text="0"
+                                           Style="{StaticResource HeadingMedium}"
+                                           HorizontalAlignment="Center"/>
+                                <TextBlock Text="Distractions"
+                                           Style="{StaticResource LabelMuted}"
+                                           HorizontalAlignment="Center"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                                <TextBlock x:Name="EnforcementDisplay"
+                                           Text="Warn"
+                                           Style="{StaticResource HeadingMedium}"
+                                           HorizontalAlignment="Center"/>
+                                <TextBlock Text="Enforcement"
+                                           Style="{StaticResource LabelMuted}"
+                                           HorizontalAlignment="Center"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2" HorizontalAlignment="Center">
+                                <TextBlock x:Name="BlockedAppsCount"
+                                           Text="3"
+                                           Style="{StaticResource HeadingMedium}"
+                                           HorizontalAlignment="Center"/>
+                                <TextBlock Text="Apps Blocked"
+                                           Style="{StaticResource LabelMuted}"
+                                           HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Stop Button -->
+                        <Button x:Name="StopFocusButton"
+                                Content="End Session Early"
+                                Style="{StaticResource ButtonDanger}"
+                                Padding="24,12"
+                                HorizontalAlignment="Center"
+                                Click="StopFocusButton_Click"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- ============================================ -->
+            <!-- ENFORCEMENT SETTINGS CARD -->
+            <!-- ============================================ -->
+            <TextBlock Text="ENFORCEMENT SETTINGS"
+                       Style="{StaticResource NavSectionHeader}"
+                       Margin="0,0,0,12"/>
+
+            <Border Style="{StaticResource CardBase}" Margin="0,0,0,24">
+                <StackPanel>
+                    <TextBlock Text="How should distracting apps be handled?"
+                               Style="{StaticResource BodyMedium}"
+                               Margin="0,0,0,16"/>
+
+                    <!-- Enforcement Level Selection -->
+                    <StackPanel>
+                        <!-- Warn Option -->
+                        <Border x:Name="WarnOption"
+                                Background="{DynamicResource Accent.Primary}"
+                                CornerRadius="8"
+                                Padding="16,12"
+                                Margin="0,0,0,8"
+                                Cursor="Hand"
+                                MouseLeftButtonDown="WarnOption_Click">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <md:PackIcon x:Name="WarnIcon" Kind="AlertCircle" Width="24" Height="24"
+                                             Foreground="{DynamicResource Accent.OnAccent}"
+                                             VerticalAlignment="Center"/>
+                                <StackPanel Grid.Column="1" Margin="12,0,0,0">
+                                    <TextBlock x:Name="WarnTitle" Text="Warn"
+                                               FontWeight="SemiBold"
+                                               FontSize="14"
+                                               Foreground="{DynamicResource Accent.OnAccent}"/>
+                                    <TextBlock x:Name="WarnDescription" 
+                                               Text="Show popup when opening distracting app (allow override)"
+                                               FontSize="12"
+                                               Foreground="{DynamicResource Accent.OnAccent}"
+                                               Opacity="0.8"/>
+                                </StackPanel>
+                                <md:PackIcon x:Name="WarnCheck" Grid.Column="2" 
+                                             Kind="Check" Width="20" Height="20"
+                                             Foreground="{DynamicResource Accent.OnAccent}"
+                                             VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- Block Option -->
+                        <Border x:Name="BlockOption"
+                                Background="{DynamicResource Bg.Elevated}"
+                                CornerRadius="8"
+                                Padding="16,12"
+                                Margin="0,0,0,8"
+                                Cursor="Hand"
+                                MouseLeftButtonDown="BlockOption_Click">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <md:PackIcon x:Name="BlockIcon" Kind="Block" Width="24" Height="24"
+                                             Foreground="{DynamicResource Text.Secondary}"
+                                             VerticalAlignment="Center"/>
+                                <StackPanel Grid.Column="1" Margin="12,0,0,0">
+                                    <TextBlock x:Name="BlockTitle" Text="Block"
+                                               Style="{StaticResource BodyMedium}"
+                                               FontWeight="SemiBold"/>
+                                    <TextBlock x:Name="BlockDescription" 
+                                               Text="Minimize distracting apps automatically during focus time"
+                                               Style="{StaticResource LabelSecondary}"/>
+                                </StackPanel>
+                                <md:PackIcon x:Name="BlockCheck" Grid.Column="2" 
+                                             Kind="Check" Width="20" Height="20"
+                                             Foreground="{DynamicResource Accent.Primary}"
+                                             VerticalAlignment="Center"
+                                             Visibility="Collapsed"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- Hide Option (Future) -->
+                        <Border x:Name="HideOption"
+                                Background="{DynamicResource Bg.Elevated}"
+                                CornerRadius="8"
+                                Padding="16,12"
+                                Opacity="0.5"
+                                IsEnabled="False">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <md:PackIcon Kind="EyeOff" Width="24" Height="24"
+                                             Foreground="{DynamicResource Text.Muted}"
+                                             VerticalAlignment="Center"/>
+                                <StackPanel Grid.Column="1" Margin="12,0,0,0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Hide"
+                                                   Style="{StaticResource BodyMedium}"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{DynamicResource Text.Muted}"/>
+                                        <Border Background="{DynamicResource Text.Muted}"
+                                                CornerRadius="4"
+                                                Padding="6,2"
+                                                Margin="8,0,0,0">
+                                            <TextBlock Text="Coming Soon"
+                                                       FontSize="10"
+                                                       Foreground="{DynamicResource Bg.Primary}"/>
+                                        </Border>
+                                    </StackPanel>
+                                    <TextBlock Text="Remove from taskbar and Start menu"
+                                               Style="{StaticResource LabelMuted}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- ============================================ -->
+            <!-- APP CATEGORIES CARD -->
+            <!-- ============================================ -->
+            <TextBlock Text="APP CATEGORIES"
+                       Style="{StaticResource NavSectionHeader}"
+                       Margin="0,0,0,12"/>
+
+            <Border Style="{StaticResource CardBase}" Margin="0,0,0,24">
+                <StackPanel>
+                    <TextBlock Text="Categorize your apps to control what's blocked during focus sessions."
+                               Style="{StaticResource LabelSecondary}"
+                               TextWrapping="Wrap"
+                               Margin="0,0,0,16"/>
+
+                    <!-- Category Legend -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                        <Border Background="{DynamicResource Status.Success}"
+                                CornerRadius="4"
+                                Padding="8,4"
+                                Margin="0,0,12,0">
+                            <TextBlock Text="Work" FontSize="12" FontWeight="SemiBold"
+                                       Foreground="White"/>
+                        </Border>
+                        <Border Background="{DynamicResource Status.Danger}"
+                                CornerRadius="4"
+                                Padding="8,4"
+                                Margin="0,0,12,0">
+                            <TextBlock Text="Entertainment" FontSize="12" FontWeight="SemiBold"
+                                       Foreground="White"/>
+                        </Border>
+                        <Border Background="{DynamicResource Text.Muted}"
+                                CornerRadius="4"
+                                Padding="8,4">
+                            <TextBlock Text="Neutral" FontSize="12" FontWeight="SemiBold"
+                                       Foreground="White"/>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- App List -->
+                    <ItemsControl x:Name="AppCategoryList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource CardListItem}"
+                                        Background="{DynamicResource Bg.Elevated}"
+                                        Padding="12"
+                                        Margin="0,0,0,8">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- App Icon -->
+                                        <Border Background="{DynamicResource Bg.Card}"
+                                                CornerRadius="6"
+                                                Padding="6">
+                                            <Image Source="{Binding Icon}"
+                                                   Width="24" Height="24"
+                                                   RenderOptions.BitmapScalingMode="HighQuality"/>
+                                        </Border>
+
+                                        <!-- App Name -->
+                                        <TextBlock Grid.Column="1"
+                                                   Text="{Binding AppName}"
+                                                   Style="{StaticResource BodyMedium}"
+                                                   VerticalAlignment="Center"
+                                                   Margin="12,0,12,0"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   ToolTip="{Binding AppName}"/>
+
+                                        <!-- Category Buttons -->
+                                        <StackPanel Grid.Column="2" 
+                                                    Orientation="Horizontal"
+                                                    VerticalAlignment="Center">
+                                            <Button Content="W"
+                                                    ToolTip="Work"
+                                                    Width="28" Height="28"
+                                                    Padding="0"
+                                                    FontSize="12"
+                                                    FontWeight="Bold"
+                                                    Margin="0,0,4,0"
+                                                    Tag="{Binding}"
+                                                    Click="SetWorkCategory_Click">
+                                                <Button.Style>
+                                                    <Style TargetType="Button" BasedOn="{StaticResource ButtonSecondary}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Category}" Value="Work">
+                                                                <Setter Property="Background" Value="{DynamicResource Status.Success}"/>
+                                                                <Setter Property="Foreground" Value="White"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+                                            <Button Content="E"
+                                                    ToolTip="Entertainment"
+                                                    Width="28" Height="28"
+                                                    Padding="0"
+                                                    FontSize="12"
+                                                    FontWeight="Bold"
+                                                    Margin="0,0,4,0"
+                                                    Tag="{Binding}"
+                                                    Click="SetEntertainmentCategory_Click">
+                                                <Button.Style>
+                                                    <Style TargetType="Button" BasedOn="{StaticResource ButtonSecondary}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Category}" Value="Entertainment">
+                                                                <Setter Property="Background" Value="{DynamicResource Status.Danger}"/>
+                                                                <Setter Property="Foreground" Value="White"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+                                            <Button Content="N"
+                                                    ToolTip="Neutral (allowed during focus)"
+                                                    Width="28" Height="28"
+                                                    Padding="0"
+                                                    FontSize="12"
+                                                    FontWeight="Bold"
+                                                    Tag="{Binding}"
+                                                    Click="SetNeutralCategory_Click">
+                                                <Button.Style>
+                                                    <Style TargetType="Button" BasedOn="{StaticResource ButtonSecondary}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Category}" Value="Neutral">
+                                                                <Setter Property="Background" Value="{DynamicResource Text.Muted}"/>
+                                                                <Setter Property="Foreground" Value="White"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <!-- Info Note -->
+                    <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
+                        <md:PackIcon Kind="Information" Width="16" Height="16"
+                                     Foreground="{DynamicResource Text.Muted}"
+                                     VerticalAlignment="Top"
+                                     Margin="0,2,0,0"/>
+                        <TextBlock Text="Apps you've used recently will appear here. Entertainment apps are blocked during focus. Work and Neutral apps are always allowed."
+                                   Style="{StaticResource LabelSecondary}"
+                                   TextWrapping="Wrap"
+                                   Margin="8,0,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- ============================================ -->
+            <!-- FOCUS HISTORY CARD -->
+            <!-- ============================================ -->
+            <TextBlock Text="RECENT SESSIONS"
+                       Style="{StaticResource NavSectionHeader}"
+                       Margin="0,0,0,12"/>
+
+            <Border Style="{StaticResource CardFlat}" Margin="0,0,0,24">
+                <StackPanel>
+                    <!-- Today's Stats -->
+                    <Grid Margin="0,0,0,16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <TextBlock x:Name="TodayFocusTime"
+                                       Text="0h 0m"
+                                       Style="{StaticResource StatNumber}"
+                                       FontSize="28"/>
+                            <TextBlock Text="Today's Focus Time"
+                                       Style="{StaticResource LabelSecondary}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1">
+                            <TextBlock x:Name="TodaySessionCount"
+                                       Text="0"
+                                       Style="{StaticResource StatNumber}"
+                                       FontSize="28"/>
+                            <TextBlock Text="Sessions Completed"
+                                       Style="{StaticResource LabelSecondary}"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <Border Style="{StaticResource NavDivider}" Margin="0,0,0,16"/>
+
+                    <!-- Session History List -->
+                    <ItemsControl x:Name="SessionHistoryList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="0,8">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <md:PackIcon Kind="{Binding StatusIcon}"
+                                                     Width="20" Height="20"
+                                                     Foreground="{Binding StatusColor}"
+                                                     VerticalAlignment="Center"/>
+
+                                        <StackPanel Grid.Column="1" Margin="12,0,0,0">
+                                            <TextBlock Text="{Binding DurationText}"
+                                                       Style="{StaticResource BodyMedium}"/>
+                                            <TextBlock Text="{Binding TimeText}"
+                                                       Style="{StaticResource LabelMuted}"/>
+                                        </StackPanel>
+
+                                        <TextBlock Grid.Column="2"
+                                                   Text="{Binding DistractionsText}"
+                                                   Style="{StaticResource LabelSecondary}"
+                                                   VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <TextBlock x:Name="NoHistoryText"
+                               Text="No focus sessions yet. Start your first session above!"
+                               Style="{StaticResource LabelSecondary}"
+                               HorizontalAlignment="Center"
+                               Margin="0,8,0,0"/>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
+

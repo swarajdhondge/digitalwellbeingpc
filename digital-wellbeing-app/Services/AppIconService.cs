@@ -5,7 +5,7 @@ using System.Windows.Media.Imaging;
 
 namespace digital_wellbeing_app.Services
 {
-    public static class AppIconService
+    public class AppIconService
     {
         public static BitmapImage? GetIconForExe(string exePath)
         {
@@ -33,6 +33,14 @@ namespace digital_wellbeing_app.Services
             {
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Instance method for getting app icon (for compatibility)
+        /// </summary>
+        public BitmapImage? GetIconForApp(string exePath)
+        {
+            return GetIconForExe(exePath);
         }
     }
 }
