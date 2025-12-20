@@ -254,5 +254,164 @@ namespace digital_wellbeing_app.Services
             _values["Focus_SoundOnComplete"] = sound;
             SaveToDisk();
         }
+
+        // --- Wind Down persistence ---
+        public bool LoadWindDownEnabled()
+        {
+            if (_values.TryGetValue(Models.WindDownKeys.IsEnabled, out var val))
+            {
+                if (val is bool b)
+                    return b;
+                if (val is System.Text.Json.JsonElement je && je.ValueKind == System.Text.Json.JsonValueKind.True)
+                    return true;
+                if (val is System.Text.Json.JsonElement je2 && je2.ValueKind == System.Text.Json.JsonValueKind.False)
+                    return false;
+            }
+            return false;
+        }
+
+        public void SaveWindDownEnabled(bool enabled)
+        {
+            _values[Models.WindDownKeys.IsEnabled] = enabled;
+            SaveToDisk();
+        }
+
+        public int LoadWindDownStartHour()
+        {
+            if (_values.TryGetValue(Models.WindDownKeys.StartHour, out var val))
+            {
+                if (val is int i)
+                    return i;
+                if (val is System.Text.Json.JsonElement je && je.TryGetInt32(out var intVal))
+                    return intVal;
+            }
+            return 21; // Default: 9 PM
+        }
+
+        public int LoadWindDownStartMinute()
+        {
+            if (_values.TryGetValue(Models.WindDownKeys.StartMinute, out var val))
+            {
+                if (val is int i)
+                    return i;
+                if (val is System.Text.Json.JsonElement je && je.TryGetInt32(out var intVal))
+                    return intVal;
+            }
+            return 0;
+        }
+
+        public void SaveWindDownStartTime(int hour, int minute)
+        {
+            _values[Models.WindDownKeys.StartHour] = hour;
+            _values[Models.WindDownKeys.StartMinute] = minute;
+            SaveToDisk();
+        }
+
+        public int LoadWindDownEndHour()
+        {
+            if (_values.TryGetValue(Models.WindDownKeys.EndHour, out var val))
+            {
+                if (val is int i)
+                    return i;
+                if (val is System.Text.Json.JsonElement je && je.TryGetInt32(out var intVal))
+                    return intVal;
+            }
+            return 7; // Default: 7 AM
+        }
+
+        public int LoadWindDownEndMinute()
+        {
+            if (_values.TryGetValue(Models.WindDownKeys.EndMinute, out var val))
+            {
+                if (val is int i)
+                    return i;
+                if (val is System.Text.Json.JsonElement je && je.TryGetInt32(out var intVal))
+                    return intVal;
+            }
+            return 0;
+        }
+
+        public void SaveWindDownEndTime(int hour, int minute)
+        {
+            _values[Models.WindDownKeys.EndHour] = hour;
+            _values[Models.WindDownKeys.EndMinute] = minute;
+            SaveToDisk();
+        }
+
+        public bool LoadWindDownShowNotification()
+        {
+            if (_values.TryGetValue(Models.WindDownKeys.ShowNotification, out var val))
+            {
+                if (val is bool b)
+                    return b;
+                if (val is System.Text.Json.JsonElement je && je.ValueKind == System.Text.Json.JsonValueKind.True)
+                    return true;
+                if (val is System.Text.Json.JsonElement je2 && je2.ValueKind == System.Text.Json.JsonValueKind.False)
+                    return false;
+            }
+            return true; // Default: show notification
+        }
+
+        public void SaveWindDownShowNotification(bool show)
+        {
+            _values[Models.WindDownKeys.ShowNotification] = show;
+            SaveToDisk();
+        }
+
+        public bool LoadWindDownShowVisualCue()
+        {
+            if (_values.TryGetValue(Models.WindDownKeys.ShowVisualCue, out var val))
+            {
+                if (val is bool b)
+                    return b;
+                if (val is System.Text.Json.JsonElement je && je.ValueKind == System.Text.Json.JsonValueKind.True)
+                    return true;
+                if (val is System.Text.Json.JsonElement je2 && je2.ValueKind == System.Text.Json.JsonValueKind.False)
+                    return false;
+            }
+            return true; // Default: show visual cue
+        }
+
+        public void SaveWindDownShowVisualCue(bool show)
+        {
+            _values[Models.WindDownKeys.ShowVisualCue] = show;
+            SaveToDisk();
+        }
+
+        public int LoadWindDownVisualStyle()
+        {
+            if (_values.TryGetValue(Models.WindDownKeys.VisualStyle, out var val))
+            {
+                if (val is int i)
+                    return i;
+                if (val is System.Text.Json.JsonElement je && je.TryGetInt32(out var intVal))
+                    return intVal;
+            }
+            return 0; // Default: Amber
+        }
+
+        public void SaveWindDownVisualStyle(int style)
+        {
+            _values[Models.WindDownKeys.VisualStyle] = style;
+            SaveToDisk();
+        }
+
+        public double LoadWindDownVisualOpacity()
+        {
+            if (_values.TryGetValue(Models.WindDownKeys.VisualOpacity, out var val))
+            {
+                if (val is double d)
+                    return d;
+                if (val is System.Text.Json.JsonElement je && je.TryGetDouble(out var dVal))
+                    return dVal;
+            }
+            return 0.3; // Default: 30% opacity
+        }
+
+        public void SaveWindDownVisualOpacity(double opacity)
+        {
+            _values[Models.WindDownKeys.VisualOpacity] = opacity;
+            SaveToDisk();
+        }
     }
 }
