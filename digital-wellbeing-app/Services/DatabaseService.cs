@@ -49,6 +49,8 @@ namespace digital_wellbeing_app.Services
             _database?.CreateTable<ScreenTimeSession>();
             _database?.CreateTable<SoundUsageSession>();
             _database?.CreateTable<UserSettings>();
+            _database?.CreateTable<FocusSession>();
+            _database?.CreateTable<AppCategory>();
         }
 
         // --- App Usage ---
@@ -111,6 +113,68 @@ namespace digital_wellbeing_app.Services
             return conn.Table<SoundUsageSession>()
                        .Where(s => s.StartTime >= dayStart && s.StartTime < dayEnd)
                        .ToList();
+        }
+
+        // --- Focus Sessions ---
+        public static void SaveFocusSession(FocusSession session)
+        {
+            GetConnection().InsertOrReplace(session);
+        }
+
+        public static List<FocusSession> GetFocusSessionsForDate(DateTime date)
+        {
+            var dateKey = date.ToString("yyyy-MM-dd");
+            return GetConnection()
+                   .Table<FocusSession>()
+                   .Where(x => x.SessionDate == dateKey)
+                   .ToList();
+        }
+
+        public static List<FocusSession> GetFocusSessionHistory(int days = 7)
+        {
+            var startDate = DateTime.Now.AddDays(-days).Date;
+            return GetConnection()
+                   .Table<FocusSession>()
+                   .Where(x => x.StartTime >= startDate)
+                   .OrderByDescending(x => x.StartTime)
+                   .ToList();
+        }
+
+        // --- App Categories ---
+        public static void SaveAppCategory(AppCategory category)
+        {
+            var conn = GetConnection();
+            
+            // Check if app already has a category
+            var existing = conn.Table<AppCategory>()
+                              .FirstOrDefault(x => x.AppIdentifier == category.AppIdentifier);
+            
+            if (existing != null)
+            {
+                existing.Category = category.Category;
+                existing.AppName = category.AppName;
+                existing.ExecutablePath = category.ExecutablePath;
+                existing.LastUpdated = DateTime.Now;
+                conn.Update(existing);
+            }
+            else
+            {
+                conn.Insert(category);
+            }
+        }
+
+        public static List<AppCategory> GetAllAppCategories()
+        {
+            return GetConnection()
+                   .Table<AppCategory>()
+                   .ToList();
+        }
+
+        public static AppCategory? GetAppCategory(string appIdentifier)
+        {
+            return GetConnection()
+                   .Table<AppCategory>()
+                   .FirstOrDefault(x => x.AppIdentifier == appIdentifier);
         }
     }
 }

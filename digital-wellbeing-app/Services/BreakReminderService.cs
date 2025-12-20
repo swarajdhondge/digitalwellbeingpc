@@ -28,8 +28,8 @@ namespace digital_wellbeing_app.Services
         /// <summary>Interval between breaks in minutes (default: 20)</summary>
         public int IntervalMinutes { get; set; } = 20;
         
-        /// <summary>TEST MODE: Use seconds instead of minutes for quick testing</summary>
-        public bool TestMode { get; set; } = false;  // Production mode
+        /// <summary>TEST MODE: Use seconds instead of minutes for quick testing. Set to false for production.</summary>
+        public bool TestMode { get; set; } = false;  // PRODUCTION MODE - Do not change for releases
         
         /// <summary>Whether break reminders are enabled</summary>
         public bool IsEnabled { get; set; } = false;

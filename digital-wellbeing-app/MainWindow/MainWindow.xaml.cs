@@ -10,6 +10,7 @@ using System.Windows.Interop;
 using System.Windows.Media.Animation;
 using digital_wellbeing_app.Views.AppUsage;
 using digital_wellbeing_app.Views.Dashboard;
+using digital_wellbeing_app.Views.Focus;
 using digital_wellbeing_app.Views.Screen;
 using digital_wellbeing_app.Views.Settings;
 using digital_wellbeing_app.Views.Sound;
@@ -26,6 +27,7 @@ namespace digital_wellbeing_app.MainWindow
         private readonly ScreenView _screenView = new();
         private readonly SoundTimelineView _soundView = new();
         private readonly AppUsageView _appUsageView = new();
+        private readonly FocusView _focusView = new();
         private readonly SettingsView _settingsView = new();
 
         // Track active nav button
@@ -34,17 +36,165 @@ namespace digital_wellbeing_app.MainWindow
         // Break reminder service
         private Services.BreakReminderService? _breakReminderService;
 
+        // Focus session service
+        private Services.FocusSessionService? _focusSessionService;
+        private string _currentDistractingApp = string.Empty;
+
         public MainWindow()
         {
             InitializeComponent();
             InitTrayIcon();
             InitBreakReminder();
+            InitFocusSession();
             MainContent.Content = _dashboardView;
             _activeNavButton = NavDashboard;
 
             // Handle maximize state for proper corner radius
             StateChanged += MainWindow_StateChanged;
         }
+
+        private void InitFocusSession()
+        {
+            _focusSessionService = new Services.FocusSessionService();
+            _focusSessionService.DistractingAppDetected += OnDistractingAppDetected;
+            _focusSessionService.SessionEnded += OnFocusSessionEnded;
+        }
+
+        /// <summary>
+        /// Get the focus session service for child views
+        /// </summary>
+        public Services.FocusSessionService? GetFocusSessionService()
+        {
+            return _focusSessionService;
+        }
+
+        private void OnDistractingAppDetected(string appName, string executablePath)
+        {
+            // Store the app name for when user responds to the warning
+            _currentDistractingApp = appName;
+
+            // Show notification (balloon + in-app overlay)
+            Dispatcher.Invoke(() =>
+            {
+                ShowFocusWarningNotification(appName);
+            });
+        }
+
+        private void ShowFocusWarningNotification(string appName)
+        {
+            if (_focusSessionService == null) return;
+
+            var remaining = _focusSessionService.TimeRemaining;
+            var timeText = $"{(int)remaining.TotalMinutes}:{remaining.Seconds:D2}";
+
+            // Update the in-app overlay
+            DistractingAppName.Text = appName;
+            FocusTimeRemaining.Text = $"{timeText} remaining in focus session";
+
+            // Show tray balloon notification (this works without app registration)
+            // The balloon plays its own warning sound, so we don't need to play one manually
+            if (_trayIcon != null)
+            {
+                _trayIcon.BalloonTipTitle = "⚠️ Distracting App Detected";
+                _trayIcon.BalloonTipText = $"{appName} is marked as Entertainment.\n{timeText} remaining in focus. Click to respond.";
+                _trayIcon.BalloonTipIcon = ToolTipIcon.Warning;
+                _trayIcon.BalloonTipClicked += OnFocusWarningBalloonClicked;
+                _trayIcon.ShowBalloonTip(5000);
+            }
+        }
+
+        private void OnFocusWarningBalloonClicked(object? sender, EventArgs e)
+        {
+            // Unsubscribe to prevent multiple handlers
+            if (_trayIcon != null)
+            {
+                _trayIcon.BalloonTipClicked -= OnFocusWarningBalloonClicked;
+            }
+
+            // Show the in-app overlay when user clicks the balloon
+            Dispatcher.Invoke(() =>
+            {
+                // Bring window to front and show overlay
+                if (WindowState == WindowState.Minimized)
+                    WindowState = WindowState.Normal;
+                Show();
+                Activate();
+                
+                FocusWarningOverlay.Visibility = Visibility.Visible;
+            });
+        }
+
+        private void OnFocusSessionEnded(bool completed)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                FocusWarningOverlay.Visibility = Visibility.Collapsed;
+            });
+        }
+
+        private void BackToWorkButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Dismiss warning - if user goes back to the same app, warn immediately
+            _focusSessionService?.DismissWarning(_currentDistractingApp);
+            _currentDistractingApp = string.Empty;
+            FocusWarningOverlay.Visibility = Visibility.Collapsed;
+            // The distracting app was already minimized by the service (in Block mode)
+            // or user is just acknowledging (in Warn mode)
+        }
+
+        private void ContinueAnywayButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Record the override and allow this app for the rest of the session
+            _focusSessionService?.RecordDistractionOverride();
+            _focusSessionService?.AllowAppForSession(_currentDistractingApp);
+            _currentDistractingApp = string.Empty;
+            FocusWarningOverlay.Visibility = Visibility.Collapsed;
+        }
+
+        private void FocusBackdrop_Click(object sender, MouseButtonEventArgs e)
+        {
+            // Clicking backdrop = back to work (don't allow the app)
+            _focusSessionService?.DismissWarning(_currentDistractingApp);
+            _currentDistractingApp = string.Empty;
+            FocusWarningOverlay.Visibility = Visibility.Collapsed;
+        }
+
+        #region End Session Confirmation
+
+        /// <summary>
+        /// Show the custom end session confirmation dialog
+        /// </summary>
+        public void ShowEndSessionConfirmation()
+        {
+            if (_focusSessionService == null || !_focusSessionService.IsInFocusMode)
+            {
+                return;
+            }
+
+            var remaining = _focusSessionService.TimeRemaining;
+            var timeText = $"{(int)remaining.TotalMinutes}:{remaining.Seconds:D2}";
+            EndSessionMessage.Text = $"You still have {timeText} remaining. Are you sure you want to end early?";
+            EndSessionOverlay.Visibility = Visibility.Visible;
+        }
+
+        private void KeepGoingButton_Click(object sender, RoutedEventArgs e)
+        {
+            EndSessionOverlay.Visibility = Visibility.Collapsed;
+        }
+
+        private void ConfirmEndSessionButton_Click(object sender, RoutedEventArgs e)
+        {
+            EndSessionOverlay.Visibility = Visibility.Collapsed;
+            _focusSessionService?.EndSession(false);
+        }
+
+        private void EndSessionBackdrop_Click(object sender, MouseButtonEventArgs e)
+        {
+            // Clicking backdrop = keep going
+            EndSessionOverlay.Visibility = Visibility.Collapsed;
+        }
+
+        #endregion
 
         private void InitBreakReminder()
         {
@@ -470,6 +620,7 @@ namespace digital_wellbeing_app.MainWindow
         private void Window_Closing(object? sender, CancelEventArgs e)
         {
             _breakReminderService?.Dispose();
+            _focusSessionService?.Dispose();
             _trayIcon?.Dispose();
         }
 
@@ -545,6 +696,11 @@ namespace digital_wellbeing_app.MainWindow
         private void AppUsage_Click(object? sender, RoutedEventArgs e)
         {
             NavigateWithTransition(_appUsageView, NavApps);
+        }
+
+        private void Focus_Click(object? sender, RoutedEventArgs e)
+        {
+            NavigateWithTransition(_focusView, NavFocus);
         }
 
         private void Settings_Click(object? sender, RoutedEventArgs e)

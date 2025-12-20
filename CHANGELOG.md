@@ -1,5 +1,44 @@
 # Changelog
 
+## [v1.4.0] - 2025-12-20
+
+### Features
+- **Focus Sessions** - Windows-native Focus Mode with user-controlled enforcement
+  - Start/stop focus sessions with customizable duration (15/25/45/60/90 min or custom)
+  - Two enforcement levels: Warn (balloon notification), Block (auto-minimize distracting apps)
+  - App categorization: Work, Entertainment, Neutral
+  - Per-app category assignment from last 7 days of usage (sorted by usage time)
+  - Real-time focus timer with progress bar
+  - Distraction tracking with warnings and override counts
+  - Focus session history with daily stats and completion status
+  - Custom "End Session" confirmation dialog (not Windows MessageBox)
+  - System tray balloon notifications for distraction warnings
+
+### Enforcement Behavior
+- **Warn Mode**: Shows tray balloon notification every 30 seconds if user stays on entertainment app
+- **Block Mode**: Auto-minimizes entertainment apps every 5 seconds if user keeps restoring them
+- Apps that resist minimize (admin/fullscreen) automatically fallback to Warn mode
+- Clicking "Allow This App" permits that app for the rest of the session
+- Clicking "Back to Work" allows re-warning if user returns to same app
+
+### Edge Cases Handled
+- System apps excluded from blocking (explorer, Task Manager, Start Menu, etc.)
+- Cooldown-based warning system prevents spam while allowing repeated reminders
+- Per-app tracking (switching apps doesn't reset warnings for other apps)
+- Long app names show with ellipsis and tooltip
+
+### Theme Improvements
+- Duration buttons update both background AND foreground when selected
+- Enforcement options (Warn/Block) have proper selected state colors
+- Custom dialogs match app's dark/light theme
+
+### Technical
+- Consolidated NativeMethods into Platform/Windows folder
+- Added SW_FORCEMINIMIZE for aggressive window minimize
+- Debug logging for focus check behavior
+
+---
+
 ## [v1.3.0] - 2025-12-19
 
 ### Features
