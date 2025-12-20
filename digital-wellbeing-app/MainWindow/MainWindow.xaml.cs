@@ -14,6 +14,8 @@ using digital_wellbeing_app.Views.Screen;
 using digital_wellbeing_app.Views.Settings;
 using digital_wellbeing_app.Views.Sound;
 using MaterialDesignThemes.Wpf;
+using Windows.UI.Notifications;
+using Windows.Data.Xml.Dom;
 
 namespace digital_wellbeing_app.MainWindow
 {
@@ -29,15 +31,289 @@ namespace digital_wellbeing_app.MainWindow
         // Track active nav button
         private System.Windows.Controls.Button? _activeNavButton;
 
+        // Break reminder service
+        private Services.BreakReminderService? _breakReminderService;
+
         public MainWindow()
         {
             InitializeComponent();
             InitTrayIcon();
+            InitBreakReminder();
             MainContent.Content = _dashboardView;
             _activeNavButton = NavDashboard;
 
             // Handle maximize state for proper corner radius
             StateChanged += MainWindow_StateChanged;
+        }
+
+        private void InitBreakReminder()
+        {
+            _breakReminderService = new Services.BreakReminderService();
+            _breakReminderService.LoadSettings();
+            _breakReminderService.BreakDue += OnBreakDue;
+            _breakReminderService.BreakDismissed += OnBreakDismissed;
+            _breakReminderService.Start();
+        }
+
+        // Track if break notification is pending (for when user clicks balloon)
+        private bool _breakNotificationPending = false;
+
+        private void OnBreakDue()
+        {
+            System.Diagnostics.Debug.WriteLine("OnBreakDue triggered!");
+            // Show break notification on UI thread
+            Dispatcher.Invoke(() =>
+            {
+                // Check if app is visible or minimized/hidden
+                bool isMinimized = WindowState == WindowState.Minimized || !IsVisible;
+                System.Diagnostics.Debug.WriteLine($"isMinimized: {isMinimized}, WindowState: {WindowState}, IsVisible: {IsVisible}");
+                
+                if (isMinimized)
+                {
+                    // Show balloon notification from system tray (balloon has its own sound)
+                    _breakNotificationPending = true;
+                    ShowFallbackBalloon();
+                }
+                else
+                {
+                    // Show centered overlay
+                    ShowBreakOverlay();
+                    
+                    // Play system sound if enabled (only for overlay, balloon has its own)
+                    if (_breakReminderService?.SoundEnabled == true)
+                    {
+                        System.Media.SystemSounds.Asterisk.Play();
+                    }
+                }
+            });
+        }
+
+        private ToastNotification? _currentToast;
+        private const string APP_ID = "DigitalWellbeing";
+
+        private void ShowToastNotification()
+        {
+            System.Diagnostics.Debug.WriteLine("ShowToastNotification called - attempting to show toast");
+            try
+            {
+                // Create toast XML with action buttons
+                string toastXml = @"
+                    <toast activationType='foreground' launch='action=open'>
+                        <visual>
+                            <binding template='ToastGeneric'>
+                                <text>Time for a break!</text>
+                                <text>Follow the 20-20-20 rule: Look away from screen for 20 seconds.</text>
+                            </binding>
+                        </visual>
+                        <actions>
+                            <action content='Snooze 5 min' arguments='action=snooze' activationType='foreground'/>
+                            <action content='Dismiss' arguments='action=dismiss' activationType='foreground'/>
+                        </actions>
+                        <audio src='ms-winsoundevent:Notification.Default'/>
+                    </toast>";
+
+                var xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(toastXml);
+
+                _currentToast = new ToastNotification(xmlDoc);
+                
+                // Handle toast activation (button clicks or toast click)
+                _currentToast.Activated += Toast_Activated;
+                _currentToast.Dismissed += Toast_Dismissed;
+
+                // Show the toast
+                ToastNotificationManager.CreateToastNotifier(APP_ID).Show(_currentToast);
+            }
+            catch (Exception ex)
+            {
+                // Fallback to balloon tip if toast fails
+                System.Diagnostics.Debug.WriteLine($"Toast error: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+                ShowFallbackBalloon();
+            }
+            System.Diagnostics.Debug.WriteLine("ShowToastNotification completed");
+        }
+
+        private void Toast_Activated(ToastNotification sender, object args)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                _breakNotificationPending = false;
+                
+                // Parse the arguments to determine action
+                string arguments = "";
+                if (args is Windows.UI.Notifications.ToastActivatedEventArgs toastArgs)
+                {
+                    arguments = toastArgs.Arguments;
+                }
+
+                if (arguments.Contains("snooze"))
+                {
+                    _breakReminderService?.Snooze(5);
+                }
+                else if (arguments.Contains("dismiss"))
+                {
+                    _breakReminderService?.Dismiss();
+                }
+                else
+                {
+                    // Default click - open app with overlay
+                    Show();
+                    WindowState = WindowState.Normal;
+                    Activate();
+                    Topmost = true;
+                    Topmost = false;
+                    ShowBreakOverlay();
+                }
+            });
+        }
+
+        private void Toast_Dismissed(ToastNotification sender, ToastDismissedEventArgs args)
+        {
+            // Only auto-dismiss if user swiped away (not if they clicked a button)
+            if (args.Reason == ToastDismissalReason.UserCanceled && _breakNotificationPending)
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    _breakNotificationPending = false;
+                    _breakReminderService?.Dismiss();
+                });
+            }
+        }
+
+        private void ShowFallbackBalloon()
+        {
+            // Fallback to legacy balloon tip
+            if (_trayIcon != null)
+            {
+                _trayIcon.BalloonTipTitle = "Time for a break!";
+                _trayIcon.BalloonTipText = "Follow the 20-20-20 rule: Look away from screen for 20 seconds.";
+                _trayIcon.BalloonTipIcon = ToolTipIcon.Info;
+                _trayIcon.ShowBalloonTip(10000);
+            }
+        }
+
+        private void TrayIcon_BalloonTipClicked(object? sender, EventArgs e)
+        {
+            // Fallback balloon clicked
+            if (_breakNotificationPending)
+            {
+                _breakNotificationPending = false;
+                Show();
+                WindowState = WindowState.Normal;
+                Activate();
+                Topmost = true;
+                Topmost = false;
+                ShowBreakOverlay();
+            }
+        }
+
+        private void TrayIcon_BalloonTipClosed(object? sender, EventArgs e)
+        {
+            // Balloon closed (timeout or user clicked X)
+            // DON'T dismiss - keep the notification pending
+            // User must click the balloon or interact with overlay to dismiss
+            // This prevents the timer from restarting when balloon auto-closes
+        }
+
+        private void ClearToastNotifications()
+        {
+            try
+            {
+                ToastNotificationManager.History.Clear(APP_ID);
+            }
+            catch
+            {
+                // Ignore errors
+            }
+        }
+
+        private void OnBreakDismissed()
+        {
+            // Hide notification on UI thread
+            Dispatcher.Invoke(() =>
+            {
+                BreakOverlay.Visibility = Visibility.Collapsed;
+                _breakNotificationPending = false;
+                ClearToastNotifications();
+            });
+        }
+
+        private void OverlaySnoozeButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_breakReminderService != null)
+            {
+                bool snoozed = _breakReminderService.Snooze(5); // Snooze for 5 minutes
+                if (!snoozed)
+                {
+                    // Max snoozes reached - service auto-dismissed
+                    // Overlay will be hidden by OnBreakDismissed
+                }
+                else
+                {
+                    BreakOverlay.Visibility = Visibility.Collapsed;
+                }
+            }
+        }
+
+        private void OverlayDismissButton_Click(object sender, RoutedEventArgs e)
+        {
+            _breakReminderService?.Dismiss();
+        }
+
+        private void BreakBackdrop_Click(object sender, MouseButtonEventArgs e)
+        {
+            // Clicking backdrop dismisses the overlay
+            _breakReminderService?.Dismiss();
+        }
+
+        private void TurnOffLink_Click(object sender, MouseButtonEventArgs e)
+        {
+            // Permanently turn off break reminders
+            if (_breakReminderService != null)
+            {
+                _breakReminderService.IsEnabled = false;
+                _breakReminderService.Stop();
+                _breakReminderService.SaveSettings();
+                _breakReminderService.Dismiss();
+            }
+        }
+
+        /// <summary>
+        /// Show the break overlay and update snooze button state
+        /// </summary>
+        private void ShowBreakOverlay()
+        {
+            BreakOverlay.Visibility = Visibility.Visible;
+            
+            // Update snooze button based on remaining snoozes
+            if (_breakReminderService != null)
+            {
+                int remaining = _breakReminderService.MaxSnoozeCount - _breakReminderService.SnoozeCount;
+                if (remaining > 0)
+                {
+                    OverlaySnoozeButton.Content = $"Snooze 5 min ({remaining} left)";
+                    OverlaySnoozeButton.IsEnabled = true;
+                }
+                else
+                {
+                    OverlaySnoozeButton.Content = "No snoozes left";
+                    OverlaySnoozeButton.IsEnabled = false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Update break reminder service with new settings (called from SettingsView)
+        /// </summary>
+        public void UpdateBreakReminderService()
+        {
+            if (_breakReminderService != null)
+            {
+                _breakReminderService.Stop();
+                _breakReminderService.LoadSettings();
+                _breakReminderService.Start();
+            }
         }
 
         #region Tray Icon
@@ -71,6 +347,10 @@ namespace digital_wellbeing_app.MainWindow
             _trayIcon.ContextMenuStrip.Items.Add("Open", null, (s, e) => ShowWindow());
             _trayIcon.ContextMenuStrip.Items.Add("Exit", null, (s, e) => Close());
             _trayIcon.DoubleClick += (s, e) => ShowWindow();
+            
+            // Handle balloon tip events for break reminders
+            _trayIcon.BalloonTipClicked += TrayIcon_BalloonTipClicked;
+            _trayIcon.BalloonTipClosed += TrayIcon_BalloonTipClosed;
         }
 
         private void ShowWindow()
@@ -78,6 +358,12 @@ namespace digital_wellbeing_app.MainWindow
             Show();
             WindowState = WindowState.Normal;
             Activate();
+            
+            // If there's a pending break notification, show the overlay
+            if (_breakReminderService?.IsBreakPending == true)
+            {
+                ShowBreakOverlay();
+            }
         }
 
         #endregion
@@ -151,11 +437,22 @@ namespace digital_wellbeing_app.MainWindow
                 WindowBorder.Margin = new Thickness(0);
                 MaximizeIcon.Kind = PackIconKind.WindowRestore;
             }
-            else
+            else if (WindowState == WindowState.Normal)
             {
                 // Restore corner radius and margin
                 WindowBorder.CornerRadius = new CornerRadius(8);
                 WindowBorder.Margin = new Thickness(10);
+                MaximizeIcon.Kind = PackIconKind.WindowMaximize;
+                
+                // If restored from minimized and there's a pending break, show overlay
+                if (_breakReminderService?.IsBreakPending == true)
+                {
+                    ShowBreakOverlay();
+                }
+            }
+            else
+            {
+                // Minimized - just update icon
                 MaximizeIcon.Kind = PackIconKind.WindowMaximize;
             }
         }
@@ -172,6 +469,7 @@ namespace digital_wellbeing_app.MainWindow
 
         private void Window_Closing(object? sender, CancelEventArgs e)
         {
+            _breakReminderService?.Dispose();
             _trayIcon?.Dispose();
         }
 

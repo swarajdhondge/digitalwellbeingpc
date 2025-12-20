@@ -92,6 +92,98 @@
                 </StackPanel>
             </Border>
 
+            <!-- Break Reminders Section -->
+            <TextBlock Text="BREAK REMINDERS"
+                       Style="{StaticResource NavSectionHeader}"
+                       Margin="0,0,0,12"/>
+
+            <Border Style="{StaticResource CardBase}" Margin="0,0,0,24">
+                <StackPanel>
+                    <TextBlock Text="Regular Breaks"
+                               Style="{StaticResource HeadingSmall}"
+                               Margin="0,0,0,12"/>
+                    
+                    <TextBlock Text="Get reminded to take breaks and rest your eyes. Follow the 20-20-20 rule: every 20 minutes, look at something 20 feet away for 20 seconds."
+                               Style="{StaticResource LabelSecondary}"
+                               TextWrapping="Wrap"
+                               Margin="0,0,0,16"/>
+
+                    <!-- Enable Toggle -->
+                    <Grid Margin="0,0,0,16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="Enable break reminders"
+                                   Style="{StaticResource BodyMedium}"
+                                   VerticalAlignment="Center"/>
+
+                        <ToggleButton x:Name="BreakReminderToggle"
+                                      Grid.Column="1"
+                                      Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                      Checked="BreakReminderToggle_Changed"
+                                      Unchecked="BreakReminderToggle_Changed"
+                                      VerticalAlignment="Center"/>
+                    </Grid>
+
+                    <!-- Interval Selection -->
+                    <StackPanel x:Name="BreakReminderOptionsPanel" 
+                                Visibility="Collapsed"
+                                Margin="0,0,0,16">
+                        <TextBlock Text="Reminder interval"
+                                   Style="{StaticResource BodyMedium}"
+                                   Margin="0,0,0,8"/>
+                        
+                        <ComboBox x:Name="IntervalComboBox"
+                                  SelectionChanged="IntervalComboBox_SelectionChanged"
+                                  Background="{DynamicResource Bg.Elevated}"
+                                  Foreground="{DynamicResource Text.Primary}"
+                                  BorderThickness="0"
+                                  Padding="12,8">
+                            <ComboBoxItem Content="Every 15 minutes" Tag="15"/>
+                            <ComboBoxItem Content="Every 20 minutes (recommended)" Tag="20" IsSelected="True"/>
+                            <ComboBoxItem Content="Every 30 minutes" Tag="30"/>
+                            <ComboBoxItem Content="Every 45 minutes" Tag="45"/>
+                            <ComboBoxItem Content="Every 60 minutes" Tag="60"/>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <!-- Sound Toggle -->
+                    <Grid x:Name="BreakReminderSoundPanel" 
+                          Visibility="Collapsed">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="Play notification sound"
+                                   Style="{StaticResource BodyMedium}"
+                                   VerticalAlignment="Center"/>
+
+                        <ToggleButton x:Name="SoundToggle"
+                                      Grid.Column="1"
+                                      Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                      IsChecked="True"
+                                      Checked="SoundToggle_Changed"
+                                      Unchecked="SoundToggle_Changed"
+                                      VerticalAlignment="Center"/>
+                    </Grid>
+
+                    <!-- Info -->
+                    <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
+                        <md:PackIcon Kind="Information" Width="16" Height="16"
+                                     Foreground="{DynamicResource Text.Muted}"
+                                     VerticalAlignment="Center"/>
+                        <TextBlock Text="Notifications appear in the title bar. You can snooze or dismiss them."
+                                   Style="{StaticResource LabelSecondary}"
+                                   TextWrapping="Wrap"
+                                   Margin="8,0,0,0"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
             <!-- Hearing Protection Section (Coming Soon - Blurred) -->
             <TextBlock Text="HEARING PROTECTION"
                        Style="{StaticResource NavSectionHeader}"
@@ -289,7 +381,7 @@
                         <StackPanel Margin="12,0,0,0" VerticalAlignment="Center">
                             <TextBlock Text="Digital Wellbeing"
                                        Style="{StaticResource HeadingSmall}"/>
-                            <TextBlock Text="Version 1.2.0"
+                            <TextBlock Text="Version 1.3.0"
                                        Style="{StaticResource LabelSecondary}"/>
                         </StackPanel>
                     </StackPanel>

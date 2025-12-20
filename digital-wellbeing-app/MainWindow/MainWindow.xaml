@@ -65,13 +65,13 @@
                                    VerticalAlignment="Center"/>
                     </StackPanel>
 
-                    <!-- Notification Area (reserved for break reminders) -->
+                    <!-- Notification Area (reserved for future use) -->
                     <StackPanel x:Name="NotificationArea"
                                 Grid.Column="2"
                                 Orientation="Horizontal"
                                 Margin="0,0,16,0"
                                 VerticalAlignment="Center">
-                        <!-- Notifications will be added here -->
+                        <!-- Empty for now - break reminders use overlay -->
                     </StackPanel>
 
                     <!-- Window Controls -->
@@ -188,7 +188,7 @@
                             </Button>
 
                             <!-- Version -->
-                            <TextBlock Text="v1.1.0"
+                            <TextBlock Text="v1.3.0"
                                        Style="{StaticResource LabelMuted}"
                                        Margin="24,16,0,0"/>
                         </StackPanel>
@@ -214,6 +214,110 @@
                         VerticalAlignment="Bottom"
                         Cursor="SizeNWSE"
                         Visibility="Visible"/>
+            
+            <!-- ============================================ -->
+            <!-- BREAK REMINDER OVERLAY -->
+            <!-- ============================================ -->
+            <Grid x:Name="BreakOverlay" 
+                  Grid.RowSpan="2" 
+                  Visibility="Collapsed"
+                  Panel.ZIndex="1000">
+                
+                <!-- Semi-transparent backdrop -->
+                <Border x:Name="BreakBackdrop"
+                        Background="#80000000"
+                        MouseLeftButtonDown="BreakBackdrop_Click"/>
+                
+                <!-- Centered dialog card -->
+                <Border Background="{DynamicResource Bg.Card}"
+                        CornerRadius="16"
+                        Padding="40"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        MinWidth="400"
+                        MaxWidth="500">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="30" ShadowDepth="0" Opacity="0.5" Color="Black"/>
+                    </Border.Effect>
+                    
+                    <StackPanel>
+                        <!-- Icon -->
+                        <md:PackIcon Kind="Eye"
+                                     Width="48"
+                                     Height="48"
+                                     Foreground="{DynamicResource Accent.Primary}"
+                                     HorizontalAlignment="Center"
+                                     Margin="0,0,0,16"/>
+                        
+                        <!-- Title -->
+                        <TextBlock Text="Time for a break!"
+                                   Style="{StaticResource HeadingLarge}"
+                                   Foreground="{DynamicResource Text.Primary}"
+                                   TextAlignment="Center"
+                                   Margin="0,0,0,12"/>
+                        
+                        <!-- Message -->
+                        <TextBlock Text="Follow the 20-20-20 rule: Look at something 20 feet away for 20 seconds."
+                                   Style="{StaticResource BodyMedium}"
+                                   Foreground="{DynamicResource Text.Secondary}"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   Margin="0,0,0,32"/>
+                        
+                        <!-- Buttons -->
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center">
+                            <!-- Dismiss Button -->
+                            <Button x:Name="OverlayDismissButton"
+                                    Content="Dismiss"
+                                    Click="OverlayDismissButton_Click"
+                                    Style="{StaticResource ButtonSecondary}"
+                                    Padding="24,12"
+                                    Margin="0,0,12,0"
+                                    FontSize="14"/>
+                            
+                            <!-- Snooze Button -->
+                            <Button x:Name="OverlaySnoozeButton"
+                                    Content="Snooze 5 min"
+                                    Click="OverlaySnoozeButton_Click"
+                                    Background="{DynamicResource Accent.Primary}"
+                                    Foreground="{DynamicResource Accent.OnAccent}"
+                                    BorderThickness="0"
+                                    Padding="24,12"
+                                    FontSize="14"
+                                    Cursor="Hand">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border Background="{TemplateBinding Background}"
+                                                            CornerRadius="8"
+                                                            Padding="{TemplateBinding Padding}">
+                                                        <ContentPresenter HorizontalAlignment="Center" 
+                                                                        VerticalAlignment="Center"/>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </StackPanel>
+                        
+                        <!-- Turn Off Link -->
+                        <TextBlock x:Name="TurnOffLink"
+                                   Text="Turn off reminders"
+                                   Foreground="{DynamicResource Text.Secondary}"
+                                   TextDecorations="Underline"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,24,0,0"
+                                   FontSize="13"
+                                   Cursor="Hand"
+                                   MouseLeftButtonDown="TurnOffLink_Click"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
         </Grid>
     </Border>
 </Window>
