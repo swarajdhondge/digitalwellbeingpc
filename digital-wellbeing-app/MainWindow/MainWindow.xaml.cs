@@ -15,6 +15,7 @@ using digital_wellbeing_app.Views.Screen;
 using digital_wellbeing_app.Views.Settings;
 using digital_wellbeing_app.Views.Sound;
 using MaterialDesignThemes.Wpf;
+using Microsoft.Win32;
 using Windows.UI.Notifications;
 using Windows.Data.Xml.Dom;
 
@@ -55,6 +56,10 @@ namespace digital_wellbeing_app.MainWindow
 
             // Handle maximize state for proper corner radius
             StateChanged += MainWindow_StateChanged;
+
+            // Subscribe to system events for pause/resume of services
+            SystemEvents.SessionSwitch += OnSystemSessionSwitch;
+            SystemEvents.PowerModeChanged += OnSystemPowerModeChanged;
         }
 
         private void InitFocusSession()
@@ -225,7 +230,8 @@ namespace digital_wellbeing_app.MainWindow
             {
                 _windDownService.Stop();
                 _windDownService.LoadSettings();
-                _windDownService.Start();
+                // Pass false to preserve notification state - don't show notification again on settings change
+                _windDownService.Start(resetNotification: false);
 
                 // Update visual immediately if settings changed
                 if (_windDownService.IsWindDownActive && _windDownService.ShowVisualCue)
@@ -571,7 +577,8 @@ namespace digital_wellbeing_app.MainWindow
             {
                 _breakReminderService.Stop();
                 _breakReminderService.LoadSettings();
-                _breakReminderService.Start();
+                // Pass false to preserve timer state - don't reset on settings change
+                _breakReminderService.Start(resetState: false);
             }
         }
 
@@ -656,6 +663,19 @@ namespace digital_wellbeing_app.MainWindow
             // Handle window snapping (already handled by DragMove)
         }
 
+        private void ResizeGrip_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (WindowState == WindowState.Normal)
+            {
+                // Use native resize from bottom-right corner (WM_SYSCOMMAND + SC_SIZE + WMSZ_BOTTOMRIGHT)
+                Platform.Windows.NativeMethods.SendMessage(
+                    new WindowInteropHelper(this).Handle, 
+                    0x112,      // WM_SYSCOMMAND
+                    (IntPtr)0xF008,  // SC_SIZE + WMSZ_BOTTOMRIGHT
+                    IntPtr.Zero);
+            }
+        }
+
         #endregion
 
         #region Window Controls
@@ -728,10 +748,66 @@ namespace digital_wellbeing_app.MainWindow
 
         private void Window_Closing(object? sender, CancelEventArgs e)
         {
+            // Unsubscribe from system events
+            SystemEvents.SessionSwitch -= OnSystemSessionSwitch;
+            SystemEvents.PowerModeChanged -= OnSystemPowerModeChanged;
+
             _breakReminderService?.Dispose();
             _focusSessionService?.Dispose();
             _windDownService?.Dispose();
             _trayIcon?.Dispose();
+        }
+
+        /// <summary>
+        /// Handle system session events (lock/unlock) - pause/resume services to prevent timer drift
+        /// </summary>
+        private void OnSystemSessionSwitch(object sender, SessionSwitchEventArgs e)
+        {
+            switch (e.Reason)
+            {
+                case SessionSwitchReason.SessionLock:
+                case SessionSwitchReason.SessionLogoff:
+                case SessionSwitchReason.ConsoleDisconnect:
+                case SessionSwitchReason.RemoteDisconnect:
+                    // Screen locked - stop timers to prevent drift/unexpected notifications
+                    _breakReminderService?.Stop();
+                    _windDownService?.Stop();
+                    System.Diagnostics.Debug.WriteLine("[System] Session locked - services paused");
+                    break;
+
+                case SessionSwitchReason.SessionUnlock:
+                case SessionSwitchReason.SessionLogon:
+                case SessionSwitchReason.ConsoleConnect:
+                case SessionSwitchReason.RemoteConnect:
+                    // Screen unlocked - restart services (preserving state)
+                    _breakReminderService?.Start(resetState: false);
+                    _windDownService?.Start(resetNotification: false);
+                    System.Diagnostics.Debug.WriteLine("[System] Session unlocked - services resumed");
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Handle power mode changes (sleep/resume) - pause/resume services
+        /// </summary>
+        private void OnSystemPowerModeChanged(object sender, PowerModeChangedEventArgs e)
+        {
+            switch (e.Mode)
+            {
+                case PowerModes.Suspend:
+                    // PC sleeping - stop timers
+                    _breakReminderService?.Stop();
+                    _windDownService?.Stop();
+                    System.Diagnostics.Debug.WriteLine("[System] Power suspend - services paused");
+                    break;
+
+                case PowerModes.Resume:
+                    // PC waking - restart services (preserving state)
+                    _breakReminderService?.Start(resetState: false);
+                    _windDownService?.Start(resetNotification: false);
+                    System.Diagnostics.Debug.WriteLine("[System] Power resume - services resumed");
+                    break;
+            }
         }
 
         #endregion
