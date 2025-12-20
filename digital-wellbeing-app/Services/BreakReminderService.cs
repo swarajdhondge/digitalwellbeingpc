@@ -64,8 +64,8 @@ namespace digital_wellbeing_app.Services
         {
             _lastBreakTime = DateTime.Now;
             
-            // Check every 2 seconds in test mode, 30 seconds in production
-            _breakTimer = new System.Timers.Timer(2_000)  // 2 seconds for quick testing
+            // Check every 30 seconds in production (reduces CPU usage)
+            _breakTimer = new System.Timers.Timer(30_000)
             {
                 AutoReset = true
             };
@@ -75,14 +75,19 @@ namespace digital_wellbeing_app.Services
         /// <summary>
         /// Start the break reminder service
         /// </summary>
-        public void Start()
+        /// <param name="resetState">If true, reset timer and pending state (used on app start).
+        /// If false, preserve state (used when reloading settings).</param>
+        public void Start(bool resetState = true)
         {
             if (!IsEnabled)
                 return;
 
-            _lastBreakTime = DateTime.Now;
-            _snoozeUntil = null;
-            _breakPending = false;  // Clear any pending state
+            if (resetState)
+            {
+                _lastBreakTime = DateTime.Now;
+                _snoozeUntil = null;
+                _breakPending = false;  // Clear any pending state
+            }
             _breakTimer.Start();
         }
 

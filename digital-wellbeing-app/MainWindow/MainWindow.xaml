@@ -10,7 +10,7 @@
     WindowStyle="None"
     AllowsTransparency="True"
     Background="Transparent"
-    ResizeMode="CanResizeWithGrip"
+    ResizeMode="CanResize"
     StateChanged="Window_StateChanged"
     Closing="Window_Closing">
 
@@ -218,13 +218,24 @@
                 </Border>
             </Grid>
 
-            <!-- Resize Grip (bottom-right corner) -->
-            <ResizeGrip x:Name="ResizeGrip"
-                        Grid.Row="1"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Bottom"
-                        Cursor="SizeNWSE"
-                        Visibility="Visible"/>
+            <!-- ============================================ -->
+            <!-- RESIZE GRIP (inside window border) -->
+            <!-- ============================================ -->
+            <Grid Grid.Row="1" 
+                  HorizontalAlignment="Right" 
+                  VerticalAlignment="Bottom"
+                  Margin="0,0,4,4"
+                  Cursor="SizeNWSE"
+                  Width="16" Height="16"
+                  Background="Transparent"
+                  MouseLeftButtonDown="ResizeGrip_MouseLeftButtonDown">
+                <Path Data="M 0,12 L 12,0 M 4,12 L 12,4 M 8,12 L 12,8"
+                      Stroke="{DynamicResource Text.Tertiary}"
+                      StrokeThickness="1.5"
+                      StrokeStartLineCap="Round"
+                      StrokeEndLineCap="Round"
+                      Margin="2"/>
+            </Grid>
 
             <!-- ============================================ -->
             <!-- WIND DOWN MODE VISUAL CUE -->

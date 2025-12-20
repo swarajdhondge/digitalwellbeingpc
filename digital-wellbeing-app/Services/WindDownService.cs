@@ -14,6 +14,7 @@ namespace digital_wellbeing_app.Services
         private bool _isDisposed = false;
         private bool _wasActive = false;  // Track state to fire events only on transitions
         private bool _notificationShownThisSession = false;  // Prevent repeated notifications
+        private DateTime _lastNotificationTime = DateTime.MinValue;  // Throttle notifications
 
         /// <summary>Fired when Wind Down mode becomes active</summary>
         public event Action? WindDownStarted;
@@ -81,14 +82,20 @@ namespace digital_wellbeing_app.Services
         /// <summary>
         /// Start the Wind Down service
         /// </summary>
-        public void Start()
+        /// <param name="resetNotification">If true, reset notification flag (used on app start). 
+        /// If false, preserve notification state (used when reloading settings).</param>
+        public void Start(bool resetNotification = true)
         {
             _wasActive = IsWindDownActive;
-            _notificationShownThisSession = false;
+            if (resetNotification)
+            {
+                _notificationShownThisSession = false;
+            }
             _checkTimer.Start();
 
             // If already in Wind Down period when starting, fire the event
-            if (_wasActive && IsEnabled)
+            // But only if this is a fresh start, not a settings reload
+            if (_wasActive && IsEnabled && resetNotification)
             {
                 WindDownStarted?.Invoke();
             }
@@ -175,13 +182,14 @@ namespace digital_wellbeing_app.Services
             {
                 // Just entered Wind Down period
                 _wasActive = true;
-                _notificationShownThisSession = false;
+                // Don't reset notification flag here - let HasNotificationBeenShown handle throttling
                 WindDownStarted?.Invoke();
             }
             else if (!isNowActive && _wasActive)
             {
                 // Just exited Wind Down period
                 _wasActive = false;
+                // Reset notification flag when Wind Down ends, so next session can show notification
                 _notificationShownThisSession = false;
                 WindDownEnded?.Invoke();
             }
@@ -264,9 +272,22 @@ namespace digital_wellbeing_app.Services
         }
 
         /// <summary>
-        /// Check if notification has been shown this Wind Down session
+        /// Check if notification has been shown this Wind Down session.
+        /// Also prevents showing notification more than once per hour.
         /// </summary>
-        public bool HasNotificationBeenShown => _notificationShownThisSession;
+        public bool HasNotificationBeenShown
+        {
+            get
+            {
+                // Prevent notification if already shown this session
+                if (_notificationShownThisSession) return true;
+                
+                // Also prevent notification if shown within the last hour (safety throttle)
+                if ((DateTime.Now - _lastNotificationTime).TotalMinutes < 60) return true;
+                
+                return false;
+            }
+        }
 
         /// <summary>
         /// Mark that the notification has been shown for this Wind Down session
@@ -274,6 +295,7 @@ namespace digital_wellbeing_app.Services
         public void MarkNotificationShown()
         {
             _notificationShownThisSession = true;
+            _lastNotificationTime = DateTime.Now;
         }
 
         #region Settings Helpers

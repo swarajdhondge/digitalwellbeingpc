@@ -1,5 +1,26 @@
 # Changelog
 
+## [v1.5.1] - 2025-12-21
+
+### Bug Fixes
+- **Wind Down notification spam** - Fixed notification showing repeatedly on settings change
+  - Notification now only shows once per Wind Down session (with 60-min throttle safety)
+  - Settings changes no longer reset notification state
+- **Break Reminder state reset** - Fixed timer resetting when changing settings
+  - Timer state preserved when updating Break Reminder settings
+- **System sleep/resume handling** - Added proper pause/resume for all services
+  - Wind Down and Break Reminder now pause on screen lock and system sleep
+  - Services resume correctly without notification spam on wake
+- **Duplicate resize grips** - Fixed two resize grips appearing at window corner
+  - Custom styled resize grip now inside the window border
+- **Timer interval** - Fixed Break Reminder polling from 2s to 30s (reduced CPU usage)
+
+### Improvements
+- Custom resize grip styled to match app theme
+- Better state management for all timer-based services
+
+---
+
 ## [v1.5.0] - 2025-12-20
 
 ### Features

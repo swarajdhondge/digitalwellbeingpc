@@ -66,4 +66,5 @@ Desktop.ini
 
 # Documentation and planning files
 docs/
+docs/*
 .cursor/
