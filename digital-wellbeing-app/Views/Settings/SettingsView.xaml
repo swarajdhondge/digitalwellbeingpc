@@ -184,6 +184,225 @@
                 </StackPanel>
             </Border>
 
+            <!-- Wind Down Mode Section -->
+            <TextBlock Text="WIND DOWN MODE"
+                       Style="{StaticResource NavSectionHeader}"
+                       Margin="0,0,0,12"/>
+
+            <Border Style="{StaticResource CardBase}" Margin="0,0,0,24">
+                <StackPanel>
+                    <TextBlock Text="Quiet Hours"
+                               Style="{StaticResource HeadingSmall}"
+                               Margin="0,0,0,12"/>
+                    
+                    <TextBlock Text="Get a gentle reminder when it's time to wind down for the day. A subtle visual cue will appear around your screen edges during quiet hours."
+                               Style="{StaticResource LabelSecondary}"
+                               TextWrapping="Wrap"
+                               Margin="0,0,0,16"/>
+
+                    <!-- Enable Toggle -->
+                    <Grid Margin="0,0,0,16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="Enable Wind Down mode"
+                                   Style="{StaticResource BodyMedium}"
+                                   VerticalAlignment="Center"/>
+
+                        <ToggleButton x:Name="WindDownToggle"
+                                      Grid.Column="1"
+                                      Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                      Checked="WindDownToggle_Changed"
+                                      Unchecked="WindDownToggle_Changed"
+                                      VerticalAlignment="Center"/>
+                    </Grid>
+
+                    <!-- Wind Down Options Panel -->
+                    <StackPanel x:Name="WindDownOptionsPanel" 
+                                Visibility="Collapsed">
+                        
+                        <!-- Schedule -->
+                        <TextBlock Text="Schedule"
+                                   Style="{StaticResource BodyMedium}"
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,12"/>
+                        
+                        <Grid Margin="0,0,0,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Start Time -->
+                            <TextBlock Text="From"
+                                       Style="{StaticResource BodyMedium}"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,8,0"/>
+                            
+                            <ComboBox x:Name="StartTimeComboBox"
+                                      Grid.Column="1"
+                                      SelectionChanged="StartTimeComboBox_SelectionChanged"
+                                      Background="{DynamicResource Bg.Elevated}"
+                                      Foreground="{DynamicResource Text.Primary}"
+                                      BorderThickness="0"
+                                      Padding="12,8"
+                                      MinWidth="100"/>
+
+                            <!-- End Time -->
+                            <TextBlock Text="to"
+                                       Grid.Column="2"
+                                       Style="{StaticResource BodyMedium}"
+                                       VerticalAlignment="Center"
+                                       Margin="16,0,8,0"/>
+                            
+                            <ComboBox x:Name="EndTimeComboBox"
+                                      Grid.Column="3"
+                                      SelectionChanged="EndTimeComboBox_SelectionChanged"
+                                      Background="{DynamicResource Bg.Elevated}"
+                                      Foreground="{DynamicResource Text.Primary}"
+                                      BorderThickness="0"
+                                      Padding="12,8"
+                                      MinWidth="100"/>
+                        </Grid>
+
+                        <!-- Notification Toggle -->
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel>
+                                <TextBlock Text="Show notification"
+                                           Style="{StaticResource BodyMedium}"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Text="Display a reminder when Wind Down starts"
+                                           Style="{StaticResource LabelMuted}"
+                                           Margin="0,2,0,0"/>
+                            </StackPanel>
+
+                            <ToggleButton x:Name="WindDownNotificationToggle"
+                                          Grid.Column="1"
+                                          Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                          IsChecked="True"
+                                          Checked="WindDownNotificationToggle_Changed"
+                                          Unchecked="WindDownNotificationToggle_Changed"
+                                          VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- Visual Cue Toggle -->
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel>
+                                <TextBlock Text="Show visual border"
+                                           Style="{StaticResource BodyMedium}"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Text="Display a subtle glow around the window edges"
+                                           Style="{StaticResource LabelMuted}"
+                                           Margin="0,2,0,0"/>
+                            </StackPanel>
+
+                            <ToggleButton x:Name="WindDownVisualToggle"
+                                          Grid.Column="1"
+                                          Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                          IsChecked="True"
+                                          Checked="WindDownVisualToggle_Changed"
+                                          Unchecked="WindDownVisualToggle_Changed"
+                                          VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- Visual Style Selection -->
+                        <StackPanel x:Name="VisualStylePanel" Margin="0,8,0,0">
+                            <TextBlock Text="Visual style"
+                                       Style="{StaticResource BodyMedium}"
+                                       Margin="0,0,0,8"/>
+                            
+                            <StackPanel Orientation="Horizontal">
+                                <!-- Amber Style -->
+                                <Border x:Name="AmberStyleOption"
+                                        Background="{DynamicResource Accent.Primary}"
+                                        CornerRadius="8"
+                                        Padding="12,8"
+                                        Margin="0,0,8,0"
+                                        Cursor="Hand"
+                                        MouseLeftButtonDown="AmberStyle_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border Width="16" Height="16" 
+                                                CornerRadius="8"
+                                                Background="#F59E0B"
+                                                Margin="0,0,8,0"/>
+                                        <TextBlock Text="Amber"
+                                                   Style="{StaticResource BodySmall}"
+                                                   Foreground="{DynamicResource Accent.OnAccent}"
+                                                   VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Purple Style -->
+                                <Border x:Name="PurpleStyleOption"
+                                        Background="{DynamicResource Bg.Elevated}"
+                                        CornerRadius="8"
+                                        Padding="12,8"
+                                        Margin="0,0,8,0"
+                                        Cursor="Hand"
+                                        MouseLeftButtonDown="PurpleStyle_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border Width="16" Height="16" 
+                                                CornerRadius="8"
+                                                Background="#8B5CF6"
+                                                Margin="0,0,8,0"/>
+                                        <TextBlock Text="Purple"
+                                                   Style="{StaticResource BodySmall}"
+                                                   VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Dim Style -->
+                                <Border x:Name="DimStyleOption"
+                                        Background="{DynamicResource Bg.Elevated}"
+                                        CornerRadius="8"
+                                        Padding="12,8"
+                                        Cursor="Hand"
+                                        MouseLeftButtonDown="DimStyle_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border Width="16" Height="16" 
+                                                CornerRadius="8"
+                                                Background="#6B7280"
+                                                Margin="0,0,8,0"/>
+                                        <TextBlock Text="Dim"
+                                                   Style="{StaticResource BodySmall}"
+                                                   VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Current Status -->
+                    <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
+                        <md:PackIcon x:Name="WindDownStatusIcon" 
+                                     Kind="MoonWaningCrescent" 
+                                     Width="16" Height="16"
+                                     Foreground="{DynamicResource Text.Muted}"
+                                     VerticalAlignment="Center"/>
+                        <TextBlock x:Name="WindDownStatusText"
+                                   Text="Wind Down is disabled"
+                                   Style="{StaticResource LabelSecondary}"
+                                   Margin="8,0,0,0"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
             <!-- Hearing Protection Section (Coming Soon - Blurred) -->
             <TextBlock Text="HEARING PROTECTION"
                        Style="{StaticResource NavSectionHeader}"
@@ -381,7 +600,7 @@
                         <StackPanel Margin="12,0,0,0" VerticalAlignment="Center">
                             <TextBlock Text="Digital Wellbeing"
                                        Style="{StaticResource HeadingSmall}"/>
-                            <TextBlock Text="Version 1.4.0"
+                            <TextBlock Text="Version 1.5.0"
                                        Style="{StaticResource LabelSecondary}"/>
                         </StackPanel>
                     </StackPanel>

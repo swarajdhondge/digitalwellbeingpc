@@ -40,12 +40,16 @@ namespace digital_wellbeing_app.MainWindow
         private Services.FocusSessionService? _focusSessionService;
         private string _currentDistractingApp = string.Empty;
 
+        // Wind Down service
+        private Services.WindDownService? _windDownService;
+
         public MainWindow()
         {
             InitializeComponent();
             InitTrayIcon();
             InitBreakReminder();
             InitFocusSession();
+            InitWindDown();
             MainContent.Content = _dashboardView;
             _activeNavButton = NavDashboard;
 
@@ -131,6 +135,111 @@ namespace digital_wellbeing_app.MainWindow
                 FocusWarningOverlay.Visibility = Visibility.Collapsed;
             });
         }
+
+        #region Wind Down Mode
+
+        private void InitWindDown()
+        {
+            _windDownService = new Services.WindDownService();
+            _windDownService.LoadSettings();
+            _windDownService.WindDownStarted += OnWindDownStarted;
+            _windDownService.WindDownEnded += OnWindDownEnded;
+            _windDownService.Start();
+
+            // Check if we're already in Wind Down mode when the app starts
+            if (_windDownService.IsWindDownActive && _windDownService.ShowVisualCue)
+            {
+                UpdateWindDownVisual(true);
+            }
+        }
+
+        private void OnWindDownStarted()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                System.Diagnostics.Debug.WriteLine("[WindDown] Wind Down mode started");
+
+                // Show notification if enabled and not shown yet this session
+                if (_windDownService?.ShowNotification == true && !_windDownService.HasNotificationBeenShown)
+                {
+                    ShowWindDownNotification();
+                    _windDownService.MarkNotificationShown();
+                }
+
+                // Show visual cue if enabled
+                if (_windDownService?.ShowVisualCue == true)
+                {
+                    UpdateWindDownVisual(true);
+                }
+            });
+        }
+
+        private void OnWindDownEnded()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                System.Diagnostics.Debug.WriteLine("[WindDown] Wind Down mode ended");
+                UpdateWindDownVisual(false);
+            });
+        }
+
+        private void ShowWindDownNotification()
+        {
+            if (_trayIcon == null) return;
+
+            _trayIcon.BalloonTipTitle = "🌙 Time to Wind Down";
+            _trayIcon.BalloonTipText = "Quiet hours have started. Consider wrapping up and getting ready for rest.";
+            _trayIcon.BalloonTipIcon = ToolTipIcon.Info;
+            _trayIcon.ShowBalloonTip(5000);
+        }
+
+        private void UpdateWindDownVisual(bool active)
+        {
+            if (active && _windDownService?.ShowVisualCue == true)
+            {
+                // Set border color based on visual style
+                var color = _windDownService.VisualStyle switch
+                {
+                    Models.WindDownVisualStyle.Amber => System.Windows.Media.Color.FromRgb(245, 158, 11),  // #F59E0B
+                    Models.WindDownVisualStyle.Purple => System.Windows.Media.Color.FromRgb(139, 92, 246), // #8B5CF6
+                    Models.WindDownVisualStyle.Dim => System.Windows.Media.Color.FromRgb(107, 114, 128),   // #6B7280
+                    _ => System.Windows.Media.Color.FromRgb(245, 158, 11)
+                };
+
+                WindDownBorder.Visibility = Visibility.Visible;
+                WindDownBorder.BorderBrush = new System.Windows.Media.SolidColorBrush(color);
+                WindDownBorder.Opacity = _windDownService.VisualOpacity;
+            }
+            else
+            {
+                WindDownBorder.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        /// <summary>
+        /// Update Wind Down service with new settings (called from SettingsView)
+        /// </summary>
+        public void UpdateWindDownService()
+        {
+            if (_windDownService != null)
+            {
+                _windDownService.Stop();
+                _windDownService.LoadSettings();
+                _windDownService.Start();
+
+                // Update visual immediately if settings changed
+                if (_windDownService.IsWindDownActive && _windDownService.ShowVisualCue)
+                {
+                    UpdateWindDownVisual(true);
+                }
+                else
+                {
+                    UpdateWindDownVisual(false);
+                }
+            }
+        }
+
+        #endregion
 
         private void BackToWorkButton_Click(object sender, RoutedEventArgs e)
         {
@@ -621,6 +730,7 @@ namespace digital_wellbeing_app.MainWindow
         {
             _breakReminderService?.Dispose();
             _focusSessionService?.Dispose();
+            _windDownService?.Dispose();
             _trayIcon?.Dispose();
         }
 

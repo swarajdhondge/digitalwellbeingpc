@@ -199,7 +199,7 @@
                             </Button>
 
                             <!-- Version -->
-                            <TextBlock Text="v1.4.0"
+                            <TextBlock Text="v1.5.0"
                                        Style="{StaticResource LabelMuted}"
                                        Margin="24,16,0,0"/>
                         </StackPanel>
@@ -225,6 +225,24 @@
                         VerticalAlignment="Bottom"
                         Cursor="SizeNWSE"
                         Visibility="Visible"/>
+
+            <!-- ============================================ -->
+            <!-- WIND DOWN MODE VISUAL CUE -->
+            <!-- Subtle border glow around window edges -->
+            <!-- ============================================ -->
+            <Border x:Name="WindDownBorder"
+                    Grid.RowSpan="2"
+                    BorderThickness="4"
+                    BorderBrush="#F59E0B"
+                    CornerRadius="8"
+                    Opacity="0.3"
+                    Visibility="Collapsed"
+                    IsHitTestVisible="False"
+                    Panel.ZIndex="500">
+                <Border.Effect>
+                    <BlurEffect Radius="8"/>
+                </Border.Effect>
+            </Border>
             
             <!-- ============================================ -->
             <!-- BREAK REMINDER OVERLAY -->

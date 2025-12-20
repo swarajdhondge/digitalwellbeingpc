@@ -1,5 +1,31 @@
 # Changelog
 
+## [v1.5.0] - 2025-12-20
+
+### Features
+- **Wind Down Mode** - Subtle end-of-day awareness (non-blocking)
+  - Scheduled quiet hours with configurable start/end time
+  - Gentle notification when Wind Down starts ("Time to Wind Down")
+  - Subtle visual border glow around window edges during quiet hours
+  - Three visual styles: Amber (warm), Purple (calm), Dim (subtle)
+  - All settings configurable in Settings view
+
+### Wind Down Behavior
+- **Non-blocking**: Wind Down only provides awareness, never blocks anything
+- **Gradual**: Visual cue is gentle and non-distracting (30% opacity by default)
+- **Overnight support**: Schedules like 9 PM to 7 AM work correctly
+- Notification only shown once per Wind Down session
+- Visual cue automatically appears/disappears based on schedule
+
+### Settings
+- Enable/disable Wind Down mode
+- Set start and end times (30-minute increments)
+- Toggle notification when Wind Down starts
+- Toggle visual border effect
+- Choose visual style (Amber/Purple/Dim)
+
+---
+
 ## [v1.4.0] - 2025-12-20
 
 ### Features
