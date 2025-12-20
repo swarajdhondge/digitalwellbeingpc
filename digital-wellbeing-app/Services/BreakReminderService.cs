@@ -26,10 +26,10 @@ namespace digital_wellbeing_app.Services
         public event Action? BreakDismissed;
 
         /// <summary>Interval between breaks in minutes (default: 20)</summary>
-        public int IntervalMinutes { get; set; } = 10;
+        public int IntervalMinutes { get; set; } = 20;
         
         /// <summary>TEST MODE: Use seconds instead of minutes for quick testing</summary>
-        public bool TestMode { get; set; } = true;  // SET TO false FOR PRODUCTION
+        public bool TestMode { get; set; } = false;  // Production mode
         
         /// <summary>Whether break reminders are enabled</summary>
         public bool IsEnabled { get; set; } = false;
