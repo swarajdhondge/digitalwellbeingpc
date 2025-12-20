@@ -9,7 +9,9 @@ namespace digital_wellbeing_app.Views.Settings
     {
         private readonly ThemeService _themeService = new();
         private readonly GoalService _goalService = new();
+        private readonly SettingsService _settingsService = new();
         private bool _isLoadingGoal;
+        private bool _isLoadingBreakReminder;
 
         public SettingsView()
         {
@@ -38,6 +40,9 @@ namespace digital_wellbeing_app.Views.Settings
 
             // Load goal settings
             LoadGoalSettings();
+
+            // Load break reminder settings
+            LoadBreakReminderSettings();
 
             // Note: Hearing Protection threshold is disabled (Coming Soon)
             // Default is 75 dB, set in SettingsService.LoadHarmfulThreshold()
@@ -131,6 +136,78 @@ namespace digital_wellbeing_app.Views.Settings
                 CurrentGoalText.Text = $"Goal: {hours} hours per day";
             else
                 CurrentGoalText.Text = $"Goal: {mins} minutes per day";
+        }
+
+        #endregion
+
+        #region Break Reminder Settings
+
+        private void LoadBreakReminderSettings()
+        {
+            _isLoadingBreakReminder = true;
+
+            bool enabled = _settingsService.LoadBreakReminderEnabled();
+            int interval = _settingsService.LoadBreakReminderInterval();
+            bool soundEnabled = _settingsService.LoadBreakReminderSound();
+
+            BreakReminderToggle.IsChecked = enabled;
+            BreakReminderOptionsPanel.Visibility = enabled ? Visibility.Visible : Visibility.Collapsed;
+            BreakReminderSoundPanel.Visibility = enabled ? Visibility.Visible : Visibility.Collapsed;
+            SoundToggle.IsChecked = soundEnabled;
+
+            // Set interval selection
+            foreach (System.Windows.Controls.ComboBoxItem item in IntervalComboBox.Items)
+            {
+                if (item.Tag?.ToString() == interval.ToString())
+                {
+                    IntervalComboBox.SelectedItem = item;
+                    break;
+                }
+            }
+
+            _isLoadingBreakReminder = false;
+        }
+
+        private void BreakReminderToggle_Changed(object sender, RoutedEventArgs e)
+        {
+            if (_isLoadingBreakReminder) return;
+
+            bool enabled = BreakReminderToggle.IsChecked == true;
+            BreakReminderOptionsPanel.Visibility = enabled ? Visibility.Visible : Visibility.Collapsed;
+            BreakReminderSoundPanel.Visibility = enabled ? Visibility.Visible : Visibility.Collapsed;
+
+            _settingsService.SaveBreakReminderEnabled(enabled);
+
+            // Notify MainWindow to restart the service
+            NotifyBreakReminderServiceChanged();
+        }
+
+        private void IntervalComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (_isLoadingBreakReminder) return;
+
+            var selected = IntervalComboBox.SelectedItem as System.Windows.Controls.ComboBoxItem;
+            if (selected?.Tag != null && int.TryParse(selected.Tag.ToString(), out int interval))
+            {
+                _settingsService.SaveBreakReminderInterval(interval);
+                NotifyBreakReminderServiceChanged();
+            }
+        }
+
+        private void SoundToggle_Changed(object sender, RoutedEventArgs e)
+        {
+            if (_isLoadingBreakReminder) return;
+
+            bool soundEnabled = SoundToggle.IsChecked == true;
+            _settingsService.SaveBreakReminderSound(soundEnabled);
+            NotifyBreakReminderServiceChanged();
+        }
+
+        private void NotifyBreakReminderServiceChanged()
+        {
+            // Find MainWindow and update break reminder service
+            var mainWindow = Window.GetWindow(this) as MainWindow.MainWindow;
+            mainWindow?.UpdateBreakReminderService();
         }
 
         #endregion

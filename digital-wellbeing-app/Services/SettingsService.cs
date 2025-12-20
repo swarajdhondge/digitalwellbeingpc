@@ -92,5 +92,70 @@ namespace digital_wellbeing_app.Services
             _values["HarmfulThreshold"] = dB;
             SaveToDisk();
         }
+
+        // --- Break reminder persistence ---
+        public bool LoadBreakReminderEnabled()
+        {
+            if (_values.TryGetValue(Models.BreakReminderKeys.IsEnabled, out var val))
+            {
+                if (val is bool b)
+                    return b;
+                if (val is System.Text.Json.JsonElement je && je.ValueKind == System.Text.Json.JsonValueKind.True)
+                    return true;
+                if (val is System.Text.Json.JsonElement je2 && je2.ValueKind == System.Text.Json.JsonValueKind.False)
+                    return false;
+            }
+            return false;
+        }
+
+        public void SaveBreakReminderEnabled(bool enabled)
+        {
+            _values[Models.BreakReminderKeys.IsEnabled] = enabled;
+            SaveToDisk();
+        }
+
+        public int LoadBreakReminderInterval()
+        {
+            if (_values.TryGetValue(Models.BreakReminderKeys.IntervalMinutes, out var val))
+            {
+                if (val is int i)
+                    return i;
+                if (val is System.Text.Json.JsonElement je && je.TryGetInt32(out var intVal))
+                    return intVal;
+            }
+            return 20; // Default: 20 minutes
+        }
+
+        public void SaveBreakReminderInterval(int minutes)
+        {
+            _values[Models.BreakReminderKeys.IntervalMinutes] = minutes;
+            SaveToDisk();
+        }
+
+        public bool LoadBreakReminderSound()
+        {
+            if (_values.TryGetValue(Models.BreakReminderKeys.SoundEnabled, out var val))
+            {
+                if (val is bool b)
+                    return b;
+                if (val is System.Text.Json.JsonElement je && je.ValueKind == System.Text.Json.JsonValueKind.True)
+                    return true;
+                if (val is System.Text.Json.JsonElement je2 && je2.ValueKind == System.Text.Json.JsonValueKind.False)
+                    return false;
+            }
+            return true; // Default: sound enabled
+        }
+
+        public void SaveBreakReminderSound(bool enabled)
+        {
+            _values[Models.BreakReminderKeys.SoundEnabled] = enabled;
+            SaveToDisk();
+        }
+
+        // --- Internal helper for BreakReminderService ---
+        internal System.Collections.Generic.Dictionary<string, object> GetAllSettings()
+        {
+            return new System.Collections.Generic.Dictionary<string, object>(_values);
+        }
     }
 }
