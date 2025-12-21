@@ -5,14 +5,28 @@
     <!-- 
     ============================================
     TYPOGRAPHY STYLES
-    Uses tokens from ThemeDark/ThemeLight
+    v1.7 Design Revamp - Samsung Digital Wellbeing Style
+    
+    KEY RULE: Hero stats use PRIMARY text color, NOT accent!
     ============================================
     -->
 
-    <!-- Heading Styles -->
+    <!-- ============================================ -->
+    <!-- HEADING STYLES -->
+    <!-- ============================================ -->
+
+    <!-- Hero Stat - Largest display (48-56px, bold, PRIMARY color) -->
     <Style x:Key="HeadingHero" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
         <Setter Property="FontSize" Value="{DynamicResource Font.Hero}"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Primary}"/>
+    </Style>
+
+    <!-- Hero Stat Large - Weekly report main stat (56px) -->
+    <Style x:Key="HeadingHeroLarge" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Font.HeroLG}"/>
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="Foreground" Value="{DynamicResource Text.Primary}"/>
     </Style>
@@ -27,18 +41,21 @@
     <Style x:Key="HeadingMedium" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
         <Setter Property="FontSize" Value="{DynamicResource Font.XL}"/>
-        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontWeight" Value="Medium"/>  <!-- Samsung: section headers are medium, not bold -->
         <Setter Property="Foreground" Value="{DynamicResource Text.Primary}"/>
     </Style>
 
     <Style x:Key="HeadingSmall" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
         <Setter Property="FontSize" Value="{DynamicResource Font.LG}"/>
-        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontWeight" Value="Medium"/>
         <Setter Property="Foreground" Value="{DynamicResource Text.Primary}"/>
     </Style>
 
-    <!-- Body Text Styles -->
+    <!-- ============================================ -->
+    <!-- BODY TEXT STYLES -->
+    <!-- ============================================ -->
+
     <Style x:Key="BodyLarge" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
         <Setter Property="FontSize" Value="{DynamicResource Font.LG}"/>
@@ -60,7 +77,10 @@
         <Setter Property="Foreground" Value="{DynamicResource Text.Secondary}"/>
     </Style>
 
-    <!-- Label Styles -->
+    <!-- ============================================ -->
+    <!-- LABEL STYLES -->
+    <!-- ============================================ -->
+
     <Style x:Key="LabelPrimary" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
         <Setter Property="FontSize" Value="{DynamicResource Font.MD}"/>
@@ -82,28 +102,140 @@
         <Setter Property="Foreground" Value="{DynamicResource Text.Muted}"/>
     </Style>
 
-    <!-- Stat/Number Display -->
+    <!-- ============================================ -->
+    <!-- STAT/NUMBER DISPLAY STYLES -->
+    <!-- ============================================ -->
+
+    <!-- 
+    CRITICAL: StatNumber uses PRIMARY text color, NOT accent!
+    This matches Samsung Digital Wellbeing where hero stats are white/black
+    -->
     <Style x:Key="StatNumber" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Font.Hero}"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Primary}"/>
+    </Style>
+
+    <!-- Medium stat (40px) - for volume stats, category totals -->
+    <Style x:Key="StatNumberMedium" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Font.Stat}"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Primary}"/>
+    </Style>
+
+    <!-- Small stat (32px) - for category totals in weekly report -->
+    <Style x:Key="StatNumberSmall" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
         <Setter Property="FontSize" Value="{DynamicResource Font.XXXL}"/>
         <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="Foreground" Value="{DynamicResource Accent.Primary}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Primary}"/>
     </Style>
 
+    <!-- Stat label (below the number) -->
     <Style x:Key="StatLabel" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
-        <Setter Property="FontSize" Value="{DynamicResource Font.SM}"/>
-        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="FontSize" Value="{DynamicResource Font.MD}"/>
+        <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="Foreground" Value="{DynamicResource Text.Secondary}"/>
     </Style>
 
-    <!-- Section Header (uppercase, muted) -->
+    <!-- Value display (bold, primary) - for "69 dB", durations in lists -->
+    <Style x:Key="ValueDisplay" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Font.LG}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Primary}"/>
+    </Style>
+
+    <!-- ============================================ -->
+    <!-- SPECIAL STYLES -->
+    <!-- ============================================ -->
+
+    <!-- Section Header (for card titles like "Most used app categories") -->
+    <Style x:Key="SectionHeader" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Font.LG}"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Primary}"/>
+        <Setter Property="Margin" Value="0,0,0,12"/>
+    </Style>
+
+    <!-- Navigation Section Header (uppercase, muted) -->
     <Style x:Key="NavSectionHeader" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
         <Setter Property="FontSize" Value="{DynamicResource Font.XS}"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="Foreground" Value="{DynamicResource Text.Muted}"/>
         <Setter Property="Margin" Value="24,16,16,8"/>
+    </Style>
+
+    <!-- Active Toggle Text (Teal color) -->
+    <Style x:Key="ToggleActive" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Font.MD}"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Foreground" Value="{DynamicResource Accent.Primary}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+    </Style>
+
+    <!-- Inactive Toggle Text (Gray color) -->
+    <Style x:Key="ToggleInactive" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Font.MD}"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Secondary}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+    </Style>
+
+    <!-- Chart Axis Label -->
+    <Style x:Key="ChartAxisLabel" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Font.XS}"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Muted}"/>
+    </Style>
+
+    <!-- App/Category Name in list -->
+    <Style x:Key="ListItemName" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Font.MD}"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Primary}"/>
+    </Style>
+
+    <!-- Duration in list (right-aligned) -->
+    <Style x:Key="ListItemDuration" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Font.MD}"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Primary}"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+    </Style>
+
+    <!-- Badge Text (inside pill badges) -->
+    <Style x:Key="BadgeText" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Font.SM}"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Foreground" Value="#0F0F0F"/>  <!-- Dark text on colored badge -->
+    </Style>
+
+    <!-- Week Selector Text -->
+    <Style x:Key="WeekSelectorText" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Font.SM}"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Secondary}"/>
+    </Style>
+
+    <!-- Comparison Text (smaller, gray) -->
+    <Style x:Key="ComparisonText" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Font.SM}"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Secondary}"/>
     </Style>
 
 </ResourceDictionary>

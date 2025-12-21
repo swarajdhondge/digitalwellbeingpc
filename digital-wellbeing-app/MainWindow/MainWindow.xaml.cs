@@ -11,6 +11,7 @@ using System.Windows.Media.Animation;
 using digital_wellbeing_app.Views.AppUsage;
 using digital_wellbeing_app.Views.Dashboard;
 using digital_wellbeing_app.Views.Focus;
+using digital_wellbeing_app.Views.Reports;
 using digital_wellbeing_app.Views.Screen;
 using digital_wellbeing_app.Views.Settings;
 using digital_wellbeing_app.Views.Sound;
@@ -29,6 +30,7 @@ namespace digital_wellbeing_app.MainWindow
         private readonly SoundTimelineView _soundView = new();
         private readonly AppUsageView _appUsageView = new();
         private readonly FocusView _focusView = new();
+        private readonly WeeklyReportView _reportsView = new();
         private readonly SettingsView _settingsView = new();
 
         // Track active nav button
@@ -887,6 +889,11 @@ namespace digital_wellbeing_app.MainWindow
         private void Focus_Click(object? sender, RoutedEventArgs e)
         {
             NavigateWithTransition(_focusView, NavFocus);
+        }
+
+        private void Reports_Click(object? sender, RoutedEventArgs e)
+        {
+            NavigateWithTransition(_reportsView, NavReports);
         }
 
         private void Settings_Click(object? sender, RoutedEventArgs e)

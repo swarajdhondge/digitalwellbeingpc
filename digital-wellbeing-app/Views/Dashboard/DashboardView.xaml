@@ -5,205 +5,339 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
-             d:DesignHeight="500" d:DesignWidth="800"
+             d:DesignHeight="800" d:DesignWidth="500"
              Background="Transparent">
 
     <ScrollViewer HorizontalScrollBarVisibility="Disabled"
-                  VerticalScrollBarVisibility="Auto">
-        <StackPanel Margin="8">
+                  VerticalScrollBarVisibility="Auto"
+                  Padding="20,16">
+        <StackPanel>
 
             <!-- Page Header -->
-            <TextBlock Text="Dashboard"
+            <TextBlock Text="Digital Wellbeing"
                        Style="{StaticResource HeadingLarge}"
-                       Margin="0,0,0,24"/>
+                       Margin="0,0,0,20"/>
 
-            <!-- Stats Cards Grid -->
-            <WrapPanel Orientation="Horizontal">
-
-                <!-- Screen Time Card -->
-                <Border Style="{StaticResource CardStat}">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-
-                        <!-- Header -->
-                        <StackPanel Grid.Row="0" Orientation="Horizontal">
-                            <Border Background="{DynamicResource Accent.Primary}"
-                                    CornerRadius="6"
-                                    Padding="6">
-                                <md:PackIcon Kind="Monitor" Width="16" Height="16"
-                                             Foreground="{DynamicResource Accent.OnAccent}"/>
-                            </Border>
-                            <TextBlock Text="Screen Time"
-                                       Style="{StaticResource LabelPrimary}"
-                                       Margin="10,0,0,0"
-                                       VerticalAlignment="Center"/>
-                        </StackPanel>
-
-                        <!-- Value -->
-                        <TextBlock Grid.Row="1"
-                                   Text="{Binding ScreenTime}"
-                                   Style="{StaticResource StatNumber}"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Center"
-                                   Margin="0,16,0,8"/>
-
-                        <!-- Label -->
-                        <TextBlock Grid.Row="2"
-                                   Text="TODAY"
-                                   Style="{StaticResource LabelSecondary}"
-                                   HorizontalAlignment="Center"/>
-                    </Grid>
-                </Border>
-
-                <!-- Sound Listening Card -->
-                <Border Style="{StaticResource CardStat}">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-
-                        <!-- Header -->
-                        <StackPanel Grid.Row="0" Orientation="Horizontal">
-                            <Border Background="{DynamicResource Status.Info}"
-                                    CornerRadius="6"
-                                    Padding="6">
-                                <md:PackIcon Kind="VolumeHigh" Width="16" Height="16"
-                                             Foreground="{DynamicResource Accent.OnAccent}"/>
-                            </Border>
-                            <TextBlock Text="Sound Output"
-                                       Style="{StaticResource LabelPrimary}"
-                                       Margin="10,0,0,0"
-                                       VerticalAlignment="Center"/>
-                        </StackPanel>
-
-                        <!-- Value -->
-                        <TextBlock Grid.Row="1"
-                                   Text="{Binding SoundTime}"
-                                   Style="{StaticResource StatNumber}"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Center"
-                                   Margin="0,16,0,8"/>
-
-                        <!-- Label -->
-                        <TextBlock Grid.Row="2"
-                                   Text="LISTENING TODAY"
-                                   Style="{StaticResource LabelSecondary}"
-                                   HorizontalAlignment="Center"/>
-                    </Grid>
-                </Border>
-
-                <!-- Harmful Sound Card -->
-                <Border Style="{StaticResource CardStat}"
-                        BorderBrush="{DynamicResource Status.Danger}"
-                        BorderThickness="0,0,0,3">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-
-                        <!-- Header -->
-                        <StackPanel Grid.Row="0" Orientation="Horizontal">
-                            <Border Background="{DynamicResource Status.Danger}"
-                                    CornerRadius="6"
-                                    Padding="6">
-                                <md:PackIcon Kind="VolumeOff" Width="16" Height="16"
-                                             Foreground="{DynamicResource Accent.OnAccent}"/>
-                            </Border>
-                            <TextBlock Text="Harmful Exposure"
-                                       Style="{StaticResource LabelPrimary}"
-                                       Margin="10,0,0,0"
-                                       VerticalAlignment="Center"/>
-                        </StackPanel>
-
-                        <!-- Value -->
-                        <TextBlock Grid.Row="1"
-                                   Text="{Binding SoundHarmfulTime}"
-                                   FontFamily="{StaticResource Font.Primary}"
-                                   FontSize="32"
-                                   FontWeight="Bold"
-                                   Foreground="{DynamicResource Status.Danger}"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Center"
-                                   Margin="0,16,0,8"/>
-
-                        <!-- Label -->
-                        <TextBlock Grid.Row="2"
-                                   Text="{Binding ThresholdLabel}"
-                                   Style="{StaticResource LabelSecondary}"
-                                   HorizontalAlignment="Center"/>
-                    </Grid>
-                </Border>
-
-                <!-- Most Used App Card -->
-                <Border Style="{StaticResource CardStat}"
-                        MinWidth="280">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-
-                        <!-- Header -->
-                        <StackPanel Grid.Row="0" Orientation="Horizontal">
-                            <Border Background="{DynamicResource Status.Warning}"
-                                    CornerRadius="6"
-                                    Padding="6">
-                                <md:PackIcon Kind="Star" Width="16" Height="16"
-                                             Foreground="{DynamicResource Accent.OnAccent}"/>
-                            </Border>
-                            <TextBlock Text="Most Used App"
-                                       Style="{StaticResource LabelPrimary}"
-                                       Margin="10,0,0,0"
-                                       VerticalAlignment="Center"/>
-                        </StackPanel>
-
-                        <!-- App Info -->
-                        <StackPanel Grid.Row="1"
-                                    Orientation="Horizontal"
-                                    VerticalAlignment="Center"
-                                    Margin="0,16,0,0">
-                            <!-- App Icon -->
-                            <Border Background="{DynamicResource Bg.Elevated}"
-                                    CornerRadius="8"
-                                    Padding="8">
-                                <Image Source="{Binding TopAppIcon}"
-                                       Width="40" Height="40"
-                                       RenderOptions.BitmapScalingMode="HighQuality"/>
-                            </Border>
-                            <!-- App Details -->
-                            <StackPanel Margin="16,0,0,0" VerticalAlignment="Center">
-                                <TextBlock Text="{Binding TopAppName}"
-                                           Style="{StaticResource HeadingSmall}"/>
-                                <TextBlock Text="{Binding TopAppDuration}"
-                                           Style="{StaticResource LabelSecondary}"
-                                           Margin="0,4,0,0"/>
-                            </StackPanel>
-                        </StackPanel>
-                    </Grid>
-                </Border>
-
-            </WrapPanel>
-
-            <!-- Quick Tips Section (Future) -->
-            <Border Style="{StaticResource CardFlat}"
-                    Margin="0,24,0,0"
-                    Visibility="Collapsed">
+            <!-- ============================================ -->
+            <!-- SCREEN TIME CARD (Samsung Hero Style) -->
+            <!-- ============================================ -->
+            <Border Style="{StaticResource CardBase}"
+                    Margin="{StaticResource Margin.Card}">
                 <StackPanel>
-                    <TextBlock Text="💡 Quick Tip"
-                               Style="{StaticResource HeadingSmall}"
-                               Margin="0,0,0,8"/>
-                    <TextBlock Text="Take a 5-minute break every 25 minutes to reduce eye strain."
-                               Style="{StaticResource BodyMedium}"
-                               Foreground="{DynamicResource Text.Secondary}"
-                               TextWrapping="Wrap"/>
+                    
+                    <!-- Hero Stat -->
+                    <TextBlock Text="{Binding ScreenTime}"
+                               Style="{StaticResource StatNumber}"
+                               HorizontalAlignment="Left"/>
+                    
+                    <!-- Stacked Horizontal Bar -->
+                    <Border Style="{StaticResource StackedBarContainer}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <!-- Dynamic columns based on top apps -->
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <!-- Three-segment bar with actual percentages -->
+                            <ItemsControl ItemsSource="{Binding TopApps}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Height="14"
+                                                CornerRadius="0">
+                                            <Border.Width>
+                                                <MultiBinding Converter="{StaticResource PercentageToWidthConverter}">
+                                                    <Binding Path="Percentage"/>
+                                                    <Binding RelativeSource="{RelativeSource AncestorType=ItemsControl}" Path="ActualWidth"/>
+                                                </MultiBinding>
+                                            </Border.Width>
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Background" Value="{DynamicResource Chart.Segment1}"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ColorIndex}" Value="1">
+                                                            <Setter Property="Background" Value="{DynamicResource Chart.Segment2}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding ColorIndex}" Value="2">
+                                                            <Setter Property="Background" Value="{DynamicResource Chart.Segment3}"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Grid>
+                    </Border>
+                    
+                    <!-- Top Apps List with Icons -->
+                    <ItemsControl ItemsSource="{Binding TopApps}"
+                                  Margin="0,4,0,0">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,0,0,12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <!-- App Icon -->
+                                    <Border Grid.Column="0"
+                                            Width="36" Height="36"
+                                            CornerRadius="8"
+                                            Margin="0,0,12,0"
+                                            VerticalAlignment="Center">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Background" Value="{DynamicResource Bg.Elevated}"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ColorIndex}" Value="0">
+                                                        <Setter Property="Background" Value="{DynamicResource Chart.Segment1}"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding ColorIndex}" Value="1">
+                                                        <Setter Property="Background" Value="{DynamicResource Chart.Segment2}"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding ColorIndex}" Value="2">
+                                                        <Setter Property="Background" Value="{DynamicResource Chart.Segment3}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <Image Source="{Binding Icon}"
+                                               Width="24" Height="24"
+                                               RenderOptions.BitmapScalingMode="HighQuality"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+                                    </Border>
+                                    
+                                    <!-- App Name -->
+                                    <TextBlock Grid.Column="1"
+                                               Text="{Binding Name}"
+                                               Style="{StaticResource ListItemName}"
+                                               VerticalAlignment="Center"/>
+                                    
+                                    <!-- Duration -->
+                                    <TextBlock Grid.Column="2"
+                                               Text="{Binding Duration}"
+                                               Style="{StaticResource ListItemDuration}"
+                                               VerticalAlignment="Center"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    
+                </StackPanel>
+            </Border>
+
+            <!-- ============================================ -->
+            <!-- SOUND MONITOR CARD -->
+            <!-- ============================================ -->
+            <Border Style="{StaticResource CardBase}"
+                    Margin="{StaticResource Margin.Card}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <StackPanel Grid.Column="0">
+                        <!-- Section Title -->
+                        <TextBlock Text="Volume monitor"
+                                   Style="{StaticResource SectionHeader}"
+                                   Margin="0,0,0,8"/>
+                        
+                        <!-- Listening Time -->
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0,0,0,4">
+                            <TextBlock Text="{Binding SoundTime}"
+                                       Style="{StaticResource ValueDisplay}"/>
+                            <TextBlock Text=" listening time"
+                                       Style="{StaticResource BodySmall}"
+                                       VerticalAlignment="Center"
+                                       Margin="4,0,0,0"/>
+                        </StackPanel>
+                        
+                        <!-- Harmful Time (if any) -->
+                        <StackPanel Orientation="Horizontal"
+                                    Visibility="{Binding SoundHarmfulTime, Converter={StaticResource StringToVisibilityConverter}}">
+                            <TextBlock Text="{Binding SoundHarmfulTime}"
+                                       Foreground="{DynamicResource Status.Danger}"
+                                       FontWeight="SemiBold"/>
+                            <TextBlock Text=" loud exposure"
+                                       Style="{StaticResource BodySmall}"
+                                       VerticalAlignment="Center"
+                                       Margin="4,0,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                    
+                    <!-- Status Badge -->
+                    <Border Grid.Column="1"
+                            Style="{StaticResource PillBadgeSuccess}"
+                            VerticalAlignment="Top">
+                        <TextBlock Text="Normal"
+                                   Style="{StaticResource BadgeText}"/>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- ============================================ -->
+            <!-- MOST USED APP CARD -->
+            <!-- ============================================ -->
+            <Border Style="{StaticResource CardBase}"
+                    Margin="{StaticResource Margin.Card}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- App Icon -->
+                    <Border Grid.Column="0"
+                            Background="{DynamicResource Bg.Elevated}"
+                            CornerRadius="12"
+                            Width="48" Height="48"
+                            Margin="0,0,16,0">
+                        <Image Source="{Binding TopAppIcon}"
+                               Width="32" Height="32"
+                               RenderOptions.BitmapScalingMode="HighQuality"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                    </Border>
+                    
+                    <!-- App Info -->
+                    <StackPanel Grid.Column="1"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="Most used app"
+                                   Style="{StaticResource LabelSecondary}"
+                                   Margin="0,0,0,2"/>
+                        <TextBlock Text="{Binding TopAppName}"
+                                   Style="{StaticResource HeadingSmall}"/>
+                    </StackPanel>
+                    
+                    <!-- Duration -->
+                    <TextBlock Grid.Column="2"
+                               Text="{Binding TopAppDuration}"
+                               Style="{StaticResource ValueDisplay}"
+                               VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+
+            <!-- ============================================ -->
+            <!-- WEEKLY SUMMARY CARD -->
+            <!-- ============================================ -->
+            <Border Style="{StaticResource CardInteractive}"
+                    Margin="{StaticResource Margin.Card}"
+                    MouseLeftButtonDown="WeeklySummary_Click">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Chart Icon -->
+                    <Border Grid.Column="0"
+                            Style="{StaticResource IconContainer}"
+                            Background="{DynamicResource Accent.Subtle}">
+                        <md:PackIcon Kind="ChartBar" 
+                                     Width="20" Height="20"
+                                     Foreground="{DynamicResource Accent.Primary}"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"/>
+                    </Border>
+
+                    <!-- Content -->
+                    <StackPanel Grid.Column="1" 
+                                VerticalAlignment="Center">
+                        <TextBlock Text="Weekly report"
+                                   Style="{StaticResource HeadingSmall}"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                            <TextBlock Text="{Binding WeeklyScreenTime}"
+                                       Style="{StaticResource LabelPrimary}"
+                                       FontWeight="SemiBold"/>
+                            <TextBlock Text=" total"
+                                       Style="{StaticResource LabelSecondary}"/>
+                            <TextBlock Margin="12,0,0,0"
+                                       VerticalAlignment="Center">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="FontSize" Value="12"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource Status.Warning}"/>
+                                        <Setter Property="Text" Value="{Binding WeeklyChangeText}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding WeeklyImproved}" Value="True">
+                                                <Setter Property="Foreground" Value="{DynamicResource Status.Success}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Arrow -->
+                    <md:PackIcon Grid.Column="2"
+                                 Kind="ChevronRight"
+                                 Width="24" Height="24"
+                                 Foreground="{DynamicResource Text.Muted}"
+                                 VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+
+            <!-- ============================================ -->
+            <!-- SCREEN TIME GOAL CARD -->
+            <!-- ============================================ -->
+            <Border Style="{StaticResource CardBase}"
+                    Margin="{StaticResource Margin.Card}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Screen time goal"
+                                   Style="{StaticResource SectionHeader}"
+                                   Margin="0"/>
+                        <TextBlock Text="Set a daily screen time goal to help manage your usage."
+                                   Style="{StaticResource BodySmall}"
+                                   TextWrapping="Wrap"
+                                   Margin="0,4,0,0"/>
+                    </StackPanel>
+                    
+                    <Button Grid.Column="1"
+                            Content="Set goal"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Foreground="{DynamicResource Accent.Primary}"
+                            BorderBrush="{DynamicResource Accent.Primary}"
+                            VerticalAlignment="Center"
+                            Padding="16,8"
+                            Click="SetGoal_Click"/>
+                </Grid>
+            </Border>
+
+            <!-- ============================================ -->
+            <!-- TIP SECTION -->
+            <!-- ============================================ -->
+            <Border Style="{StaticResource TipContainer}"
+                    Margin="0,8,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <md:PackIcon Kind="LightbulbOutline"
+                                 Width="20" Height="20"
+                                 Foreground="{DynamicResource Accent.Primary}"
+                                 VerticalAlignment="Top"
+                                 Margin="0,2,12,0"/>
+                    <TextBlock Text="Take regular breaks using the 20-20-20 rule: every 20 minutes, look at something 20 feet away for 20 seconds."
+                               Style="{StaticResource BodySmall}"
+                               TextWrapping="Wrap"
+                               MaxWidth="400"/>
                 </StackPanel>
             </Border>
 

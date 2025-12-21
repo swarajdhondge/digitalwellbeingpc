@@ -7,7 +7,7 @@
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:conv="clr-namespace:digital_wellbeing_app.Converters"
     mc:Ignorable="d"
-    d:DesignHeight="600" d:DesignWidth="800"
+    d:DesignHeight="800" d:DesignWidth="500"
     Background="Transparent">
 
     <UserControl.Resources>
@@ -23,24 +23,27 @@
         <conv:BoolToVisibilityConverter     x:Key="BoolToVisibilityConverter" />
     </UserControl.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel Margin="8">
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  Padding="20,16">
+        <StackPanel>
 
-            <!-- Page Header with Status Indicator -->
-            <Grid Margin="0,0,0,24">
+            <!-- ============================================ -->
+            <!-- PAGE HEADER -->
+            <!-- ============================================ -->
+            <Grid Margin="0,0,0,16">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="Screen Time"
+                <TextBlock Text="Screen time"
                            Style="{StaticResource HeadingLarge}"/>
 
-                <!-- Status Indicator (Phase 2.1) -->
+                <!-- Status Indicator -->
                 <Border Grid.Column="1"
-                        Background="{DynamicResource Bg.Elevated}"
-                        CornerRadius="12"
-                        Padding="10,6"
+                        Background="{DynamicResource Bg.Card}"
+                        CornerRadius="{DynamicResource Radius.Full}"
+                        Padding="12,6"
                         VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal">
                         <Ellipse Width="8" Height="8"
@@ -54,63 +57,133 @@
                 </Border>
             </Grid>
 
-            <!-- Today's Stats Card -->
-            <Border Style="{StaticResource CardBase}" Margin="0,0,0,16">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+            <!-- ============================================ -->
+            <!-- VIEW TOGGLE (Today / Weekly view) -->
+            <!-- ============================================ -->
+            <StackPanel Style="{StaticResource ViewToggleContainer}">
+                <TextBlock x:Name="TodayToggle"
+                           Text="Today"
+                           MouseLeftButtonDown="TodayToggle_Click"
+                           Cursor="Hand">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource ToggleActive}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsWeeklyView}" Value="True">
+                                    <Setter Property="Foreground" Value="{DynamicResource Text.Secondary}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <TextBlock Style="{StaticResource ViewToggleSeparator}"/>
+                <TextBlock x:Name="WeeklyToggle"
+                           Text="Weekly view"
+                           MouseLeftButtonDown="WeeklyToggle_Click"
+                           Cursor="Hand">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource ToggleInactive}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsWeeklyView}" Value="True">
+                                    <Setter Property="Foreground" Value="{DynamicResource Accent.Primary}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </StackPanel>
 
-                    <!-- Icon -->
-                    <Border Grid.Column="0"
-                            Background="{DynamicResource Accent.Primary}"
-                            CornerRadius="8"
-                            Padding="12"
-                            VerticalAlignment="Center">
-                        <md:PackIcon Kind="Monitor" Width="28" Height="28"
-                                     Foreground="{DynamicResource Accent.OnAccent}"/>
+            <!-- ============================================ -->
+            <!-- HERO STAT CARD -->
+            <!-- ============================================ -->
+            <Border Style="{StaticResource CardBase}"
+                    Margin="{StaticResource Margin.Card}">
+                <StackPanel>
+                    <!-- Hero Time -->
+                    <TextBlock Text="{Binding TodayTimeText}"
+                               Style="{StaticResource StatNumber}"
+                               HorizontalAlignment="Left"/>
+                    
+                    <!-- Subtitle -->
+                    <TextBlock Text="{Binding ContextLine}"
+                               Style="{StaticResource StatLabel}"
+                               Margin="0,4,0,0"/>
+
+                    <!-- ============================================ -->
+                    <!-- HOURLY COLUMN CHART (Samsung Blue Bars) -->
+                    <!-- ============================================ -->
+                    <Border x:Name="TimelineBorder"
+                            Margin="0,24,0,0"
+                            Height="120">
+                        <Grid>
+                            <!-- Chart Area -->
+                            <Canvas x:Name="RealTimeCanvas" Background="Transparent"/>
+                            
+                            <!-- Goal Line (Red Dashed) - if goal is set -->
+                            <Border Style="{StaticResource GoalLineContainer}"
+                                    VerticalAlignment="Top"
+                                    Margin="0,30,0,0"
+                                    Visibility="{Binding HasGoal, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        </Grid>
                     </Border>
 
-                    <!-- Stats -->
-                    <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
-                        <TextBlock Text="Today's Screen Time"
-                                   Style="{StaticResource LabelSecondary}"/>
-                        <TextBlock Text="{Binding TodayTimeText}"
-                                   Style="{StaticResource StatNumber}"
-                                   Margin="0,4,0,0"/>
-                        <!-- Context Line (Phase 2.2) -->
-                        <TextBlock Text="{Binding ContextLine}"
-                                   Style="{StaticResource LabelMuted}"
-                                   Margin="0,4,0,0"/>
-                    </StackPanel>
-                </Grid>
+                    <!-- Hour Labels -->
+                    <ItemsControl ItemsSource="{Binding HourMarkers}"
+                                  Margin="0,4,0,0">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Rows="1" Columns="24"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Style="{StaticResource ChartAxisLabel}"
+                                           HorizontalAlignment="Center">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource HourDynamicLabelConverter}">
+                                            <Binding/>
+                                            <Binding ElementName="TimelineBorder" Path="ActualWidth"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                    <TextBlock.Visibility>
+                                        <MultiBinding Converter="{StaticResource HourVisibilityConverter}">
+                                            <Binding/>
+                                            <Binding ElementName="TimelineBorder" Path="ActualWidth"/>
+                                        </MultiBinding>
+                                    </TextBlock.Visibility>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
             </Border>
 
-            <!-- Goal Progress Bar (Phase 3.4) -->
+            <!-- ============================================ -->
+            <!-- GOAL PROGRESS CARD -->
+            <!-- ============================================ -->
             <Border Style="{StaticResource CardBase}" 
-                    Margin="0,0,0,16"
+                    Margin="{StaticResource Margin.Card}"
                     Visibility="{Binding HasGoal, Converter={StaticResource BoolToVisibilityConverter}}">
                 <StackPanel>
-                    <Grid Margin="0,0,0,8">
+                    <Grid Margin="0,0,0,12">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Daily Goal"
-                                   Style="{StaticResource LabelSecondary}"/>
+                        <TextBlock Text="Daily goal"
+                                   Style="{StaticResource SectionHeader}"
+                                   Margin="0"/>
                         <TextBlock Grid.Column="1"
                                    Text="{Binding GoalProgressText}"
-                                   Style="{StaticResource LabelPrimary}"/>
+                                   Style="{StaticResource ValueDisplay}"/>
                     </Grid>
                     
                     <!-- Progress Bar -->
                     <Border x:Name="GoalProgressContainer"
                             Background="{DynamicResource Bg.Elevated}"
-                            CornerRadius="4"
+                            CornerRadius="{DynamicResource Radius.Full}"
                             Height="8">
                         <Border Background="{Binding GoalProgress, Converter={StaticResource GoalProgressToColorConverter}}"
-                                CornerRadius="4"
+                                CornerRadius="{DynamicResource Radius.Full}"
                                 HorizontalAlignment="Left">
                             <Border.Width>
                                 <MultiBinding Converter="{StaticResource GoalProgressToWidthConverter}">
@@ -123,8 +196,11 @@
                 </StackPanel>
             </Border>
 
-            <!-- Quick Stats Row (Phase 2.3) -->
-            <Border Style="{StaticResource CardBase}" Margin="0,0,0,24">
+            <!-- ============================================ -->
+            <!-- QUICK STATS CARD -->
+            <!-- ============================================ -->
+            <Border Style="{StaticResource CardBase}"
+                    Margin="{StaticResource Margin.Card}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -135,104 +211,123 @@
                     <!-- Sessions -->
                     <StackPanel Grid.Column="0" HorizontalAlignment="Center">
                         <TextBlock Text="{Binding SessionCount}"
-                                   Style="{StaticResource HeadingMedium}"
+                                   Style="{StaticResource ValueDisplay}"
                                    HorizontalAlignment="Center"/>
                         <TextBlock Text="Sessions"
-                                   Style="{StaticResource LabelMuted}"
-                                   HorizontalAlignment="Center"/>
+                                   Style="{StaticResource LabelSecondary}"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,4,0,0"/>
                     </StackPanel>
 
                     <!-- Longest -->
                     <StackPanel Grid.Column="1" HorizontalAlignment="Center">
                         <TextBlock Text="{Binding LongestSession}"
-                                   Style="{StaticResource HeadingMedium}"
+                                   Style="{StaticResource ValueDisplay}"
                                    HorizontalAlignment="Center"/>
                         <TextBlock Text="Longest"
-                                   Style="{StaticResource LabelMuted}"
-                                   HorizontalAlignment="Center"/>
+                                   Style="{StaticResource LabelSecondary}"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,4,0,0"/>
                     </StackPanel>
 
                     <!-- Breaks -->
                     <StackPanel Grid.Column="2" HorizontalAlignment="Center">
                         <TextBlock Text="{Binding BreakCount}"
-                                   Style="{StaticResource HeadingMedium}"
+                                   Style="{StaticResource ValueDisplay}"
                                    HorizontalAlignment="Center"/>
                         <TextBlock Text="Breaks"
-                                   Style="{StaticResource LabelMuted}"
-                                   HorizontalAlignment="Center"/>
+                                   Style="{StaticResource LabelSecondary}"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,4,0,0"/>
                     </StackPanel>
                 </Grid>
             </Border>
 
-            <!-- Timeline Section -->
-            <TextBlock Text="TODAY'S ACTIVITY"
-                       Style="{StaticResource NavSectionHeader}"
-                       Margin="0,0,0,12"/>
+            <!-- ============================================ -->
+            <!-- WEEKLY USAGE SECTION -->
+            <!-- ============================================ -->
+            <TextBlock Text="This week"
+                       Style="{StaticResource SectionHeader}"
+                       Margin="0,8,0,0"/>
 
-            <!-- Timeline -->
-            <Border x:Name="TimelineBorder"
-                    Style="{StaticResource CardBase}"
-                    Padding="16"
-                    Margin="0,0,0,8">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="60"/>
-                    </Grid.RowDefinitions>
+            <Border Style="{StaticResource CardBase}">
+                <StackPanel>
+                    <!-- Weekly Average -->
+                    <Grid Margin="0,0,0,16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Daily average"
+                                   Style="{StaticResource LabelSecondary}"/>
+                        <TextBlock Grid.Column="1"
+                                   Text="{Binding WeeklyAverageText}"
+                                   Style="{StaticResource ValueDisplay}"/>
+                    </Grid>
 
-                    <!-- Timeline Bar -->
-                    <Border Grid.Row="1"
-                            Background="{DynamicResource Bg.Elevated}"
-                            CornerRadius="4"
-                            Height="40"
-                            VerticalAlignment="Center">
-                        <Canvas x:Name="RealTimeCanvas" Background="Transparent"/>
-                    </Border>
-                </Grid>
+                    <!-- Day-by-day list -->
+                    <ItemsControl ItemsSource="{Binding WeeklyUsage}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,0,0,12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="48"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Day Name -->
+                                    <TextBlock Grid.Column="0"
+                                               Text="{Binding Day}"
+                                               Style="{StaticResource ListItemName}"
+                                               VerticalAlignment="Center">
+                                        <TextBlock.FontWeight>
+                                            <Binding Path="IsToday">
+                                                <Binding.Converter>
+                                                    <conv:BoolToFontWeightConverter/>
+                                                </Binding.Converter>
+                                            </Binding>
+                                        </TextBlock.FontWeight>
+                                    </TextBlock>
+
+                                    <!-- Progress Bar -->
+                                    <Border Grid.Column="1"
+                                            Background="{DynamicResource Bg.Elevated}"
+                                            CornerRadius="{DynamicResource Radius.Full}"
+                                            Height="8"
+                                            Margin="12,0"
+                                            VerticalAlignment="Center">
+                                        <Border Background="{DynamicResource Chart.Primary}"
+                                                CornerRadius="{DynamicResource Radius.Full}"
+                                                HorizontalAlignment="Left"
+                                                Width="{Binding Usage, Converter={StaticResource UsageToWidthConverter}}"/>
+                                    </Border>
+
+                                    <!-- Duration -->
+                                    <TextBlock Grid.Column="2"
+                                               Text="{Binding Usage}"
+                                               Style="{StaticResource ListItemDuration}"
+                                               VerticalAlignment="Center"
+                                               MinWidth="60"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
             </Border>
 
-            <!-- Hour Labels -->
-            <ItemsControl ItemsSource="{Binding HourMarkers}"
-                          Margin="16,0,16,8"
-                          Width="{Binding ActualWidth, ElementName=TimelineBorder}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Rows="1" Columns="24"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Style="{StaticResource LabelMuted}"
-                                   HorizontalAlignment="Center">
-                            <TextBlock.Text>
-                                <MultiBinding Converter="{StaticResource HourDynamicLabelConverter}">
-                                    <Binding/>
-                                    <Binding ElementName="TimelineBorder" Path="ActualWidth"/>
-                                </MultiBinding>
-                            </TextBlock.Text>
-                            <TextBlock.Visibility>
-                                <MultiBinding Converter="{StaticResource HourVisibilityConverter}">
-                                    <Binding/>
-                                    <Binding ElementName="TimelineBorder" Path="ActualWidth"/>
-                                </MultiBinding>
-                            </TextBlock.Visibility>
-                        </TextBlock>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-
-            <!-- Timeline Legend (Phase 2.4) -->
+            <!-- Timeline Legend -->
             <StackPanel Orientation="Horizontal" 
                         HorizontalAlignment="Center"
-                        Margin="0,0,0,24">
-                <StackPanel Orientation="Horizontal" Margin="0,0,16,0">
+                        Margin="0,16,0,0">
+                <StackPanel Orientation="Horizontal" Margin="0,0,20,0">
                     <Border Width="12" Height="12" 
-                            Background="{DynamicResource Accent.Primary}"
+                            Background="{DynamicResource Chart.Primary}"
                             CornerRadius="2"
                             VerticalAlignment="Center"/>
                     <TextBlock Text="Active"
-                               Style="{StaticResource LabelMuted}"
-                               Margin="6,0,0,0"
+                               Style="{StaticResource LabelSecondary}"
+                               Margin="8,0,0,0"
                                VerticalAlignment="Center"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
@@ -240,79 +335,12 @@
                             Background="{DynamicResource Bg.Elevated}"
                             CornerRadius="2"
                             VerticalAlignment="Center"/>
-                    <TextBlock Text="Away"
-                               Style="{StaticResource LabelMuted}"
-                               Margin="6,0,0,0"
+                    <TextBlock Text="Idle"
+                               Style="{StaticResource LabelSecondary}"
+                               Margin="8,0,0,0"
                                VerticalAlignment="Center"/>
                 </StackPanel>
             </StackPanel>
-
-            <!-- Weekly Usage Section -->
-            <Grid Margin="0,0,0,12">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="THIS WEEK"
-                           Style="{StaticResource NavSectionHeader}"/>
-                <!-- Weekly Average (Phase 2.5) -->
-                <TextBlock Grid.Column="1"
-                           Style="{StaticResource LabelSecondary}">
-                    <Run Text="Avg: "/>
-                    <Run Text="{Binding WeeklyAverageText, Mode=OneWay}"/>
-                </TextBlock>
-            </Grid>
-
-            <Border Style="{StaticResource CardBase}">
-                <ItemsControl ItemsSource="{Binding WeeklyUsage}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Margin="0,8">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-
-                                <!-- Day Name -->
-                                <TextBlock Grid.Column="0"
-                                           Text="{Binding Day}"
-                                           Style="{StaticResource BodyMedium}"
-                                           VerticalAlignment="Center">
-                                    <TextBlock.FontWeight>
-                                        <Binding Path="IsToday">
-                                            <Binding.Converter>
-                                                <conv:BoolToFontWeightConverter/>
-                                            </Binding.Converter>
-                                        </Binding>
-                                    </TextBlock.FontWeight>
-                                </TextBlock>
-
-                                <!-- Progress Bar -->
-                                <Border Grid.Column="1"
-                                        Background="{DynamicResource Bg.Elevated}"
-                                        CornerRadius="4"
-                                        Height="8"
-                                        Margin="16,0"
-                                        VerticalAlignment="Center">
-                                    <Border Background="{DynamicResource Accent.Primary}"
-                                            CornerRadius="4"
-                                            HorizontalAlignment="Left"
-                                            Width="{Binding Usage, Converter={StaticResource UsageToWidthConverter}}"/>
-                                </Border>
-
-                                <!-- Duration -->
-                                <TextBlock Grid.Column="2"
-                                           Text="{Binding Usage}"
-                                           Style="{StaticResource LabelPrimary}"
-                                           VerticalAlignment="Center"
-                                           MinWidth="80"
-                                           TextAlignment="Right"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </Border>
 
         </StackPanel>
     </ScrollViewer>

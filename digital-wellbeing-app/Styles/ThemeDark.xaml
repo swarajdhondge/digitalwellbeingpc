@@ -4,36 +4,47 @@
 
     <!-- 
     ============================================
-    DARK THEME - Slate + Teal Palette
+    DARK THEME - Samsung Digital Wellbeing Style
+    v1.7 Design Revamp - Extracted from Screenshots
     ============================================
     -->
 
-    <!-- Background Colors (Slate - Blue-Gray Tint) -->
-    <Color x:Key="Bg.PrimaryColor">#0F172A</Color>         <!-- Slate 950 - Darkest (sidebar) -->
-    <Color x:Key="Bg.SecondaryColor">#1E293B</Color>       <!-- Slate 900 - Content area -->
-    <Color x:Key="Bg.CardColor">#334155</Color>            <!-- Slate 700 - Cards -->
-    <Color x:Key="Bg.ElevatedColor">#475569</Color>        <!-- Slate 600 - Hover states -->
+    <!-- Background Colors (True Black/Dark Gray) -->
+    <Color x:Key="Bg.PrimaryColor">#0A0A0A</Color>         <!-- Near-black main background -->
+    <Color x:Key="Bg.SecondaryColor">#0A0A0A</Color>       <!-- Same for sidebar -->
+    <Color x:Key="Bg.CardColor">#1A1A1A</Color>            <!-- Dark gray cards -->
+    <Color x:Key="Bg.ElevatedColor">#1E1E1E</Color>        <!-- Slightly lighter for hover -->
 
     <!-- Border Colors -->
-    <Color x:Key="Border.DefaultColor">#334155</Color>     <!-- Slate 700 -->
-    <Color x:Key="Border.SubtleColor">#1E293B</Color>      <!-- Slate 900 -->
+    <Color x:Key="Border.DefaultColor">#2A2A2A</Color>     <!-- Subtle dark border -->
+    <Color x:Key="Border.SubtleColor">#1A1A1A</Color>      <!-- Very subtle -->
 
     <!-- Text Colors -->
-    <Color x:Key="Text.PrimaryColor">#F1F5F9</Color>       <!-- Slate 100 - Headings, body -->
-    <Color x:Key="Text.SecondaryColor">#94A3B8</Color>     <!-- Slate 400 - Labels -->
-    <Color x:Key="Text.MutedColor">#64748B</Color>         <!-- Slate 500 - Hints, disabled -->
+    <Color x:Key="Text.PrimaryColor">#FFFFFF</Color>       <!-- Pure white for headings/stats -->
+    <Color x:Key="Text.SecondaryColor">#9CA3AF</Color>     <!-- Gray for labels -->
+    <Color x:Key="Text.MutedColor">#6B7280</Color>         <!-- Darker gray for hints -->
 
-    <!-- Accent Colors (Soft Teal) -->
-    <Color x:Key="Accent.PrimaryColor">#2DD4BF</Color>     <!-- Teal 400 -->
+    <!-- Accent Colors (Teal/Cyan) -->
+    <Color x:Key="Accent.PrimaryColor">#2DD4BF</Color>     <!-- Teal 400 - active toggle -->
     <Color x:Key="Accent.HoverColor">#5EEAD4</Color>       <!-- Teal 300 -->
-    <Color x:Key="Accent.SubtleColor">#134E4A</Color>      <!-- Teal 900 - Icon badges -->
-    <Color x:Key="Accent.OnAccentColor">#042F2E</Color>    <!-- Teal 950 - Text on accent -->
+    <Color x:Key="Accent.SubtleColor">#134E4A</Color>      <!-- Teal 900 - icon badges -->
+    <Color x:Key="Accent.OnAccentColor">#042F2E</Color>    <!-- Teal 950 - text on accent -->
+
+    <!-- Chart Colors (Samsung Blue) -->
+    <Color x:Key="Chart.PrimaryColor">#3B82F6</Color>      <!-- Blue - main chart bars -->
+    <Color x:Key="Chart.Segment1Color">#2DD4BF</Color>     <!-- Teal/Cyan - stacked bar -->
+    <Color x:Key="Chart.Segment2Color">#3B82F6</Color>     <!-- Blue - stacked bar -->
+    <Color x:Key="Chart.Segment3Color">#8B5CF6</Color>     <!-- Purple - stacked bar -->
 
     <!-- Status Colors -->
-    <Color x:Key="Status.SuccessColor">#22C55E</Color>     <!-- Green 500 -->
+    <Color x:Key="Status.SuccessColor">#22C55E</Color>     <!-- Green 500 - Normal badge -->
     <Color x:Key="Status.WarningColor">#F59E0B</Color>     <!-- Amber 500 -->
-    <Color x:Key="Status.DangerColor">#EF4444</Color>      <!-- Red 500 -->
+    <Color x:Key="Status.DangerColor">#EF4444</Color>      <!-- Red 500 - Goal line -->
     <Color x:Key="Status.InfoColor">#3B82F6</Color>        <!-- Blue 500 -->
+
+    <!-- Week Selector -->
+    <Color x:Key="Selector.ActiveColor">#374151</Color>    <!-- Gray fill when selected -->
+    <Color x:Key="Selector.InactiveColor">Transparent</Color>
 
     <!-- ============================================ -->
     <!-- BRUSHES -->
@@ -60,18 +71,27 @@
     <SolidColorBrush x:Key="Accent.Subtle" Color="{StaticResource Accent.SubtleColor}"/>
     <SolidColorBrush x:Key="Accent.OnAccent" Color="{StaticResource Accent.OnAccentColor}"/>
 
+    <!-- Chart Brushes -->
+    <SolidColorBrush x:Key="Chart.Primary" Color="{StaticResource Chart.PrimaryColor}"/>
+    <SolidColorBrush x:Key="Chart.Segment1" Color="{StaticResource Chart.Segment1Color}"/>
+    <SolidColorBrush x:Key="Chart.Segment2" Color="{StaticResource Chart.Segment2Color}"/>
+    <SolidColorBrush x:Key="Chart.Segment3" Color="{StaticResource Chart.Segment3Color}"/>
+
     <!-- Status Brushes -->
     <SolidColorBrush x:Key="Status.Success" Color="{StaticResource Status.SuccessColor}"/>
     <SolidColorBrush x:Key="Status.Warning" Color="{StaticResource Status.WarningColor}"/>
     <SolidColorBrush x:Key="Status.Danger" Color="{StaticResource Status.DangerColor}"/>
     <SolidColorBrush x:Key="Status.Info" Color="{StaticResource Status.InfoColor}"/>
 
+    <!-- Selector Brushes -->
+    <SolidColorBrush x:Key="Selector.Active" Color="{StaticResource Selector.ActiveColor}"/>
+    <SolidColorBrush x:Key="Selector.Inactive" Color="{StaticResource Selector.InactiveColor}"/>
+
     <!-- ============================================ -->
-    <!-- SHADOWS (Darker for dark theme) -->
+    <!-- SHADOWS (None for Samsung style) -->
     <!-- ============================================ -->
-    <DropShadowEffect x:Key="Shadow.SM" BlurRadius="4" ShadowDepth="1" Opacity="0.4" Color="#000000"/>
-    <DropShadowEffect x:Key="Shadow.MD" BlurRadius="8" ShadowDepth="2" Opacity="0.5" Color="#000000"/>
-    <DropShadowEffect x:Key="Shadow.LG" BlurRadius="16" ShadowDepth="4" Opacity="0.6" Color="#000000"/>
+    <DropShadowEffect x:Key="Shadow.SM" BlurRadius="0" ShadowDepth="0" Opacity="0" Color="#000000"/>
+    <DropShadowEffect x:Key="Shadow.MD" BlurRadius="0" ShadowDepth="0" Opacity="0" Color="#000000"/>
+    <DropShadowEffect x:Key="Shadow.LG" BlurRadius="0" ShadowDepth="0" Opacity="0" Color="#000000"/>
 
 </ResourceDictionary>
-

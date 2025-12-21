@@ -1,0 +1,289 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- 
+    ============================================
+    COMPONENT STYLES
+    v1.7 Design Revamp - Samsung Digital Wellbeing Style
+    
+    New reusable components:
+    - PillBadge (Normal/Warning status)
+    - ViewToggle (Today/Weekly view)
+    - WeekSelector pills
+    - StackedBar segments
+    - ColoredDot for app list
+    - IconContainer for categories
+    - GoalLine for charts
+    ============================================
+    -->
+
+    <!-- ============================================ -->
+    <!-- STATUS BADGE (rectangular with small radius) -->
+    <!-- ============================================ -->
+
+    <!-- Base Status Badge -->
+    <Style x:Key="PillBadge" TargetType="Border">
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.SM}"/>
+        <Setter Property="Padding" Value="12,4"/>
+        <Setter Property="Background" Value="{DynamicResource Status.Success}"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <!-- Success Badge (Green - "Normal") -->
+    <Style x:Key="PillBadgeSuccess" TargetType="Border" BasedOn="{StaticResource PillBadge}">
+        <Setter Property="Background" Value="{DynamicResource Status.Success}"/>
+    </Style>
+
+    <!-- Warning Badge (Amber) -->
+    <Style x:Key="PillBadgeWarning" TargetType="Border" BasedOn="{StaticResource PillBadge}">
+        <Setter Property="Background" Value="{DynamicResource Status.Warning}"/>
+    </Style>
+
+    <!-- Danger Badge (Red) -->
+    <Style x:Key="PillBadgeDanger" TargetType="Border" BasedOn="{StaticResource PillBadge}">
+        <Setter Property="Background" Value="{DynamicResource Status.Danger}"/>
+    </Style>
+
+    <!-- Info Badge (Blue) -->
+    <Style x:Key="PillBadgeInfo" TargetType="Border" BasedOn="{StaticResource PillBadge}">
+        <Setter Property="Background" Value="{DynamicResource Status.Info}"/>
+    </Style>
+
+    <!-- ============================================ -->
+    <!-- VIEW TOGGLE (Today / Weekly view) -->
+    <!-- ============================================ -->
+
+    <!-- Toggle Container -->
+    <Style x:Key="ViewToggleContainer" TargetType="StackPanel">
+        <Setter Property="Orientation" Value="Horizontal"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Margin" Value="0,0,0,16"/>
+    </Style>
+
+    <!-- Toggle Separator -->
+    <Style x:Key="ViewToggleSeparator" TargetType="TextBlock">
+        <Setter Property="Text" Value="/"/>
+        <Setter Property="FontSize" Value="{DynamicResource Font.MD}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Muted}"/>
+        <Setter Property="Margin" Value="8,0"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <!-- ============================================ -->
+    <!-- WEEK SELECTOR PILLS (W47, W48, W49, W50) -->
+    <!-- ============================================ -->
+
+    <!-- Week Selector Container -->
+    <Style x:Key="WeekSelectorContainer" TargetType="StackPanel">
+        <Setter Property="Orientation" Value="Horizontal"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Margin" Value="0,0,0,20"/>
+    </Style>
+
+    <!-- Week Selector - Inactive -->
+    <Style x:Key="WeekPill" TargetType="Border">
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.SM}"/>
+        <Setter Property="Padding" Value="16,8"/>
+        <Setter Property="Margin" Value="0,0,8,0"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Cursor" Value="Hand"/>
+    </Style>
+
+    <!-- Week Pill - Active (Gray filled) -->
+    <Style x:Key="WeekPillActive" TargetType="Border" BasedOn="{StaticResource WeekPill}">
+        <Setter Property="Background" Value="{DynamicResource Selector.Active}"/>
+    </Style>
+
+    <!-- ============================================ -->
+    <!-- STACKED HORIZONTAL BAR -->
+    <!-- ============================================ -->
+
+    <!-- Stacked Bar Container (flat rectangular with minimal radius) -->
+    <Style x:Key="StackedBarContainer" TargetType="Border">
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.XS}"/>
+        <Setter Property="Height" Value="{DynamicResource Chart.StackedBarHeight}"/>
+        <Setter Property="ClipToBounds" Value="True"/>
+        <Setter Property="Background" Value="{DynamicResource Bg.Elevated}"/>
+        <Setter Property="Margin" Value="0,16,0,16"/>
+    </Style>
+
+    <!-- Stacked Bar Inner (holds the colored segments) -->
+    <Style x:Key="StackedBarInner" TargetType="Grid">
+        <Setter Property="ClipToBounds" Value="True"/>
+    </Style>
+
+    <!-- ============================================ -->
+    <!-- COLORED DOT (for app list) -->
+    <!-- ============================================ -->
+
+    <!-- Base Dot -->
+    <Style x:Key="ColorDot" TargetType="Ellipse">
+        <Setter Property="Width" Value="{DynamicResource Dot.Size}"/>
+        <Setter Property="Height" Value="{DynamicResource Dot.Size}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,0,12,0"/>
+    </Style>
+
+    <!-- Segment 1 Dot (Teal) -->
+    <Style x:Key="ColorDotTeal" TargetType="Ellipse" BasedOn="{StaticResource ColorDot}">
+        <Setter Property="Fill" Value="{DynamicResource Chart.Segment1}"/>
+    </Style>
+
+    <!-- Segment 2 Dot (Blue) -->
+    <Style x:Key="ColorDotBlue" TargetType="Ellipse" BasedOn="{StaticResource ColorDot}">
+        <Setter Property="Fill" Value="{DynamicResource Chart.Segment2}"/>
+    </Style>
+
+    <!-- Segment 3 Dot (Purple) -->
+    <Style x:Key="ColorDotPurple" TargetType="Ellipse" BasedOn="{StaticResource ColorDot}">
+        <Setter Property="Fill" Value="{DynamicResource Chart.Segment3}"/>
+    </Style>
+
+    <!-- ============================================ -->
+    <!-- ICON CONTAINER (for category list) -->
+    <!-- ============================================ -->
+
+    <!-- Category Icon Container (rounded square with icon) -->
+    <Style x:Key="IconContainer" TargetType="Border">
+        <Setter Property="Width" Value="{DynamicResource IconContainer.Size}"/>
+        <Setter Property="Height" Value="{DynamicResource IconContainer.Size}"/>
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Icon}"/>
+        <Setter Property="Margin" Value="0,0,12,0"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <!-- Video Category (Red/Orange) -->
+    <Style x:Key="IconContainerVideo" TargetType="Border" BasedOn="{StaticResource IconContainer}">
+        <Setter Property="Background" Value="#EF4444"/>
+    </Style>
+
+    <!-- Social Category (Blue) -->
+    <Style x:Key="IconContainerSocial" TargetType="Border" BasedOn="{StaticResource IconContainer}">
+        <Setter Property="Background" Value="#3B82F6"/>
+    </Style>
+
+    <!-- Productivity Category (Green) -->
+    <Style x:Key="IconContainerProductivity" TargetType="Border" BasedOn="{StaticResource IconContainer}">
+        <Setter Property="Background" Value="#22C55E"/>
+    </Style>
+
+    <!-- Entertainment Category (Purple) -->
+    <Style x:Key="IconContainerEntertainment" TargetType="Border" BasedOn="{StaticResource IconContainer}">
+        <Setter Property="Background" Value="#8B5CF6"/>
+    </Style>
+
+    <!-- ============================================ -->
+    <!-- CHART COMPONENTS -->
+    <!-- ============================================ -->
+
+    <!-- Column Chart Bar (rounded top only) -->
+    <Style x:Key="ChartBar" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Chart.Primary}"/>
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.BarTop}"/>
+        <Setter Property="Width" Value="{DynamicResource Chart.BarWidth}"/>
+        <Setter Property="VerticalAlignment" Value="Bottom"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+    </Style>
+
+    <!-- Goal Line (Red dashed) -->
+    <Style x:Key="GoalLine" TargetType="Line">
+        <Setter Property="Stroke" Value="{DynamicResource Status.Danger}"/>
+        <Setter Property="StrokeThickness" Value="2"/>
+        <Setter Property="StrokeDashArray" Value="4,4"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    </Style>
+
+    <!-- Goal Line Container -->
+    <Style x:Key="GoalLineContainer" TargetType="Border">
+        <Setter Property="BorderBrush" Value="{DynamicResource Status.Danger}"/>
+        <Setter Property="BorderThickness" Value="0,2,0,0"/>
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    </Style>
+
+    <!-- Checkmark Circle (Green - goal met) -->
+    <Style x:Key="GoalCheckmark" TargetType="Border">
+        <Setter Property="Width" Value="20"/>
+        <Setter Property="Height" Value="20"/>
+        <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="Background" Value="{DynamicResource Status.Success}"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,4,0,0"/>
+    </Style>
+
+    <!-- ============================================ -->
+    <!-- DATE SELECTOR (for daily views) -->
+    <!-- ============================================ -->
+
+    <!-- Date Number - Inactive -->
+    <Style x:Key="DateNumber" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{DynamicResource Font.MD}"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Secondary}"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="8,0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+    </Style>
+
+    <!-- Date Number Container - Active (Circle) -->
+    <Style x:Key="DateNumberActive" TargetType="Border">
+        <Setter Property="Width" Value="32"/>
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="CornerRadius" Value="16"/>
+        <Setter Property="Background" Value="{DynamicResource Selector.Active}"/>
+        <Setter Property="Margin" Value="4,0"/>
+    </Style>
+
+    <!-- Date Number - Disabled (Future) -->
+    <Style x:Key="DateNumberDisabled" TargetType="TextBlock" BasedOn="{StaticResource DateNumber}">
+        <Setter Property="Foreground" Value="{DynamicResource Text.Muted}"/>
+        <Setter Property="Opacity" Value="0.5"/>
+    </Style>
+
+    <!-- ============================================ -->
+    <!-- LIST ITEM COMPONENTS -->
+    <!-- ============================================ -->
+
+    <!-- App List Item Container -->
+    <Style x:Key="AppListItem" TargetType="Grid">
+        <Setter Property="Margin" Value="0,0,0,12"/>
+    </Style>
+
+    <!-- Category List Item Container -->
+    <Style x:Key="CategoryListItem" TargetType="Grid">
+        <Setter Property="Margin" Value="0,0,0,16"/>
+    </Style>
+
+    <!-- ============================================ -->
+    <!-- COMPARISON ROW (e.g., "Compared to yesterday | +5 dB") -->
+    <!-- ============================================ -->
+
+    <Style x:Key="ComparisonRow" TargetType="Grid">
+        <Setter Property="Margin" Value="0,12,0,0"/>
+    </Style>
+
+    <!-- ============================================ -->
+    <!-- SCREEN ON/OFF BAR (Horizontal comparison) -->
+    <!-- ============================================ -->
+
+    <Style x:Key="ComparisonBar" TargetType="Border">
+        <Setter Property="Height" Value="8"/>
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.XS}"/>
+        <Setter Property="Margin" Value="0,12,0,8"/>
+    </Style>
+
+    <!-- ============================================ -->
+    <!-- TIP SECTION -->
+    <!-- ============================================ -->
+
+    <Style x:Key="TipContainer" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Bg.Elevated}"/>
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Card}"/>
+        <Setter Property="Padding" Value="16"/>
+        <Setter Property="Margin" Value="0,16,0,0"/>
+    </Style>
+
+</ResourceDictionary>
+

@@ -5,7 +5,7 @@
     <!-- 
     ============================================
     SHARED DESIGN TOKENS (Theme-Independent)
-    These values don't change between light/dark
+    v1.7 Design Revamp - Samsung Digital Wellbeing Style
     ============================================
     -->
 
@@ -18,26 +18,43 @@
     <sys:Double x:Key="Spacing.SM" xmlns:sys="clr-namespace:System;assembly=mscorlib">8</sys:Double>
     <sys:Double x:Key="Spacing.MD" xmlns:sys="clr-namespace:System;assembly=mscorlib">12</sys:Double>
     <sys:Double x:Key="Spacing.LG" xmlns:sys="clr-namespace:System;assembly=mscorlib">16</sys:Double>
-    <sys:Double x:Key="Spacing.XL" xmlns:sys="clr-namespace:System;assembly=mscorlib">24</sys:Double>
-    <sys:Double x:Key="Spacing.XXL" xmlns:sys="clr-namespace:System;assembly=mscorlib">32</sys:Double>
-    <sys:Double x:Key="Spacing.XXXL" xmlns:sys="clr-namespace:System;assembly=mscorlib">48</sys:Double>
+    <sys:Double x:Key="Spacing.XL" xmlns:sys="clr-namespace:System;assembly=mscorlib">20</sys:Double>
+    <sys:Double x:Key="Spacing.XXL" xmlns:sys="clr-namespace:System;assembly=mscorlib">24</sys:Double>
+    <sys:Double x:Key="Spacing.XXXL" xmlns:sys="clr-namespace:System;assembly=mscorlib">32</sys:Double>
 
+    <!-- Padding (Samsung style: generous 20-24px) -->
     <Thickness x:Key="Padding.XS">4</Thickness>
     <Thickness x:Key="Padding.SM">8</Thickness>
     <Thickness x:Key="Padding.MD">12</Thickness>
     <Thickness x:Key="Padding.LG">16</Thickness>
-    <Thickness x:Key="Padding.XL">24</Thickness>
+    <Thickness x:Key="Padding.XL">20</Thickness>
+    <Thickness x:Key="Padding.XXL">24</Thickness>
+    <Thickness x:Key="Padding.Card">20</Thickness>          <!-- Standard card padding -->
+
+    <!-- Card Spacing (Samsung: 16-20px between cards) -->
+    <Thickness x:Key="Margin.Card">0,0,0,16</Thickness>
+    <Thickness x:Key="Margin.CardGrid">0,0,0,20</Thickness>
 
     <!-- 
     ============================================
-    BORDER RADIUS
+    BORDER RADIUS (Samsung Style)
     ============================================
     -->
-    <CornerRadius x:Key="Radius.SM">4</CornerRadius>
-    <CornerRadius x:Key="Radius.MD">8</CornerRadius>
-    <CornerRadius x:Key="Radius.LG">12</CornerRadius>
-    <CornerRadius x:Key="Radius.XL">16</CornerRadius>
-    <CornerRadius x:Key="Radius.Full">9999</CornerRadius>
+    <CornerRadius x:Key="Radius.XS">4</CornerRadius>
+    <CornerRadius x:Key="Radius.SM">8</CornerRadius>
+    <CornerRadius x:Key="Radius.MD">12</CornerRadius>
+    <CornerRadius x:Key="Radius.LG">16</CornerRadius>
+    <CornerRadius x:Key="Radius.XL">20</CornerRadius>       <!-- Card radius (Samsung) -->
+    <CornerRadius x:Key="Radius.Full">9999</CornerRadius>   <!-- Pill shape -->
+    
+    <!-- Card-specific radius -->
+    <CornerRadius x:Key="Radius.Card">20</CornerRadius>     <!-- Samsung: 16-20px -->
+    
+    <!-- Chart bar corners (rounded top only) -->
+    <CornerRadius x:Key="Radius.BarTop">6,6,0,0</CornerRadius>
+    
+    <!-- Icon container radius (Samsung: ~12px) -->
+    <CornerRadius x:Key="Radius.Icon">12</CornerRadius>
 
     <!-- 
     ============================================
@@ -48,19 +65,29 @@
     <sys:Double x:Key="TitleBar.Height" xmlns:sys="clr-namespace:System;assembly=mscorlib">48</sys:Double>
     <sys:Double x:Key="NavItem.Height" xmlns:sys="clr-namespace:System;assembly=mscorlib">44</sys:Double>
 
+    <!-- Chart Dimensions -->
+    <sys:Double x:Key="Chart.BarWidth" xmlns:sys="clr-namespace:System;assembly=mscorlib">24</sys:Double>
+    <sys:Double x:Key="Chart.StackedBarHeight" xmlns:sys="clr-namespace:System;assembly=mscorlib">14</sys:Double>
+
+    <!-- Badge/Dot Sizes -->
+    <sys:Double x:Key="Dot.Size" xmlns:sys="clr-namespace:System;assembly=mscorlib">10</sys:Double>
+    <sys:Double x:Key="IconContainer.Size" xmlns:sys="clr-namespace:System;assembly=mscorlib">40</sys:Double>
+
     <!-- 
     ============================================
-    FONT SIZES
+    FONT SIZES (Samsung Typography Scale)
     ============================================
     -->
     <sys:Double x:Key="Font.XS" xmlns:sys="clr-namespace:System;assembly=mscorlib">11</sys:Double>
     <sys:Double x:Key="Font.SM" xmlns:sys="clr-namespace:System;assembly=mscorlib">12</sys:Double>
     <sys:Double x:Key="Font.MD" xmlns:sys="clr-namespace:System;assembly=mscorlib">14</sys:Double>
     <sys:Double x:Key="Font.LG" xmlns:sys="clr-namespace:System;assembly=mscorlib">16</sys:Double>
-    <sys:Double x:Key="Font.XL" xmlns:sys="clr-namespace:System;assembly=mscorlib">20</sys:Double>
+    <sys:Double x:Key="Font.XL" xmlns:sys="clr-namespace:System;assembly=mscorlib">18</sys:Double>
     <sys:Double x:Key="Font.XXL" xmlns:sys="clr-namespace:System;assembly=mscorlib">24</sys:Double>
     <sys:Double x:Key="Font.XXXL" xmlns:sys="clr-namespace:System;assembly=mscorlib">32</sys:Double>
-    <sys:Double x:Key="Font.Hero" xmlns:sys="clr-namespace:System;assembly=mscorlib">48</sys:Double>
+    <sys:Double x:Key="Font.Stat" xmlns:sys="clr-namespace:System;assembly=mscorlib">40</sys:Double>   <!-- Volume stat size -->
+    <sys:Double x:Key="Font.Hero" xmlns:sys="clr-namespace:System;assembly=mscorlib">48</sys:Double>   <!-- Main hero stats -->
+    <sys:Double x:Key="Font.HeroLG" xmlns:sys="clr-namespace:System;assembly=mscorlib">56</sys:Double> <!-- Weekly report stat -->
 
     <!-- Font Family -->
     <FontFamily x:Key="Font.Primary">Segoe UI, San Francisco, Helvetica Neue, Arial</FontFamily>

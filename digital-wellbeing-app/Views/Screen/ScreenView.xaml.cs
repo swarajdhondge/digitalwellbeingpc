@@ -72,5 +72,15 @@
                 RealTimeCanvas.Children.Add(rect);
             }
         }
+
+        private void TodayToggle_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            _vm.IsWeeklyView = false;
+        }
+
+        private void WeeklyToggle_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            _vm.IsWeeklyView = true;
+        }
     }
 }

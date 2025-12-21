@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -13,6 +14,7 @@ namespace digital_wellbeing_app.ViewModels
     public class DashboardViewModel : INotifyPropertyChanged, IDisposable
     {
         private readonly SettingsService _settingsService = new();
+        private readonly ReportService _reportService = new();
         private readonly DispatcherTimer _refreshTimer;
         
         private string _screenTime = string.Empty;
@@ -23,6 +25,28 @@ namespace digital_wellbeing_app.ViewModels
         private ImageSource _topAppIcon = null!;
         private string _topAppName = string.Empty;
         private string _topAppDuration = string.Empty;
+
+        // Weekly summary
+        private string _weeklyScreenTime = string.Empty;
+        private string _weeklyChangeText = string.Empty;
+        private bool _weeklyImproved = false;
+
+        // Top apps for stacked bar
+        private ObservableCollection<TopAppInfo> _topApps = new();
+        
+        /// <summary>Model for top apps display</summary>
+        public class TopAppInfo : INotifyPropertyChanged
+        {
+            public string Name { get; set; } = string.Empty;
+            public string Duration { get; set; } = string.Empty;
+            public TimeSpan TotalTime { get; set; }
+            public double Percentage { get; set; }
+            public ImageSource? Icon { get; set; }
+            public string ExecutablePath { get; set; } = string.Empty;
+            public int ColorIndex { get; set; }
+            
+            public event PropertyChangedEventHandler? PropertyChanged;
+        }
 
         public string ScreenTime
         {
@@ -75,6 +99,34 @@ namespace digital_wellbeing_app.ViewModels
             set { if (_topAppDuration != value) { _topAppDuration = value; OnPropertyChanged(); } }
         }
 
+        /// <summary>Weekly total screen time formatted</summary>
+        public string WeeklyScreenTime
+        {
+            get => _weeklyScreenTime;
+            set { if (_weeklyScreenTime != value) { _weeklyScreenTime = value; OnPropertyChanged(); } }
+        }
+
+        /// <summary>Weekly change text (e.g., "↓ 12% vs last week")</summary>
+        public string WeeklyChangeText
+        {
+            get => _weeklyChangeText;
+            set { if (_weeklyChangeText != value) { _weeklyChangeText = value; OnPropertyChanged(); } }
+        }
+
+        /// <summary>Whether weekly screen time improved (decreased)</summary>
+        public bool WeeklyImproved
+        {
+            get => _weeklyImproved;
+            set { if (_weeklyImproved != value) { _weeklyImproved = value; OnPropertyChanged(); } }
+        }
+
+        /// <summary>Top 3 apps for stacked bar display</summary>
+        public ObservableCollection<TopAppInfo> TopApps
+        {
+            get => _topApps;
+            set { if (_topApps != value) { _topApps = value; OnPropertyChanged(); } }
+        }
+
         public DashboardViewModel()
         {
             // Initial load
@@ -107,7 +159,7 @@ namespace digital_wellbeing_app.ViewModels
             var tsScreen = period != null
                 ? TimeSpan.FromSeconds(period.AccumulatedActiveSeconds)
                 : TimeSpan.Zero;
-            ScreenTime = Format(tsScreen);
+            ScreenTime = FormatSamsung(tsScreen);
 
             // — Sound Sessions —
             var soundSessions = DatabaseService.GetSoundSessionsForDate(today);
@@ -116,24 +168,24 @@ namespace digital_wellbeing_app.ViewModels
             var tsSound = soundSessions.Aggregate(
                 TimeSpan.Zero,
                 (sum, s) => sum + s.ActualListeningDuration);
-            SoundTime = Format(tsSound);
+            SoundTime = FormatSamsung(tsSound);
 
             // total harmful
             var tsHarm = soundSessions.Aggregate(
                 TimeSpan.Zero,
                 (sum, s) => sum + s.HarmfulDuration);
-            SoundHarmfulTime = Format(tsHarm);
+            SoundHarmfulTime = FormatSamsung(tsHarm);
 
-            // — App Usage & Top App (unchanged) —
+            // — App Usage & Top Apps —
             var appSessions = DatabaseService.GetAppUsageSessionsForDate(today);
             var tsApp = appSessions.Aggregate(
                 TimeSpan.Zero,
                 (sum, s) => sum + (s.EndTime - s.StartTime));
-            AppTime = Format(tsApp);
+            AppTime = FormatSamsung(tsApp);
 
             if (appSessions.Count > 0)
             {
-                var top = appSessions
+                var grouped = appSessions
                     .GroupBy(s => s.ExecutablePath)
                     .Select(g => new {
                         Path = g.Key,
@@ -141,21 +193,75 @@ namespace digital_wellbeing_app.ViewModels
                         Total = new TimeSpan(g.Sum(s => (s.EndTime - s.StartTime).Ticks))
                     })
                     .OrderByDescending(x => x.Total)
-                    .First();
+                    .Take(3)
+                    .ToList();
 
-                TopAppName = top.Name;
-                TopAppDuration = Format(top.Total);
+                var top = grouped.First();
+                TopAppName = AppNameService.GetDisplayName(top.Name, top.Path);
+                TopAppDuration = FormatSamsung(top.Total);
                 TopAppIcon = AppIconService.GetIconForExe(top.Path) ?? null!;
+
+                // Build top apps list for stacked bar
+                var totalTicks = grouped.Sum(x => x.Total.Ticks);
+                var topAppsList = grouped.Select((app, index) => new TopAppInfo
+                {
+                    Name = AppNameService.GetDisplayName(app.Name, app.Path),
+                    Duration = FormatSamsung(app.Total),
+                    TotalTime = app.Total,
+                    Percentage = totalTicks > 0 ? (double)app.Total.Ticks / totalTicks * 100 : 0,
+                    Icon = AppIconService.GetIconForExe(app.Path),
+                    ExecutablePath = app.Path,
+                    ColorIndex = index
+                }).ToList();
+
+                TopApps = new ObservableCollection<TopAppInfo>(topAppsList);
             }
             else
             {
                 TopAppName = "—";
-                TopAppDuration = "0:00:00";
+                TopAppDuration = "0 m";
                 TopAppIcon = null!;
+                TopApps = new ObservableCollection<TopAppInfo>();
             }
+
+            // — Weekly Summary —
+            var (weeklyTotal, changePercent, improved) = _reportService.GetCurrentWeekSummary();
+            WeeklyScreenTime = FormatShort(weeklyTotal);
+            WeeklyImproved = improved;
+            
+            if (Math.Abs(changePercent) < 1)
+            {
+                WeeklyChangeText = "same as last week";
+            }
+            else
+            {
+                var arrow = improved ? "↓" : "↑";
+                WeeklyChangeText = $"{arrow} {Math.Abs(changePercent):F0}% vs last week";
+            }
+
             await Task.CompletedTask;
         }
 
+        /// <summary>Samsung style short format: "4h 20m" for weekly summary</summary>
+        private static string FormatShort(TimeSpan ts)
+        {
+            if (ts.TotalHours >= 1)
+                return $"{(int)ts.TotalHours}h {ts.Minutes}m";
+            return $"{ts.Minutes}m";
+        }
+
+        /// <summary>Samsung style format with spaces: "4 h 20 m"</summary>
+        private static string FormatSamsung(TimeSpan ts)
+        {
+            var hours = (int)ts.TotalHours;
+            var minutes = ts.Minutes;
+            
+            if (hours > 0)
+                return $"{hours} h {minutes} m";
+            return $"{minutes} m";
+        }
+
+        /// <summary>Legacy format for backward compatibility</summary>
         private static string Format(TimeSpan ts)
             => $"{(int)ts.TotalHours}:{ts.Minutes:D2}:{ts.Seconds:D2}";
 

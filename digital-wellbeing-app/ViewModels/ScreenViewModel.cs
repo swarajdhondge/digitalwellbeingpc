@@ -55,6 +55,22 @@ namespace digital_wellbeing_app.ViewModels
 
         #endregion
 
+        #region Properties - View Toggle
+
+        private bool _isWeeklyView;
+        public bool IsWeeklyView
+        {
+            get => _isWeeklyView;
+            set 
+            { 
+                if (_isWeeklyView == value) return; 
+                _isWeeklyView = value; 
+                OnPropertyChanged(nameof(IsWeeklyView)); 
+            }
+        }
+
+        #endregion
+
         #region Properties - Quick Stats (Phase 2.3)
 
         private int _sessionCount;
