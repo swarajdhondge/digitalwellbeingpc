@@ -8,8 +8,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    d:DesignHeight="500"
-    d:DesignWidth="800"
+    d:DesignHeight="800"
+    d:DesignWidth="500"
     Background="Transparent">
 
     <UserControl.DataContext>
@@ -23,204 +23,207 @@
         <conv:HourVisibilityConverter   x:Key="HourVisibilityConverter" />
     </UserControl.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel Margin="8">
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  Padding="20,16">
+        <StackPanel>
 
-            <!-- Page Header -->
-            <TextBlock Text="Sound Output"
+            <!-- ============================================ -->
+            <!-- PAGE HEADER -->
+            <!-- ============================================ -->
+            <TextBlock Text="Volume monitor"
                        Style="{StaticResource HeadingLarge}"
-                       Margin="0,0,0,24"/>
+                       Margin="0,0,0,16"/>
 
-            <!-- Stats Cards Row -->
-            <WrapPanel Orientation="Horizontal" Margin="0,0,0,24">
+            <!-- ============================================ -->
+            <!-- VIEW TOGGLE (Today / Weekly view) -->
+            <!-- ============================================ -->
+            <StackPanel Style="{StaticResource ViewToggleContainer}">
+                <TextBlock Text="Today"
+                           Style="{StaticResource ToggleActive}"/>
+                <TextBlock Style="{StaticResource ViewToggleSeparator}"/>
+                <TextBlock Text="Weekly view"
+                           Style="{StaticResource ToggleInactive}"/>
+            </StackPanel>
 
-                <!-- Total Listening Card -->
-                <Border Style="{StaticResource CardStat}" MinWidth="180">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
+            <!-- ============================================ -->
+            <!-- LOUD LISTENING CARD (Samsung Style) -->
+            <!-- ============================================ -->
+            <Border Style="{StaticResource CardBase}"
+                    Margin="{StaticResource Margin.Card}">
+                <StackPanel>
+                    <!-- Section Title -->
+                    <TextBlock Text="Loud listening time"
+                               Style="{StaticResource LabelSecondary}"
+                               Margin="0,0,0,8"/>
+                    
+                    <!-- Stat Row with Badge -->
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0,0,0,4">
+                        <!-- Hero Stat (harmful time or "0 m") -->
+                        <TextBlock Text="{Binding TotalHarmfulText}"
+                                   Style="{StaticResource StatNumberMedium}"/>
+                        
+                        <!-- Normal Badge (shown when no harmful exposure) -->
+                        <Border Style="{StaticResource PillBadgeSuccess}"
+                                Margin="16,0,0,0"
+                                VerticalAlignment="Center">
+                            <TextBlock Text="Normal"
+                                       Style="{StaticResource BadgeText}"/>
+                        </Border>
+                    </StackPanel>
+                    
+                    <!-- Subtitle -->
+                    <TextBlock Style="{StaticResource ComparisonText}"
+                               Margin="0,4,0,0">
+                        <Run Text="Out of "/>
+                        <Run Text="{Binding TotalListeningText, Mode=OneWay}"/>
+                        <Run Text=" total listening time"/>
+                    </TextBlock>
 
-                        <StackPanel Grid.Row="0" Orientation="Horizontal">
-                            <Border Background="{DynamicResource Status.Info}"
-                                    CornerRadius="6" Padding="6">
-                                <md:PackIcon Kind="VolumeHigh" Width="16" Height="16"
-                                             Foreground="{DynamicResource Accent.OnAccent}"/>
+                    <!-- ============================================ -->
+                    <!-- HOURLY COLUMN CHART -->
+                    <!-- ============================================ -->
+                    <Border x:Name="TimelineBorder"
+                            Margin="0,24,0,0"
+                            Height="100">
+                        <Grid>
+                            <Border Background="{DynamicResource Bg.Elevated}"
+                                    CornerRadius="4"
+                                    Height="80"
+                                    VerticalAlignment="Bottom">
+                                <Canvas x:Name="RealTimeCanvas" Background="Transparent"/>
                             </Border>
-                            <TextBlock Text="Listening"
-                                       Style="{StaticResource LabelPrimary}"
-                                       Margin="10,0,0,0" VerticalAlignment="Center"/>
-                        </StackPanel>
-
-                        <TextBlock Grid.Row="1"
-                                   Text="{Binding TotalListeningText}"
-                                   Style="{StaticResource StatNumber}"
-                                   VerticalAlignment="Center"
-                                   Margin="0,12,0,0"/>
-                    </Grid>
-                </Border>
-
-                <!-- Harmful Exposure Card -->
-                <Border Style="{StaticResource CardStat}"
-                        MinWidth="180"
-                        BorderBrush="{DynamicResource Status.Danger}"
-                        BorderThickness="0,0,0,3">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-
-                        <StackPanel Grid.Row="0" Orientation="Horizontal">
-                            <Border Background="{DynamicResource Status.Danger}"
-                                    CornerRadius="6" Padding="6">
-                                <md:PackIcon Kind="VolumeOff" Width="16" Height="16"
-                                             Foreground="{DynamicResource Accent.OnAccent}"/>
-                            </Border>
-                            <TextBlock Text="Harmful"
-                                       Style="{StaticResource LabelPrimary}"
-                                       Margin="10,0,0,0" VerticalAlignment="Center"/>
-                        </StackPanel>
-
-                        <TextBlock Grid.Row="1"
-                                   Text="{Binding TotalHarmfulText}"
-                                   FontFamily="{StaticResource Font.Primary}"
-                                   FontSize="32"
-                                   FontWeight="Bold"
-                                   Foreground="{DynamicResource Status.Danger}"
-                                   VerticalAlignment="Center"
-                                   Margin="0,12,0,0"/>
-
-                        <!-- Threshold Label -->
-                        <TextBlock Grid.Row="2"
-                                   Text="{Binding ThresholdLabel}"
-                                   Style="{StaticResource LabelSecondary}"
-                                   HorizontalAlignment="Center"
-                                   Margin="0,4,0,0"/>
-                    </Grid>
-                </Border>
-
-            </WrapPanel>
-
-            <!-- Timeline Section -->
-            <TextBlock Text="TODAY'S ACTIVITY"
-                       Style="{StaticResource NavSectionHeader}"
-                       Margin="0,0,0,12"/>
-
-            <!-- Timeline -->
-            <Border x:Name="TimelineBorder"
-                    Style="{StaticResource CardBase}"
-                    Padding="16"
-                    Margin="0,0,0,8">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="60"/>
-                    </Grid.RowDefinitions>
-
-                    <Border Background="{DynamicResource Bg.Elevated}"
-                            CornerRadius="4"
-                            Height="40"
-                            VerticalAlignment="Center">
-                        <Canvas x:Name="RealTimeCanvas" Background="Transparent"/>
+                        </Grid>
                     </Border>
+
+                    <!-- Hour Labels -->
+                    <ItemsControl ItemsSource="{Binding HourMarkers}"
+                                  Margin="0,4,0,0">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Rows="1" Columns="24"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Style="{StaticResource ChartAxisLabel}"
+                                           HorizontalAlignment="Center">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource HourDynamicLabelConverter}">
+                                            <Binding/>
+                                            <Binding ElementName="TimelineBorder" Path="ActualWidth"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                    <TextBlock.Visibility>
+                                        <MultiBinding Converter="{StaticResource HourVisibilityConverter}">
+                                            <Binding/>
+                                            <Binding ElementName="TimelineBorder" Path="ActualWidth"/>
+                                        </MultiBinding>
+                                    </TextBlock.Visibility>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <!-- ============================================ -->
+                    <!-- STATS ROWS (Average, Comparison) -->
+                    <!-- ============================================ -->
+                    <Grid Margin="0,20,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Average"
+                                   Style="{StaticResource LabelSecondary}"/>
+                        <TextBlock Grid.Column="1"
+                                   Text="{Binding AverageSPLText}"
+                                   Style="{StaticResource ValueDisplay}"/>
+                    </Grid>
+                    
+                    <Grid Margin="0,12,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Compared to yesterday"
+                                   Style="{StaticResource LabelSecondary}"/>
+                        <TextBlock Grid.Column="1"
+                                   Text="{Binding ComparisonText}"
+                                   Style="{StaticResource ComparisonText}"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- ============================================ -->
+            <!-- THRESHOLD INFO CARD -->
+            <!-- ============================================ -->
+            <Border Style="{StaticResource CardBase}"
+                    Margin="{StaticResource Margin.Card}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Harmful threshold"
+                                   Style="{StaticResource SectionHeader}"
+                                   Margin="0"/>
+                        <TextBlock Text="{Binding ThresholdLabel}"
+                                   Style="{StaticResource BodySmall}"
+                                   Margin="0,4,0,0"/>
+                    </StackPanel>
+                    
+                    <md:PackIcon Grid.Column="1"
+                                 Kind="InformationOutline"
+                                 Width="20" Height="20"
+                                 Foreground="{DynamicResource Text.Muted}"
+                                 VerticalAlignment="Center"/>
                 </Grid>
             </Border>
 
-            <!-- Hour Labels -->
-            <ItemsControl ItemsSource="{Binding HourMarkers}"
-                          Margin="16,0,16,8"
-                          Width="{Binding ActualWidth, ElementName=TimelineBorder}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Rows="1" Columns="24"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Style="{StaticResource LabelMuted}"
-                                   HorizontalAlignment="Center">
-                            <TextBlock.Text>
-                                <MultiBinding Converter="{StaticResource HourDynamicLabelConverter}">
-                                    <Binding/>
-                                    <Binding ElementName="TimelineBorder" Path="ActualWidth"/>
-                                </MultiBinding>
-                            </TextBlock.Text>
-                            <TextBlock.Visibility>
-                                <MultiBinding Converter="{StaticResource HourVisibilityConverter}">
-                                    <Binding/>
-                                    <Binding ElementName="TimelineBorder" Path="ActualWidth"/>
-                                </MultiBinding>
-                            </TextBlock.Visibility>
-                        </TextBlock>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-
-            <!-- Timeline Legend -->
-            <StackPanel Orientation="Horizontal" 
-                        HorizontalAlignment="Center"
-                        Margin="0,0,0,24">
-                <StackPanel Orientation="Horizontal" Margin="0,0,16,0">
-                    <Border Width="12" Height="12" 
-                            Background="{DynamicResource Accent.Primary}"
-                            CornerRadius="2"
-                            VerticalAlignment="Center"/>
-                    <TextBlock Text="Safe"
-                               Style="{StaticResource LabelMuted}"
-                               Margin="6,0,0,0"
-                               VerticalAlignment="Center"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Border Width="12" Height="12" 
-                            Background="{DynamicResource Status.Danger}"
-                            CornerRadius="2"
-                            VerticalAlignment="Center"/>
-                    <TextBlock Text="Harmful"
-                               Style="{StaticResource LabelMuted}"
-                               Margin="6,0,0,0"
-                               VerticalAlignment="Center"/>
-                </StackPanel>
-            </StackPanel>
-
-            <!-- Session Details Section -->
-            <TextBlock Text="SESSION DETAILS"
-                       Style="{StaticResource NavSectionHeader}"
-                       Margin="0,0,0,12"/>
+            <!-- ============================================ -->
+            <!-- SESSION DETAILS SECTION -->
+            <!-- ============================================ -->
+            <TextBlock Text="Session details"
+                       Style="{StaticResource SectionHeader}"
+                       Margin="0,8,0,0"/>
 
             <Border Style="{StaticResource CardBase}">
                 <StackPanel>
-                    <!-- Header with toggle and summary -->
-                    <Grid Margin="0,0,0,16">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                    <!-- Toggle Button -->
+                    <Button x:Name="ToggleDetailsButton"
+                            Click="ToggleDetailsButton_Click"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Foreground="{DynamicResource Accent.Primary}"
+                            BorderBrush="{DynamicResource Accent.Primary}"
+                            HorizontalAlignment="Left"
+                            Padding="16,8"
+                            Margin="0,0,0,16">
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="ChevronDown" 
+                                         Width="16" Height="16"
+                                         VerticalAlignment="Center"
+                                         Margin="0,0,8,0"/>
+                            <TextBlock Text="Show detailed tracking"/>
+                        </StackPanel>
+                    </Button>
 
-                        <Button x:Name="ToggleDetailsButton"
-                                Content="Show detailed tracking"
-                                Click="ToggleDetailsButton_Click"
-                                Style="{StaticResource ButtonSecondary}"
-                                HorizontalAlignment="Left"/>
-
-                        <TextBlock Grid.Column="1"
-                                   Text="{Binding SessionSummaryText}"
-                                   Style="{StaticResource LabelMuted}"
-                                   HorizontalAlignment="Right"
-                                   VerticalAlignment="Center"/>
-                    </Grid>
+                    <!-- Session Summary -->
+                    <TextBlock Text="{Binding SessionSummaryText}"
+                               Style="{StaticResource ComparisonText}"
+                               Margin="0,0,0,16"/>
 
                     <!-- Scrollable sessions list -->
                     <ScrollViewer x:Name="SessionsList"
                                   MaxHeight="320"
                                   VerticalScrollBarVisibility="Auto"
-                                  Padding="0,0,8,0">
+                                  Visibility="Collapsed">
                         <ItemsControl ItemsSource="{Binding RecentSessions}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Border Background="{DynamicResource Bg.Elevated}"
-                                            CornerRadius="6"
+                                            CornerRadius="{DynamicResource Radius.MD}"
                                             Padding="12"
                                             Margin="0,0,0,8">
                                         <Grid>
@@ -232,36 +235,36 @@
 
                                             <!-- Device Icon -->
                                             <Border Grid.Column="0"
+                                                    Style="{StaticResource IconContainer}"
                                                     Background="{DynamicResource Accent.Subtle}"
-                                                    CornerRadius="6"
-                                                    Padding="8"
-                                                    VerticalAlignment="Center">
+                                                    Width="40" Height="40">
                                                 <md:PackIcon Kind="{Binding DeviceTypeIcon}" 
                                                              Width="20" Height="20"
-                                                             Foreground="{DynamicResource Accent.Primary}"/>
+                                                             Foreground="{DynamicResource Accent.Primary}"
+                                                             HorizontalAlignment="Center"
+                                                             VerticalAlignment="Center"/>
                                             </Border>
 
                                             <!-- Device Info -->
                                             <StackPanel Grid.Column="1" 
-                                                        Margin="12,0,0,0" 
                                                         VerticalAlignment="Center">
                                                 <TextBlock Text="{Binding DeviceName}"
-                                                           Style="{StaticResource BodyMedium}"
+                                                           Style="{StaticResource ListItemName}"
                                                            TextTrimming="CharacterEllipsis"
-                                                           MaxWidth="200"/>
+                                                           MaxWidth="180"/>
                                                 <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
                                                     <TextBlock Text="{Binding DeviceType}"
-                                                               Style="{StaticResource LabelMuted}"/>
+                                                               Style="{StaticResource LabelSecondary}"/>
                                                     <TextBlock Text=" · "
-                                                               Style="{StaticResource LabelMuted}"/>
+                                                               Style="{StaticResource LabelSecondary}"/>
                                                     <TextBlock Text="{Binding SessionLabel}"
-                                                               Style="{StaticResource LabelMuted}"/>
+                                                               Style="{StaticResource LabelSecondary}"/>
                                                 </StackPanel>
                                             </StackPanel>
 
                                             <!-- Peak SPL Badge -->
                                             <Border Grid.Column="2"
-                                                    CornerRadius="4"
+                                                    CornerRadius="{DynamicResource Radius.SM}"
                                                     Padding="8,4"
                                                     VerticalAlignment="Center">
                                                 <Border.Style>
@@ -276,12 +279,13 @@
                                                 </Border.Style>
                                                 <TextBlock Text="{Binding PeakSPLText}">
                                                     <TextBlock.Style>
-                                                        <Style TargetType="TextBlock" BasedOn="{StaticResource LabelSecondary}">
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="FontSize" Value="12"/>
                                                             <Setter Property="FontWeight" Value="SemiBold"/>
                                                             <Setter Property="Foreground" Value="{DynamicResource Accent.Primary}"/>
                                                             <Style.Triggers>
                                                                 <DataTrigger Binding="{Binding WasHarmful}" Value="True">
-                                                                    <Setter Property="Foreground" Value="{DynamicResource Text.Primary}"/>
+                                                                    <Setter Property="Foreground" Value="#0F0F0F"/>
                                                                 </DataTrigger>
                                                             </Style.Triggers>
                                                         </Style>
@@ -296,6 +300,50 @@
                     </ScrollViewer>
                 </StackPanel>
             </Border>
+
+            <!-- ============================================ -->
+            <!-- TIP SECTION -->
+            <!-- ============================================ -->
+            <Border Style="{StaticResource TipContainer}"
+                    Margin="0,8,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <md:PackIcon Kind="HeadphonesSettings"
+                                 Width="20" Height="20"
+                                 Foreground="{DynamicResource Accent.Primary}"
+                                 VerticalAlignment="Top"
+                                 Margin="0,2,12,0"/>
+                    <TextBlock Text="Keep volume at 60% or below and take breaks every hour to protect your hearing."
+                               Style="{StaticResource BodySmall}"
+                               TextWrapping="Wrap"
+                               MaxWidth="400"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Legend -->
+            <StackPanel Orientation="Horizontal" 
+                        HorizontalAlignment="Center"
+                        Margin="0,20,0,0">
+                <StackPanel Orientation="Horizontal" Margin="0,0,20,0">
+                    <Border Width="12" Height="12" 
+                            Background="{DynamicResource Chart.Primary}"
+                            CornerRadius="2"
+                            VerticalAlignment="Center"/>
+                    <TextBlock Text="Safe"
+                               Style="{StaticResource LabelSecondary}"
+                               Margin="8,0,0,0"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Border Width="12" Height="12" 
+                            Background="{DynamicResource Status.Danger}"
+                            CornerRadius="2"
+                            VerticalAlignment="Center"/>
+                    <TextBlock Text="Harmful"
+                               Style="{StaticResource LabelSecondary}"
+                               Margin="8,0,0,0"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+            </StackPanel>
 
         </StackPanel>
     </ScrollViewer>

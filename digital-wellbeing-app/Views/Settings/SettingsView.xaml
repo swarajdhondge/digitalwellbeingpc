@@ -5,27 +5,26 @@
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
     Background="Transparent">
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel Margin="8">
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  Padding="20,16">
+        <StackPanel>
 
             <!-- Page Header -->
             <TextBlock Text="Settings"
                        Style="{StaticResource HeadingLarge}"
-                       Margin="0,0,0,24"/>
+                       Margin="0,0,0,20"/>
 
-            <!-- Screen Time Goal Section (Phase 3.3) -->
-            <TextBlock Text="SCREEN TIME GOAL"
-                       Style="{StaticResource NavSectionHeader}"
-                       Margin="0,0,0,12"/>
+            <!-- ============================================ -->
+            <!-- SCREEN TIME GOAL SECTION -->
+            <!-- ============================================ -->
+            <TextBlock Text="Screen time goal"
+                       Style="{StaticResource SectionHeader}"/>
 
-            <Border Style="{StaticResource CardBase}" Margin="0,0,0,24">
+            <Border Style="{StaticResource CardBase}"
+                    Margin="{StaticResource Margin.Card}">
                 <StackPanel>
-                    <TextBlock Text="Daily Limit"
-                               Style="{StaticResource HeadingSmall}"
-                               Margin="0,0,0,12"/>
-                    
                     <TextBlock Text="Set a target for your daily screen time. You'll see progress on the Screen Time page."
-                               Style="{StaticResource LabelSecondary}"
+                               Style="{StaticResource BodySmall}"
                                TextWrapping="Wrap"
                                Margin="0,0,0,16"/>
 
@@ -37,7 +36,7 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Text="Enable daily goal"
-                                   Style="{StaticResource BodyMedium}"
+                                   Style="{StaticResource ListItemName}"
                                    VerticalAlignment="Center"/>
 
                         <ToggleButton x:Name="GoalEnabledCheckBox"
@@ -85,26 +84,23 @@
                         </StackPanel>
                     </StackPanel>
 
-                    <!-- Current Goal Display -->
                     <TextBlock x:Name="CurrentGoalText"
-                               Style="{StaticResource LabelMuted}"
+                               Style="{StaticResource ComparisonText}"
                                Margin="0,8,0,0"/>
                 </StackPanel>
             </Border>
 
-            <!-- Break Reminders Section -->
-            <TextBlock Text="BREAK REMINDERS"
-                       Style="{StaticResource NavSectionHeader}"
-                       Margin="0,0,0,12"/>
+            <!-- ============================================ -->
+            <!-- BREAK REMINDERS SECTION -->
+            <!-- ============================================ -->
+            <TextBlock Text="Break reminders"
+                       Style="{StaticResource SectionHeader}"/>
 
-            <Border Style="{StaticResource CardBase}" Margin="0,0,0,24">
+            <Border Style="{StaticResource CardBase}"
+                    Margin="{StaticResource Margin.Card}">
                 <StackPanel>
-                    <TextBlock Text="Regular Breaks"
-                               Style="{StaticResource HeadingSmall}"
-                               Margin="0,0,0,12"/>
-                    
-                    <TextBlock Text="Get reminded to take breaks and rest your eyes. Follow the 20-20-20 rule: every 20 minutes, look at something 20 feet away for 20 seconds."
-                               Style="{StaticResource LabelSecondary}"
+                    <TextBlock Text="Get reminded to take breaks and rest your eyes. Follow the 20-20-20 rule."
+                               Style="{StaticResource BodySmall}"
                                TextWrapping="Wrap"
                                Margin="0,0,0,16"/>
 
@@ -116,7 +112,7 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Text="Enable break reminders"
-                                   Style="{StaticResource BodyMedium}"
+                                   Style="{StaticResource ListItemName}"
                                    VerticalAlignment="Center"/>
 
                         <ToggleButton x:Name="BreakReminderToggle"
@@ -132,7 +128,7 @@
                                 Visibility="Collapsed"
                                 Margin="0,0,0,16">
                         <TextBlock Text="Reminder interval"
-                                   Style="{StaticResource BodyMedium}"
+                                   Style="{StaticResource LabelSecondary}"
                                    Margin="0,0,0,8"/>
                         
                         <ComboBox x:Name="IntervalComboBox"
@@ -158,7 +154,7 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Text="Play notification sound"
-                                   Style="{StaticResource BodyMedium}"
+                                   Style="{StaticResource ListItemName}"
                                    VerticalAlignment="Center"/>
 
                         <ToggleButton x:Name="SoundToggle"
@@ -170,33 +166,34 @@
                                       VerticalAlignment="Center"/>
                     </Grid>
 
-                    <!-- Info -->
-                    <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
-                        <md:PackIcon Kind="Information" Width="16" Height="16"
-                                     Foreground="{DynamicResource Text.Muted}"
-                                     VerticalAlignment="Center"/>
-                        <TextBlock Text="Notifications appear in the title bar. You can snooze or dismiss them."
-                                   Style="{StaticResource LabelSecondary}"
-                                   TextWrapping="Wrap"
-                                   Margin="8,0,0,0"
-                                   VerticalAlignment="Center"/>
-                    </StackPanel>
+                    <!-- Info Tip -->
+                    <Border Style="{StaticResource TipContainer}"
+                            Margin="0,16,0,0">
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="InformationOutline"
+                                         Width="16" Height="16"
+                                         Foreground="{DynamicResource Accent.Primary}"
+                                         VerticalAlignment="Top"
+                                         Margin="0,2,8,0"/>
+                            <TextBlock Text="Notifications appear in the title bar. You can snooze or dismiss them."
+                                       Style="{StaticResource BodySmall}"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
                 </StackPanel>
             </Border>
 
-            <!-- Wind Down Mode Section -->
-            <TextBlock Text="WIND DOWN MODE"
-                       Style="{StaticResource NavSectionHeader}"
-                       Margin="0,0,0,12"/>
+            <!-- ============================================ -->
+            <!-- WIND DOWN MODE SECTION -->
+            <!-- ============================================ -->
+            <TextBlock Text="Wind down mode"
+                       Style="{StaticResource SectionHeader}"/>
 
-            <Border Style="{StaticResource CardBase}" Margin="0,0,0,24">
+            <Border Style="{StaticResource CardBase}"
+                    Margin="{StaticResource Margin.Card}">
                 <StackPanel>
-                    <TextBlock Text="Quiet Hours"
-                               Style="{StaticResource HeadingSmall}"
-                               Margin="0,0,0,12"/>
-                    
-                    <TextBlock Text="Get a gentle reminder when it's time to wind down for the day. A subtle visual cue will appear around your screen edges during quiet hours."
-                               Style="{StaticResource LabelSecondary}"
+                    <TextBlock Text="Get a gentle reminder when it's time to wind down for the day."
+                               Style="{StaticResource BodySmall}"
                                TextWrapping="Wrap"
                                Margin="0,0,0,16"/>
 
@@ -208,7 +205,7 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Text="Enable Wind Down mode"
-                                   Style="{StaticResource BodyMedium}"
+                                   Style="{StaticResource ListItemName}"
                                    VerticalAlignment="Center"/>
 
                         <ToggleButton x:Name="WindDownToggle"
@@ -225,8 +222,7 @@
                         
                         <!-- Schedule -->
                         <TextBlock Text="Schedule"
-                                   Style="{StaticResource BodyMedium}"
-                                   FontWeight="SemiBold"
+                                   Style="{StaticResource LabelSecondary}"
                                    Margin="0,0,0,12"/>
                         
                         <Grid Margin="0,0,0,16">
@@ -238,9 +234,8 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <!-- Start Time -->
                             <TextBlock Text="From"
-                                       Style="{StaticResource BodyMedium}"
+                                       Style="{StaticResource ListItemName}"
                                        VerticalAlignment="Center"
                                        Margin="0,0,8,0"/>
                             
@@ -253,10 +248,9 @@
                                       Padding="12,8"
                                       MinWidth="100"/>
 
-                            <!-- End Time -->
                             <TextBlock Text="to"
                                        Grid.Column="2"
-                                       Style="{StaticResource BodyMedium}"
+                                       Style="{StaticResource ListItemName}"
                                        VerticalAlignment="Center"
                                        Margin="16,0,8,0"/>
                             
@@ -279,10 +273,9 @@
 
                             <StackPanel>
                                 <TextBlock Text="Show notification"
-                                           Style="{StaticResource BodyMedium}"
-                                           VerticalAlignment="Center"/>
+                                           Style="{StaticResource ListItemName}"/>
                                 <TextBlock Text="Display a reminder when Wind Down starts"
-                                           Style="{StaticResource LabelMuted}"
+                                           Style="{StaticResource LabelSecondary}"
                                            Margin="0,2,0,0"/>
                             </StackPanel>
 
@@ -304,10 +297,9 @@
 
                             <StackPanel>
                                 <TextBlock Text="Show visual border"
-                                           Style="{StaticResource BodyMedium}"
-                                           VerticalAlignment="Center"/>
+                                           Style="{StaticResource ListItemName}"/>
                                 <TextBlock Text="Display a subtle glow around the window edges"
-                                           Style="{StaticResource LabelMuted}"
+                                           Style="{StaticResource LabelSecondary}"
                                            Margin="0,2,0,0"/>
                             </StackPanel>
 
@@ -323,64 +315,55 @@
                         <!-- Visual Style Selection -->
                         <StackPanel x:Name="VisualStylePanel" Margin="0,8,0,0">
                             <TextBlock Text="Visual style"
-                                       Style="{StaticResource BodyMedium}"
+                                       Style="{StaticResource LabelSecondary}"
                                        Margin="0,0,0,8"/>
                             
                             <StackPanel Orientation="Horizontal">
-                                <!-- Amber Style -->
                                 <Border x:Name="AmberStyleOption"
                                         Background="{DynamicResource Accent.Primary}"
-                                        CornerRadius="8"
-                                        Padding="12,8"
+                                        CornerRadius="{DynamicResource Radius.Full}"
+                                        Padding="16,8"
                                         Margin="0,0,8,0"
                                         Cursor="Hand"
                                         MouseLeftButtonDown="AmberStyle_Click">
                                     <StackPanel Orientation="Horizontal">
-                                        <Border Width="16" Height="16" 
-                                                CornerRadius="8"
-                                                Background="#F59E0B"
-                                                Margin="0,0,8,0"/>
+                                        <Ellipse Width="16" Height="16" 
+                                                 Fill="#F59E0B"
+                                                 Margin="0,0,8,0"/>
                                         <TextBlock Text="Amber"
-                                                   Style="{StaticResource BodySmall}"
-                                                   Foreground="{DynamicResource Accent.OnAccent}"
-                                                   VerticalAlignment="Center"/>
+                                                   Style="{StaticResource BadgeText}"
+                                                   Foreground="{DynamicResource Accent.OnAccent}"/>
                                     </StackPanel>
                                 </Border>
 
-                                <!-- Purple Style -->
                                 <Border x:Name="PurpleStyleOption"
                                         Background="{DynamicResource Bg.Elevated}"
-                                        CornerRadius="8"
-                                        Padding="12,8"
+                                        CornerRadius="{DynamicResource Radius.Full}"
+                                        Padding="16,8"
                                         Margin="0,0,8,0"
                                         Cursor="Hand"
                                         MouseLeftButtonDown="PurpleStyle_Click">
                                     <StackPanel Orientation="Horizontal">
-                                        <Border Width="16" Height="16" 
-                                                CornerRadius="8"
-                                                Background="#8B5CF6"
-                                                Margin="0,0,8,0"/>
+                                        <Ellipse Width="16" Height="16" 
+                                                 Fill="#8B5CF6"
+                                                 Margin="0,0,8,0"/>
                                         <TextBlock Text="Purple"
-                                                   Style="{StaticResource BodySmall}"
-                                                   VerticalAlignment="Center"/>
+                                                   Style="{StaticResource LabelSecondary}"/>
                                     </StackPanel>
                                 </Border>
 
-                                <!-- Dim Style -->
                                 <Border x:Name="DimStyleOption"
                                         Background="{DynamicResource Bg.Elevated}"
-                                        CornerRadius="8"
-                                        Padding="12,8"
+                                        CornerRadius="{DynamicResource Radius.Full}"
+                                        Padding="16,8"
                                         Cursor="Hand"
                                         MouseLeftButtonDown="DimStyle_Click">
                                     <StackPanel Orientation="Horizontal">
-                                        <Border Width="16" Height="16" 
-                                                CornerRadius="8"
-                                                Background="#6B7280"
-                                                Margin="0,0,8,0"/>
+                                        <Ellipse Width="16" Height="16" 
+                                                 Fill="#6B7280"
+                                                 Margin="0,0,8,0"/>
                                         <TextBlock Text="Dim"
-                                                   Style="{StaticResource BodySmall}"
-                                                   VerticalAlignment="Center"/>
+                                                   Style="{StaticResource LabelSecondary}"/>
                                     </StackPanel>
                                 </Border>
                             </StackPanel>
@@ -396,112 +379,33 @@
                                      VerticalAlignment="Center"/>
                         <TextBlock x:Name="WindDownStatusText"
                                    Text="Wind Down is disabled"
-                                   Style="{StaticResource LabelSecondary}"
+                                   Style="{StaticResource ComparisonText}"
                                    Margin="8,0,0,0"
                                    VerticalAlignment="Center"/>
                     </StackPanel>
                 </StackPanel>
             </Border>
 
-            <!-- Hearing Protection Section (Coming Soon - Blurred) -->
-            <TextBlock Text="HEARING PROTECTION"
-                       Style="{StaticResource NavSectionHeader}"
-                       Margin="0,0,0,12"/>
+            <!-- ============================================ -->
+            <!-- APPEARANCE SECTION -->
+            <!-- ============================================ -->
+            <TextBlock Text="Appearance"
+                       Style="{StaticResource SectionHeader}"/>
 
-            <Border Style="{StaticResource CardBase}" Margin="0,0,0,24" IsEnabled="False">
-                <Grid>
-                    <!-- Content (blurred/disabled) -->
-                    <StackPanel Opacity="0.4">
-                        <TextBlock Text="Volume Threshold"
-                                   Style="{StaticResource HeadingSmall}"
-                                   Margin="0,0,0,12"/>
-                        
-                        <TextBlock Text="Get notified when listening above this level for extended periods."
-                                   Style="{StaticResource LabelSecondary}"
-                                   TextWrapping="Wrap"
-                                   Margin="0,0,0,16"/>
-
-                        <!-- Slider with value display -->
-                        <Grid Margin="0,0,0,8">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Slider x:Name="ThresholdSlider"
-                                    Style="{StaticResource SliderThemed}"
-                                    Minimum="60"
-                                    Maximum="100"
-                                    Value="75"
-                                    TickFrequency="5"
-                                    IsSnapToTickEnabled="True"
-                                    IsEnabled="False"
-                                    VerticalAlignment="Center"/>
-
-                            <TextBlock Grid.Column="1"
-                                       x:Name="ThresholdValueText"
-                                       Text="75 dB"
-                                       Style="{StaticResource HeadingSmall}"
-                                       Foreground="{DynamicResource Text.Muted}"
-                                       Margin="16,0,0,0"
-                                       MinWidth="50"
-                                       TextAlignment="Right"
-                                       VerticalAlignment="Center"/>
-                        </Grid>
-
-                        <!-- Scale labels -->
-                        <Grid Margin="0,0,66,12">
-                            <TextBlock Text="60 dB"
-                                       Style="{StaticResource LabelMuted}"
-                                       HorizontalAlignment="Left"/>
-                            <TextBlock Text="100 dB"
-                                       Style="{StaticResource LabelMuted}"
-                                       HorizontalAlignment="Right"/>
-                        </Grid>
-
-                        <!-- Recommendation -->
-                        <StackPanel Orientation="Horizontal">
-                            <md:PackIcon Kind="ShieldCheck" Width="16" Height="16"
-                                         Foreground="{DynamicResource Text.Muted}"
-                                         VerticalAlignment="Center"/>
-                            <TextBlock Text="Default: 75 dB"
-                                       Style="{StaticResource LabelSecondary}"
-                                       Margin="8,0,0,0"
-                                       VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </StackPanel>
-
-                    <!-- Coming Soon Overlay -->
-                    <Border Background="{DynamicResource Bg.Card}" 
-                            Opacity="0.7"
-                            CornerRadius="8"
-                            Margin="-16"/>
-                    <TextBlock Text="Coming Soon"
-                               Style="{StaticResource LabelSecondary}"
-                               FontWeight="SemiBold"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"/>
-                </Grid>
-            </Border>
-
-            <!-- Appearance Section -->
-            <TextBlock Text="APPEARANCE"
-                       Style="{StaticResource NavSectionHeader}"
-                       Margin="0,0,0,12"/>
-
-            <Border Style="{StaticResource CardBase}" Margin="0,0,0,24">
+            <Border Style="{StaticResource CardBase}"
+                    Margin="{StaticResource Margin.Card}">
                 <StackPanel>
                     <TextBlock Text="Theme"
-                               Style="{StaticResource HeadingSmall}"
-                               Margin="0,0,0,16"/>
+                               Style="{StaticResource LabelSecondary}"
+                               Margin="0,0,0,12"/>
 
                     <StackPanel Orientation="Horizontal">
                         <!-- Light Theme Option -->
                         <Border x:Name="LightThemeOption"
                                 Background="{DynamicResource Bg.Elevated}"
-                                CornerRadius="8"
+                                CornerRadius="{DynamicResource Radius.MD}"
                                 Padding="16,12"
-                                Margin="0,0,12,0"
+                                Margin="0,0,8,0"
                                 Cursor="Hand"
                                 MouseLeftButtonDown="LightTheme_Click">
                             <StackPanel Orientation="Horizontal">
@@ -509,7 +413,7 @@
                                              Foreground="{DynamicResource Text.Secondary}"
                                              VerticalAlignment="Center"/>
                                 <TextBlock Text="Light"
-                                           Style="{StaticResource BodyMedium}"
+                                           Style="{StaticResource ListItemName}"
                                            Margin="8,0,0,0"
                                            VerticalAlignment="Center"/>
                             </StackPanel>
@@ -518,9 +422,9 @@
                         <!-- Dark Theme Option -->
                         <Border x:Name="DarkThemeOption"
                                 Background="{DynamicResource Accent.Primary}"
-                                CornerRadius="8"
+                                CornerRadius="{DynamicResource Radius.MD}"
                                 Padding="16,12"
-                                Margin="0,0,12,0"
+                                Margin="0,0,8,0"
                                 Cursor="Hand"
                                 MouseLeftButtonDown="DarkTheme_Click">
                             <StackPanel Orientation="Horizontal">
@@ -538,7 +442,7 @@
                         <!-- Auto Theme Option -->
                         <Border x:Name="AutoThemeOption"
                                 Background="{DynamicResource Bg.Elevated}"
-                                CornerRadius="8"
+                                CornerRadius="{DynamicResource Radius.MD}"
                                 Padding="16,12"
                                 Cursor="Hand"
                                 MouseLeftButtonDown="AutoTheme_Click">
@@ -547,7 +451,7 @@
                                              Foreground="{DynamicResource Text.Secondary}"
                                              VerticalAlignment="Center"/>
                                 <TextBlock Text="Auto"
-                                           Style="{StaticResource BodyMedium}"
+                                           Style="{StaticResource ListItemName}"
                                            Margin="8,0,0,0"
                                            VerticalAlignment="Center"/>
                             </StackPanel>
@@ -556,12 +460,14 @@
                 </StackPanel>
             </Border>
 
-            <!-- Startup Section -->
-            <TextBlock Text="STARTUP"
-                       Style="{StaticResource NavSectionHeader}"
-                       Margin="0,0,0,12"/>
+            <!-- ============================================ -->
+            <!-- STARTUP SECTION -->
+            <!-- ============================================ -->
+            <TextBlock Text="Startup"
+                       Style="{StaticResource SectionHeader}"/>
 
-            <Border Style="{StaticResource CardBase}" Margin="0,0,0,24">
+            <Border Style="{StaticResource CardBase}"
+                    Margin="{StaticResource Margin.Card}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -570,8 +476,7 @@
 
                     <StackPanel Grid.Column="0" VerticalAlignment="Center">
                         <TextBlock Text="Launch on Windows startup"
-                                   Style="{StaticResource BodyMedium}"
-                                   FontWeight="SemiBold"/>
+                                   Style="{StaticResource ListItemName}"/>
                         <TextBlock Text="Start Digital Wellbeing when you log in"
                                    Style="{StaticResource LabelSecondary}"
                                    Margin="0,4,0,0"/>
@@ -586,21 +491,28 @@
                 </Grid>
             </Border>
 
-            <!-- About Section -->
-            <TextBlock Text="ABOUT"
-                       Style="{StaticResource NavSectionHeader}"
-                       Margin="0,0,0,12"/>
+            <!-- ============================================ -->
+            <!-- ABOUT SECTION -->
+            <!-- ============================================ -->
+            <TextBlock Text="About"
+                       Style="{StaticResource SectionHeader}"/>
 
-            <Border Style="{StaticResource CardFlat}">
+            <Border Style="{StaticResource CardBase}">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
-                        <Image Source="/Resources/Icons/digital-balance-icon-32.png"
-                               Width="32" Height="32"
-                               RenderOptions.BitmapScalingMode="HighQuality"/>
-                        <StackPanel Margin="12,0,0,0" VerticalAlignment="Center">
+                        <Border Style="{StaticResource IconContainer}"
+                                Background="{DynamicResource Accent.Primary}"
+                                Width="48" Height="48">
+                            <Image Source="/Resources/Icons/digital-balance-icon-32.png"
+                                   Width="28" Height="28"
+                                   RenderOptions.BitmapScalingMode="HighQuality"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                        </Border>
+                        <StackPanel VerticalAlignment="Center">
                             <TextBlock Text="Digital Wellbeing"
                                        Style="{StaticResource HeadingSmall}"/>
-                            <TextBlock Text="Version 1.5.0"
+                            <TextBlock Text="Version 1.7.0"
                                        Style="{StaticResource LabelSecondary}"/>
                         </StackPanel>
                     </StackPanel>

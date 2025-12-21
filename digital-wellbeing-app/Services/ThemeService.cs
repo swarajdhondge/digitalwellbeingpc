@@ -63,6 +63,9 @@ namespace digital_wellbeing_app.Services
 
             // Also update MaterialDesign's base theme for their components
             UpdateMaterialDesignTheme(isDark);
+
+            // Update LiveCharts2 theme
+            App.ConfigureLiveChartsTheme(isDark);
         }
 
         private void SwapThemeDictionary(bool isDark)

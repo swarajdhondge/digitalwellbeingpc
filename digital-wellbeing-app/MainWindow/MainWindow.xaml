@@ -175,6 +175,17 @@
                                     <TextBlock Text="Focus Mode" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
+
+                            <TextBlock Text="INSIGHTS" Style="{StaticResource NavSectionHeader}"/>
+
+                            <Button x:Name="NavReports"
+                                    Style="{StaticResource NavItem}"
+                                    Click="Reports_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <md:PackIcon Kind="ChartBar" Width="20" Height="20" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Weekly Report" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
                         </StackPanel>
 
                         <!-- Bottom Navigation -->
@@ -199,7 +210,7 @@
                             </Button>
 
                             <!-- Version -->
-                            <TextBlock Text="v1.5.0"
+                            <TextBlock Text="v1.7.0"
                                        Style="{StaticResource LabelMuted}"
                                        Margin="24,16,0,0"/>
                         </StackPanel>
@@ -268,16 +279,16 @@
                         Background="#80000000"
                         MouseLeftButtonDown="BreakBackdrop_Click"/>
                 
-                <!-- Centered dialog card -->
+                <!-- Centered dialog card (Samsung style: 20px radius) -->
                 <Border Background="{DynamicResource Bg.Card}"
-                        CornerRadius="16"
+                        CornerRadius="{DynamicResource Radius.Card}"
                         Padding="40"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         MinWidth="400"
                         MaxWidth="500">
                     <Border.Effect>
-                        <DropShadowEffect BlurRadius="30" ShadowDepth="0" Opacity="0.5" Color="Black"/>
+                        <DropShadowEffect BlurRadius="30" ShadowDepth="0" Opacity="0.4" Color="Black"/>
                     </Border.Effect>
                     
                     <StackPanel>
@@ -372,16 +383,16 @@
                         Background="#80000000"
                         MouseLeftButtonDown="FocusBackdrop_Click"/>
                 
-                <!-- Centered warning dialog -->
+                <!-- Centered warning dialog (Samsung style: 20px radius) -->
                 <Border Background="{DynamicResource Bg.Card}"
-                        CornerRadius="16"
+                        CornerRadius="{DynamicResource Radius.Card}"
                         Padding="40"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         MinWidth="420"
                         MaxWidth="520">
                     <Border.Effect>
-                        <DropShadowEffect BlurRadius="30" ShadowDepth="0" Opacity="0.5" Color="Black"/>
+                        <DropShadowEffect BlurRadius="30" ShadowDepth="0" Opacity="0.4" Color="Black"/>
                     </Border.Effect>
                     
                     <StackPanel>
@@ -480,16 +491,16 @@
                 <Border Background="#80000000"
                         MouseLeftButtonDown="EndSessionBackdrop_Click"/>
                 
-                <!-- Centered confirmation dialog -->
+                <!-- Centered confirmation dialog (Samsung style: 20px radius) -->
                 <Border Background="{DynamicResource Bg.Card}"
-                        CornerRadius="16"
+                        CornerRadius="{DynamicResource Radius.Card}"
                         Padding="40"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         MinWidth="400"
                         MaxWidth="480">
                     <Border.Effect>
-                        <DropShadowEffect BlurRadius="30" ShadowDepth="0" Opacity="0.5" Color="Black"/>
+                        <DropShadowEffect BlurRadius="30" ShadowDepth="0" Opacity="0.4" Color="Black"/>
                     </Border.Effect>
                     
                     <StackPanel>

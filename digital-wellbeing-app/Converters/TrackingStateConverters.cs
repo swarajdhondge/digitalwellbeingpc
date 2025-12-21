@@ -132,4 +132,86 @@ namespace digital_wellbeing_app.Converters
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
             => throw new NotImplementedException();
     }
+
+    /// <summary>
+    /// Converts percentage (0-100) and container width to actual pixel width for stacked bars.
+    /// </summary>
+    public class PercentageToWidthConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (values.Length >= 2 &&
+                values[0] is double percentage &&
+                values[1] is double containerWidth)
+            {
+                return (percentage / 100.0) * containerWidth;
+            }
+            return 0.0;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+            => throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Converts non-empty/non-zero string to Visible, empty/"0 m" to Collapsed.
+    /// </summary>
+    public class StringToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is string s && !string.IsNullOrEmpty(s) && s != "0 m" && s != "0 h 0 m")
+            {
+                return Visibility.Visible;
+            }
+            return Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            => throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Converts index to segment color for stacked bars.
+    /// </summary>
+    public class IndexToSegmentColorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            int index = value is int i ? i : 0;
+            return index switch
+            {
+                0 => System.Windows.Application.Current.FindResource("Chart.Segment1") as System.Windows.Media.Brush 
+                     ?? System.Windows.Media.Brushes.Teal,
+                1 => System.Windows.Application.Current.FindResource("Chart.Segment2") as System.Windows.Media.Brush 
+                     ?? System.Windows.Media.Brushes.Blue,
+                2 => System.Windows.Application.Current.FindResource("Chart.Segment3") as System.Windows.Media.Brush 
+                     ?? System.Windows.Media.Brushes.Purple,
+                _ => System.Windows.Media.Brushes.Gray
+            };
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            => throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Converts a percentage (0-100) to a GridLength for grid column widths.
+    /// </summary>
+    public class PercentToGridLengthConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is double percent)
+            {
+                // Minimum width of 0 star, maximum of the percentage
+                var stars = Math.Max(0, percent);
+                return new System.Windows.GridLength(stars, System.Windows.GridUnitType.Star);
+            }
+            return new System.Windows.GridLength(0, System.Windows.GridUnitType.Star);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            => throw new NotImplementedException();
+    }
 }

@@ -8,8 +8,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    d:DesignHeight="600"
-    d:DesignWidth="800"
+    d:DesignHeight="800"
+    d:DesignWidth="500"
     Background="Transparent">
 
     <UserControl.DataContext>
@@ -21,24 +21,27 @@
         <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </UserControl.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel Margin="8">
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  Padding="20,16">
+        <StackPanel>
 
-            <!-- Page Header with Status Indicator -->
-            <Grid Margin="0,0,0,24">
+            <!-- ============================================ -->
+            <!-- PAGE HEADER -->
+            <!-- ============================================ -->
+            <Grid Margin="0,0,0,16">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="App Usage"
+                <TextBlock Text="App usage"
                            Style="{StaticResource HeadingLarge}"/>
 
                 <!-- Status Indicator -->
                 <Border Grid.Column="1"
-                        Background="{DynamicResource Bg.Elevated}"
-                        CornerRadius="12"
-                        Padding="10,6"
+                        Background="{DynamicResource Bg.Card}"
+                        CornerRadius="{DynamicResource Radius.Full}"
+                        Padding="12,6"
                         VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal">
                         <Ellipse Width="8" Height="8"
@@ -71,12 +74,22 @@
                 </Border>
             </Grid>
 
-            <!-- NOW USING Card -->
-            <TextBlock Text="NOW USING"
-                       Style="{StaticResource NavSectionHeader}"
-                       Margin="0,0,0,12"/>
+            <!-- ============================================ -->
+            <!-- VIEW TOGGLE -->
+            <!-- ============================================ -->
+            <StackPanel Style="{StaticResource ViewToggleContainer}">
+                <TextBlock Text="Today"
+                           Style="{StaticResource ToggleActive}"/>
+                <TextBlock Style="{StaticResource ViewToggleSeparator}"/>
+                <TextBlock Text="Weekly view"
+                           Style="{StaticResource ToggleInactive}"/>
+            </StackPanel>
 
-            <Border Style="{StaticResource CardBase}" Margin="0,0,0,16">
+            <!-- ============================================ -->
+            <!-- NOW USING CARD -->
+            <!-- ============================================ -->
+            <Border Style="{StaticResource CardBase}"
+                    Margin="{StaticResource Margin.Card}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -84,16 +97,17 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- App Icon -->
+                    <!-- App Icon Container -->
                     <Border Grid.Column="0"
+                            Style="{StaticResource IconContainer}"
                             Background="{DynamicResource Accent.Primary}"
-                            CornerRadius="8"
-                            Padding="12"
-                            VerticalAlignment="Center">
+                            Width="48" Height="48">
                         <Image Source="{Binding CurrentAppIcon}"
                                Width="28" Height="28"
                                Stretch="Uniform"
-                               RenderOptions.BitmapScalingMode="HighQuality">
+                               RenderOptions.BitmapScalingMode="HighQuality"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center">
                             <Image.Style>
                                 <Style TargetType="Image">
                                     <Style.Triggers>
@@ -107,15 +121,17 @@
                     </Border>
 
                     <!-- App Name + Window Title -->
-                    <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock Text="Now using"
+                                   Style="{StaticResource LabelSecondary}"
+                                   Margin="0,0,0,2"/>
                         <TextBlock Text="{Binding CurrentAppName}"
-                                   Style="{StaticResource BodyMedium}"
-                                   FontWeight="SemiBold"
-                                   FontSize="16"/>
+                                   Style="{StaticResource HeadingSmall}"/>
                         <TextBlock Text="{Binding CurrentWindowTitle}"
-                                   Style="{StaticResource LabelMuted}"
-                                   Margin="0,4,0,0"
+                                   Style="{StaticResource ComparisonText}"
+                                   Margin="0,2,0,0"
                                    TextTrimming="CharacterEllipsis"
+                                   MaxWidth="200"
                                    Visibility="{Binding HasCurrentApp, Converter={StaticResource BoolToVisibilityConverter}}"/>
                     </StackPanel>
 
@@ -124,13 +140,12 @@
                                 Orientation="Horizontal" 
                                 VerticalAlignment="Center">
                         <TextBlock Text="{Binding CurrentAppDuration}"
-                                   Style="{StaticResource StatNumber}"
-                                   FontSize="24"
-                                   Foreground="{DynamicResource Accent.Primary}"
+                                   Style="{StaticResource ValueDisplay}"
+                                   FontSize="20"
                                    VerticalAlignment="Center"/>
                         <!-- Blinking indicator -->
                         <Ellipse Width="6" Height="6"
-                                 Fill="{DynamicResource Accent.Primary}"
+                                 Fill="{DynamicResource Status.Success}"
                                  Margin="8,0,0,0"
                                  VerticalAlignment="Center"
                                  Visibility="{Binding HasCurrentApp, Converter={StaticResource BoolToVisibilityConverter}}">
@@ -155,12 +170,11 @@
                 </Grid>
             </Border>
 
-            <!-- TODAY'S STATS Section -->
-            <TextBlock Text="TODAY'S STATS"
-                       Style="{StaticResource NavSectionHeader}"
-                       Margin="0,0,0,12"/>
-
-            <Border Style="{StaticResource CardBase}" Margin="0,0,0,24">
+            <!-- ============================================ -->
+            <!-- QUICK STATS CARD -->
+            <!-- ============================================ -->
+            <Border Style="{StaticResource CardBase}"
+                    Margin="{StaticResource Margin.Card}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -171,108 +185,148 @@
                     <!-- Switches -->
                     <StackPanel Grid.Column="0" HorizontalAlignment="Center">
                         <TextBlock Text="{Binding SwitchCount}"
-                                   Style="{StaticResource HeadingMedium}"
+                                   Style="{StaticResource ValueDisplay}"
                                    HorizontalAlignment="Center"/>
                         <TextBlock Text="Switches"
-                                   Style="{StaticResource LabelMuted}"
-                                   HorizontalAlignment="Center"/>
+                                   Style="{StaticResource LabelSecondary}"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,4,0,0"/>
                     </StackPanel>
 
                     <!-- Average Focus -->
                     <StackPanel Grid.Column="1" HorizontalAlignment="Center">
                         <TextBlock Text="{Binding AverageFocusTime}"
-                                   Style="{StaticResource HeadingMedium}"
+                                   Style="{StaticResource ValueDisplay}"
                                    HorizontalAlignment="Center"/>
                         <TextBlock Text="Avg Focus"
-                                   Style="{StaticResource LabelMuted}"
-                                   HorizontalAlignment="Center"/>
+                                   Style="{StaticResource LabelSecondary}"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,4,0,0"/>
                     </StackPanel>
 
                     <!-- Longest Session -->
                     <StackPanel Grid.Column="2" HorizontalAlignment="Center">
                         <TextBlock Text="{Binding LongestSessionTime}"
-                                   Style="{StaticResource HeadingMedium}"
+                                   Style="{StaticResource ValueDisplay}"
                                    HorizontalAlignment="Center"/>
                         <TextBlock Text="Longest"
-                                   Style="{StaticResource LabelMuted}"
-                                   HorizontalAlignment="Center"/>
+                                   Style="{StaticResource LabelSecondary}"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,4,0,0"/>
                     </StackPanel>
                 </Grid>
             </Border>
 
-            <!-- TODAY'S APPS Section -->
-            <TextBlock Text="TODAY'S APPS"
-                       Style="{StaticResource NavSectionHeader}"
-                       Margin="0,0,0,12"/>
+            <!-- ============================================ -->
+            <!-- TODAY'S APPS SECTION -->
+            <!-- ============================================ -->
+            <TextBlock Text="Today's apps"
+                       Style="{StaticResource SectionHeader}"
+                       Margin="0,8,0,0"/>
 
-            <!-- App List (shown when there are apps) -->
+            <!-- App List -->
             <Border Style="{StaticResource CardBase}"
                     Visibility="{Binding HasApps, Converter={StaticResource BoolToVisibilityConverter}}">
                 <ItemsControl ItemsSource="{Binding TodaysUsage}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Style="{StaticResource CardListItem}">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
+                            <Grid Margin="0,0,0,16">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
 
-                                    <!-- App Icon -->
-                                    <Border Grid.Column="0"
-                                            Background="{DynamicResource Bg.Elevated}"
-                                            CornerRadius="8"
-                                            Padding="6"
-                                            Width="48" Height="48">
-                                        <Image Source="{Binding Icon}"
-                                               Width="32" Height="32"
-                                               Stretch="Uniform"
-                                               RenderOptions.BitmapScalingMode="HighQuality"/>
+                                <!-- App Icon -->
+                                <Border Grid.Column="0"
+                                        Background="{DynamicResource Bg.Elevated}"
+                                        CornerRadius="{DynamicResource Radius.Icon}"
+                                        Width="40" Height="40"
+                                        Margin="0,0,12,0">
+                                    <Image Source="{Binding Icon}"
+                                           Width="24" Height="24"
+                                           Stretch="Uniform"
+                                           RenderOptions.BitmapScalingMode="HighQuality"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                                </Border>
+
+                                <!-- App Name + Progress Bar -->
+                                <StackPanel Grid.Column="1"
+                                            VerticalAlignment="Center"
+                                            Margin="0,0,16,0">
+                                    <TextBlock Text="{Binding AppName}"
+                                               Style="{StaticResource ListItemName}"/>
+                                    <!-- Usage Bar -->
+                                    <Border Background="{DynamicResource Bg.Elevated}"
+                                            CornerRadius="{DynamicResource Radius.Full}"
+                                            Height="6"
+                                            Margin="0,6,0,0">
+                                        <Border Background="{DynamicResource Chart.Primary}"
+                                                CornerRadius="{DynamicResource Radius.Full}"
+                                                HorizontalAlignment="Left"
+                                                Width="{Binding TotalDuration, Converter={StaticResource DurationToWidthConverter}}"/>
                                     </Border>
+                                </StackPanel>
 
-                                    <!-- App Name + Progress Bar -->
-                                    <StackPanel Grid.Column="1"
-                                                Margin="16,0,16,0"
-                                                VerticalAlignment="Center">
-                                        <TextBlock Text="{Binding AppName}"
-                                                   Style="{StaticResource BodyMedium}"
-                                                   FontWeight="SemiBold"/>
-                                        <!-- Usage Bar -->
-                                        <Border Background="{DynamicResource Bg.Elevated}"
-                                                CornerRadius="3"
-                                                Height="6"
-                                                Margin="0,8,0,0">
-                                            <Border Background="{DynamicResource Accent.Primary}"
-                                                    CornerRadius="3"
-                                                    HorizontalAlignment="Left"
-                                                    Width="{Binding TotalDuration, Converter={StaticResource DurationToWidthConverter}}"/>
-                                        </Border>
-                                    </StackPanel>
-
-                                    <!-- Duration -->
-                                    <TextBlock Grid.Column="2"
-                                               Text="{Binding DurationFormatted}"
-                                               Style="{StaticResource LabelPrimary}"
-                                               Foreground="{DynamicResource Accent.Primary}"
-                                               VerticalAlignment="Center"
-                                               MinWidth="70"
-                                               TextAlignment="Right"/>
-                                </Grid>
-                            </Border>
+                                <!-- Duration -->
+                                <TextBlock Grid.Column="2"
+                                           Text="{Binding DurationFormatted}"
+                                           Style="{StaticResource ListItemDuration}"
+                                           VerticalAlignment="Center"
+                                           MinWidth="60"/>
+                            </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </Border>
 
-            <!-- Empty State (shown when no apps) -->
-            <StackPanel Style="{StaticResource EmptyStateContainer}"
-                        Visibility="{Binding HasApps, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Invert}">
-                <TextBlock Style="{StaticResource EmptyStateIcon}" Text="📱"/>
-                <TextBlock Style="{StaticResource EmptyStateTitle}" Text="No apps tracked yet"/>
-                <TextBlock Style="{StaticResource EmptyStateDescription}"
-                           Text="Start using some applications and they'll appear here."/>
-            </StackPanel>
+            <!-- View All Link -->
+            <TextBlock Text="View all"
+                       Style="{StaticResource ToggleActive}"
+                       HorizontalAlignment="Right"
+                       Margin="0,8,0,0"
+                       Visibility="{Binding HasApps, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+            <!-- Empty State -->
+            <Border Style="{StaticResource CardBase}"
+                    Visibility="{Binding HasApps, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Invert}"
+                    Padding="40">
+                <StackPanel HorizontalAlignment="Center">
+                    <md:PackIcon Kind="ApplicationOutline"
+                                 Width="48" Height="48"
+                                 Foreground="{DynamicResource Text.Muted}"
+                                 HorizontalAlignment="Center"
+                                 Margin="0,0,0,16"/>
+                    <TextBlock Text="No apps tracked yet"
+                               Style="{StaticResource HeadingSmall}"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,8"/>
+                    <TextBlock Text="Start using some applications and they'll appear here."
+                               Style="{StaticResource BodySmall}"
+                               HorizontalAlignment="Center"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+
+            <!-- ============================================ -->
+            <!-- TIP SECTION -->
+            <!-- ============================================ -->
+            <Border Style="{StaticResource TipContainer}"
+                    Margin="0,16,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <md:PackIcon Kind="TimerSandEmpty"
+                                 Width="20" Height="20"
+                                 Foreground="{DynamicResource Accent.Primary}"
+                                 VerticalAlignment="Top"
+                                 Margin="0,2,12,0"/>
+                    <TextBlock Text="Use app timers to set daily limits on distracting apps. Navigate to Focus Mode to set up."
+                               Style="{StaticResource BodySmall}"
+                               TextWrapping="Wrap"
+                               MaxWidth="400"/>
+                </StackPanel>
+            </Border>
 
         </StackPanel>
     </ScrollViewer>

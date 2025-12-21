@@ -2,11 +2,38 @@
 using System.Threading;
 using Microsoft.Win32;
 using Velopack;
+using LiveChartsCore;
+using LiveChartsCore.SkiaSharpView;
+using SkiaSharp;
 
 namespace digital_wellbeing_app
 {
     public partial class App : System.Windows.Application
     {
+        /// <summary>
+        /// Configures LiveCharts2 global theme settings
+        /// </summary>
+        public static void ConfigureLiveChartsTheme(bool isDark)
+        {
+            // Define colors based on theme - matches our design tokens
+            var textColor = isDark 
+                ? SKColor.Parse("#94A3B8")   // Slate 400 (Text.Secondary)
+                : SKColor.Parse("#64748B");  // Slate 500
+                
+            var accentPrimary = SKColor.Parse("#2DD4BF");    // Teal 400 (Accent.Primary)
+            var statusSuccess = SKColor.Parse("#22C55E");    // Green 500
+            var statusWarning = SKColor.Parse("#F59E0B");    // Amber 500
+            var statusDanger = SKColor.Parse("#EF4444");     // Red 500
+            var statusInfo = SKColor.Parse("#3B82F6");       // Blue 500
+
+            LiveCharts.Configure(config => config
+                .AddSkiaSharp()
+                .AddDefaultMappers()
+                .AddDarkTheme()  // Start with dark as base, we customize below
+                .HasGlobalSKTypeface(SKFontManager.Default.MatchFamily("Segoe UI"))
+            );
+        }
+
         private const string MutexName = "DigitalWellbeingPC_SingleInstance";
         private static Mutex? _mutex;
 
@@ -40,6 +67,15 @@ namespace digital_wellbeing_app
             var themeService = new Services.ThemeService();
             var savedMode = themeService.Load();
             themeService.ApplyTheme(savedMode);
+
+            // Configure LiveCharts2 theme to match
+            bool isDark = savedMode switch
+            {
+                ViewModels.AppTheme.Light => false,
+                ViewModels.AppTheme.Dark => true,
+                _ => themeService.IsSystemInDarkMode()
+            };
+            ConfigureLiveChartsTheme(isDark);
 
             // Initialize database & trackers
             Services.DatabaseService.GetConnection();

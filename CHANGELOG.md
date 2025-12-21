@@ -1,5 +1,53 @@
 # Changelog
 
+## [v1.7.0] - 2025-06-20
+
+### Design Revamp - Samsung Digital Wellbeing Style
+
+Major visual overhaul matching Samsung Digital Wellbeing aesthetic.
+
+### New Features
+- **App Name Service** - Intelligent app name display
+  - 80+ known apps mapped to friendly names (Chrome → Google Chrome, explorer → File Explorer)
+  - Falls back to executable metadata for unknown apps
+  - Prettifies raw process names with proper capitalization
+
+- **View Toggle** - Today/Weekly view switching
+  - Added functional toggle to Screen Time view
+  - Visual state changes on selection
+  - Framework for other views
+
+- **Set Goal Button** - Dashboard quick action now works
+  - Clicking "Set goal" navigates to Settings
+
+### Visual Changes
+- **Removed oval/pill shapes** - All progress bars now use flat rectangles
+  - Stacked bars: 4px corner radius (was fully rounded)
+  - Status badges: 8px corner radius (was pill-shaped)
+  - Week selectors: 8px corner radius (was pill-shaped)
+  - Comparison bars: 4px corner radius (was fully rounded)
+
+- **Improved app list display**
+  - App icons shown in colored containers
+  - Proper display names instead of raw process names
+  - Duration formatting maintained
+
+- **Simplified charts**
+  - Replaced LiveCharts horizontal bar chart with list-based progress bars
+  - Replaced pie/donut chart with horizontal stacked bar
+  - Added `PercentOfMax` for relative progress visualization
+
+### New Components
+- `Services/AppNameService.cs` - App name prettification
+- `Converters/PercentToGridLengthConverter` - For stacked bar widths
+
+### Bug Fixes
+- Fixed "Most used apps" chart showing "0h" on all axes
+- Fixed Focus vs Leisure chart showing raw decimal numbers
+- Fixed dashboard app list missing icons and showing raw names
+
+---
+
 ## [v1.5.1] - 2025-12-21
 
 ### Bug Fixes

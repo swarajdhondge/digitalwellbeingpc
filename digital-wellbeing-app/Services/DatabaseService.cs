@@ -176,5 +176,53 @@ namespace digital_wellbeing_app.Services
                    .Table<AppCategory>()
                    .FirstOrDefault(x => x.AppIdentifier == appIdentifier);
         }
+
+        // --- Multi-Day Queries (for Weekly Reports) ---
+
+        /// <summary>
+        /// Get all ScreenTimePeriod records for a date range (inclusive)
+        /// </summary>
+        public static List<ScreenTimePeriod> GetScreenTimePeriodsForRange(DateTime startDate, DateTime endDate)
+        {
+            var conn = GetConnection();
+            var startKey = startDate.ToString("yyyy-MM-dd");
+            var endKey = endDate.ToString("yyyy-MM-dd");
+
+            // SQLite doesn't support string.Compare, so we fetch all and filter in memory
+            // Since SessionDate is in yyyy-MM-dd format, lexicographic comparison works
+            return conn.Table<ScreenTimePeriod>()
+                       .ToList()
+                       .Where(x => string.CompareOrdinal(x.SessionDate, startKey) >= 0 
+                                && string.CompareOrdinal(x.SessionDate, endKey) <= 0)
+                       .ToList();
+        }
+
+        /// <summary>
+        /// Get all AppUsageSessions for a date range (inclusive)
+        /// </summary>
+        public static List<AppUsageSession> GetAppUsageSessionsForRange(DateTime startDate, DateTime endDate)
+        {
+            var conn = GetConnection();
+            var rangeStart = startDate.Date;
+            var rangeEnd = endDate.Date.AddDays(1); // Include full end day
+
+            return conn.Table<AppUsageSession>()
+                       .Where(s => s.StartTime >= rangeStart && s.StartTime < rangeEnd)
+                       .ToList();
+        }
+
+        /// <summary>
+        /// Get all FocusSessions for a date range (inclusive)
+        /// </summary>
+        public static List<FocusSession> GetFocusSessionsForRange(DateTime startDate, DateTime endDate)
+        {
+            var conn = GetConnection();
+            var rangeStart = startDate.Date;
+            var rangeEnd = endDate.Date.AddDays(1); // Include full end day
+
+            return conn.Table<FocusSession>()
+                       .Where(x => x.StartTime >= rangeStart && x.StartTime < rangeEnd)
+                       .ToList();
+        }
     }
 }
