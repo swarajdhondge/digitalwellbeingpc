@@ -191,6 +191,9 @@ namespace digital_wellbeing_app.Services
             {
                 // User is idle - reset timer, they're taking a natural break
                 _lastBreakTime = DateTime.Now;
+                _snoozeUntil = null;
+                SnoozeCount = 0;
+                _breakPending = false;
                 return;
             }
 

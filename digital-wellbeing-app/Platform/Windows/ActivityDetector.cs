@@ -54,35 +54,39 @@ namespace digital_wellbeing_app.Platform.Windows
         /// <returns>True if audio is playing above threshold</returns>
         public static bool IsSystemAudioPlaying(float threshold = 0.01f)
         {
+            object? enumeratorObj = null;
+            IMMDevice? device = null;
+            IAudioMeterInformation? meter = null;
+
             try
             {
-                var enumerator = (IMMDeviceEnumerator)new MMDeviceEnumerator();
-                
+                enumeratorObj = new MMDeviceEnumerator();
+                var enumerator = (IMMDeviceEnumerator)enumeratorObj;
+
                 // eRender = 0, eMultimedia = 1
-                int hr = enumerator.GetDefaultAudioEndpoint(0, 1, out IMMDevice device);
+                int hr = enumerator.GetDefaultAudioEndpoint(0, 1, out device);
                 if (hr != 0 || device == null)
                     return false;
 
                 Guid iid = IID_IAudioMeterInformation;
-                hr = device.Activate(ref iid, 1, IntPtr.Zero, out IAudioMeterInformation meter);
+                hr = device.Activate(ref iid, 1, IntPtr.Zero, out meter);
                 if (hr != 0 || meter == null)
-                {
-                    Marshal.ReleaseComObject(device);
                     return false;
-                }
 
                 hr = meter.GetPeakValue(out float peak);
-                
-                Marshal.ReleaseComObject(meter);
-                Marshal.ReleaseComObject(device);
-                Marshal.ReleaseComObject(enumerator);
-
                 return hr == 0 && peak > threshold;
             }
             catch
             {
                 // Fail gracefully - assume no audio if detection fails
                 return false;
+            }
+            finally
+            {
+                // Always release COM objects in reverse order, even if an exception occurred
+                if (meter != null) try { Marshal.ReleaseComObject(meter); } catch { }
+                if (device != null) try { Marshal.ReleaseComObject(device); } catch { }
+                if (enumeratorObj != null) try { Marshal.ReleaseComObject(enumeratorObj); } catch { }
             }
         }
 

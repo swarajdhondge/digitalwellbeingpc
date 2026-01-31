@@ -62,6 +62,7 @@ namespace digital_wellbeing_app.Views.Focus
     public partial class FocusView : System.Windows.Controls.UserControl
     {
         private FocusSessionService? _focusService;
+        private bool _serviceInitialized;
         private int _selectedDuration = 25;
         private readonly ObservableCollection<AppCategoryDisplay> _appDisplayList = new();
         private readonly ObservableCollection<SessionHistoryDisplay> _sessionHistory = new();
@@ -69,16 +70,26 @@ namespace digital_wellbeing_app.Views.Focus
         public FocusView()
         {
             InitializeComponent();
-            
+
             AppCategoryList.ItemsSource = _appDisplayList;
             SessionHistoryList.ItemsSource = _sessionHistory;
-            
+
             Loaded += FocusView_Loaded;
         }
 
         private void FocusView_Loaded(object sender, RoutedEventArgs e)
         {
-            InitializeFocusService();
+            if (!_serviceInitialized)
+            {
+                InitializeFocusService();
+                _serviceInitialized = true;
+            }
+            else if (_focusService?.IsInFocusMode == true)
+            {
+                // Re-sync UI state when navigating back
+                ShowActiveState();
+            }
+
             LoadAppCategories();
             LoadSessionHistory();
             UpdateEnforcementUI();
@@ -90,13 +101,13 @@ namespace digital_wellbeing_app.Views.Focus
             // Get service from MainWindow if available, or create new one
             var mainWindow = Window.GetWindow(this) as MainWindow.MainWindow;
             _focusService = mainWindow?.GetFocusSessionService();
-            
+
             if (_focusService == null)
             {
                 _focusService = new FocusSessionService();
             }
 
-            // Subscribe to events
+            // Subscribe to events (once only - guarded by _serviceInitialized)
             _focusService.SessionStarted += OnSessionStarted;
             _focusService.SessionEnded += OnSessionEnded;
             _focusService.SessionTick += OnSessionTick;

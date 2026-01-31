@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
     Title="Digital Wellbeing"
-    Height="650" Width="1000"
+    Height="750" Width="1100"
     MinHeight="500" MinWidth="800"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
@@ -192,6 +192,15 @@
                         <StackPanel Grid.Row="2" Margin="0,0,0,16">
                             <Border Style="{StaticResource NavDivider}"/>
 
+                            <Button x:Name="NavHelp"
+                                    Style="{StaticResource NavItem}"
+                                    Click="Help_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <md:PackIcon Kind="HelpCircleOutline" Width="20" Height="20" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Help" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+
                             <Button x:Name="NavSettings"
                                     Style="{StaticResource NavItem}"
                                     Click="Settings_Click">
@@ -210,7 +219,8 @@
                             </Button>
 
                             <!-- Version -->
-                            <TextBlock Text="v1.7.0"
+                            <TextBlock x:Name="SidebarVersionText"
+                                       Text="v1.7.0"
                                        Style="{StaticResource LabelMuted}"
                                        Margin="24,16,0,0"/>
                         </StackPanel>

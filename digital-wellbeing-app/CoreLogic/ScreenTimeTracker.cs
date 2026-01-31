@@ -16,9 +16,10 @@ namespace digital_wellbeing_app.CoreLogic
         Paused   // Screen locked or PC sleeping
     }
 
-    public class ScreenTimeTracker
+    public class ScreenTimeTracker : IDisposable
     {
         private readonly System.Timers.Timer _timer;
+        private readonly object _stateLock = new();
         private TimeSpan _activeTime;
         private DateTime _sessionStartTime;
         private DateTime _lastSaved;
@@ -88,20 +89,25 @@ namespace digital_wellbeing_app.CoreLogic
 
         public void Start()
         {
-            // New session starts now
-            _currentSegmentStart = DateTime.Now;
-            _currentSegmentAccumulated = 0;
-            _continuousSessionStart = DateTime.Now;
-            _continuousSessionSeconds = 0;
-            _state = TrackingState.Active;
-            _timer.Start();
+            lock (_stateLock)
+            {
+                _currentSegmentStart = DateTime.Now;
+                _currentSegmentAccumulated = 0;
+                _continuousSessionStart = DateTime.Now;
+                _continuousSessionSeconds = 0;
+                _state = TrackingState.Active;
+                _timer.Start();
+            }
         }
 
         public void Stop()
         {
-            _timer.Stop();
-            SaveSessionData();
-            SaveCurrentScreenSession();
+            lock (_stateLock)
+            {
+                _timer.Stop();
+                SaveSessionData();
+                SaveCurrentScreenSession();
+            }
         }
 
         /// <summary>
@@ -109,15 +115,18 @@ namespace digital_wellbeing_app.CoreLogic
         /// </summary>
         public void Pause()
         {
-            if (_state == TrackingState.Paused)
-                return;
+            lock (_stateLock)
+            {
+                if (_state == TrackingState.Paused)
+                    return;
 
-            _timer.Stop();
-            SaveSessionData();
-            SaveCurrentScreenSession();
-            
-            _state = TrackingState.Paused;
-            StateChanged?.Invoke(this, _state);
+                _timer.Stop();
+                SaveSessionData();
+                SaveCurrentScreenSession();
+
+                _state = TrackingState.Paused;
+            }
+            StateChanged?.Invoke(this, TrackingState.Paused);
         }
 
         /// <summary>
@@ -125,129 +134,147 @@ namespace digital_wellbeing_app.CoreLogic
         /// </summary>
         public void Resume()
         {
-            if (_state != TrackingState.Paused)
-                return;
+            lock (_stateLock)
+            {
+                if (_state != TrackingState.Paused)
+                    return;
 
-            // Check for day rollover
-            CheckDayRollover();
+                CheckDayRollover();
 
-            // Start new session
-            _currentSegmentStart = DateTime.Now;
-            _currentSegmentAccumulated = 0;
-            _continuousSessionStart = DateTime.Now;
-            _continuousSessionSeconds = 0;
-            _sessionCount++;
-            _state = TrackingState.Active;
-            _idleStartTime = null;
-            
-            _timer.Start();
-            StateChanged?.Invoke(this, _state);
+                _currentSegmentStart = DateTime.Now;
+                _currentSegmentAccumulated = 0;
+                _continuousSessionStart = DateTime.Now;
+                _continuousSessionSeconds = 0;
+                _sessionCount++;
+                _state = TrackingState.Active;
+                _idleStartTime = null;
+
+                _timer.Start();
+            }
+            StateChanged?.Invoke(this, TrackingState.Active);
+        }
+
+        public void Dispose()
+        {
+            _timer.Stop();
+            _timer.Elapsed -= CheckActivity;
+            _timer.Dispose();
         }
 
         private void CheckActivity(object? sender, ElapsedEventArgs e)
         {
-            // Check for day rollover at midnight
-            CheckDayRollover();
+            TrackingState? stateChangeToReport = null;
 
-            // Get current idle state
-            var idleTime = WindowsIdleTimeHelper.GetIdleTime();
-            bool isUserIdle = idleTime.TotalSeconds > IdleThresholdSeconds;
-            bool isPassivelyConsuming = ActivityDetector.IsPassivelyConsuming();
-
-            // Smart idle detection:
-            // Only pause if user is idle AND not passively consuming content
-            bool shouldPauseTracking = isUserIdle && !isPassivelyConsuming;
-
-            if (shouldPauseTracking)
+            lock (_stateLock)
             {
-                // User is truly idle
-                if (_state != TrackingState.Idle)
+                // Check for day rollover at midnight
+                CheckDayRollover();
+
+                // Get current idle state
+                var idleTime = WindowsIdleTimeHelper.GetIdleTime();
+                bool isUserIdle = idleTime.TotalSeconds > IdleThresholdSeconds;
+                bool isPassivelyConsuming = ActivityDetector.IsPassivelyConsuming();
+
+                bool shouldPauseTracking = isUserIdle && !isPassivelyConsuming;
+
+                if (shouldPauseTracking)
                 {
-                    // Transition to idle - save current session
-                    _idleStartTime ??= DateTime.Now;
-                    
-                    if (_state == TrackingState.Active)
+                    if (_state != TrackingState.Idle)
                     {
-                        SaveSessionData();
-                        SaveCurrentScreenSession();
+                        _idleStartTime ??= DateTime.Now;
+
+                        if (_state == TrackingState.Active)
+                        {
+                            SaveSessionData();
+                            SaveCurrentScreenSession();
+                        }
+
+                        _state = TrackingState.Idle;
+                        stateChangeToReport = _state;
                     }
-                    
-                    _state = TrackingState.Idle;
-                    StateChanged?.Invoke(this, _state);
                 }
-                // Don't accumulate time while idle
-            }
-            else
-            {
-                // User is active (or passively consuming)
-                if (_state == TrackingState.Idle)
+                else
                 {
-                    // Transition from idle to active - start new continuous session
-                    _currentSegmentStart = DateTime.Now;
-                    _currentSegmentAccumulated = 0;
-                    _continuousSessionStart = DateTime.Now;
-                    _continuousSessionSeconds = 0;
-                    _sessionCount++;
-                    _idleStartTime = null;
-                    _state = TrackingState.Active;
-                    StateChanged?.Invoke(this, _state);
+                    if (_state == TrackingState.Idle)
+                    {
+                        _currentSegmentStart = DateTime.Now;
+                        _currentSegmentAccumulated = 0;
+                        _continuousSessionStart = DateTime.Now;
+                        _continuousSessionSeconds = 0;
+                        _sessionCount++;
+                        _idleStartTime = null;
+                        _state = TrackingState.Active;
+                        stateChangeToReport = _state;
+                    }
+
+                    _activeTime = _activeTime.Add(TimeSpan.FromSeconds(1));
+                    _currentSegmentAccumulated++;
+                    _continuousSessionSeconds++;
                 }
 
-                // Accumulate time (both total and continuous session)
-                _activeTime = _activeTime.Add(TimeSpan.FromSeconds(1));
-                _currentSegmentAccumulated++;
-                _continuousSessionSeconds++;
+                // Periodic save
+                var now = DateTime.Now;
+                if ((now - _lastSaved).TotalMinutes >= SaveIntervalMinutes)
+                {
+                    SaveSessionData();
+
+                    if (_currentSegmentAccumulated >= 30)
+                    {
+                        SaveCurrentScreenSession();
+                        _currentSegmentStart = DateTime.Now;
+                        _currentSegmentAccumulated = 0;
+                    }
+
+                    _lastSaved = now;
+                }
             }
 
-            // Periodic save (every 5 minutes instead of 15)
-            var now = DateTime.Now;
-            if ((now - _lastSaved).TotalMinutes >= SaveIntervalMinutes)
+            // Fire events outside the lock to avoid potential deadlocks
+            if (stateChangeToReport.HasValue)
             {
-                SaveSessionData();
-                
-                // Save current segment (only if we have meaningful data)
-                // NOTE: This resets segment counters but NOT continuous session counters
-                if (_currentSegmentAccumulated >= 30)
-                {
-                    SaveCurrentScreenSession();
-                    _currentSegmentStart = DateTime.Now;
-                    _currentSegmentAccumulated = 0;
-                }
-                
-                _lastSaved = now;
+                StateChanged?.Invoke(this, stateChangeToReport.Value);
             }
         }
 
         private void CheckDayRollover()
         {
-            var todayKey = DateTime.Now.ToString("yyyy-MM-dd");
-            var sessionDateKey = _sessionStartTime.ToString("yyyy-MM-dd");
-
-            if (todayKey != sessionDateKey)
+            try
             {
-                // Day changed - save current session and reset
-                SaveSessionData();
-                SaveCurrentScreenSession();
+                var todayKey = DateTime.Now.ToString("yyyy-MM-dd");
+                var sessionDateKey = _sessionStartTime.ToString("yyyy-MM-dd");
 
-                // Reset for new day
-                _activeTime = TimeSpan.Zero;
-                _sessionStartTime = DateTime.Now;
-                _currentSegmentStart = DateTime.Now;
-                _currentSegmentAccumulated = 0;
-                _continuousSessionStart = DateTime.Now;
-                _continuousSessionSeconds = 0;
-                _sessionCount = 1;
-
-                // Create new day entry
-                var db = DatabaseService.GetConnection();
-                var entry = new ScreenTimePeriod
+                if (todayKey != sessionDateKey)
                 {
-                    SessionDate = todayKey,
-                    SessionStartTime = _sessionStartTime.ToString("o"),
-                    LastRecordedTime = DateTime.Now.ToString("o"),
-                    AccumulatedActiveSeconds = 0
-                };
-                db.Insert(entry);
+                    // Day changed - save current session and reset
+                    SaveSessionData();
+                    SaveCurrentScreenSession();
+
+                    // Reset for new day
+                    _activeTime = TimeSpan.Zero;
+                    _sessionStartTime = DateTime.Now;
+                    _currentSegmentStart = DateTime.Now;
+                    _currentSegmentAccumulated = 0;
+                    _continuousSessionStart = DateTime.Now;
+                    _continuousSessionSeconds = 0;
+                    _sessionCount = 1;
+
+                    // Create new day entry (InsertOrReplace handles race condition)
+                    var db = DatabaseService.GetConnection();
+                    var entry = new ScreenTimePeriod
+                    {
+                        SessionDate = todayKey,
+                        SessionStartTime = _sessionStartTime.ToString("o"),
+                        LastRecordedTime = DateTime.Now.ToString("o"),
+                        AccumulatedActiveSeconds = 0
+                    };
+                    db.InsertOrReplace(entry);
+
+                    System.Diagnostics.Debug.WriteLine($"[ScreenTimeTracker] Day rollover: {sessionDateKey} -> {todayKey}");
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[ScreenTimeTracker] CheckDayRollover error: {ex.Message}");
             }
         }
 

@@ -492,6 +492,139 @@
             </Border>
 
             <!-- ============================================ -->
+            <!-- DATA & PRIVACY SECTION -->
+            <!-- ============================================ -->
+            <TextBlock Text="Data &amp; Privacy"
+                       Style="{StaticResource SectionHeader}"/>
+
+            <Border Style="{StaticResource CardBase}"
+                    Margin="{StaticResource Margin.Card}">
+                <StackPanel>
+                    <TextBlock Text="All your data is stored locally on this device. Nothing is sent to the cloud."
+                               Style="{StaticResource BodySmall}"
+                               TextWrapping="Wrap"
+                               Margin="0,0,0,16"/>
+
+                    <!-- Storage Location -->
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel>
+                            <TextBlock Text="Storage location"
+                                       Style="{StaticResource ListItemName}"/>
+                            <TextBlock x:Name="StoragePathText"
+                                       Text="Loading..."
+                                       Style="{StaticResource LabelSecondary}"
+                                       TextTrimming="CharacterEllipsis"
+                                       Margin="0,2,0,0"/>
+                        </StackPanel>
+
+                        <Button Content="Open"
+                                Grid.Column="1"
+                                Click="OpenDataFolder_Click"
+                                Style="{StaticResource ButtonSecondary}"
+                                Padding="16,6"
+                                FontSize="12"
+                                VerticalAlignment="Center"/>
+                    </Grid>
+
+                    <!-- Database Size -->
+                    <Grid Margin="0,0,0,16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="Database size"
+                                   Style="{StaticResource ListItemName}"
+                                   VerticalAlignment="Center"/>
+
+                        <TextBlock x:Name="DbSizeText"
+                                   Grid.Column="1"
+                                   Text="--"
+                                   Style="{StaticResource LabelSecondary}"
+                                   VerticalAlignment="Center"/>
+                    </Grid>
+
+                    <!-- Separator -->
+                    <Border Height="1"
+                            Background="{DynamicResource Border.Subtle}"
+                            Margin="0,0,0,16"/>
+
+                    <!-- Export Data -->
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Export my data"
+                                       Style="{StaticResource ListItemName}"/>
+                            <TextBlock Text="Save all tracked data as CSV files"
+                                       Style="{StaticResource LabelSecondary}"
+                                       Margin="0,2,0,0"/>
+                        </StackPanel>
+
+                        <Button Content="Export"
+                                Grid.Column="1"
+                                Click="ExportData_Click"
+                                Style="{StaticResource ButtonSecondary}"
+                                Padding="16,6"
+                                FontSize="12"
+                                VerticalAlignment="Center"/>
+                    </Grid>
+
+                    <!-- Delete All Data -->
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Delete all data"
+                                       Style="{StaticResource ListItemName}"
+                                       Foreground="{DynamicResource Status.Danger}"/>
+                            <TextBlock Text="Permanently remove all tracked data"
+                                       Style="{StaticResource LabelSecondary}"
+                                       Margin="0,2,0,0"/>
+                        </StackPanel>
+
+                        <Button Content="Delete"
+                                Grid.Column="1"
+                                Click="DeleteAllData_Click"
+                                Padding="16,6"
+                                FontSize="12"
+                                Foreground="{DynamicResource Status.Danger}"
+                                Style="{StaticResource ButtonSecondary}"
+                                VerticalAlignment="Center"/>
+                    </Grid>
+
+                    <!-- View Privacy Info -->
+                    <Border Background="{DynamicResource Bg.Elevated}"
+                            CornerRadius="{DynamicResource Radius.SM}"
+                            Padding="12,10"
+                            Cursor="Hand"
+                            MouseLeftButtonDown="ViewPrivacyInfo_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="ShieldCheck"
+                                         Width="16" Height="16"
+                                         Foreground="{DynamicResource Accent.Primary}"
+                                         VerticalAlignment="Center"
+                                         Margin="0,0,8,0"/>
+                            <TextBlock Text="View privacy information"
+                                       Style="{StaticResource BodySmall}"
+                                       Foreground="{DynamicResource Accent.Primary}"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- ============================================ -->
             <!-- ABOUT SECTION -->
             <!-- ============================================ -->
             <TextBlock Text="About"
@@ -512,14 +645,50 @@
                         <StackPanel VerticalAlignment="Center">
                             <TextBlock Text="Digital Wellbeing"
                                        Style="{StaticResource HeadingSmall}"/>
-                            <TextBlock Text="Version 1.7.0"
+                            <TextBlock x:Name="AboutVersionText"
+                                       Text="Version 2.0.0"
                                        Style="{StaticResource LabelSecondary}"/>
                         </StackPanel>
                     </StackPanel>
 
                     <TextBlock Text="Track your screen time, app usage, and audio exposure to maintain a healthy digital lifestyle."
                                Style="{StaticResource BodySmall}"
-                               TextWrapping="Wrap"/>
+                               TextWrapping="Wrap"
+                               Margin="0,0,0,12"/>
+
+                    <TextBlock Text="Licensed under the Apache License 2.0"
+                               Style="{StaticResource LabelSecondary}"
+                               Margin="0,0,0,16"/>
+
+                    <!-- Action Links -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                        <Button Content="Check for Updates"
+                                Click="CheckForUpdates_Click"
+                                Style="{StaticResource ButtonSecondary}"
+                                Padding="16,6"
+                                FontSize="12"
+                                Margin="0,0,8,0"/>
+
+                        <Border Background="{DynamicResource Bg.Elevated}"
+                                CornerRadius="{DynamicResource Radius.SM}"
+                                Padding="12,6"
+                                Cursor="Hand"
+                                MouseLeftButtonDown="OpenGitHub_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <md:PackIcon Kind="Github" Width="14" Height="14"
+                                             Foreground="{DynamicResource Text.Secondary}"
+                                             VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <TextBlock Text="GitHub"
+                                           Style="{StaticResource BodySmall}"
+                                           Foreground="{DynamicResource Text.Secondary}"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <TextBlock x:Name="UpdateStatusText"
+                               Style="{StaticResource LabelSecondary}"
+                               Visibility="Collapsed"/>
                 </StackPanel>
             </Border>
 

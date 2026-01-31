@@ -6,11 +6,12 @@ using digital_wellbeing_app.Services;
 
 namespace digital_wellbeing_app.CoreLogic
 {
-    public class AppUsageTracker
+    public class AppUsageTracker : IDisposable
     {
         private AppUsageSession? _currentSession;
         private readonly FocusChangeListener _focusListener;
         private readonly System.Timers.Timer _periodicSaveTimer;
+        private readonly object _sessionLock = new();
         private DateTime _lastSaved = DateTime.Now;
 
         // Save interval matches ScreenTimeTracker (5 minutes)
@@ -46,17 +47,19 @@ namespace digital_wellbeing_app.CoreLogic
 
         public void Stop()
         {
-            _periodicSaveTimer.Stop();
-
-            // End any in‐flight session
-            if (_currentSession != null)
+            lock (_sessionLock)
             {
-                _currentSession.EndTime = DateTime.Now;
-                DatabaseService.SaveAppUsageSession(_currentSession);
-                _currentSession = null;
-            }
+                _periodicSaveTimer.Stop();
 
-            _focusListener.Stop();
+                if (_currentSession != null)
+                {
+                    _currentSession.EndTime = DateTime.Now;
+                    SaveSessionToDb(_currentSession);
+                    _currentSession = null;
+                }
+
+                _focusListener.Stop();
+            }
         }
 
         /// <summary>
@@ -65,65 +68,87 @@ namespace digital_wellbeing_app.CoreLogic
         /// </summary>
         private void OnPeriodicSave(object? sender, System.Timers.ElapsedEventArgs e)
         {
-            var now = DateTime.Now;
-
-            // Only save every SaveIntervalMinutes
-            if ((now - _lastSaved).TotalMinutes < SaveIntervalMinutes)
-                return;
-
-            if (_currentSession == null)
-                return;
-
-            // Skip very short sessions (less than 30 seconds)
-            var duration = now - _currentSession.StartTime;
-            if (duration.TotalSeconds < 30)
-                return;
-
-            // Save the current session segment
-            _currentSession.EndTime = now;
-            DatabaseService.SaveAppUsageSession(_currentSession);
-
-            // Start a new session segment for the same app (seamless continuation)
-            _currentSession = new AppUsageSession
+            lock (_sessionLock)
             {
-                AppName = _currentSession.AppName,
-                ExecutablePath = _currentSession.ExecutablePath,
-                WindowTitle = _currentSession.WindowTitle,
-                StartTime = now
-            };
+                var now = DateTime.Now;
 
-            _lastSaved = now;
+                if ((now - _lastSaved).TotalMinutes < SaveIntervalMinutes)
+                    return;
+
+                if (_currentSession == null)
+                    return;
+
+                var duration = now - _currentSession.StartTime;
+                if (duration.TotalSeconds < 30)
+                    return;
+
+                _currentSession.EndTime = now;
+                SaveSessionToDb(_currentSession);
+
+                _currentSession = new AppUsageSession
+                {
+                    AppName = _currentSession.AppName,
+                    ExecutablePath = _currentSession.ExecutablePath,
+                    WindowTitle = _currentSession.WindowTitle,
+                    StartTime = now
+                };
+
+                _lastSaved = now;
+            }
         }
 
         private void OnAppChanged(Process? process)
         {
-            // If user is idle, skip
-            if (WindowsIdleTimeHelper.IsUserIdle(60))
-                return;
+            bool shouldNotify = false;
 
-            var now = DateTime.Now;
-
-            // End previous session if exists
-            if (_currentSession != null)
+            lock (_sessionLock)
             {
-                _currentSession.EndTime = now;
-                DatabaseService.SaveAppUsageSession(_currentSession);
-                _currentSession = null;
+                if (WindowsIdleTimeHelper.IsUserIdle(60))
+                {
+                    process?.Dispose();
+                    return;
+                }
+
+                var now = DateTime.Now;
+
+                if (_currentSession != null)
+                {
+                    _currentSession.EndTime = now;
+                    SaveSessionToDb(_currentSession);
+                    _currentSession = null;
+                }
+
+                if (process == null) return;
+
+                try
+                {
+                    var appName = process.ProcessName;
+                    var windowTitle = SafeGetWindowTitle(process);
+
+                    // UWP apps run under ApplicationFrameHost - use window title as app name
+                    if (string.Equals(appName, "ApplicationFrameHost", StringComparison.OrdinalIgnoreCase)
+                        && !string.IsNullOrWhiteSpace(windowTitle))
+                    {
+                        appName = windowTitle;
+                    }
+
+                    _currentSession = new AppUsageSession
+                    {
+                        AppName = appName,
+                        ExecutablePath = SafeGetPath(process),
+                        WindowTitle = windowTitle,
+                        StartTime = now
+                    };
+                    shouldNotify = true;
+                }
+                finally
+                {
+                    process.Dispose();
+                }
             }
 
-            if (process == null) return;
-
-            // Start new usage session
-            _currentSession = new AppUsageSession
-            {
-                AppName = process.ProcessName,
-                ExecutablePath = SafeGetPath(process),
-                WindowTitle = SafeGetWindowTitle(process),
-                StartTime = now
-            };
-
-            // Notify subscribers
-            OnAppSwitched?.Invoke();
+            if (shouldNotify)
+                OnAppSwitched?.Invoke();
         }
 
         private static string SafeGetPath(Process proc)
@@ -136,6 +161,32 @@ namespace digital_wellbeing_app.CoreLogic
         {
             try { return proc.MainWindowTitle; }
             catch { return string.Empty; }
+        }
+
+        /// <summary>
+        /// Saves a session to the DB without persisting the window title.
+        /// Window titles can contain sensitive info (email subjects, passwords, URLs).
+        /// The title is kept in memory for live display but not stored permanently.
+        /// </summary>
+        private static void SaveSessionToDb(AppUsageSession session)
+        {
+            var dbSession = new AppUsageSession
+            {
+                AppName = session.AppName,
+                ExecutablePath = session.ExecutablePath,
+                WindowTitle = null,  // Privacy: don't persist window titles
+                StartTime = session.StartTime,
+                EndTime = session.EndTime
+            };
+            DatabaseService.SaveAppUsageSession(dbSession);
+        }
+
+        public void Dispose()
+        {
+            _periodicSaveTimer.Stop();
+            _periodicSaveTimer.Elapsed -= OnPeriodicSave;
+            _periodicSaveTimer.Dispose();
+            _focusListener.Stop();
         }
     }
 }

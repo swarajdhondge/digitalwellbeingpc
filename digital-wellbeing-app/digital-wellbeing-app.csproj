@@ -17,7 +17,7 @@
     <ApplicationIcon>Resources\Icons\digital-balance-icon.ico</ApplicationIcon>
     <Win32Icon>Resources\Icons\digital-balance-icon.ico</Win32Icon>
 
-    <Version>1.6.0</Version>
+    <Version>2.0.0</Version>
     
     <!-- Disable assembly info generation to fix WPF temp project duplicate attribute issue -->
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -25,9 +25,16 @@
     
     <!-- Minimum Windows version supported -->
     <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
+
+    <!-- App manifest for DPI awareness and execution level -->
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+
+    <!-- Exclude nested test project from compilation -->
+    <DefaultItemExcludes>$(DefaultItemExcludes);Tests\**</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
     <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
     <PackageReference Include="xunit.abstractions" Version="2.0.3" />
     <PackageReference Include="xunit.assert" Version="2.9.3" />

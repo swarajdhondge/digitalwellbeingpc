@@ -129,13 +129,33 @@ namespace digital_wellbeing_app.ViewModels
 
         public DashboardViewModel()
         {
-            // Initial load
-            RefreshData();
-
-            // Set up timer for periodic refresh (every 2 seconds)
+            // Set up timer (don't start yet - wait for StartRefreshing)
             _refreshTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
             _refreshTimer.Tick += (_, __) => RefreshData();
+
+            // Initial data load
+            RefreshData();
+        }
+
+        /// <summary>
+        /// Start periodic refresh. Call from view's Loaded/IsVisibleChanged event.
+        /// Idempotent - safe to call multiple times.
+        /// </summary>
+        public void StartRefreshing()
+        {
+            if (_refreshTimer.IsEnabled) return;
+            RefreshData();
             _refreshTimer.Start();
+        }
+
+        /// <summary>
+        /// Stop periodic refresh. Call from view's Unloaded/IsVisibleChanged event.
+        /// Idempotent - safe to call multiple times.
+        /// </summary>
+        public void StopRefreshing()
+        {
+            if (!_refreshTimer.IsEnabled) return;
+            _refreshTimer.Stop();
         }
 
         /// <summary>

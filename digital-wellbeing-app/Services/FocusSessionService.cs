@@ -133,6 +133,36 @@ namespace digital_wellbeing_app.Services
 
             LoadSettings();
             LoadAppCategories();
+            RecoverOrphanedSessions();
+        }
+
+        /// <summary>
+        /// Check for focus sessions that were started but never ended (crash recovery).
+        /// Marks them as incomplete so they show in history.
+        /// </summary>
+        private void RecoverOrphanedSessions()
+        {
+            try
+            {
+                var todayKey = DateTime.Now.ToString("yyyy-MM-dd");
+                var todaySessions = DatabaseService.GetFocusSessionsForDate(DateTime.Today);
+
+                foreach (var session in todaySessions)
+                {
+                    // Orphaned = no end time set (EndTime defaults to MinValue)
+                    if (session.EndTime == DateTime.MinValue && !session.Completed)
+                    {
+                        session.EndTime = session.StartTime.AddMinutes(session.PlannedDurationMinutes);
+                        session.Completed = false;
+                        DatabaseService.SaveFocusSession(session);
+                        System.Diagnostics.Debug.WriteLine($"[Focus] Recovered orphaned session from {session.StartTime}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[Focus] Orphan recovery error: {ex.Message}");
+            }
         }
 
         /// <summary>
@@ -152,8 +182,12 @@ namespace digital_wellbeing_app.Services
                 StartTime = DateTime.Now,
                 PlannedDurationMinutes = durationMinutes,
                 EnforcementLevel = EnforcementLevel,
-                SessionDate = DateTime.Now.ToString("yyyy-MM-dd")
+                SessionDate = DateTime.Now.ToString("yyyy-MM-dd"),
+                Completed = false
             };
+
+            // Persist immediately so crash recovery can find it
+            DatabaseService.SaveFocusSession(_currentSession);
 
             // Clear session-specific data from previous sessions
             _sessionOverrideApps.Clear();
@@ -403,11 +437,11 @@ namespace digital_wellbeing_app.Services
                 NativeMethods.GetWindowThreadProcessId(foregroundHandle, out uint processId);
                 if (processId == 0) return;
 
-                var process = Process.GetProcessById((int)processId);
+                using var process = Process.GetProcessById((int)processId);
                 if (process == null) return;
 
                 var appIdentifier = process.ProcessName;
-                
+
                 // Check if this is a distracting app
                 if (!IsDistractingApp(appIdentifier))
                 {
@@ -416,7 +450,7 @@ namespace digital_wellbeing_app.Services
 
                 // Check cooldown - have we recently warned/blocked this app?
                 var cooldown = EnforcementLevel == FocusEnforcementLevel.Warn ? WarnCooldown : BlockCooldown;
-                
+
                 if (_appLastActionTime.TryGetValue(appIdentifier, out var lastAction))
                 {
                     var elapsed = DateTime.Now - lastAction;
@@ -428,7 +462,7 @@ namespace digital_wellbeing_app.Services
                 }
 
                 System.Diagnostics.Debug.WriteLine($"[Focus] DISTRACTING APP DETECTED: {appIdentifier} (Enforcement: {EnforcementLevel})");
-                
+
                 string execPath = string.Empty;
                 try { execPath = process.MainModule?.FileName ?? string.Empty; }
                 catch { }
