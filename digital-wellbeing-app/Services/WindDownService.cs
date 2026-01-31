@@ -249,25 +249,28 @@ namespace digital_wellbeing_app.Services
         {
             var today = now.Date;
             var endTime = today.AddHours(EndHour).AddMinutes(EndMinute);
-            
-            // For overnight schedules, end time is the next day
-            if (EndHour * 60 + EndMinute <= StartHour * 60 + StartMinute)
+
+            var startMinutes = StartHour * 60 + StartMinute;
+            var endMinutes = EndHour * 60 + EndMinute;
+            var nowMinutes = now.Hour * 60 + now.Minute;
+
+            if (endMinutes <= startMinutes)
             {
-                // Overnight schedule - if we're before midnight, end is tomorrow
-                if (now.Hour >= StartHour || now.Hour < EndHour)
+                // Overnight schedule (e.g., 9 PM to 7 AM):
+                // If we're in the "before midnight" portion, end is tomorrow
+                if (nowMinutes >= startMinutes)
                 {
-                    if (now.Hour >= StartHour)
-                    {
-                        endTime = today.AddDays(1).AddHours(EndHour).AddMinutes(EndMinute);
-                    }
+                    endTime = today.AddDays(1).AddHours(EndHour).AddMinutes(EndMinute);
                 }
+                // else: "after midnight" portion, end is today - already correct
             }
-            
+
+            // Safety: if endTime is somehow in the past, add a day
             if (endTime <= now)
             {
                 endTime = endTime.AddDays(1);
             }
-            
+
             return endTime - now;
         }
 

@@ -154,7 +154,8 @@
                         
                         <!-- Listening Time -->
                         <StackPanel Orientation="Horizontal"
-                                    Margin="0,0,0,4">
+                                    Margin="0,0,0,4"
+                                    ToolTip="Total time audio was playing through your output device today">
                             <TextBlock Text="{Binding SoundTime}"
                                        Style="{StaticResource ValueDisplay}"/>
                             <TextBlock Text=" listening time"
@@ -165,6 +166,7 @@
                         
                         <!-- Harmful Time (if any) -->
                         <StackPanel Orientation="Horizontal"
+                                    ToolTip="Time your audio exceeded the safe volume threshold (estimated 85+ dB SPL)"
                                     Visibility="{Binding SoundHarmfulTime, Converter={StaticResource StringToVisibilityConverter}}">
                             <TextBlock Text="{Binding SoundHarmfulTime}"
                                        Foreground="{DynamicResource Status.Danger}"

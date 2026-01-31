@@ -246,9 +246,43 @@
             <!-- ============================================ -->
             <!-- WEEKLY USAGE SECTION -->
             <!-- ============================================ -->
-            <TextBlock Text="This week"
-                       Style="{StaticResource SectionHeader}"
-                       Margin="0,8,0,0"/>
+
+            <!-- Week Navigation Header -->
+            <Grid Margin="0,8,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="PrevWeekBtn"
+                        Grid.Column="0"
+                        Click="PrevWeek_Click"
+                        Style="{StaticResource MaterialDesignIconButton}"
+                        Width="32" Height="32"
+                        Padding="0"
+                        Foreground="{DynamicResource Text.Secondary}">
+                    <md:PackIcon Kind="ChevronLeft" Width="20" Height="20"/>
+                </Button>
+
+                <TextBlock Grid.Column="1"
+                           Text="{Binding WeekLabel}"
+                           Style="{StaticResource SectionHeader}"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Margin="0"/>
+
+                <Button x:Name="NextWeekBtn"
+                        Grid.Column="2"
+                        Click="NextWeek_Click"
+                        Style="{StaticResource MaterialDesignIconButton}"
+                        Width="32" Height="32"
+                        Padding="0"
+                        IsEnabled="{Binding CanGoForward}"
+                        Foreground="{DynamicResource Text.Secondary}">
+                    <md:PackIcon Kind="ChevronRight" Width="20" Height="20"/>
+                </Button>
+            </Grid>
 
             <Border Style="{StaticResource CardBase}">
                 <StackPanel>
@@ -291,7 +325,8 @@
                                     </TextBlock>
 
                                     <!-- Progress Bar -->
-                                    <Border Grid.Column="1"
+                                    <Border x:Name="WeekBarContainer"
+                                            Grid.Column="1"
                                             Background="{DynamicResource Bg.Elevated}"
                                             CornerRadius="{DynamicResource Radius.Full}"
                                             Height="8"
@@ -299,8 +334,14 @@
                                             VerticalAlignment="Center">
                                         <Border Background="{DynamicResource Chart.Primary}"
                                                 CornerRadius="{DynamicResource Radius.Full}"
-                                                HorizontalAlignment="Left"
-                                                Width="{Binding Usage, Converter={StaticResource UsageToWidthConverter}}"/>
+                                                HorizontalAlignment="Left">
+                                            <Border.Width>
+                                                <MultiBinding Converter="{StaticResource PercentageToWidthConverter}">
+                                                    <Binding Path="Percentage"/>
+                                                    <Binding ElementName="WeekBarContainer" Path="ActualWidth"/>
+                                                </MultiBinding>
+                                            </Border.Width>
+                                        </Border>
                                     </Border>
 
                                     <!-- Duration -->
@@ -328,17 +369,19 @@
                     <TextBlock Text="Active"
                                Style="{StaticResource LabelSecondary}"
                                Margin="8,0,0,0"
-                               VerticalAlignment="Center"/>
+                               VerticalAlignment="Center"
+                               ToolTip="Time spent actively using your PC (mouse/keyboard input)"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <Border Width="12" Height="12" 
+                    <Border Width="12" Height="12"
                             Background="{DynamicResource Bg.Elevated}"
                             CornerRadius="2"
                             VerticalAlignment="Center"/>
                     <TextBlock Text="Idle"
                                Style="{StaticResource LabelSecondary}"
                                Margin="8,0,0,0"
-                               VerticalAlignment="Center"/>
+                               VerticalAlignment="Center"
+                               ToolTip="Time with no mouse/keyboard input detected"/>
                 </StackPanel>
             </StackPanel>
 

@@ -1,0 +1,250 @@
+<UserControl
+    x:Class="digital_wellbeing_app.Views.Welcome.WelcomeView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    Background="Transparent">
+
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                  VerticalScrollBarVisibility="Auto"
+                  Padding="20,16">
+        <StackPanel MaxWidth="640" HorizontalAlignment="Center">
+
+            <!-- App Icon + Welcome Header -->
+            <StackPanel HorizontalAlignment="Center" Margin="0,20,0,32">
+                <Border Background="{DynamicResource Accent.Primary}"
+                        CornerRadius="{DynamicResource Radius.LG}"
+                        Width="72" Height="72"
+                        HorizontalAlignment="Center"
+                        Margin="0,0,0,16">
+                    <Image Source="/Resources/Icons/digital-balance-icon-32.png"
+                           Width="44" Height="44"
+                           RenderOptions.BitmapScalingMode="HighQuality"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+                </Border>
+
+                <TextBlock Text="Welcome to Digital Wellbeing"
+                           Style="{StaticResource HeadingLarge}"
+                           TextAlignment="Center"
+                           Margin="0,0,0,8"/>
+
+                <TextBlock Text="Your personal digital wellness companion for Windows"
+                           Style="{StaticResource BodySmall}"
+                           Foreground="{DynamicResource Text.Secondary}"
+                           TextAlignment="Center"/>
+            </StackPanel>
+
+            <!-- What We Track -->
+            <Border Style="{StaticResource CardBase}"
+                    Margin="{StaticResource Margin.Card}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                        <md:PackIcon Kind="Eye"
+                                     Width="20" Height="20"
+                                     Foreground="{DynamicResource Accent.Primary}"
+                                     VerticalAlignment="Center"
+                                     Margin="0,0,10,0"/>
+                        <TextBlock Text="What we track"
+                                   Style="{StaticResource HeadingSmall}"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="0,0,0,8">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                            <md:PackIcon Kind="Monitor" Width="16" Height="16"
+                                         Foreground="{DynamicResource Text.Secondary}"
+                                         VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBlock Text="Screen time (active vs idle periods)"
+                                       Style="{StaticResource BodySmall}" TextWrapping="Wrap"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                            <md:PackIcon Kind="Apps" Width="16" Height="16"
+                                         Foreground="{DynamicResource Text.Secondary}"
+                                         VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBlock Text="App names and usage duration (not window contents)"
+                                       Style="{StaticResource BodySmall}" TextWrapping="Wrap"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="VolumeHigh" Width="16" Height="16"
+                                         Foreground="{DynamicResource Text.Secondary}"
+                                         VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBlock Text="Audio output volume levels for hearing safety"
+                                       Style="{StaticResource BodySmall}" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- What We DON'T Track -->
+            <Border Style="{StaticResource CardBase}"
+                    Margin="{StaticResource Margin.Card}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                        <md:PackIcon Kind="ShieldCheck"
+                                     Width="20" Height="20"
+                                     Foreground="{DynamicResource Status.Success}"
+                                     VerticalAlignment="Center"
+                                     Margin="0,0,10,0"/>
+                        <TextBlock Text="What we never track"
+                                   Style="{StaticResource HeadingSmall}"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="0,0,0,8">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                            <md:PackIcon Kind="Close" Width="16" Height="16"
+                                         Foreground="{DynamicResource Status.Danger}"
+                                         VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBlock Text="Keystrokes, passwords, or typed content"
+                                       Style="{StaticResource BodySmall}" TextWrapping="Wrap"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                            <md:PackIcon Kind="Close" Width="16" Height="16"
+                                         Foreground="{DynamicResource Status.Danger}"
+                                         VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBlock Text="Screen contents, screenshots, or window text"
+                                       Style="{StaticResource BodySmall}" TextWrapping="Wrap"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                            <md:PackIcon Kind="Close" Width="16" Height="16"
+                                         Foreground="{DynamicResource Status.Danger}"
+                                         VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBlock Text="Microphone audio or recordings"
+                                       Style="{StaticResource BodySmall}" TextWrapping="Wrap"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="Close" Width="16" Height="16"
+                                         Foreground="{DynamicResource Status.Danger}"
+                                         VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBlock Text="Internet traffic, browsing history, or URLs"
+                                       Style="{StaticResource BodySmall}" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Where Data Lives -->
+            <Border Style="{StaticResource CardBase}"
+                    Margin="{StaticResource Margin.Card}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                        <md:PackIcon Kind="FolderLock"
+                                     Width="20" Height="20"
+                                     Foreground="{DynamicResource Accent.Primary}"
+                                     VerticalAlignment="Center"
+                                     Margin="0,0,10,0"/>
+                        <TextBlock Text="Your data stays local"
+                                   Style="{StaticResource HeadingSmall}"/>
+                    </StackPanel>
+
+                    <TextBlock Text="All data is stored locally on your computer in:"
+                               Style="{StaticResource BodySmall}"
+                               TextWrapping="Wrap"
+                               Margin="0,0,0,8"/>
+
+                    <Border Background="{DynamicResource Bg.Elevated}"
+                            CornerRadius="{DynamicResource Radius.SM}"
+                            Padding="12,8"
+                            Margin="0,0,0,8">
+                        <TextBlock x:Name="DataPathText"
+                                   Text="%LocalAppData%\Digital Wellbeing\"
+                                   Style="{StaticResource BodySmall}"
+                                   Foreground="{DynamicResource Accent.Primary}"
+                                   FontFamily="Consolas"/>
+                    </Border>
+
+                    <TextBlock Text="Nothing is ever sent to the cloud, no account required, no internet needed."
+                               Style="{StaticResource BodySmall}"
+                               Foreground="{DynamicResource Text.Secondary}"
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Permissions Used -->
+            <Border Style="{StaticResource CardBase}"
+                    Margin="{StaticResource Margin.Card}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                        <md:PackIcon Kind="Key"
+                                     Width="20" Height="20"
+                                     Foreground="{DynamicResource Status.Warning}"
+                                     VerticalAlignment="Center"
+                                     Margin="0,0,10,0"/>
+                        <TextBlock Text="Permissions used"
+                                   Style="{StaticResource HeadingSmall}"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="0,0,0,8">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                            <md:PackIcon Kind="CursorDefaultClick" Width="16" Height="16"
+                                         Foreground="{DynamicResource Text.Secondary}"
+                                         VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBlock Text="Window focus detection (to track active app)"
+                                       Style="{StaticResource BodySmall}" TextWrapping="Wrap"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                            <md:PackIcon Kind="Sleep" Width="16" Height="16"
+                                         Foreground="{DynamicResource Text.Secondary}"
+                                         VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBlock Text="Idle detection (mouse/keyboard inactivity)"
+                                       Style="{StaticResource BodySmall}" TextWrapping="Wrap"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="Speaker" Width="16" Height="16"
+                                         Foreground="{DynamicResource Text.Secondary}"
+                                         VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBlock Text="Audio output meter (volume level only, not audio content)"
+                                       Style="{StaticResource BodySmall}" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Your Control -->
+            <Border Style="{StaticResource TipContainer}"
+                    Margin="0,0,0,16">
+                <StackPanel Orientation="Horizontal">
+                    <md:PackIcon Kind="InformationOutline"
+                                 Width="16" Height="16"
+                                 Foreground="{DynamicResource Accent.Primary}"
+                                 VerticalAlignment="Top"
+                                 Margin="0,2,8,0"/>
+                    <TextBlock Text="You can export or delete all your data anytime from Settings."
+                               Style="{StaticResource BodySmall}"
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Continue Button -->
+            <Button x:Name="ContinueButton"
+                    Content="Get Started"
+                    Click="ContinueButton_Click"
+                    Background="{DynamicResource Accent.Primary}"
+                    Foreground="{DynamicResource Accent.OnAccent}"
+                    BorderThickness="0"
+                    Padding="32,14"
+                    FontSize="16"
+                    FontWeight="Medium"
+                    HorizontalAlignment="Center"
+                    Margin="0,8,0,32"
+                    Cursor="Hand">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}"
+                                            CornerRadius="12"
+                                            Padding="{TemplateBinding Padding}">
+                                        <ContentPresenter HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+            </Button>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

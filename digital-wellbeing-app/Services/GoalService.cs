@@ -8,8 +8,8 @@ namespace digital_wellbeing_app.Services
     /// </summary>
     public class GoalService
     {
-        private int? _cachedGoal;
-        private bool _cacheValid;
+        private static int? _cachedGoal;
+        private static bool _cacheValid;
 
         /// <summary>
         /// Static event fired when the goal is changed from any GoalService instance.
@@ -62,6 +62,9 @@ namespace digital_wellbeing_app.Services
             }
             else
             {
+                // Clamp to valid range: 1 minute to 24 hours
+                minutes = Math.Clamp(minutes.Value, 1, 1440);
+
                 if (setting == null)
                 {
                     setting = new UserSettings { Key = SettingsKeys.ScreenTimeGoal };

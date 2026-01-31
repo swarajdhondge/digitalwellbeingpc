@@ -22,6 +22,10 @@ namespace digital_wellbeing_app.ViewModels
         private readonly DispatcherTimer _timer;
         private bool _disposed;
 
+        // Throttle DB-heavy queries: update every 5 seconds instead of every 1 second
+        private int _tickCounter;
+        private const int DbRefreshInterval = 5;
+
         #region Properties - Today's Time
 
         private string _todayTimeText = "0 hr 0 min";
@@ -146,25 +150,131 @@ namespace digital_wellbeing_app.ViewModels
 
         #endregion
 
+        #region Properties - Week Navigation
+
+        private DateTime _currentWeekStart;
+
+        private string _weekLabel = string.Empty;
+        public string WeekLabel
+        {
+            get => _weekLabel;
+            set { if (_weekLabel == value) return; _weekLabel = value; OnPropertyChanged(nameof(WeekLabel)); }
+        }
+
+        private bool _canGoForward;
+        public bool CanGoForward
+        {
+            get => _canGoForward;
+            set { if (_canGoForward == value) return; _canGoForward = value; OnPropertyChanged(nameof(CanGoForward)); }
+        }
+
+        private bool _isCurrentWeek = true;
+        public bool IsCurrentWeek
+        {
+            get => _isCurrentWeek;
+            set { if (_isCurrentWeek == value) return; _isCurrentWeek = value; OnPropertyChanged(nameof(IsCurrentWeek)); }
+        }
+
+        #endregion
+
         public ScreenViewModel()
         {
             _tracker = (System.Windows.Application.Current as App)?.ScreenTracker
                        ?? new ScreenTimeTracker();
             _goalService = new GoalService();
 
-            // Subscribe to state changes
-            _tracker.StateChanged += (s, state) => TrackingState = state;
+            // Initialize week navigation to current week's Monday
+            _currentWeekStart = DateTime.Today;
+            while (_currentWeekStart.DayOfWeek != DayOfWeek.Monday)
+                _currentWeekStart = _currentWeekStart.AddDays(-1);
+
+            // Subscribe to state changes (named method for proper unsubscription)
+            _tracker.StateChanged += OnTrackerStateChanged;
             TrackingState = _tracker.State;
 
             // Subscribe to goal changes from Settings
             GoalService.GoalChanged += OnGoalChanged;
 
+            // Set up timer (don't start yet - wait for StartRefreshing)
             _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
-            _timer.Tick += (s, e) => UpdateAll();
-            _timer.Start();
+            _timer.Tick += OnTimerTick;
 
             LoadWeeklyUsage();
             UpdateAll();
+        }
+
+        public void GoToPreviousWeek()
+        {
+            _currentWeekStart = _currentWeekStart.AddDays(-7);
+            UpdateWeekNavState();
+            LoadWeeklyUsage();
+        }
+
+        public void GoToNextWeek()
+        {
+            var nextWeek = _currentWeekStart.AddDays(7);
+            // Don't go past current week
+            var currentMonday = DateTime.Today;
+            while (currentMonday.DayOfWeek != DayOfWeek.Monday)
+                currentMonday = currentMonday.AddDays(-1);
+            if (nextWeek > currentMonday) return;
+
+            _currentWeekStart = nextWeek;
+            UpdateWeekNavState();
+            LoadWeeklyUsage();
+        }
+
+        private void UpdateWeekNavState()
+        {
+            var currentMonday = DateTime.Today;
+            while (currentMonday.DayOfWeek != DayOfWeek.Monday)
+                currentMonday = currentMonday.AddDays(-1);
+
+            IsCurrentWeek = _currentWeekStart == currentMonday;
+            CanGoForward = _currentWeekStart < currentMonday;
+
+            // Format: "W5 · Jan 27 – Feb 2"
+            var weekEnd = _currentWeekStart.AddDays(6);
+            var cal = System.Globalization.CultureInfo.CurrentCulture.Calendar;
+            var weekNum = cal.GetWeekOfYear(_currentWeekStart, System.Globalization.CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+
+            if (_currentWeekStart.Month == weekEnd.Month)
+                WeekLabel = $"W{weekNum} \u00B7 {_currentWeekStart:MMM d}\u2013{weekEnd:d}";
+            else
+                WeekLabel = $"W{weekNum} \u00B7 {_currentWeekStart:MMM d}\u2013{weekEnd:MMM d}";
+        }
+
+        private void OnTrackerStateChanged(object? sender, TrackingState state)
+        {
+            TrackingState = state;
+        }
+
+        private void OnTimerTick(object? sender, EventArgs e)
+        {
+            UpdateAll();
+        }
+
+        /// <summary>
+        /// Start periodic refresh. Call from view's Loaded/IsVisibleChanged event.
+        /// Idempotent - safe to call multiple times.
+        /// </summary>
+        public void StartRefreshing()
+        {
+            if (_timer.IsEnabled) return;
+            _tickCounter = DbRefreshInterval; // Force DB queries on first call
+            LoadWeeklyUsage();
+            UpdateAll();
+            _timer.Start();
+        }
+
+        /// <summary>
+        /// Stop periodic refresh. Call from view's Unloaded/IsVisibleChanged event.
+        /// Idempotent - safe to call multiple times.
+        /// </summary>
+        public void StopRefreshing()
+        {
+            if (!_timer.IsEnabled) return;
+            _timer.Stop();
         }
 
         private void OnGoalChanged(object? sender, EventArgs e)
@@ -198,12 +308,20 @@ namespace digital_wellbeing_app.ViewModels
         {
             if (_disposed) return;
 
+            // Lightweight updates every tick (1 second)
             UpdateTodayUsage();
             UpdateTrackingState();
-            UpdateContextLine();
-            UpdateQuickStats();
             UpdateGoalProgress();
             UpdateTodayInWeeklyView();
+
+            // DB-heavy updates only every N ticks
+            _tickCounter++;
+            if (_tickCounter >= DbRefreshInterval)
+            {
+                _tickCounter = 0;
+                UpdateContextLine();
+                UpdateQuickStats();
+            }
         }
 
         private void UpdateTodayUsage()
@@ -397,10 +515,13 @@ namespace digital_wellbeing_app.ViewModels
         }
 
         /// <summary>
-        /// Update just today's entry in the weekly view (called every second)
+        /// Update just today's entry in the weekly view (called every second).
+        /// Only runs when viewing the current week.
         /// </summary>
         private void UpdateTodayInWeeklyView()
         {
+            if (!IsCurrentWeek) return;
+
             var todayItem = WeeklyUsage.FirstOrDefault(x => x.IsToday);
             if (todayItem == null) return;
 
@@ -412,7 +533,10 @@ namespace digital_wellbeing_app.ViewModels
             {
                 todayItem.Usage = newUsage;
                 todayItem.Minutes = newMinutes;
-                
+
+                // Recalculate bar percentages (today's value may now be the new max)
+                RecalculateBarPercentages();
+
                 // Recalculate weekly average
                 var totalMinutes = WeeklyUsage.Sum(x => x.Minutes);
                 var daysWithData = WeeklyUsage.Count(x => x.Minutes > 0);
@@ -434,23 +558,22 @@ namespace digital_wellbeing_app.ViewModels
             WeeklyUsage.Clear();
             var db = DatabaseService.GetConnection();
 
-            DateTime monday = DateTime.Today;
-            while (monday.DayOfWeek != DayOfWeek.Monday)
-                monday = monday.AddDays(-1);
+            // Update week nav label
+            UpdateWeekNavState();
 
             int totalMinutes = 0;
             int daysWithData = 0;
 
             for (int i = 0; i < 7; i++)
             {
-                var day = monday.AddDays(i);
+                var day = _currentWeekStart.AddDays(i);
                 var key = day.ToString("yyyy-MM-dd");
                 var entry = db.Table<ScreenTimePeriod>()
                               .FirstOrDefault(x => x.SessionDate == key);
-                
+
                 int sec = entry?.AccumulatedActiveSeconds ?? 0;
-                
-                // For today, use live data
+
+                // For today, use live data (only if viewing current week)
                 if (day.Date == DateTime.Today)
                     sec = (int)_tracker.CurrentActiveTime.TotalSeconds;
 
@@ -472,6 +595,9 @@ namespace digital_wellbeing_app.ViewModels
                 });
             }
 
+            // Calculate proportional bar percentages (relative to max day)
+            RecalculateBarPercentages();
+
             // Calculate weekly average
             if (daysWithData > 0)
             {
@@ -484,6 +610,16 @@ namespace digital_wellbeing_app.ViewModels
             {
                 WeeklyAverageMinutes = 0;
                 WeeklyAverageText = "0 hr 0 min";
+            }
+        }
+
+        private void RecalculateBarPercentages()
+        {
+            var maxMinutes = WeeklyUsage.Max(x => x.Minutes);
+            if (maxMinutes <= 0) maxMinutes = 1; // avoid division by zero
+            foreach (var item in WeeklyUsage)
+            {
+                item.Percentage = (double)item.Minutes / maxMinutes * 100.0;
             }
         }
 
@@ -549,10 +685,11 @@ namespace digital_wellbeing_app.ViewModels
             if (_disposed) return;
             _disposed = true;
             _timer.Stop();
-            
-            // Unsubscribe from static event to prevent memory leaks
+
+            // Unsubscribe from all events to prevent memory leaks
+            _tracker.StateChanged -= OnTrackerStateChanged;
             GoalService.GoalChanged -= OnGoalChanged;
-            
+
             GC.SuppressFinalize(this);
         }
 
@@ -564,7 +701,7 @@ namespace digital_wellbeing_app.ViewModels
     public class WeeklyUsageItem : INotifyPropertyChanged
     {
         public string Day { get; set; } = string.Empty;
-        
+
         private string _usage = string.Empty;
         public string Usage
         {
@@ -576,7 +713,7 @@ namespace digital_wellbeing_app.ViewModels
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Usage)));
             }
         }
-        
+
         private int _minutes;
         public int Minutes
         {
@@ -588,7 +725,19 @@ namespace digital_wellbeing_app.ViewModels
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Minutes)));
             }
         }
-        
+
+        private double _percentage;
+        public double Percentage
+        {
+            get => _percentage;
+            set
+            {
+                if (Math.Abs(_percentage - value) < 0.01) return;
+                _percentage = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Percentage)));
+            }
+        }
+
         public bool IsToday { get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;

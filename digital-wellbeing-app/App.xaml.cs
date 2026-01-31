@@ -1,4 +1,5 @@
 // File: App.xaml.cs
+using System.Security.Principal;
 using System.Threading;
 using Microsoft.Win32;
 using Velopack;
@@ -34,8 +35,21 @@ namespace digital_wellbeing_app
             );
         }
 
-        private const string MutexName = "DigitalWellbeingPC_SingleInstance";
+        // User-scoped mutex: allows multiple Windows users to each run their own instance
+        private static readonly string MutexName = $"DigitalWellbeingPC_SingleInstance_{GetCurrentUserSid()}";
         private static Mutex? _mutex;
+
+        private static string GetCurrentUserSid()
+        {
+            try
+            {
+                return WindowsIdentity.GetCurrent().User?.Value ?? "default";
+            }
+            catch
+            {
+                return "default";
+            }
+        }
 
         public CoreLogic.ScreenTimeTracker ScreenTracker { get; private set; } = null!;
         public CoreLogic.AppUsageTracker AppTracker { get; private set; } = null!;
@@ -47,6 +61,15 @@ namespace digital_wellbeing_app
         {
             // Velopack update hooks - must be first
             VelopackApp.Build().Run();
+
+            // Global exception handlers - catch unhandled crashes
+            DispatcherUnhandledException += OnDispatcherUnhandledException;
+            AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
+            System.Threading.Tasks.TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
+
+            // Initialize logging
+            Services.LogService.Initialize();
+            Services.LogService.Info("App starting up");
 
             // Single instance check
             _mutex = new Mutex(true, MutexName, out bool isNewInstance);
@@ -85,9 +108,76 @@ namespace digital_wellbeing_app
             AppTracker.Start();
             _soundService = new Services.SoundMonitoringService();
 
+            Services.LogService.Info("Trackers started successfully");
+
             // Subscribe to system events for pause/resume tracking
             SystemEvents.SessionSwitch += OnSessionSwitch;
             SystemEvents.PowerModeChanged += OnPowerModeChanged;
+
+            // Auto-check for updates (non-blocking, fire-and-forget)
+            _ = System.Threading.Tasks.Task.Run(async () =>
+            {
+                try
+                {
+                    // Delay to let UI finish loading first
+                    await System.Threading.Tasks.Task.Delay(5000);
+                    var updateService = new Services.UpdateService();
+                    await Current.Dispatcher.InvokeAsync(async () =>
+                    {
+                        await updateService.CheckAndPromptUpdateAsync();
+                    });
+                }
+                catch (System.Exception ex)
+                {
+                    Services.LogService.Warning($"Auto-update check failed: {ex.Message}");
+                }
+            });
+        }
+
+        /// <summary>
+        /// Handles unhandled exceptions on the UI dispatcher thread.
+        /// Shows a user-friendly error dialog and logs the crash.
+        /// </summary>
+        private void OnDispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            Services.LogService.Error("Unhandled UI exception", e.Exception);
+
+            try
+            {
+                System.Windows.MessageBox.Show(
+                    $"An unexpected error occurred:\n\n{e.Exception.Message}\n\n" +
+                    "The error has been logged. The application will try to continue.\n" +
+                    "If the problem persists, please restart the application.",
+                    "Digital Wellbeing - Error",
+                    System.Windows.MessageBoxButton.OK,
+                    System.Windows.MessageBoxImage.Error);
+            }
+            catch
+            {
+                // If we can't show a dialog, just log and continue
+            }
+
+            e.Handled = true; // Prevent app crash for recoverable exceptions
+        }
+
+        /// <summary>
+        /// Handles unhandled exceptions on non-UI threads (fatal).
+        /// </summary>
+        private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            if (e.ExceptionObject is Exception ex)
+            {
+                Services.LogService.Error("Fatal unhandled exception", ex);
+            }
+        }
+
+        /// <summary>
+        /// Handles unobserved Task exceptions (prevents silent failures).
+        /// </summary>
+        private void OnUnobservedTaskException(object? sender, System.Threading.Tasks.UnobservedTaskExceptionEventArgs e)
+        {
+            Services.LogService.Error("Unobserved task exception", e.Exception);
+            e.SetObserved(); // Prevent process termination
         }
 
         /// <summary>
@@ -140,13 +230,24 @@ namespace digital_wellbeing_app
 
         protected override void OnExit(System.Windows.ExitEventArgs e)
         {
+            Services.LogService.Info("App shutting down");
+
             // Unsubscribe from system events
             SystemEvents.SessionSwitch -= OnSessionSwitch;
             SystemEvents.PowerModeChanged -= OnPowerModeChanged;
 
             ScreenTracker?.Stop();
+            ScreenTracker?.Dispose();
             AppTracker?.Stop();
+            AppTracker?.Dispose();
+            SoundExposureMgr?.Dispose();
             _soundService?.Dispose();
+
+            // Close database connection last (after all trackers have saved)
+            Services.DatabaseService.CloseConnection();
+
+            Services.LogService.Info("App shutdown complete");
+
             _mutex?.ReleaseMutex();
             _mutex?.Dispose();
             base.OnExit(e);

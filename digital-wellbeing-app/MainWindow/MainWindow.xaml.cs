@@ -13,8 +13,10 @@ using digital_wellbeing_app.Views.Dashboard;
 using digital_wellbeing_app.Views.Focus;
 using digital_wellbeing_app.Views.Reports;
 using digital_wellbeing_app.Views.Screen;
+using digital_wellbeing_app.Views.Help;
 using digital_wellbeing_app.Views.Settings;
 using digital_wellbeing_app.Views.Sound;
+using digital_wellbeing_app.Views.Welcome;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Win32;
 using Windows.UI.Notifications;
@@ -31,6 +33,7 @@ namespace digital_wellbeing_app.MainWindow
         private readonly AppUsageView _appUsageView = new();
         private readonly FocusView _focusView = new();
         private readonly WeeklyReportView _reportsView = new();
+        private readonly HelpView _helpView = new();
         private readonly SettingsView _settingsView = new();
 
         // Track active nav button
@@ -46,15 +49,53 @@ namespace digital_wellbeing_app.MainWindow
         // Wind Down service
         private Services.WindDownService? _windDownService;
 
+        // Goal notification tracking
+        private bool _goalNotificationShownToday;
+        private string _goalNotificationDate = string.Empty;
+        private System.Windows.Threading.DispatcherTimer? _goalCheckTimer;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            // Set version dynamically from assembly PE file version info
+            try
+            {
+                var location = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                if (!string.IsNullOrEmpty(location))
+                {
+                    var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(location);
+                    SidebarVersionText.Text = $"v{fvi.ProductVersion ?? "1.7.0"}";
+                }
+            }
+            catch { /* Keep default text from XAML */ }
+
             InitTrayIcon();
             InitBreakReminder();
             InitFocusSession();
             InitWindDown();
-            MainContent.Content = _dashboardView;
+            InitGoalNotification();
+
+            // Show welcome screen on first run, otherwise show dashboard
+            var firstRunSettings = new Services.SettingsService();
+            if (!firstRunSettings.LoadFirstRunCompleted())
+            {
+                var welcomeView = new WelcomeView();
+                welcomeView.Completed += () =>
+                {
+                    MainContent.Content = _dashboardView;
+                    SetActiveNav(NavDashboard);
+                };
+                MainContent.Content = welcomeView;
+            }
+            else
+            {
+                MainContent.Content = _dashboardView;
+            }
             _activeNavButton = NavDashboard;
+
+            // Restore saved window position/size
+            RestoreWindowState();
 
             // Handle maximize state for proper corner radius
             StateChanged += MainWindow_StateChanged;
@@ -109,6 +150,7 @@ namespace digital_wellbeing_app.MainWindow
                 _trayIcon.BalloonTipTitle = "⚠️ Distracting App Detected";
                 _trayIcon.BalloonTipText = $"{appName} is marked as Entertainment.\n{timeText} remaining in focus. Click to respond.";
                 _trayIcon.BalloonTipIcon = ToolTipIcon.Warning;
+                _trayIcon.BalloonTipClicked -= OnFocusWarningBalloonClicked;
                 _trayIcon.BalloonTipClicked += OnFocusWarningBalloonClicked;
                 _trayIcon.ShowBalloonTip(5000);
             }
@@ -194,8 +236,21 @@ namespace digital_wellbeing_app.MainWindow
         {
             if (_trayIcon == null) return;
 
+            // Include daily summary in the notification
+            string summary = "";
+            try
+            {
+                var app = System.Windows.Application.Current as App;
+                if (app?.ScreenTracker != null)
+                {
+                    var activeTime = app.ScreenTracker.CurrentActiveTime;
+                    summary = $"\nYou used your PC for {(int)activeTime.TotalHours}h {activeTime.Minutes}m today.";
+                }
+            }
+            catch { /* ignore - show notification without summary */ }
+
             _trayIcon.BalloonTipTitle = "🌙 Time to Wind Down";
-            _trayIcon.BalloonTipText = "Quiet hours have started. Consider wrapping up and getting ready for rest.";
+            _trayIcon.BalloonTipText = $"Quiet hours have started. Consider wrapping up and getting ready for rest.{summary}";
             _trayIcon.BalloonTipIcon = ToolTipIcon.Info;
             _trayIcon.ShowBalloonTip(5000);
         }
@@ -245,6 +300,71 @@ namespace digital_wellbeing_app.MainWindow
                     UpdateWindDownVisual(false);
                 }
             }
+        }
+
+        #endregion
+
+        #region Goal Notifications
+
+        private void InitGoalNotification()
+        {
+            // Check screen time goal every 60 seconds
+            _goalCheckTimer = new System.Windows.Threading.DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(60)
+            };
+            _goalCheckTimer.Tick += OnGoalCheckTick;
+            _goalCheckTimer.Start();
+        }
+
+        private void OnGoalCheckTick(object? sender, EventArgs e)
+        {
+            try
+            {
+                var today = DateTime.Now.ToString("yyyy-MM-dd");
+
+                // Reset flag on new day
+                if (_goalNotificationDate != today)
+                {
+                    _goalNotificationShownToday = false;
+                    _goalNotificationDate = today;
+                }
+
+                if (_goalNotificationShownToday) return;
+
+                var app = System.Windows.Application.Current as App;
+                if (app?.ScreenTracker == null) return;
+
+                var goalService = new Services.GoalService();
+                var goal = goalService.GetDailyScreenTimeGoal();
+                if (goal == null) return;
+
+                var currentTime = app.ScreenTracker.CurrentActiveTime;
+                if (goalService.IsOverGoal(currentTime))
+                {
+                    _goalNotificationShownToday = true;
+                    ShowGoalReachedNotification(goal.Value, currentTime);
+                }
+            }
+            catch (Exception ex)
+            {
+                Services.LogService.Warning($"Goal check error: {ex.Message}");
+            }
+        }
+
+        private void ShowGoalReachedNotification(int goalMinutes, TimeSpan currentTime)
+        {
+            if (_trayIcon == null) return;
+
+            var goalFormatted = goalMinutes >= 60
+                ? $"{goalMinutes / 60}h {goalMinutes % 60}m"
+                : $"{goalMinutes}m";
+            var currentFormatted = $"{(int)currentTime.TotalHours}h {currentTime.Minutes}m";
+
+            _trayIcon.BalloonTipTitle = "Screen Time Goal Reached";
+            _trayIcon.BalloonTipText = $"You've used your PC for {currentFormatted}, exceeding your {goalFormatted} goal. Consider taking a break.";
+            _trayIcon.BalloonTipIcon = ToolTipIcon.Info;
+            _trayIcon.ShowBalloonTip(5000);
         }
 
         #endregion
@@ -612,8 +732,60 @@ namespace digital_wellbeing_app.MainWindow
             };
 
             _trayIcon.ContextMenuStrip = new ContextMenuStrip();
-            _trayIcon.ContextMenuStrip.Items.Add("Open", null, (s, e) => ShowWindow());
+
+            // Quick navigate
+            _trayIcon.ContextMenuStrip.Items.Add("Open Dashboard", null, (s, e) => { ShowWindow(); Dashboard_Click(null, new RoutedEventArgs()); });
+            _trayIcon.ContextMenuStrip.Items.Add("Focus", null, (s, e) => { ShowWindow(); Focus_Click(null, new RoutedEventArgs()); });
+            _trayIcon.ContextMenuStrip.Items.Add("Reports", null, (s, e) => { ShowWindow(); Reports_Click(null, new RoutedEventArgs()); });
+            _trayIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
+
+            // Focus session toggle
+            var focusItem = new ToolStripMenuItem("Start Focus Session");
+            focusItem.Click += (s, e) =>
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    if (_focusSessionService?.IsInFocusMode == true)
+                    {
+                        _focusSessionService.EndSession(false);
+                    }
+                    else
+                    {
+                        ShowWindow();
+                        Focus_Click(null, new RoutedEventArgs());
+                    }
+                });
+            };
+            _trayIcon.ContextMenuStrip.Items.Add(focusItem);
+            _trayIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
+
+            // Settings and Updates
+            _trayIcon.ContextMenuStrip.Items.Add("Settings", null, (s, e) => { ShowWindow(); Settings_Click(null, new RoutedEventArgs()); });
+            _trayIcon.ContextMenuStrip.Items.Add("Check for Updates", null, async (s, e) =>
+            {
+                try
+                {
+                    var updateService = new Services.UpdateService();
+                    await Dispatcher.InvokeAsync(async () =>
+                    {
+                        await updateService.CheckAndPromptUpdateAsync();
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Services.LogService.Warning($"Manual tray update check failed: {ex.Message}");
+                }
+            });
+            _trayIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
             _trayIcon.ContextMenuStrip.Items.Add("Exit", null, (s, e) => Close());
+
+            // Update focus item text dynamically when menu opens
+            _trayIcon.ContextMenuStrip.Opening += (s, e) =>
+            {
+                focusItem.Text = _focusSessionService?.IsInFocusMode == true
+                    ? "End Focus Session"
+                    : "Start Focus Session";
+            };
             _trayIcon.DoubleClick += (s, e) => ShowWindow();
             
             // Handle balloon tip events for break reminders
@@ -750,14 +922,87 @@ namespace digital_wellbeing_app.MainWindow
 
         private void Window_Closing(object? sender, CancelEventArgs e)
         {
+            // Save window position/size before closing
+            SaveWindowState();
+
             // Unsubscribe from system events
             SystemEvents.SessionSwitch -= OnSystemSessionSwitch;
             SystemEvents.PowerModeChanged -= OnSystemPowerModeChanged;
 
+            _goalCheckTimer?.Stop();
             _breakReminderService?.Dispose();
             _focusSessionService?.Dispose();
             _windDownService?.Dispose();
             _trayIcon?.Dispose();
+        }
+
+        /// <summary>
+        /// Restore saved window position/size. Validates that the position is on a connected monitor.
+        /// </summary>
+        private void RestoreWindowState()
+        {
+            try
+            {
+                var settings = new Services.SettingsService();
+                var state = settings.LoadWindowState();
+                if (state == null) return;
+
+                var (left, top, width, height, isMaximized) = state.Value;
+
+                // Validate that the saved position is on a connected monitor
+                var savedRect = new System.Drawing.Rectangle(
+                    (int)left, (int)top, (int)width, (int)height);
+
+                bool isOnScreen = false;
+                foreach (var screen in System.Windows.Forms.Screen.AllScreens)
+                {
+                    if (screen.WorkingArea.IntersectsWith(savedRect))
+                    {
+                        isOnScreen = true;
+                        break;
+                    }
+                }
+
+                if (isOnScreen)
+                {
+                    Left = left;
+                    Top = top;
+                    Width = width;
+                    Height = height;
+                    WindowStartupLocation = WindowStartupLocation.Manual;
+                }
+                // else: keep CenterScreen default
+
+                if (isMaximized)
+                {
+                    WindowState = WindowState.Maximized;
+                }
+            }
+            catch
+            {
+                // If restore fails, just use default position/size
+            }
+        }
+
+        /// <summary>
+        /// Save current window position/size to settings.
+        /// Uses RestoreBounds when maximized to preserve the normal-state dimensions.
+        /// </summary>
+        private void SaveWindowState()
+        {
+            try
+            {
+                var settings = new Services.SettingsService();
+                bool isMaximized = WindowState == WindowState.Maximized;
+
+                // When maximized, use RestoreBounds to get the "normal" position/size
+                var bounds = isMaximized ? RestoreBounds : new Rect(Left, Top, Width, Height);
+                settings.SaveWindowState(bounds.Left, bounds.Top, bounds.Width, bounds.Height, isMaximized);
+            }
+            catch
+            {
+                // Ignore save errors
+            }
         }
 
         /// <summary>
@@ -896,6 +1141,11 @@ namespace digital_wellbeing_app.MainWindow
             NavigateWithTransition(_reportsView, NavReports);
         }
 
+        private void Help_Click(object? sender, RoutedEventArgs e)
+        {
+            NavigateWithTransition(_helpView, NavHelp);
+        }
+
         private void Settings_Click(object? sender, RoutedEventArgs e)
         {
             NavigateWithTransition(_settingsView, NavSettings);
@@ -904,6 +1154,23 @@ namespace digital_wellbeing_app.MainWindow
         private void Exit_Click(object? sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        /// <summary>
+        /// Show the privacy/welcome screen (called from Settings "View privacy info" link).
+        /// </summary>
+        public void ShowPrivacyInfo()
+        {
+            var welcomeView = new WelcomeView();
+            welcomeView.Completed += () =>
+            {
+                // Navigate back to settings after closing privacy info
+                NavigateWithTransition(_settingsView, NavSettings);
+            };
+            MainContent.Content = welcomeView;
+            // Clear nav highlight since we're on a non-nav page
+            if (_activeNavButton != null)
+                _activeNavButton.Tag = null;
         }
 
         #endregion

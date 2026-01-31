@@ -19,6 +19,7 @@
 
             this.Loaded += OnLoaded;
             this.Unloaded += OnUnloaded;
+            this.IsVisibleChanged += OnIsVisibleChanged;
         }
 
         private void OnLoaded(object sender, System.Windows.RoutedEventArgs e)
@@ -30,14 +31,29 @@
                 _timerEventAttached = true;
             }
             _realTimeTimer.Start();
+            _vm.StartRefreshing();
             RenderRealTimeCanvas();
         }
 
         private void OnUnloaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            // Just stop the timer when navigating away, don't dispose the ViewModel
-            // The ViewModel needs to stay alive to receive goal change events
             _realTimeTimer.Stop();
+            _vm.StopRefreshing();
+        }
+
+        private void OnIsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        {
+            if ((bool)e.NewValue)
+            {
+                _realTimeTimer.Start();
+                _vm.StartRefreshing();
+                RenderRealTimeCanvas();
+            }
+            else
+            {
+                _realTimeTimer.Stop();
+                _vm.StopRefreshing();
+            }
         }
 
         private void RenderRealTimeCanvas()
@@ -81,6 +97,16 @@
         private void WeeklyToggle_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             _vm.IsWeeklyView = true;
+        }
+
+        private void PrevWeek_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            _vm.GoToPreviousWeek();
+        }
+
+        private void NextWeek_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            _vm.GoToNextWeek();
         }
     }
 }

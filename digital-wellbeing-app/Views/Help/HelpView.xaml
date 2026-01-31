@@ -1,0 +1,195 @@
+<UserControl
+    x:Class="digital_wellbeing_app.Views.Help.HelpView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    Background="Transparent">
+
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                  VerticalScrollBarVisibility="Auto"
+                  Padding="20,16">
+        <StackPanel>
+
+            <!-- Page Header -->
+            <TextBlock Text="Help"
+                       Style="{StaticResource HeadingLarge}"
+                       Margin="0,0,0,20"/>
+
+            <!-- DASHBOARD -->
+            <Border Style="{StaticResource CardBase}"
+                    Margin="{StaticResource Margin.Card}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                        <md:PackIcon Kind="ViewDashboard" Width="20" Height="20"
+                                     Foreground="{DynamicResource Accent.Primary}"
+                                     VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <TextBlock Text="Dashboard" Style="{StaticResource HeadingSmall}"/>
+                    </StackPanel>
+                    <TextBlock Style="{StaticResource BodySmall}" TextWrapping="Wrap"
+                               Text="The Dashboard shows a summary of your digital wellbeing for today. The main stat shows your total active screen time - this is time you spent actively using your PC (moving mouse, typing). Idle periods where you step away are not counted."/>
+                    <TextBlock Style="{StaticResource BodySmall}" TextWrapping="Wrap" Margin="0,8,0,0"
+                               Foreground="{DynamicResource Text.Secondary}"
+                               Text="The stacked bar shows the breakdown between active screen time, app usage, and audio exposure. Top apps show which applications you used the most today."/>
+                </StackPanel>
+            </Border>
+
+            <!-- SCREEN TIME -->
+            <Border Style="{StaticResource CardBase}"
+                    Margin="{StaticResource Margin.Card}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                        <md:PackIcon Kind="Monitor" Width="20" Height="20"
+                                     Foreground="{DynamicResource Accent.Primary}"
+                                     VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <TextBlock Text="Screen Time" Style="{StaticResource HeadingSmall}"/>
+                    </StackPanel>
+                    <TextBlock Style="{StaticResource BodySmall}" TextWrapping="Wrap"
+                               Text="Screen Time tracks how long your display has been on while you're actively using the PC. Active time means mouse or keyboard input within the last 60 seconds. If you step away, the tracker detects idle state and pauses."/>
+                    <TextBlock Style="{StaticResource BodySmall}" TextWrapping="Wrap" Margin="0,8,0,0"
+                               Foreground="{DynamicResource Text.Secondary}"
+                               Text="The timeline shows your activity over the day. The weekly view shows your daily totals for the past 7 days. You can set a daily goal in Settings to track your progress."/>
+                </StackPanel>
+            </Border>
+
+            <!-- APP USAGE -->
+            <Border Style="{StaticResource CardBase}"
+                    Margin="{StaticResource Margin.Card}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                        <md:PackIcon Kind="Apps" Width="20" Height="20"
+                                     Foreground="{DynamicResource Accent.Primary}"
+                                     VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <TextBlock Text="App Usage" Style="{StaticResource HeadingSmall}"/>
+                    </StackPanel>
+                    <TextBlock Style="{StaticResource BodySmall}" TextWrapping="Wrap"
+                               Text="App Usage records which applications have focus (are in the foreground). When you switch apps, the previous session is saved with its duration. Categories can be set per app: Work, Entertainment, Communication, Utilities, or Other."/>
+                    <TextBlock Style="{StaticResource BodySmall}" TextWrapping="Wrap" Margin="0,8,0,0"
+                               Foreground="{DynamicResource Text.Secondary}"
+                               Text="UWP apps (like Calculator or Terminal) are detected by their window title. App names are stored but window titles are never saved to the database for privacy."/>
+                </StackPanel>
+            </Border>
+
+            <!-- SOUND EXPOSURE -->
+            <Border Style="{StaticResource CardBase}"
+                    Margin="{StaticResource Margin.Card}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                        <md:PackIcon Kind="VolumeHigh" Width="20" Height="20"
+                                     Foreground="{DynamicResource Accent.Primary}"
+                                     VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <TextBlock Text="Sound Exposure" Style="{StaticResource HeadingSmall}"/>
+                    </StackPanel>
+                    <TextBlock Style="{StaticResource BodySmall}" TextWrapping="Wrap"
+                               Text="Sound Exposure monitors your system audio output volume to estimate hearing safety. It reads the audio meter (peak volume level) from your default output device - it never records or listens to actual audio content."/>
+                    <TextBlock Style="{StaticResource BodySmall}" TextWrapping="Wrap" Margin="0,8,0,0"
+                               Foreground="{DynamicResource Text.Secondary}"
+                               Text="SPL (Sound Pressure Level) is estimated from the system volume. The WHO recommends keeping exposure below 85 dB for extended periods. The default threshold is 75 dB. Headphones vs. speakers are detected automatically when possible."/>
+                </StackPanel>
+            </Border>
+
+            <!-- FOCUS MODE -->
+            <Border Style="{StaticResource CardBase}"
+                    Margin="{StaticResource Margin.Card}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                        <md:PackIcon Kind="Target" Width="20" Height="20"
+                                     Foreground="{DynamicResource Accent.Primary}"
+                                     VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <TextBlock Text="Focus Sessions" Style="{StaticResource HeadingSmall}"/>
+                    </StackPanel>
+                    <TextBlock Style="{StaticResource BodySmall}" TextWrapping="Wrap"
+                               Text="Focus Sessions help you stay productive by monitoring which apps you use during a timed session. When you open an app categorized as Entertainment, you'll be notified."/>
+                    <TextBlock Style="{StaticResource BodySmall}" TextWrapping="Wrap" Margin="0,8,0,0"
+                               Foreground="{DynamicResource Text.Secondary}"
+                               Text="Warn mode: Shows a popup when you open a distracting app, letting you choose to go back to work or continue anyway. Block mode: Automatically minimizes distracting apps. You can always override for specific apps during a session. A cooldown prevents spam warnings."/>
+                </StackPanel>
+            </Border>
+
+            <!-- BREAK REMINDERS -->
+            <Border Style="{StaticResource CardBase}"
+                    Margin="{StaticResource Margin.Card}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                        <md:PackIcon Kind="Eye" Width="20" Height="20"
+                                     Foreground="{DynamicResource Accent.Primary}"
+                                     VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <TextBlock Text="Break Reminders" Style="{StaticResource HeadingSmall}"/>
+                    </StackPanel>
+                    <TextBlock Style="{StaticResource BodySmall}" TextWrapping="Wrap"
+                               Text="Break Reminders follow the 20-20-20 rule: every 20 minutes, look at something 20 feet away for 20 seconds. This helps reduce eye strain from prolonged screen use."/>
+                    <TextBlock Style="{StaticResource BodySmall}" TextWrapping="Wrap" Margin="0,8,0,0"
+                               Foreground="{DynamicResource Text.Secondary}"
+                               Text="You can snooze reminders up to 3 times (5 minutes each). If the app detects you've been idle (natural break), the timer resets automatically. Reminders appear as an overlay when the app is visible, or as a system notification when minimized."/>
+                </StackPanel>
+            </Border>
+
+            <!-- WIND DOWN -->
+            <Border Style="{StaticResource CardBase}"
+                    Margin="{StaticResource Margin.Card}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                        <md:PackIcon Kind="WeatherNight" Width="20" Height="20"
+                                     Foreground="{DynamicResource Accent.Primary}"
+                                     VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <TextBlock Text="Wind Down" Style="{StaticResource HeadingSmall}"/>
+                    </StackPanel>
+                    <TextBlock Style="{StaticResource BodySmall}" TextWrapping="Wrap"
+                               Text="Wind Down mode provides a gentle visual reminder when it's time to wrap up for the day. Set your schedule (e.g., 9 PM to 7 AM) and choose from three visual styles: Amber (warm), Purple (calm), or Dim (subtle)."/>
+                    <TextBlock Style="{StaticResource BodySmall}" TextWrapping="Wrap" Margin="0,8,0,0"
+                               Foreground="{DynamicResource Text.Secondary}"
+                               Text="When active, a subtle glowing border appears around the app window. You can also enable a system notification when Wind Down starts. The schedule supports overnight spans (e.g., 10 PM to 6 AM)."/>
+                </StackPanel>
+            </Border>
+
+            <!-- WEEKLY REPORTS -->
+            <Border Style="{StaticResource CardBase}"
+                    Margin="{StaticResource Margin.Card}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                        <md:PackIcon Kind="ChartBar" Width="20" Height="20"
+                                     Foreground="{DynamicResource Accent.Primary}"
+                                     VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <TextBlock Text="Weekly Reports" Style="{StaticResource HeadingSmall}"/>
+                    </StackPanel>
+                    <TextBlock Style="{StaticResource BodySmall}" TextWrapping="Wrap"
+                               Text="Weekly Reports aggregate your data over the past 7 days. You can see trends in screen time, app usage patterns, focus session completion rates, and sound exposure levels."/>
+                    <TextBlock Style="{StaticResource BodySmall}" TextWrapping="Wrap" Margin="0,8,0,0"
+                               Foreground="{DynamicResource Text.Secondary}"
+                               Text="Week-over-week comparisons show whether your habits are improving. Focus vs. leisure breakdowns help you understand how productive your screen time has been."/>
+                </StackPanel>
+            </Border>
+
+            <!-- Footer Links -->
+            <Border Style="{StaticResource TipContainer}"
+                    Margin="0,8,0,24">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                        <md:PackIcon Kind="BugOutline" Width="16" Height="16"
+                                     Foreground="{DynamicResource Accent.Primary}"
+                                     VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <TextBlock x:Name="ReportBugLink"
+                                   Text="Report a bug"
+                                   Style="{StaticResource BodySmall}"
+                                   Foreground="{DynamicResource Accent.Primary}"
+                                   TextDecorations="Underline"
+                                   Cursor="Hand"
+                                   MouseLeftButtonDown="ReportBug_Click"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <md:PackIcon Kind="Github" Width="16" Height="16"
+                                     Foreground="{DynamicResource Accent.Primary}"
+                                     VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <TextBlock x:Name="GitHubLink"
+                                   Text="View on GitHub"
+                                   Style="{StaticResource BodySmall}"
+                                   Foreground="{DynamicResource Accent.Primary}"
+                                   TextDecorations="Underline"
+                                   Cursor="Hand"
+                                   MouseLeftButtonDown="GitHub_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

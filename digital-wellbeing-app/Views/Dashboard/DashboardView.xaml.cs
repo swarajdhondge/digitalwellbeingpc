@@ -7,10 +7,35 @@ namespace digital_wellbeing_app.Views.Dashboard
 {
     public partial class DashboardView : System.Windows.Controls.UserControl
     {
+        private readonly digital_wellbeing_app.ViewModels.DashboardViewModel _vm;
+
         public DashboardView()
         {
             InitializeComponent();
-            DataContext = new digital_wellbeing_app.ViewModels.DashboardViewModel();
+            _vm = new digital_wellbeing_app.ViewModels.DashboardViewModel();
+            DataContext = _vm;
+
+            Loaded += DashboardView_Loaded;
+            Unloaded += DashboardView_Unloaded;
+            IsVisibleChanged += DashboardView_IsVisibleChanged;
+        }
+
+        private void DashboardView_Loaded(object sender, RoutedEventArgs e)
+        {
+            _vm.StartRefreshing();
+        }
+
+        private void DashboardView_Unloaded(object sender, RoutedEventArgs e)
+        {
+            _vm.StopRefreshing();
+        }
+
+        private void DashboardView_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if ((bool)e.NewValue)
+                _vm.StartRefreshing();
+            else
+                _vm.StopRefreshing();
         }
 
         private void WeeklySummary_Click(object sender, MouseButtonEventArgs e)

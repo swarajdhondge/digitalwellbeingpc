@@ -54,7 +54,8 @@
                     <!-- Section Title -->
                     <TextBlock Text="Loud listening time"
                                Style="{StaticResource LabelSecondary}"
-                               Margin="0,0,0,8"/>
+                               Margin="0,0,0,8"
+                               ToolTip="Time your audio output exceeded the safe volume threshold"/>
                     
                     <!-- Stat Row with Badge -->
                     <StackPanel Orientation="Horizontal"
@@ -134,10 +135,12 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="Average"
-                                   Style="{StaticResource LabelSecondary}"/>
+                                   Style="{StaticResource LabelSecondary}"
+                                   ToolTip="Average estimated Sound Pressure Level (SPL) in decibels"/>
                         <TextBlock Grid.Column="1"
                                    Text="{Binding AverageSPLText}"
-                                   Style="{StaticResource ValueDisplay}"/>
+                                   Style="{StaticResource ValueDisplay}"
+                                   ToolTip="Estimated SPL based on system volume. WHO recommends below 85 dB for extended use."/>
                     </Grid>
                     
                     <Grid Margin="0,12,0,0">

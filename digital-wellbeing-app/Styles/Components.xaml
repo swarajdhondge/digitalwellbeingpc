@@ -51,6 +51,11 @@
         <Setter Property="Background" Value="{DynamicResource Status.Info}"/>
     </Style>
 
+    <!-- Neutral Badge (Gray) -->
+    <Style x:Key="PillBadgeNeutral" TargetType="Border" BasedOn="{StaticResource PillBadge}">
+        <Setter Property="Background" Value="{DynamicResource Text.Muted}"/>
+    </Style>
+
     <!-- ============================================ -->
     <!-- VIEW TOGGLE (Today / Weekly view) -->
     <!-- ============================================ -->

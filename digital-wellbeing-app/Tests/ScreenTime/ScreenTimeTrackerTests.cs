@@ -26,19 +26,16 @@ namespace digital_wellbeing_app.Tests.ScreenTime
         }
 
         [Fact]
-        public void SessionStartTime_Should_BeSetToConstructorTime()
+        public void SessionStartTime_Should_BeSetToToday()
         {
             // Arrange
-            var before = DateTime.Now;
             var tracker = new ScreenTimeTracker();
-            var after = DateTime.Now;
 
             // Act
             var start = tracker.SessionStartTime;
 
-            // Assert
-            Assert.True(start >= before && start <= after,
-                $"SessionStartTime {start} should be between {before} and {after}");
+            // Assert - SessionStartTime should be today (may be loaded from DB or set fresh)
+            Assert.Equal(DateTime.Now.Date, start.Date);
         }
     }
 }

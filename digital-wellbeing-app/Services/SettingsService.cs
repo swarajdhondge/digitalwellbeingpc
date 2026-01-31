@@ -1,3 +1,7 @@
+using System.IO;
+using System.Security.AccessControl;
+using System.Security.Principal;
+
 namespace digital_wellbeing_app.Services
 {
     public class SettingsService
@@ -6,39 +10,73 @@ namespace digital_wellbeing_app.Services
         private const string FileName = "settings.json";
         private readonly string _path;
         private readonly System.Collections.Generic.Dictionary<string, object> _values;
+        private static bool _aclApplied = false;
 
         public SettingsService()
         {
             var folder = System.IO.Path.Combine(
                 System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData),
                 FolderName);
+
+            bool created = !System.IO.Directory.Exists(folder);
             System.IO.Directory.CreateDirectory(folder);
 
-            _path = System.IO.Path.Combine(folder, FileName);
-            if (System.IO.File.Exists(_path))
+            // Restrict directory ACL on first creation
+            if (created && !_aclApplied)
             {
-                try
+                RestrictDirectoryToCurrentUser(folder);
+                _aclApplied = true;
+            }
+
+            _path = System.IO.Path.Combine(folder, FileName);
+            _values = LoadFromFile(_path);
+
+            // If primary file was corrupt/missing, try backup
+            if (_values.Count == 0 && System.IO.File.Exists(_path + ".bak"))
+            {
+                _values = LoadFromFile(_path + ".bak");
+                if (_values.Count > 0)
                 {
-                    var json = System.IO.File.ReadAllText(_path);
-                    _values = System.Text.Json.JsonSerializer
-                        .Deserialize<System.Collections.Generic.Dictionary<string, object>>(json)
-                        ?? new System.Collections.Generic.Dictionary<string, object>();
-                }
-                catch
-                {
-                    _values = new System.Collections.Generic.Dictionary<string, object>();
+                    System.Diagnostics.Debug.WriteLine("[Settings] Recovered from backup file");
                 }
             }
-            else
+        }
+
+        private static System.Collections.Generic.Dictionary<string, object> LoadFromFile(string path)
+        {
+            if (!System.IO.File.Exists(path))
+                return new System.Collections.Generic.Dictionary<string, object>();
+
+            try
             {
-                _values = new System.Collections.Generic.Dictionary<string, object>();
+                var json = System.IO.File.ReadAllText(path);
+                return System.Text.Json.JsonSerializer
+                    .Deserialize<System.Collections.Generic.Dictionary<string, object>>(json)
+                    ?? new System.Collections.Generic.Dictionary<string, object>();
+            }
+            catch
+            {
+                return new System.Collections.Generic.Dictionary<string, object>();
             }
         }
 
         private void SaveToDisk()
         {
-            var json = System.Text.Json.JsonSerializer.Serialize(_values);
-            System.IO.File.WriteAllText(_path, json);
+            try
+            {
+                // Create backup of current file before writing
+                if (System.IO.File.Exists(_path))
+                {
+                    System.IO.File.Copy(_path, _path + ".bak", overwrite: true);
+                }
+
+                var json = System.Text.Json.JsonSerializer.Serialize(_values);
+                System.IO.File.WriteAllText(_path, json);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[Settings] SaveToDisk error: {ex.Message}");
+            }
         }
 
         // --- Theme persistence ---
@@ -255,6 +293,24 @@ namespace digital_wellbeing_app.Services
             SaveToDisk();
         }
 
+        // --- First-run flag ---
+        public bool LoadFirstRunCompleted()
+        {
+            if (_values.TryGetValue("FirstRunCompleted", out var val))
+            {
+                if (val is bool b) return b;
+                if (val is System.Text.Json.JsonElement je && je.ValueKind == System.Text.Json.JsonValueKind.True)
+                    return true;
+            }
+            return false;
+        }
+
+        public void SaveFirstRunCompleted(bool completed)
+        {
+            _values["FirstRunCompleted"] = completed;
+            SaveToDisk();
+        }
+
         // --- Wind Down persistence ---
         public bool LoadWindDownEnabled()
         {
@@ -412,6 +468,92 @@ namespace digital_wellbeing_app.Services
         {
             _values[Models.WindDownKeys.VisualOpacity] = opacity;
             SaveToDisk();
+        }
+
+        // --- Window state persistence ---
+        public void SaveWindowState(double left, double top, double width, double height, bool isMaximized)
+        {
+            _values["WindowLeft"] = left;
+            _values["WindowTop"] = top;
+            _values["WindowWidth"] = width;
+            _values["WindowHeight"] = height;
+            _values["WindowMaximized"] = isMaximized;
+            SaveToDisk();
+        }
+
+        /// <summary>
+        /// Load saved window position/size. Returns null if no saved state exists.
+        /// </summary>
+        public (double Left, double Top, double Width, double Height, bool IsMaximized)? LoadWindowState()
+        {
+            if (!_values.ContainsKey("WindowWidth"))
+                return null;
+
+            double GetDouble(string key, double fallback)
+            {
+                if (_values.TryGetValue(key, out var val))
+                {
+                    if (val is double d) return d;
+                    if (val is System.Text.Json.JsonElement je && je.TryGetDouble(out var dVal)) return dVal;
+                }
+                return fallback;
+            }
+
+            bool GetBool(string key)
+            {
+                if (_values.TryGetValue(key, out var val))
+                {
+                    if (val is bool b) return b;
+                    if (val is System.Text.Json.JsonElement je && je.ValueKind == System.Text.Json.JsonValueKind.True) return true;
+                }
+                return false;
+            }
+
+            return (
+                GetDouble("WindowLeft", 100),
+                GetDouble("WindowTop", 100),
+                GetDouble("WindowWidth", 1100),
+                GetDouble("WindowHeight", 750),
+                GetBool("WindowMaximized")
+            );
+        }
+
+        /// <summary>
+        /// Restricts a directory's ACL to the current user only.
+        /// </summary>
+        private static void RestrictDirectoryToCurrentUser(string directoryPath)
+        {
+            try
+            {
+                var dirInfo = new System.IO.DirectoryInfo(directoryPath);
+                var security = dirInfo.GetAccessControl();
+
+                security.SetAccessRuleProtection(isProtected: true, preserveInheritance: false);
+
+                foreach (System.Security.AccessControl.FileSystemAccessRule rule in
+                    security.GetAccessRules(true, true, typeof(System.Security.Principal.SecurityIdentifier)))
+                {
+                    security.RemoveAccessRule(rule);
+                }
+
+                var currentUser = System.Security.Principal.WindowsIdentity.GetCurrent().User;
+                if (currentUser != null)
+                {
+                    security.AddAccessRule(new System.Security.AccessControl.FileSystemAccessRule(
+                        currentUser,
+                        System.Security.AccessControl.FileSystemRights.FullControl,
+                        System.Security.AccessControl.InheritanceFlags.ContainerInherit |
+                        System.Security.AccessControl.InheritanceFlags.ObjectInherit,
+                        System.Security.AccessControl.PropagationFlags.None,
+                        System.Security.AccessControl.AccessControlType.Allow));
+                }
+
+                dirInfo.SetAccessControl(security);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[Settings] ACL restriction failed: {ex.Message}");
+            }
         }
     }
 }

@@ -19,7 +19,19 @@ namespace digital_wellbeing_app.Views.Settings
         public SettingsView()
         {
             InitializeComponent();
-            
+
+            // Set version dynamically from assembly PE file version info
+            try
+            {
+                var location = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                if (!string.IsNullOrEmpty(location))
+                {
+                    var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(location);
+                    AboutVersionText.Text = $"Version {fvi.ProductVersion ?? "2.0.0"}";
+                }
+            }
+            catch { /* Keep default text from XAML */ }
+
             // Load saved theme preference
             var savedTheme = _themeService.Load();
             switch (savedTheme)
@@ -52,7 +64,150 @@ namespace digital_wellbeing_app.Views.Settings
 
             // Note: Hearing Protection threshold is disabled (Coming Soon)
             // Default is 75 dB, set in SettingsService.LoadHarmfulThreshold()
+
+            // Load Data & Privacy info
+            LoadDataPrivacyInfo();
         }
+
+        #region Data & Privacy
+
+        private void LoadDataPrivacyInfo()
+        {
+            try
+            {
+                StoragePathText.Text = DatabaseService.GetDatabaseFilePath();
+            }
+            catch
+            {
+                StoragePathText.Text = "Unable to determine";
+            }
+
+            RefreshDbSize();
+        }
+
+        private void RefreshDbSize()
+        {
+            try
+            {
+                long bytes = DatabaseService.GetDatabaseFileSize();
+                DbSizeText.Text = FormatFileSize(bytes);
+            }
+            catch
+            {
+                DbSizeText.Text = "Unknown";
+            }
+        }
+
+        private static string FormatFileSize(long bytes)
+        {
+            if (bytes <= 0) return "0 B";
+            if (bytes < 1024) return $"{bytes} B";
+            if (bytes < 1024 * 1024) return $"{bytes / 1024.0:F1} KB";
+            return $"{bytes / (1024.0 * 1024.0):F1} MB";
+        }
+
+        private void OpenDataFolder_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var dbPath = DatabaseService.GetDatabaseFilePath();
+                var folder = System.IO.Path.GetDirectoryName(dbPath);
+                if (folder != null && System.IO.Directory.Exists(folder))
+                {
+                    System.Diagnostics.Process.Start("explorer.exe", folder);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                System.Windows.MessageBox.Show(
+                    $"Could not open folder: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+
+        private void ExportData_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new System.Windows.Forms.FolderBrowserDialog
+            {
+                Description = "Choose where to save your exported data",
+                ShowNewFolderButton = true
+            };
+
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                try
+                {
+                    var exportDir = System.IO.Path.Combine(dialog.SelectedPath, $"DigitalWellbeing_Export_{System.DateTime.Now:yyyyMMdd_HHmmss}");
+                    int count = DataExportService.ExportAllToCsv(exportDir);
+
+                    System.Windows.MessageBox.Show(
+                        $"Successfully exported {count} data files to:\n{exportDir}",
+                        "Export Complete",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+
+                    // Open the export folder
+                    System.Diagnostics.Process.Start("explorer.exe", exportDir);
+                }
+                catch (System.Exception ex)
+                {
+                    System.Windows.MessageBox.Show(
+                        $"Export failed: {ex.Message}",
+                        "Export Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private void DeleteAllData_Click(object sender, RoutedEventArgs e)
+        {
+            var result = System.Windows.MessageBox.Show(
+                "Are you sure you want to delete ALL tracked data?\n\n" +
+                "This will permanently remove:\n" +
+                "- Screen time history\n" +
+                "- App usage history\n" +
+                "- Sound exposure history\n" +
+                "- Focus session history\n\n" +
+                "This action cannot be undone.",
+                "Delete All Data",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    DatabaseService.DeleteAllData();
+                    RefreshDbSize();
+
+                    System.Windows.MessageBox.Show(
+                        "All tracked data has been deleted.",
+                        "Data Deleted",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+                }
+                catch (System.Exception ex)
+                {
+                    System.Windows.MessageBox.Show(
+                        $"Failed to delete data: {ex.Message}",
+                        "Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private void ViewPrivacyInfo_Click(object sender, MouseButtonEventArgs e)
+        {
+            // Navigate to welcome/privacy screen
+            var mainWindow = Window.GetWindow(this) as MainWindow.MainWindow;
+            mainWindow?.ShowPrivacyInfo();
+        }
+
+        #endregion
 
         #region Goal Settings
 
@@ -531,6 +686,60 @@ namespace digital_wellbeing_app.Views.Settings
         {
             bool enable = (StartupCheckBox.IsChecked == true);
             StartupService.Enable(enable);
+        }
+
+        #endregion
+
+        #region About
+
+        private async void CheckForUpdates_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateStatusText.Text = "Checking for updates...";
+            UpdateStatusText.Visibility = Visibility.Visible;
+
+            try
+            {
+                var updateService = new UpdateService();
+                var update = await updateService.CheckForUpdatesAsync();
+
+                if (update != null)
+                {
+                    UpdateStatusText.Text = $"Update available: v{update.TargetFullRelease.Version}";
+
+                    var result = System.Windows.MessageBox.Show(
+                        $"A new version ({update.TargetFullRelease.Version}) is available.\n\nWould you like to update now?",
+                        "Update Available",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Information);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        UpdateStatusText.Text = "Downloading update...";
+                        await updateService.DownloadAndApplyAsync(update);
+                    }
+                }
+                else
+                {
+                    UpdateStatusText.Text = "You're up to date!";
+                }
+            }
+            catch (System.Exception ex)
+            {
+                UpdateStatusText.Text = $"Update check failed: {ex.Message}";
+            }
+        }
+
+        private void OpenGitHub_Click(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = "https://github.com/swarajdhondge/digitalwellbeingpc",
+                    UseShellExecute = true
+                });
+            }
+            catch { }
         }
 
         #endregion

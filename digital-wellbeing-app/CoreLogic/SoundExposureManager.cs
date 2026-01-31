@@ -4,7 +4,7 @@ using digital_wellbeing_app.Services;
 
 namespace digital_wellbeing_app.CoreLogic
 {
-    public class SoundExposureManager
+    public class SoundExposureManager : IDisposable
     {
         private SoundUsageSession? _currentSession;
         private bool _alertRaised;
@@ -149,6 +149,14 @@ namespace digital_wellbeing_app.CoreLogic
             };
 
             _lastSaved = now;
+        }
+
+        public void Dispose()
+        {
+            EndCurrentSession();
+            _periodicSaveTimer.Stop();
+            _periodicSaveTimer.Elapsed -= OnPeriodicSave;
+            _periodicSaveTimer.Dispose();
         }
 
         private static double GetBaseSPL(string deviceType) => deviceType switch

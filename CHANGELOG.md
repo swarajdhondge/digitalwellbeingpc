@@ -1,5 +1,54 @@
 # Changelog
 
+## [v2.0.0] - 2026-01-31
+
+### Production Hardening and Feature Update
+
+Major release with production-grade reliability improvements, new features, and UI refinements.
+
+### New Features
+- **Welcome Screen** - First-run onboarding experience
+  - Introduces key features to new users
+  - Only shown once (persisted via settings)
+
+- **Help Section** - Built-in FAQ and troubleshooting
+  - Common questions about screen time, app usage, and sound tracking
+  - Accessible from the navigation sidebar
+
+- **Data Export** - Export all tracking data to CSV
+  - Screen time, app usage, and sound exposure
+  - Date range selection
+  - Opens file picker for save location
+
+- **Week Navigation** - Browse past weeks in Screen Time view
+  - Chevron buttons to go forward/back between weeks
+  - Week label shows ISO week number and date range (e.g. "W5 . Jan 27-Feb 2")
+  - Forward button disabled when on the current week
+
+### Improvements
+- **Dashboard auto-refresh** - Values now update immediately when switching back to Dashboard tab
+  - Added IsVisibleChanged handler as backup for WPF Loaded/Unloaded events
+  - Start/stop refresh methods are now idempotent (safe to call multiple times)
+
+- **Proportional weekly bars** - Weekly usage bars now fill the container proportionally
+  - Longest day fills the full width, other days scale relative to it
+  - Replaced hardcoded 300px max width with dynamic percentage-based sizing
+
+- **Consistent badge styling** - Neutral category badge in Focus view now uses the PillBadge style system
+  - Matches corner radius and padding of Work and Entertainment badges
+
+- **Version display** - Settings page now shows correct version from assembly info
+
+### Technical
+- Added `Properties/AssemblyInfo.cs` with proper version attributes
+- Added `LogService` for structured application logging
+- Added `app.manifest` with DPI awareness (Per-Monitor V2) and execution level config
+- Extended test suite with `ScreenTimeTrackerExtendedTests` and `SettingsServiceTests`
+- Cleaned up `.gitignore` (added `.claude/`, confirmed `docs/` exclusion)
+- Removed stray test artifacts
+
+---
+
 ## [v1.7.0] - 2025-06-20
 
 ### Design Revamp - Samsung Digital Wellbeing Style
