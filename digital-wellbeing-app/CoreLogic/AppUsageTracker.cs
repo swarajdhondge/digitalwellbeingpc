@@ -78,8 +78,22 @@ namespace digital_wellbeing_app.CoreLogic
                 if (_currentSession == null)
                     return;
 
-                var duration = now - _currentSession.StartTime;
-                if (duration.TotalSeconds < 30)
+                // End session when user is idle (same 300s threshold as ScreenTimeTracker)
+                if (WindowsIdleTimeHelper.IsUserIdle(300))
+                {
+                    var duration = now - _currentSession.StartTime;
+                    if (duration.TotalSeconds >= 30)
+                    {
+                        _currentSession.EndTime = now;
+                        SaveSessionToDb(_currentSession);
+                    }
+                    _currentSession = null;
+                    _lastSaved = now;
+                    return;
+                }
+
+                var sessionDuration = now - _currentSession.StartTime;
+                if (sessionDuration.TotalSeconds < 30)
                     return;
 
                 _currentSession.EndTime = now;
@@ -103,7 +117,7 @@ namespace digital_wellbeing_app.CoreLogic
 
             lock (_sessionLock)
             {
-                if (WindowsIdleTimeHelper.IsUserIdle(60))
+                if (WindowsIdleTimeHelper.IsUserIdle(300))
                 {
                     process?.Dispose();
                     return;

@@ -123,15 +123,15 @@ namespace digital_wellbeing_app.Services
         {
             var settingsService = new SettingsService();
             
-            IsEnabled = LoadBoolSetting(settingsService, WindDownKeys.IsEnabled, false);
-            StartHour = LoadIntSetting(settingsService, WindDownKeys.StartHour, 21);
-            StartMinute = LoadIntSetting(settingsService, WindDownKeys.StartMinute, 0);
-            EndHour = LoadIntSetting(settingsService, WindDownKeys.EndHour, 7);
-            EndMinute = LoadIntSetting(settingsService, WindDownKeys.EndMinute, 0);
-            ShowNotification = LoadBoolSetting(settingsService, WindDownKeys.ShowNotification, true);
-            ShowVisualCue = LoadBoolSetting(settingsService, WindDownKeys.ShowVisualCue, true);
-            VisualStyle = (WindDownVisualStyle)LoadIntSetting(settingsService, WindDownKeys.VisualStyle, 0);
-            VisualOpacity = LoadDoubleSetting(settingsService, WindDownKeys.VisualOpacity, 0.3);
+            IsEnabled = settingsService.LoadBoolSetting(WindDownKeys.IsEnabled, false);
+            StartHour = settingsService.LoadIntSetting(WindDownKeys.StartHour, 21);
+            StartMinute = settingsService.LoadIntSetting(WindDownKeys.StartMinute, 0);
+            EndHour = settingsService.LoadIntSetting(WindDownKeys.EndHour, 7);
+            EndMinute = settingsService.LoadIntSetting(WindDownKeys.EndMinute, 0);
+            ShowNotification = settingsService.LoadBoolSetting(WindDownKeys.ShowNotification, true);
+            ShowVisualCue = settingsService.LoadBoolSetting(WindDownKeys.ShowVisualCue, true);
+            VisualStyle = (WindDownVisualStyle)settingsService.LoadIntSetting(WindDownKeys.VisualStyle, 0);
+            VisualOpacity = settingsService.LoadDoubleSetting(WindDownKeys.VisualOpacity, 0.3);
 
             System.Diagnostics.Debug.WriteLine($"[WindDown] Settings loaded: enabled={IsEnabled}, schedule={StartHour}:{StartMinute:D2}-{EndHour}:{EndMinute:D2}, showVisual={ShowVisualCue}, showNotif={ShowNotification}");
         }
@@ -300,63 +300,6 @@ namespace digital_wellbeing_app.Services
             _notificationShownThisSession = true;
             _lastNotificationTime = DateTime.Now;
         }
-
-        #region Settings Helpers
-
-        private bool LoadBoolSetting(SettingsService service, string key, bool defaultValue)
-        {
-            try
-            {
-                var dict = service.GetAllSettings();
-                if (dict.TryGetValue(key, out var value))
-                {
-                    if (value is bool b)
-                        return b;
-                    if (value is System.Text.Json.JsonElement je && je.ValueKind == System.Text.Json.JsonValueKind.True)
-                        return true;
-                    if (value is System.Text.Json.JsonElement je2 && je2.ValueKind == System.Text.Json.JsonValueKind.False)
-                        return false;
-                }
-            }
-            catch { }
-            return defaultValue;
-        }
-
-        private int LoadIntSetting(SettingsService service, string key, int defaultValue)
-        {
-            try
-            {
-                var dict = service.GetAllSettings();
-                if (dict.TryGetValue(key, out var value))
-                {
-                    if (value is int i)
-                        return i;
-                    if (value is System.Text.Json.JsonElement je && je.TryGetInt32(out var intVal))
-                        return intVal;
-                }
-            }
-            catch { }
-            return defaultValue;
-        }
-
-        private double LoadDoubleSetting(SettingsService service, string key, double defaultValue)
-        {
-            try
-            {
-                var dict = service.GetAllSettings();
-                if (dict.TryGetValue(key, out var value))
-                {
-                    if (value is double d)
-                        return d;
-                    if (value is System.Text.Json.JsonElement je && je.TryGetDouble(out var dVal))
-                        return dVal;
-                }
-            }
-            catch { }
-            return defaultValue;
-        }
-
-        #endregion
 
         public void Dispose()
         {

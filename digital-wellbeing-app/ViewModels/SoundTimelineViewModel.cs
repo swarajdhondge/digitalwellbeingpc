@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Threading;
 using digital_wellbeing_app.CoreLogic;
+using digital_wellbeing_app.Helpers;
 using digital_wellbeing_app.Models;
 using digital_wellbeing_app.Services;
 
@@ -90,10 +91,8 @@ namespace digital_wellbeing_app.ViewModels
             }
         }
 
-        public string TotalListeningText =>
-            $"{(int)TotalListeningTime.TotalHours:D2}:{TotalListeningTime.Minutes:D2}:{TotalListeningTime.Seconds:D2}";
-        public string TotalHarmfulText =>
-            $"{(int)TotalHarmfulTime.TotalHours:D2}:{TotalHarmfulTime.Minutes:D2}:{TotalHarmfulTime.Seconds:D2}";
+        public string TotalListeningText => TimeFormatHelper.FormatPrecise(TotalListeningTime);
+        public string TotalHarmfulText => TimeFormatHelper.FormatPrecise(TotalHarmfulTime);
 
         public SoundTimelineViewModel()
         {

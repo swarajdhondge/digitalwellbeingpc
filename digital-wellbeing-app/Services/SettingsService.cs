@@ -190,10 +190,57 @@ namespace digital_wellbeing_app.Services
             SaveToDisk();
         }
 
-        // --- Internal helper for BreakReminderService ---
         internal System.Collections.Generic.Dictionary<string, object> GetAllSettings()
         {
             return new System.Collections.Generic.Dictionary<string, object>(_values);
+        }
+
+        internal bool LoadBoolSetting(string key, bool defaultValue)
+        {
+            try
+            {
+                if (_values.TryGetValue(key, out var value))
+                {
+                    if (value is bool b) return b;
+                    if (value is System.Text.Json.JsonElement je)
+                    {
+                        if (je.ValueKind == System.Text.Json.JsonValueKind.True) return true;
+                        if (je.ValueKind == System.Text.Json.JsonValueKind.False) return false;
+                    }
+                }
+            }
+            catch { }
+            return defaultValue;
+        }
+
+        internal int LoadIntSetting(string key, int defaultValue)
+        {
+            try
+            {
+                if (_values.TryGetValue(key, out var value))
+                {
+                    if (value is int i) return i;
+                    if (value is System.Text.Json.JsonElement je && je.TryGetInt32(out var intVal))
+                        return intVal;
+                }
+            }
+            catch { }
+            return defaultValue;
+        }
+
+        internal double LoadDoubleSetting(string key, double defaultValue)
+        {
+            try
+            {
+                if (_values.TryGetValue(key, out var value))
+                {
+                    if (value is double d) return d;
+                    if (value is System.Text.Json.JsonElement je && je.TryGetDouble(out var dVal))
+                        return dVal;
+                }
+            }
+            catch { }
+            return defaultValue;
         }
 
         // --- Focus Session persistence ---

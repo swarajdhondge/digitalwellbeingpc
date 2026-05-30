@@ -156,9 +156,9 @@ namespace digital_wellbeing_app.Services
             var settingsService = new SettingsService();
             
             // Load from JSON settings
-            IsEnabled = LoadBoolSetting(settingsService, BreakReminderKeys.IsEnabled, false);
-            IntervalMinutes = LoadIntSetting(settingsService, BreakReminderKeys.IntervalMinutes, 20);
-            SoundEnabled = LoadBoolSetting(settingsService, BreakReminderKeys.SoundEnabled, true);
+            IsEnabled = settingsService.LoadBoolSetting(BreakReminderKeys.IsEnabled, false);
+            IntervalMinutes = settingsService.LoadIntSetting(BreakReminderKeys.IntervalMinutes, 20);
+            SoundEnabled = settingsService.LoadBoolSetting(BreakReminderKeys.SoundEnabled, true);
         }
 
         /// <summary>
@@ -213,42 +213,6 @@ namespace digital_wellbeing_app.Services
                 // Trigger break notification
                 BreakDue?.Invoke();
             }
-        }
-
-        private bool LoadBoolSetting(SettingsService service, string key, bool defaultValue)
-        {
-            try
-            {
-                var dict = service.GetAllSettings();
-                if (dict.TryGetValue(key, out var value))
-                {
-                    if (value is bool b)
-                        return b;
-                    if (value is System.Text.Json.JsonElement je && je.ValueKind == System.Text.Json.JsonValueKind.True)
-                        return true;
-                    if (value is System.Text.Json.JsonElement je2 && je2.ValueKind == System.Text.Json.JsonValueKind.False)
-                        return false;
-                }
-            }
-            catch { }
-            return defaultValue;
-        }
-
-        private int LoadIntSetting(SettingsService service, string key, int defaultValue)
-        {
-            try
-            {
-                var dict = service.GetAllSettings();
-                if (dict.TryGetValue(key, out var value))
-                {
-                    if (value is int i)
-                        return i;
-                    if (value is System.Text.Json.JsonElement je && je.TryGetInt32(out var intVal))
-                        return intVal;
-                }
-            }
-            catch { }
-            return defaultValue;
         }
 
         public void Dispose()

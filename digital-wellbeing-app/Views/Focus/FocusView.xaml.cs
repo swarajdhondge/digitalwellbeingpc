@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using digital_wellbeing_app.Helpers;
 using digital_wellbeing_app.Models;
 using digital_wellbeing_app.Services;
 using Brush = System.Windows.Media.Brush;
@@ -348,7 +349,7 @@ namespace digital_wellbeing_app.Views.Focus
                     var display = new AppCategoryDisplay
                     {
                         AppIdentifier = app.AppName,
-                        AppName = app.AppName,
+                        AppName = AppNameService.GetDisplayName(app.AppName, app.ExecutablePath),
                         ExecutablePath = app.ExecutablePath,
                         Category = CategoryToDisplayName(category),
                         Icon = iconService.GetIconForApp(app.ExecutablePath)
@@ -429,7 +430,7 @@ namespace digital_wellbeing_app.Views.Focus
 
                 // Update today's stats
                 var todayFocusTime = TimeSpan.FromMinutes(todaySessions.Sum(s => s.Duration.TotalMinutes));
-                TodayFocusTime.Text = FormatDuration(todayFocusTime);
+                TodayFocusTime.Text = TimeFormatHelper.FormatCompact(todayFocusTime);
                 TodaySessionCount.Text = todaySessions.Count(s => s.Completed).ToString();
 
                 // Add history items
@@ -437,7 +438,7 @@ namespace digital_wellbeing_app.Views.Focus
                 {
                     var display = new SessionHistoryDisplay
                     {
-                        DurationText = FormatDuration(session.Duration),
+                        DurationText = TimeFormatHelper.FormatCompact(session.Duration),
                         TimeText = session.StartTime.ToString("ddd, MMM d @ h:mm tt"),
                         DistractionsText = session.DistractionWarnings > 0 
                             ? $"{session.DistractionWarnings} distractions" 
@@ -458,13 +459,6 @@ namespace digital_wellbeing_app.Views.Focus
             {
                 NoHistoryText.Visibility = Visibility.Visible;
             }
-        }
-
-        private string FormatDuration(TimeSpan duration)
-        {
-            if (duration.TotalHours >= 1)
-                return $"{(int)duration.TotalHours}h {duration.Minutes}m";
-            return $"{duration.Minutes}m";
         }
 
         #endregion

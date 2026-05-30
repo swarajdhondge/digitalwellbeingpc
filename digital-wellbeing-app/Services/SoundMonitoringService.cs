@@ -17,9 +17,9 @@ namespace digital_wellbeing_app.Services
         private string? _lastDeviceId;
         private bool _hasAudioDevice;
 
-        public SoundMonitoringService()
+        public SoundMonitoringService(SoundExposureManager exposureManager)
         {
-            _exposureManager = new SoundExposureManager();
+            _exposureManager = exposureManager;
             _exposureManager.OnThresholdExceeded += (_, __) =>
             {
                 System.Windows.MessageBox.Show(
