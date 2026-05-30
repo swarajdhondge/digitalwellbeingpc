@@ -71,6 +71,7 @@ namespace digital_wellbeing_app.Views.Focus
         public FocusView()
         {
             InitializeComponent();
+            digital_wellbeing_app.Helpers.PulseLayout.CapCenter(PageScroll, PageRoot);
 
             AppCategoryList.ItemsSource = _appDisplayList;
             SessionHistoryList.ItemsSource = _sessionHistory;

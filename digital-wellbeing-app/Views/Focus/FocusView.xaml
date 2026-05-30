@@ -9,9 +9,9 @@
              FontFamily="{DynamicResource Font.Primary}"
              Background="Transparent">
 
-    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
+    <ScrollViewer x:Name="PageScroll" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
                   Padding="26,4,26,26">
-        <StackPanel MaxWidth="1040" HorizontalAlignment="Stretch">
+        <StackPanel x:Name="PageRoot" HorizontalAlignment="Center">
 
             <!-- Focus session card -->
             <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">

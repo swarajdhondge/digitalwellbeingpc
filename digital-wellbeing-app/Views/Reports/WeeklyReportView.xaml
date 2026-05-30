@@ -15,9 +15,9 @@
         <vm:WeeklyReportViewModel/>
     </UserControl.DataContext>
 
-    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
+    <ScrollViewer x:Name="PageScroll" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
                   Padding="26,4,26,26">
-        <StackPanel MaxWidth="1040" HorizontalAlignment="Stretch">
+        <StackPanel x:Name="PageRoot" HorizontalAlignment="Center">
 
             <!-- Week nav -->
             <Grid Margin="0,0,0,16">

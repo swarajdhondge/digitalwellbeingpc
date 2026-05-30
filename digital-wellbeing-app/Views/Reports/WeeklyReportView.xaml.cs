@@ -8,6 +8,7 @@ namespace digital_wellbeing_app.Views.Reports
         public WeeklyReportView()
         {
             InitializeComponent();
+            digital_wellbeing_app.Helpers.PulseLayout.CapCenter(PageScroll, PageRoot);
         }
     }
 }
