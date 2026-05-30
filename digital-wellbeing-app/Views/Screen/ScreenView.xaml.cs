@@ -90,6 +90,12 @@
             }
         }
 
+        private void ScreenScroll_SizeChanged(object sender, System.Windows.SizeChangedEventArgs e)
+        {
+            var inner = e.NewSize.Width - ScreenScroll.Padding.Left - ScreenScroll.Padding.Right;
+            RootPanel.Width = System.Math.Min(System.Math.Max(inner, 0), 1080);
+        }
+
         private void TodayToggle_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             _vm.IsWeeklyView = false;

@@ -17,9 +17,9 @@
         <conv:BoolToFontWeightConverter x:Key="BoolToFontWeight" />
     </UserControl.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
-                  Padding="26,4,26,26">
-        <StackPanel MaxWidth="1040" HorizontalAlignment="Stretch">
+    <ScrollViewer x:Name="ScreenScroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                  Padding="26,4,26,26" SizeChanged="ScreenScroll_SizeChanged">
+        <StackPanel x:Name="RootPanel" HorizontalAlignment="Center">
 
             <!-- Today / Week segmented toggle -->
             <Border Style="{StaticResource Pulse.SegmentBar}" Margin="0,0,0,16">
@@ -43,8 +43,10 @@
                         <TextBlock Text="{Binding TodayTimeText}" Style="{StaticResource Pulse.Stat}" Margin="0,6,0,0"/>
                         <TextBlock Text="{Binding ContextLine}" Style="{StaticResource Pulse.Body2}" Margin="0,2,0,0"/>
 
-                        <Border x:Name="TimelineBorder" Margin="0,22,0,0" Height="120">
-                            <Canvas x:Name="RealTimeCanvas" Background="Transparent"/>
+                        <Border x:Name="TimelineBorder" Margin="0,22,0,0" Height="100">
+                            <Border Background="{DynamicResource Track}" CornerRadius="14" Padding="0,8">
+                                <Canvas x:Name="RealTimeCanvas" Background="Transparent"/>
+                            </Border>
                         </Border>
 
                         <ItemsControl ItemsSource="{Binding HourMarkers}" Margin="0,6,0,0">
