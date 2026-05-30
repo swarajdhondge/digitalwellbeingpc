@@ -1,9 +1,11 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35919.96
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "digital-wellbeing-app", "digital-wellbeing-app\digital-wellbeing-app.csproj", "{C3519B37-9C6C-4914-89F4-0C6F135F54D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UITests", "UITests\UITests.csproj", "{B2DB7F05-0FD5-4F7E-A825-7B93F3CAA888}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,18 @@ Global
 		{C3519B37-9C6C-4914-89F4-0C6F135F54D3}.Release|x64.Build.0 = Release|Any CPU
 		{C3519B37-9C6C-4914-89F4-0C6F135F54D3}.Release|x86.ActiveCfg = Release|Any CPU
 		{C3519B37-9C6C-4914-89F4-0C6F135F54D3}.Release|x86.Build.0 = Release|Any CPU
+		{B2DB7F05-0FD5-4F7E-A825-7B93F3CAA888}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2DB7F05-0FD5-4F7E-A825-7B93F3CAA888}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2DB7F05-0FD5-4F7E-A825-7B93F3CAA888}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B2DB7F05-0FD5-4F7E-A825-7B93F3CAA888}.Debug|x64.Build.0 = Debug|Any CPU
+		{B2DB7F05-0FD5-4F7E-A825-7B93F3CAA888}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B2DB7F05-0FD5-4F7E-A825-7B93F3CAA888}.Debug|x86.Build.0 = Debug|Any CPU
+		{B2DB7F05-0FD5-4F7E-A825-7B93F3CAA888}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2DB7F05-0FD5-4F7E-A825-7B93F3CAA888}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2DB7F05-0FD5-4F7E-A825-7B93F3CAA888}.Release|x64.ActiveCfg = Release|Any CPU
+		{B2DB7F05-0FD5-4F7E-A825-7B93F3CAA888}.Release|x64.Build.0 = Release|Any CPU
+		{B2DB7F05-0FD5-4F7E-A825-7B93F3CAA888}.Release|x86.ActiveCfg = Release|Any CPU
+		{B2DB7F05-0FD5-4F7E-A825-7B93F3CAA888}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -35,4 +49,3 @@ Global
 		SolutionGuid = {5A81F098-858A-45A9-9595-0D8FF3F1D4F2}
 	EndGlobalSection
 EndGlobal
-

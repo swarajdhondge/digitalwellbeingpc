@@ -52,6 +52,9 @@ TestResults/
 *.coverage
 *.coveragexml
 
+# FlaUI UI-test screenshots
+.uishots/
+
 # Logs
 *.log
 
