@@ -1,142 +1,96 @@
-﻿<UserControl
+<UserControl
     x:Class="digital_wellbeing_app.Views.Settings.SettingsView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    FontFamily="{DynamicResource Font.Primary}"
     Background="Transparent">
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto"
-                  Padding="20,16">
-        <StackPanel>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                  Padding="26,4,26,26">
+        <StackPanel MaxWidth="1040" HorizontalAlignment="Stretch">
 
-            <!-- Page Header -->
-            <TextBlock Text="Settings"
-                       Style="{StaticResource HeadingLarge}"
-                       Margin="0,0,0,20"/>
+            <!-- Privacy / profile card (adapted: no account, on-device) -->
+            <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" Width="54" Height="54" CornerRadius="14" Background="{DynamicResource Accent.Soft}"
+                            ClipToBounds="True" Margin="0,0,16,0">
+                        <Image Source="/Resources/Icons/digital-balance-icon-32.png" Width="54" Height="54"
+                               RenderOptions.BitmapScalingMode="HighQuality"/>
+                    </Border>
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock Text="Private · on-device" Style="{StaticResource Pulse.CardTitle}"/>
+                        <TextBlock Text="No account, no cloud, no telemetry. Everything stays on this PC."
+                                   Style="{StaticResource Pulse.Body2}" Margin="0,2,0,0"/>
+                    </StackPanel>
+                    <Border Grid.Column="2" Style="{StaticResource Pulse.Pill.Good}" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="ShieldCheck" Width="14" Height="14" Foreground="{StaticResource Good}" VerticalAlignment="Center"/>
+                            <TextBlock Text="Private" Margin="6,0,0,0" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource Good}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
 
-            <!-- ============================================ -->
-            <!-- SCREEN TIME GOAL SECTION -->
-            <!-- ============================================ -->
-            <TextBlock Text="Screen time goal"
-                       Style="{StaticResource SectionHeader}"/>
-
-            <Border Style="{StaticResource CardBase}"
-                    Margin="{StaticResource Margin.Card}">
+            <!-- Screen time goal -->
+            <TextBlock Text="SCREEN TIME GOAL" Style="{StaticResource Pulse.Eyebrow}" Margin="2,0,0,8"/>
+            <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
                 <StackPanel>
-                    <TextBlock Text="Set a target for your daily screen time. You'll see progress on the Screen Time page."
-                               Style="{StaticResource BodySmall}"
-                               TextWrapping="Wrap"
-                               Margin="0,0,0,16"/>
-
-                    <!-- Goal Toggle -->
-                    <Grid Margin="0,0,0,16">
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-
-                        <TextBlock Text="Enable daily goal"
-                                   Style="{StaticResource ListItemName}"
-                                   VerticalAlignment="Center"/>
-
-                        <ToggleButton x:Name="GoalEnabledCheckBox"
-                                      Grid.Column="1"
-                                      Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                                      Checked="GoalEnabledCheckBox_Changed"
-                                      Unchecked="GoalEnabledCheckBox_Changed"
-                                      VerticalAlignment="Center"/>
+                        <StackPanel>
+                            <TextBlock Text="Enable daily goal" Style="{StaticResource Pulse.Body}"/>
+                            <TextBlock Text="Set a target for daily screen time" Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
+                        </StackPanel>
+                        <ToggleButton x:Name="GoalEnabledCheckBox" Grid.Column="1" Style="{StaticResource Pulse.Switch}"
+                                      Checked="GoalEnabledCheckBox_Changed" Unchecked="GoalEnabledCheckBox_Changed" VerticalAlignment="Center"/>
                     </Grid>
 
-                    <!-- Goal Input -->
-                    <StackPanel x:Name="GoalInputPanel" 
-                                Orientation="Horizontal"
-                                Visibility="Collapsed">
+                    <StackPanel x:Name="GoalInputPanel" Orientation="Horizontal" Visibility="Collapsed" Margin="0,16,0,0">
                         <StackPanel Orientation="Horizontal" Margin="0,0,24,0">
-                            <TextBox x:Name="GoalHoursTextBox"
-                                     Width="60"
-                                     Padding="12,8"
-                                     TextAlignment="Center"
-                                     FontSize="16"
-                                     Background="{DynamicResource Bg.Elevated}"
-                                     Foreground="{DynamicResource Text.Primary}"
-                                     BorderThickness="0"
-                                     TextChanged="GoalInput_Changed"/>
-                            <TextBlock Text="hours"
-                                       Style="{StaticResource LabelSecondary}"
-                                       VerticalAlignment="Center"
-                                       Margin="8,0,0,0"/>
+                            <TextBox x:Name="GoalHoursTextBox" Width="60" Padding="12,8" TextAlignment="Center" FontSize="16"
+                                     Background="{DynamicResource Card2}" Foreground="{DynamicResource Ink}" BorderThickness="0" TextChanged="GoalInput_Changed"/>
+                            <TextBlock Text="hours" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center" Margin="8,0,0,0"/>
                         </StackPanel>
-
                         <StackPanel Orientation="Horizontal">
-                            <TextBox x:Name="GoalMinutesTextBox"
-                                     Width="60"
-                                     Padding="12,8"
-                                     TextAlignment="Center"
-                                     FontSize="16"
-                                     Background="{DynamicResource Bg.Elevated}"
-                                     Foreground="{DynamicResource Text.Primary}"
-                                     BorderThickness="0"
-                                     TextChanged="GoalInput_Changed"/>
-                            <TextBlock Text="minutes"
-                                       Style="{StaticResource LabelSecondary}"
-                                       VerticalAlignment="Center"
-                                       Margin="8,0,0,0"/>
+                            <TextBox x:Name="GoalMinutesTextBox" Width="60" Padding="12,8" TextAlignment="Center" FontSize="16"
+                                     Background="{DynamicResource Card2}" Foreground="{DynamicResource Ink}" BorderThickness="0" TextChanged="GoalInput_Changed"/>
+                            <TextBlock Text="minutes" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center" Margin="8,0,0,0"/>
                         </StackPanel>
                     </StackPanel>
-
-                    <TextBlock x:Name="CurrentGoalText"
-                               Style="{StaticResource ComparisonText}"
-                               Margin="0,8,0,0"/>
+                    <TextBlock x:Name="CurrentGoalText" Style="{StaticResource Pulse.Muted}" Margin="0,10,0,0"/>
                 </StackPanel>
             </Border>
 
-            <!-- ============================================ -->
-            <!-- BREAK REMINDERS SECTION -->
-            <!-- ============================================ -->
-            <TextBlock Text="Break reminders"
-                       Style="{StaticResource SectionHeader}"/>
-
-            <Border Style="{StaticResource CardBase}"
-                    Margin="{StaticResource Margin.Card}">
+            <!-- Break reminders -->
+            <TextBlock Text="BREAK REMINDERS" Style="{StaticResource Pulse.Eyebrow}" Margin="2,0,0,8"/>
+            <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
                 <StackPanel>
-                    <TextBlock Text="Get reminded to take breaks and rest your eyes. Follow the 20-20-20 rule."
-                               Style="{StaticResource BodySmall}"
-                               TextWrapping="Wrap"
-                               Margin="0,0,0,16"/>
-
-                    <!-- Enable Toggle -->
-                    <Grid Margin="0,0,0,16">
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-
-                        <TextBlock Text="Enable break reminders"
-                                   Style="{StaticResource ListItemName}"
-                                   VerticalAlignment="Center"/>
-
-                        <ToggleButton x:Name="BreakReminderToggle"
-                                      Grid.Column="1"
-                                      Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                                      Checked="BreakReminderToggle_Changed"
-                                      Unchecked="BreakReminderToggle_Changed"
-                                      VerticalAlignment="Center"/>
+                        <StackPanel>
+                            <TextBlock Text="Enable break reminders" Style="{StaticResource Pulse.Body}"/>
+                            <TextBlock Text="Rest your eyes with the 20-20-20 rule" Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
+                        </StackPanel>
+                        <ToggleButton x:Name="BreakReminderToggle" Grid.Column="1" Style="{StaticResource Pulse.Switch}"
+                                      Checked="BreakReminderToggle_Changed" Unchecked="BreakReminderToggle_Changed" VerticalAlignment="Center"/>
                     </Grid>
 
-                    <!-- Interval Selection -->
-                    <StackPanel x:Name="BreakReminderOptionsPanel" 
-                                Visibility="Collapsed"
-                                Margin="0,0,0,16">
-                        <TextBlock Text="Reminder interval"
-                                   Style="{StaticResource LabelSecondary}"
-                                   Margin="0,0,0,8"/>
-                        
-                        <ComboBox x:Name="IntervalComboBox"
-                                  SelectionChanged="IntervalComboBox_SelectionChanged"
-                                  Background="{DynamicResource Bg.Elevated}"
-                                  Foreground="{DynamicResource Text.Primary}"
-                                  BorderThickness="0"
-                                  Padding="12,8">
+                    <StackPanel x:Name="BreakReminderOptionsPanel" Visibility="Collapsed" Margin="0,16,0,0">
+                        <TextBlock Text="Reminder interval" Style="{StaticResource Pulse.Body2}" Margin="0,0,0,8"/>
+                        <ComboBox x:Name="IntervalComboBox" SelectionChanged="IntervalComboBox_SelectionChanged"
+                                  Background="{DynamicResource Card2}" Foreground="{DynamicResource Ink}" BorderThickness="0" Padding="12,8">
                             <ComboBoxItem Content="Every 15 minutes" Tag="15"/>
                             <ComboBoxItem Content="Every 20 minutes (recommended)" Tag="20" IsSelected="True"/>
                             <ComboBoxItem Content="Every 30 minutes" Tag="30"/>
@@ -145,86 +99,45 @@
                         </ComboBox>
                     </StackPanel>
 
-                    <!-- Sound Toggle -->
-                    <Grid x:Name="BreakReminderSoundPanel" 
-                          Visibility="Collapsed">
+                    <Grid x:Name="BreakReminderSoundPanel" Visibility="Collapsed" Margin="0,16,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-
-                        <TextBlock Text="Play notification sound"
-                                   Style="{StaticResource ListItemName}"
-                                   VerticalAlignment="Center"/>
-
-                        <ToggleButton x:Name="SoundToggle"
-                                      Grid.Column="1"
-                                      Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                                      IsChecked="True"
-                                      Checked="SoundToggle_Changed"
-                                      Unchecked="SoundToggle_Changed"
-                                      VerticalAlignment="Center"/>
+                        <TextBlock Text="Play notification sound" Style="{StaticResource Pulse.Body}" VerticalAlignment="Center"/>
+                        <ToggleButton x:Name="SoundToggle" Grid.Column="1" Style="{StaticResource Pulse.Switch}" IsChecked="True"
+                                      Checked="SoundToggle_Changed" Unchecked="SoundToggle_Changed" VerticalAlignment="Center"/>
                     </Grid>
 
-                    <!-- Info Tip -->
-                    <Border Style="{StaticResource TipContainer}"
-                            Margin="0,16,0,0">
+                    <Border Background="{DynamicResource Accent.Soft}" CornerRadius="{StaticResource Radius.MD}" Padding="14,10" Margin="0,16,0,0">
                         <StackPanel Orientation="Horizontal">
-                            <md:PackIcon Kind="InformationOutline"
-                                         Width="16" Height="16"
-                                         Foreground="{DynamicResource Accent.Primary}"
-                                         VerticalAlignment="Top"
-                                         Margin="0,2,8,0"/>
+                            <md:PackIcon Kind="InformationOutline" Width="16" Height="16" Foreground="{DynamicResource Accent}" VerticalAlignment="Top" Margin="0,2,8,0"/>
                             <TextBlock Text="Notifications appear in the title bar. You can snooze or dismiss them."
-                                       Style="{StaticResource BodySmall}"
-                                       TextWrapping="Wrap"/>
+                                       Style="{StaticResource Pulse.Body2}" MaxWidth="600"/>
                         </StackPanel>
                     </Border>
                 </StackPanel>
             </Border>
 
-            <!-- ============================================ -->
-            <!-- WIND DOWN MODE SECTION -->
-            <!-- ============================================ -->
-            <TextBlock Text="Wind down mode"
-                       Style="{StaticResource SectionHeader}"/>
-
-            <Border Style="{StaticResource CardBase}"
-                    Margin="{StaticResource Margin.Card}">
+            <!-- Wind down -->
+            <TextBlock Text="WIND DOWN" Style="{StaticResource Pulse.Eyebrow}" Margin="2,0,0,8"/>
+            <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
                 <StackPanel>
-                    <TextBlock Text="Get a gentle reminder when it's time to wind down for the day."
-                               Style="{StaticResource BodySmall}"
-                               TextWrapping="Wrap"
-                               Margin="0,0,0,16"/>
-
-                    <!-- Enable Toggle -->
-                    <Grid Margin="0,0,0,16">
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-
-                        <TextBlock Text="Enable Wind Down mode"
-                                   Style="{StaticResource ListItemName}"
-                                   VerticalAlignment="Center"/>
-
-                        <ToggleButton x:Name="WindDownToggle"
-                                      Grid.Column="1"
-                                      Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                                      Checked="WindDownToggle_Changed"
-                                      Unchecked="WindDownToggle_Changed"
-                                      VerticalAlignment="Center"/>
+                        <StackPanel>
+                            <TextBlock Text="Enable Wind Down mode" Style="{StaticResource Pulse.Body}"/>
+                            <TextBlock Text="A gentle reminder when it's time to wind down" Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
+                        </StackPanel>
+                        <ToggleButton x:Name="WindDownToggle" Grid.Column="1" Style="{StaticResource Pulse.Switch}"
+                                      Checked="WindDownToggle_Changed" Unchecked="WindDownToggle_Changed" VerticalAlignment="Center"/>
                     </Grid>
 
-                    <!-- Wind Down Options Panel -->
-                    <StackPanel x:Name="WindDownOptionsPanel" 
-                                Visibility="Collapsed">
-                        
-                        <!-- Schedule -->
-                        <TextBlock Text="Schedule"
-                                   Style="{StaticResource LabelSecondary}"
-                                   Margin="0,0,0,12"/>
-                        
+                    <StackPanel x:Name="WindDownOptionsPanel" Visibility="Collapsed" Margin="0,16,0,0">
+                        <TextBlock Text="Schedule" Style="{StaticResource Pulse.Body2}" Margin="0,0,0,10"/>
                         <Grid Margin="0,0,0,16">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
@@ -233,472 +146,222 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-
-                            <TextBlock Text="From"
-                                       Style="{StaticResource ListItemName}"
-                                       VerticalAlignment="Center"
-                                       Margin="0,0,8,0"/>
-                            
-                            <ComboBox x:Name="StartTimeComboBox"
-                                      Grid.Column="1"
-                                      SelectionChanged="StartTimeComboBox_SelectionChanged"
-                                      Background="{DynamicResource Bg.Elevated}"
-                                      Foreground="{DynamicResource Text.Primary}"
-                                      BorderThickness="0"
-                                      Padding="12,8"
-                                      MinWidth="100"/>
-
-                            <TextBlock Text="to"
-                                       Grid.Column="2"
-                                       Style="{StaticResource ListItemName}"
-                                       VerticalAlignment="Center"
-                                       Margin="16,0,8,0"/>
-                            
-                            <ComboBox x:Name="EndTimeComboBox"
-                                      Grid.Column="3"
-                                      SelectionChanged="EndTimeComboBox_SelectionChanged"
-                                      Background="{DynamicResource Bg.Elevated}"
-                                      Foreground="{DynamicResource Text.Primary}"
-                                      BorderThickness="0"
-                                      Padding="12,8"
-                                      MinWidth="100"/>
+                            <TextBlock Text="From" Style="{StaticResource Pulse.Body}" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <ComboBox x:Name="StartTimeComboBox" Grid.Column="1" SelectionChanged="StartTimeComboBox_SelectionChanged"
+                                      Background="{DynamicResource Card2}" Foreground="{DynamicResource Ink}" BorderThickness="0" Padding="12,8" MinWidth="100"/>
+                            <TextBlock Text="to" Grid.Column="2" Style="{StaticResource Pulse.Body}" VerticalAlignment="Center" Margin="16,0,8,0"/>
+                            <ComboBox x:Name="EndTimeComboBox" Grid.Column="3" SelectionChanged="EndTimeComboBox_SelectionChanged"
+                                      Background="{DynamicResource Card2}" Foreground="{DynamicResource Ink}" BorderThickness="0" Padding="12,8" MinWidth="100"/>
                         </Grid>
 
-                        <!-- Notification Toggle -->
                         <Grid Margin="0,0,0,12">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-
                             <StackPanel>
-                                <TextBlock Text="Show notification"
-                                           Style="{StaticResource ListItemName}"/>
-                                <TextBlock Text="Display a reminder when Wind Down starts"
-                                           Style="{StaticResource LabelSecondary}"
-                                           Margin="0,2,0,0"/>
+                                <TextBlock Text="Show notification" Style="{StaticResource Pulse.Body}"/>
+                                <TextBlock Text="Display a reminder when Wind Down starts" Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
                             </StackPanel>
-
-                            <ToggleButton x:Name="WindDownNotificationToggle"
-                                          Grid.Column="1"
-                                          Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                                          IsChecked="True"
-                                          Checked="WindDownNotificationToggle_Changed"
-                                          Unchecked="WindDownNotificationToggle_Changed"
-                                          VerticalAlignment="Center"/>
+                            <ToggleButton x:Name="WindDownNotificationToggle" Grid.Column="1" Style="{StaticResource Pulse.Switch}" IsChecked="True"
+                                          Checked="WindDownNotificationToggle_Changed" Unchecked="WindDownNotificationToggle_Changed" VerticalAlignment="Center"/>
                         </Grid>
 
-                        <!-- Visual Cue Toggle -->
                         <Grid Margin="0,0,0,12">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-
                             <StackPanel>
-                                <TextBlock Text="Show visual border"
-                                           Style="{StaticResource ListItemName}"/>
-                                <TextBlock Text="Display a subtle glow around the window edges"
-                                           Style="{StaticResource LabelSecondary}"
-                                           Margin="0,2,0,0"/>
+                                <TextBlock Text="Show visual border" Style="{StaticResource Pulse.Body}"/>
+                                <TextBlock Text="A subtle glow around the window edges" Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
                             </StackPanel>
-
-                            <ToggleButton x:Name="WindDownVisualToggle"
-                                          Grid.Column="1"
-                                          Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                                          IsChecked="True"
-                                          Checked="WindDownVisualToggle_Changed"
-                                          Unchecked="WindDownVisualToggle_Changed"
-                                          VerticalAlignment="Center"/>
+                            <ToggleButton x:Name="WindDownVisualToggle" Grid.Column="1" Style="{StaticResource Pulse.Switch}" IsChecked="True"
+                                          Checked="WindDownVisualToggle_Changed" Unchecked="WindDownVisualToggle_Changed" VerticalAlignment="Center"/>
                         </Grid>
 
-                        <!-- Visual Style Selection -->
                         <StackPanel x:Name="VisualStylePanel" Margin="0,8,0,0">
-                            <TextBlock Text="Visual style"
-                                       Style="{StaticResource LabelSecondary}"
-                                       Margin="0,0,0,8"/>
-                            
+                            <TextBlock Text="Visual style" Style="{StaticResource Pulse.Body2}" Margin="0,0,0,8"/>
                             <StackPanel Orientation="Horizontal">
-                                <Border x:Name="AmberStyleOption"
-                                        Background="{DynamicResource Accent.Primary}"
-                                        CornerRadius="{DynamicResource Radius.Full}"
-                                        Padding="16,8"
-                                        Margin="0,0,8,0"
-                                        Cursor="Hand"
-                                        MouseLeftButtonDown="AmberStyle_Click">
+                                <Border x:Name="AmberStyleOption" Background="{DynamicResource Accent}" CornerRadius="{StaticResource Radius.Pill}"
+                                        Padding="16,8" Margin="0,0,8,0" Cursor="Hand" MouseLeftButtonDown="AmberStyle_Click">
                                     <StackPanel Orientation="Horizontal">
-                                        <Ellipse Width="16" Height="16" 
-                                                 Fill="#F59E0B"
-                                                 Margin="0,0,8,0"/>
-                                        <TextBlock Text="Amber"
-                                                   Style="{StaticResource BadgeText}"
-                                                   Foreground="{DynamicResource Accent.OnAccent}"/>
+                                        <Ellipse Width="14" Height="14" Fill="#F59E0B" Margin="0,0,8,0"/>
+                                        <TextBlock Text="Amber" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource Ink}"/>
                                     </StackPanel>
                                 </Border>
-
-                                <Border x:Name="PurpleStyleOption"
-                                        Background="{DynamicResource Bg.Elevated}"
-                                        CornerRadius="{DynamicResource Radius.Full}"
-                                        Padding="16,8"
-                                        Margin="0,0,8,0"
-                                        Cursor="Hand"
-                                        MouseLeftButtonDown="PurpleStyle_Click">
+                                <Border x:Name="PurpleStyleOption" Background="{DynamicResource Card2}" CornerRadius="{StaticResource Radius.Pill}"
+                                        Padding="16,8" Margin="0,0,8,0" Cursor="Hand" MouseLeftButtonDown="PurpleStyle_Click">
                                     <StackPanel Orientation="Horizontal">
-                                        <Ellipse Width="16" Height="16" 
-                                                 Fill="#8B5CF6"
-                                                 Margin="0,0,8,0"/>
-                                        <TextBlock Text="Purple"
-                                                   Style="{StaticResource LabelSecondary}"/>
+                                        <Ellipse Width="14" Height="14" Fill="#8B5CF6" Margin="0,0,8,0"/>
+                                        <TextBlock Text="Purple" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource Ink}"/>
                                     </StackPanel>
                                 </Border>
-
-                                <Border x:Name="DimStyleOption"
-                                        Background="{DynamicResource Bg.Elevated}"
-                                        CornerRadius="{DynamicResource Radius.Full}"
-                                        Padding="16,8"
-                                        Cursor="Hand"
-                                        MouseLeftButtonDown="DimStyle_Click">
+                                <Border x:Name="DimStyleOption" Background="{DynamicResource Card2}" CornerRadius="{StaticResource Radius.Pill}"
+                                        Padding="16,8" Cursor="Hand" MouseLeftButtonDown="DimStyle_Click">
                                     <StackPanel Orientation="Horizontal">
-                                        <Ellipse Width="16" Height="16" 
-                                                 Fill="#6B7280"
-                                                 Margin="0,0,8,0"/>
-                                        <TextBlock Text="Dim"
-                                                   Style="{StaticResource LabelSecondary}"/>
+                                        <Ellipse Width="14" Height="14" Fill="#6B7280" Margin="0,0,8,0"/>
+                                        <TextBlock Text="Dim" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource Ink}"/>
                                     </StackPanel>
                                 </Border>
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
 
-                    <!-- Current Status -->
                     <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
-                        <md:PackIcon x:Name="WindDownStatusIcon" 
-                                     Kind="MoonWaningCrescent" 
-                                     Width="16" Height="16"
-                                     Foreground="{DynamicResource Text.Muted}"
-                                     VerticalAlignment="Center"/>
-                        <TextBlock x:Name="WindDownStatusText"
-                                   Text="Wind Down is disabled"
-                                   Style="{StaticResource ComparisonText}"
-                                   Margin="8,0,0,0"
-                                   VerticalAlignment="Center"/>
+                        <md:PackIcon x:Name="WindDownStatusIcon" Kind="MoonWaningCrescent" Width="16" Height="16"
+                                     Foreground="{DynamicResource Ink3}" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="WindDownStatusText" Text="Wind Down is disabled" Style="{StaticResource Pulse.Muted}"
+                                   Margin="8,0,0,0" VerticalAlignment="Center"/>
                     </StackPanel>
                 </StackPanel>
             </Border>
 
-            <!-- ============================================ -->
-            <!-- APPEARANCE SECTION -->
-            <!-- ============================================ -->
-            <TextBlock Text="Appearance"
-                       Style="{StaticResource SectionHeader}"/>
-
-            <Border Style="{StaticResource CardBase}"
-                    Margin="{StaticResource Margin.Card}">
+            <!-- Appearance -->
+            <TextBlock Text="APPEARANCE" Style="{StaticResource Pulse.Eyebrow}" Margin="2,0,0,8"/>
+            <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
                 <StackPanel>
-                    <TextBlock Text="Theme"
-                               Style="{StaticResource LabelSecondary}"
-                               Margin="0,0,0,12"/>
-
+                    <TextBlock Text="Theme" Style="{StaticResource Pulse.Body2}" Margin="0,0,0,12"/>
                     <StackPanel Orientation="Horizontal">
-                        <!-- Light Theme Option -->
-                        <Border x:Name="LightThemeOption"
-                                Background="{DynamicResource Bg.Elevated}"
-                                CornerRadius="{DynamicResource Radius.MD}"
-                                Padding="16,12"
-                                Margin="0,0,8,0"
-                                Cursor="Hand"
-                                MouseLeftButtonDown="LightTheme_Click">
+                        <Border x:Name="LightThemeOption" Background="{DynamicResource Card2}" CornerRadius="{StaticResource Radius.MD}"
+                                Padding="16,12" Margin="0,0,8,0" Cursor="Hand" MouseLeftButtonDown="LightTheme_Click">
                             <StackPanel Orientation="Horizontal">
-                                <md:PackIcon Kind="WeatherSunny" Width="20" Height="20"
-                                             Foreground="{DynamicResource Text.Secondary}"
-                                             VerticalAlignment="Center"/>
-                                <TextBlock Text="Light"
-                                           Style="{StaticResource ListItemName}"
-                                           Margin="8,0,0,0"
-                                           VerticalAlignment="Center"/>
+                                <md:PackIcon Kind="WeatherSunny" Width="20" Height="20" Foreground="{DynamicResource Ink2}" VerticalAlignment="Center"/>
+                                <TextBlock Text="Light" Style="{StaticResource Pulse.Body}" Margin="8,0,0,0" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Border>
-
-                        <!-- Dark Theme Option -->
-                        <Border x:Name="DarkThemeOption"
-                                Background="{DynamicResource Accent.Primary}"
-                                CornerRadius="{DynamicResource Radius.MD}"
-                                Padding="16,12"
-                                Margin="0,0,8,0"
-                                Cursor="Hand"
-                                MouseLeftButtonDown="DarkTheme_Click">
+                        <Border x:Name="DarkThemeOption" Background="{DynamicResource Card2}" CornerRadius="{StaticResource Radius.MD}"
+                                Padding="16,12" Margin="0,0,8,0" Cursor="Hand" MouseLeftButtonDown="DarkTheme_Click">
                             <StackPanel Orientation="Horizontal">
-                                <md:PackIcon Kind="WeatherNight" Width="20" Height="20"
-                                             Foreground="{DynamicResource Accent.OnAccent}"
-                                             VerticalAlignment="Center"/>
-                                <TextBlock Text="Dark"
-                                           Foreground="{DynamicResource Accent.OnAccent}"
-                                           FontSize="14"
-                                           Margin="8,0,0,0"
-                                           VerticalAlignment="Center"/>
+                                <md:PackIcon Kind="WeatherNight" Width="20" Height="20" Foreground="{DynamicResource Ink2}" VerticalAlignment="Center"/>
+                                <TextBlock Text="Dark" Style="{StaticResource Pulse.Body}" Margin="8,0,0,0" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Border>
-
-                        <!-- Auto Theme Option -->
-                        <Border x:Name="AutoThemeOption"
-                                Background="{DynamicResource Bg.Elevated}"
-                                CornerRadius="{DynamicResource Radius.MD}"
-                                Padding="16,12"
-                                Cursor="Hand"
-                                MouseLeftButtonDown="AutoTheme_Click">
+                        <Border x:Name="AutoThemeOption" Background="{DynamicResource Card2}" CornerRadius="{StaticResource Radius.MD}"
+                                Padding="16,12" Cursor="Hand" MouseLeftButtonDown="AutoTheme_Click">
                             <StackPanel Orientation="Horizontal">
-                                <md:PackIcon Kind="ThemeLightDark" Width="20" Height="20"
-                                             Foreground="{DynamicResource Text.Secondary}"
-                                             VerticalAlignment="Center"/>
-                                <TextBlock Text="Auto"
-                                           Style="{StaticResource ListItemName}"
-                                           Margin="8,0,0,0"
-                                           VerticalAlignment="Center"/>
+                                <md:PackIcon Kind="ThemeLightDark" Width="20" Height="20" Foreground="{DynamicResource Ink2}" VerticalAlignment="Center"/>
+                                <TextBlock Text="Auto" Style="{StaticResource Pulse.Body}" Margin="8,0,0,0" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Border>
                     </StackPanel>
                 </StackPanel>
             </Border>
 
-            <!-- ============================================ -->
-            <!-- STARTUP SECTION -->
-            <!-- ============================================ -->
-            <TextBlock Text="Startup"
-                       Style="{StaticResource SectionHeader}"/>
-
-            <Border Style="{StaticResource CardBase}"
-                    Margin="{StaticResource Margin.Card}">
+            <!-- Startup -->
+            <TextBlock Text="STARTUP" Style="{StaticResource Pulse.Eyebrow}" Margin="2,0,0,8"/>
+            <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-
                     <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                        <TextBlock Text="Launch on Windows startup"
-                                   Style="{StaticResource ListItemName}"/>
-                        <TextBlock Text="Start Digital Wellbeing when you log in"
-                                   Style="{StaticResource LabelSecondary}"
-                                   Margin="0,4,0,0"/>
+                        <TextBlock Text="Launch on Windows startup" Style="{StaticResource Pulse.Body}"/>
+                        <TextBlock Text="Start Digital Wellbeing when you log in" Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
                     </StackPanel>
-
-                    <ToggleButton x:Name="StartupCheckBox"
-                                  Grid.Column="1"
-                                  Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                                  Checked="StartupCheckBox_Checked"
-                                  Unchecked="StartupCheckBox_Checked"
-                                  VerticalAlignment="Center"/>
+                    <ToggleButton x:Name="StartupCheckBox" Grid.Column="1" Style="{StaticResource Pulse.Switch}"
+                                  Checked="StartupCheckBox_Checked" Unchecked="StartupCheckBox_Checked" VerticalAlignment="Center"/>
                 </Grid>
             </Border>
 
-            <!-- ============================================ -->
-            <!-- DATA & PRIVACY SECTION -->
-            <!-- ============================================ -->
-            <TextBlock Text="Data &amp; Privacy"
-                       Style="{StaticResource SectionHeader}"/>
-
-            <Border Style="{StaticResource CardBase}"
-                    Margin="{StaticResource Margin.Card}">
+            <!-- Data & privacy -->
+            <TextBlock Text="DATA &amp; PRIVACY" Style="{StaticResource Pulse.Eyebrow}" Margin="2,0,0,8"/>
+            <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
                 <StackPanel>
                     <TextBlock Text="All your data is stored locally on this device. Nothing is sent to the cloud."
-                               Style="{StaticResource BodySmall}"
-                               TextWrapping="Wrap"
-                               Margin="0,0,0,16"/>
-
-                    <!-- Storage Location -->
+                               Style="{StaticResource Pulse.Body2}" Margin="0,0,0,16"/>
                     <Grid Margin="0,0,0,12">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-
                         <StackPanel>
-                            <TextBlock Text="Storage location"
-                                       Style="{StaticResource ListItemName}"/>
-                            <TextBlock x:Name="StoragePathText"
-                                       Text="Loading..."
-                                       Style="{StaticResource LabelSecondary}"
-                                       TextTrimming="CharacterEllipsis"
-                                       Margin="0,2,0,0"/>
+                            <TextBlock Text="Storage location" Style="{StaticResource Pulse.Body}"/>
+                            <TextBlock x:Name="StoragePathText" Text="Loading…" Style="{StaticResource Pulse.Muted}" TextTrimming="CharacterEllipsis" Margin="0,2,0,0"/>
                         </StackPanel>
-
-                        <Button Content="Open"
-                                Grid.Column="1"
-                                Click="OpenDataFolder_Click"
-                                Style="{StaticResource ButtonSecondary}"
-                                Padding="16,6"
-                                FontSize="12"
-                                VerticalAlignment="Center"/>
+                        <Button Content="Open" Grid.Column="1" Click="OpenDataFolder_Click" Style="{StaticResource Pulse.Button.Ghost}" Padding="16,6" VerticalAlignment="Center"/>
                     </Grid>
-
-                    <!-- Database Size -->
                     <Grid Margin="0,0,0,16">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-
-                        <TextBlock Text="Database size"
-                                   Style="{StaticResource ListItemName}"
-                                   VerticalAlignment="Center"/>
-
-                        <TextBlock x:Name="DbSizeText"
-                                   Grid.Column="1"
-                                   Text="--"
-                                   Style="{StaticResource LabelSecondary}"
-                                   VerticalAlignment="Center"/>
+                        <TextBlock Text="Database size" Style="{StaticResource Pulse.Body}" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="DbSizeText" Grid.Column="1" Text="--" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"/>
                     </Grid>
 
-                    <!-- Separator -->
-                    <Border Height="1"
-                            Background="{DynamicResource Border.Subtle}"
-                            Margin="0,0,0,16"/>
+                    <Border Height="1" Background="{DynamicResource Border}" Margin="0,0,0,16"/>
 
-                    <!-- Export Data -->
                     <Grid Margin="0,0,0,12">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-
                         <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="Export my data"
-                                       Style="{StaticResource ListItemName}"/>
-                            <TextBlock Text="Save all tracked data as CSV files"
-                                       Style="{StaticResource LabelSecondary}"
-                                       Margin="0,2,0,0"/>
+                            <TextBlock Text="Export my data" Style="{StaticResource Pulse.Body}"/>
+                            <TextBlock Text="Save all tracked data as CSV files" Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
                         </StackPanel>
-
-                        <Button Content="Export"
-                                Grid.Column="1"
-                                Click="ExportData_Click"
-                                Style="{StaticResource ButtonSecondary}"
-                                Padding="16,6"
-                                FontSize="12"
-                                VerticalAlignment="Center"/>
+                        <Button Content="Export" Grid.Column="1" Click="ExportData_Click" Style="{StaticResource Pulse.Button.Ghost}" Padding="16,6" VerticalAlignment="Center"/>
                     </Grid>
-
-                    <!-- Delete All Data -->
                     <Grid Margin="0,0,0,12">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-
                         <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="Delete all data"
-                                       Style="{StaticResource ListItemName}"
-                                       Foreground="{DynamicResource Status.Danger}"/>
-                            <TextBlock Text="Permanently remove all tracked data"
-                                       Style="{StaticResource LabelSecondary}"
-                                       Margin="0,2,0,0"/>
+                            <TextBlock Text="Delete all data" Style="{StaticResource Pulse.Body}" Foreground="{StaticResource Danger}"/>
+                            <TextBlock Text="Permanently remove all tracked data" Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
                         </StackPanel>
-
-                        <Button Content="Delete"
-                                Grid.Column="1"
-                                Click="DeleteAllData_Click"
-                                Padding="16,6"
-                                FontSize="12"
-                                Foreground="{DynamicResource Status.Danger}"
-                                Style="{StaticResource ButtonSecondary}"
-                                VerticalAlignment="Center"/>
+                        <Button Content="Delete" Grid.Column="1" Click="DeleteAllData_Click" Style="{StaticResource Pulse.Button.Ghost}"
+                                Foreground="{StaticResource Danger}" Padding="16,6" VerticalAlignment="Center"/>
                     </Grid>
 
-                    <!-- View Privacy Info -->
-                    <Border Background="{DynamicResource Bg.Elevated}"
-                            CornerRadius="{DynamicResource Radius.SM}"
-                            Padding="12,10"
-                            Cursor="Hand"
-                            MouseLeftButtonDown="ViewPrivacyInfo_Click">
+                    <Border Background="{DynamicResource Accent.Soft}" CornerRadius="{StaticResource Radius.SM}" Padding="12,10"
+                            Cursor="Hand" MouseLeftButtonDown="ViewPrivacyInfo_Click">
                         <StackPanel Orientation="Horizontal">
-                            <md:PackIcon Kind="ShieldCheck"
-                                         Width="16" Height="16"
-                                         Foreground="{DynamicResource Accent.Primary}"
-                                         VerticalAlignment="Center"
-                                         Margin="0,0,8,0"/>
-                            <TextBlock Text="View privacy information"
-                                       Style="{StaticResource BodySmall}"
-                                       Foreground="{DynamicResource Accent.Primary}"/>
+                            <md:PackIcon Kind="ShieldCheck" Width="16" Height="16" Foreground="{DynamicResource Accent}" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBlock Text="View privacy information" Style="{StaticResource Pulse.Body2}" Foreground="{DynamicResource Accent}"/>
                         </StackPanel>
                     </Border>
                 </StackPanel>
             </Border>
 
-            <!-- ============================================ -->
-            <!-- ABOUT SECTION -->
-            <!-- ============================================ -->
-            <TextBlock Text="About"
-                       Style="{StaticResource SectionHeader}"/>
-
-            <Border Style="{StaticResource CardBase}">
+            <!-- About -->
+            <TextBlock Text="ABOUT" Style="{StaticResource Pulse.Eyebrow}" Margin="2,0,0,8"/>
+            <Border Style="{StaticResource Pulse.Card}">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
-                        <Border Style="{StaticResource IconContainer}"
-                                Background="{DynamicResource Accent.Primary}"
-                                Width="48" Height="48">
-                            <Image Source="/Resources/Icons/digital-balance-icon-32.png"
-                                   Width="28" Height="28"
-                                   RenderOptions.BitmapScalingMode="HighQuality"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"/>
+                        <Border Width="48" Height="48" CornerRadius="12" Background="{DynamicResource Accent.Soft}" ClipToBounds="True">
+                            <Image Source="/Resources/Icons/digital-balance-icon-32.png" Width="48" Height="48" RenderOptions.BitmapScalingMode="HighQuality"/>
                         </Border>
-                        <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="Digital Wellbeing"
-                                       Style="{StaticResource HeadingSmall}"/>
-                            <TextBlock x:Name="AboutVersionText"
-                                       Text="Version 2.0.0"
-                                       Style="{StaticResource LabelSecondary}"/>
+                        <StackPanel VerticalAlignment="Center" Margin="14,0,0,0">
+                            <TextBlock Text="Digital Wellbeing" Style="{StaticResource Pulse.CardTitle}" FontSize="15"/>
+                            <TextBlock x:Name="AboutVersionText" Text="Version 2.5.0" Style="{StaticResource Pulse.Body2}"/>
                         </StackPanel>
                     </StackPanel>
-
                     <TextBlock Text="Track your screen time, app usage, and audio exposure to maintain a healthy digital lifestyle."
-                               Style="{StaticResource BodySmall}"
-                               TextWrapping="Wrap"
-                               Margin="0,0,0,12"/>
-
-                    <TextBlock Text="Licensed under the Apache License 2.0"
-                               Style="{StaticResource LabelSecondary}"
-                               Margin="0,0,0,16"/>
-
-                    <!-- Action Links -->
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                        <Button Content="Check for Updates"
-                                Click="CheckForUpdates_Click"
-                                Style="{StaticResource ButtonSecondary}"
-                                Padding="16,6"
-                                FontSize="12"
-                                Margin="0,0,8,0"/>
-
-                        <Border Background="{DynamicResource Bg.Elevated}"
-                                CornerRadius="{DynamicResource Radius.SM}"
-                                Padding="12,6"
-                                Cursor="Hand"
-                                MouseLeftButtonDown="OpenGitHub_Click">
+                               Style="{StaticResource Pulse.Body2}" Margin="0,0,0,12"/>
+                    <TextBlock Text="Licensed under the Apache License 2.0" Style="{StaticResource Pulse.Muted}" Margin="0,0,0,16"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Check for updates" Click="CheckForUpdates_Click" Style="{StaticResource Pulse.Button.Ghost}" Padding="16,6" Margin="0,0,8,0"/>
+                        <Border Background="{DynamicResource Card2}" CornerRadius="{StaticResource Radius.SM}" Padding="12,6" Cursor="Hand" MouseLeftButtonDown="OpenGitHub_Click">
                             <StackPanel Orientation="Horizontal">
-                                <md:PackIcon Kind="Github" Width="14" Height="14"
-                                             Foreground="{DynamicResource Text.Secondary}"
-                                             VerticalAlignment="Center" Margin="0,0,6,0"/>
-                                <TextBlock Text="GitHub"
-                                           Style="{StaticResource BodySmall}"
-                                           Foreground="{DynamicResource Text.Secondary}"
-                                           VerticalAlignment="Center"/>
+                                <md:PackIcon Kind="Github" Width="14" Height="14" Foreground="{DynamicResource Ink2}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <TextBlock Text="GitHub" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Border>
                     </StackPanel>
-
-                    <TextBlock x:Name="UpdateStatusText"
-                               Style="{StaticResource LabelSecondary}"
-                               Visibility="Collapsed"/>
+                    <TextBlock x:Name="UpdateStatusText" Style="{StaticResource Pulse.Muted}" Visibility="Collapsed" Margin="0,10,0,0"/>
                 </StackPanel>
             </Border>
 
-            <!-- Hidden radio buttons for backward compatibility -->
+            <!-- Hidden radios for theme state (kept for code-behind) -->
             <StackPanel Visibility="Collapsed">
                 <RadioButton x:Name="LightRadio" Checked="ThemeRadio_Checked"/>
                 <RadioButton x:Name="DarkRadio" Checked="ThemeRadio_Checked"/>
                 <RadioButton x:Name="AutoRadio" Checked="ThemeRadio_Checked"/>
             </StackPanel>
-
         </StackPanel>
     </ScrollViewer>
 </UserControl>
