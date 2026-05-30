@@ -2,11 +2,30 @@ using System;
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
+using System.Windows;
 using Color = System.Windows.Media.Color;
 using ColorConverter = System.Windows.Media.ColorConverter;
 
 namespace digital_wellbeing_app.Converters
 {
+    /// <summary>Inverts a boolean (true→false).</summary>
+    public class InverseBoolConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+            => value is bool b ? !b : true;
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            => value is bool b ? !b : true;
+    }
+
+    /// <summary>Maps false→Visible, true→Collapsed (for "show when off").</summary>
+    public class InverseBoolToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+            => (value is bool b && b) ? Visibility.Collapsed : Visibility.Visible;
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            => throw new NotSupportedException();
+    }
+
     /// <summary>
     /// Converts a 0..1 progress fraction into a StrokeDashArray for drawing a ring
     /// (a stroked Ellipse). ConverterParameter is the ring circumference expressed in

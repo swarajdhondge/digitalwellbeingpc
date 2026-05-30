@@ -64,8 +64,9 @@
             double height = RealTimeCanvas.ActualHeight;
             if (width <= 0 || height <= 0) return;
 
-            // Use the correct design system brush; fallback to green
-            var brush = this.TryFindResource("Accent.Primary") as System.Windows.Media.Brush
+            // Use the live Pulse section accent; fallback to the legacy teal then green
+            var brush = this.TryFindResource("Accent") as System.Windows.Media.Brush
+                        ?? this.TryFindResource("Accent.Primary") as System.Windows.Media.Brush
                         ?? System.Windows.Media.Brushes.Green;
 
             foreach (var seg in _vm.TimelineSegments)
@@ -89,12 +90,12 @@
             }
         }
 
-        private void TodayToggle_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void TodayToggle_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             _vm.IsWeeklyView = false;
         }
 
-        private void WeeklyToggle_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void WeeklyToggle_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             _vm.IsWeeklyView = true;
         }
