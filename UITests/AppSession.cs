@@ -73,6 +73,8 @@ public sealed class AppSession : IDisposable
     /// <summary>Save a PNG of the whole window for visual inspection.</summary>
     public string Shot(string name)
     {
+        try { Window.Focus(); Window.SetForeground(); } catch { /* best effort */ }
+        Thread.Sleep(200);
         var path = Path.Combine(ShotDir, name + ".png");
         Capture.Element(Window).ToFile(path);
         return path;

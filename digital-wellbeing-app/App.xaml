@@ -17,7 +17,9 @@
             <converters:GoalProgressToWidthConverter x:Key="GoalProgressToWidthConverter"/>
             <converters:GoalProgressToColorConverter x:Key="GoalProgressToColorConverter"/>
             <converters:PercentToGridLengthConverter x:Key="PercentToGridLength"/>
-            
+            <converters:FractionToDashConverter x:Key="FractionToDash"/>
+            <converters:ColorIndexToTintBrushConverter x:Key="ColorIndexToTint"/>
+
             <ResourceDictionary.MergedDictionaries>
 
                 <!-- MaterialDesign Base (keep for compatibility during transition) -->

@@ -38,28 +38,12 @@ namespace digital_wellbeing_app.Views.Dashboard
                 _vm.StopRefreshing();
         }
 
-        private void WeeklySummary_Click(object sender, MouseButtonEventArgs e)
-        {
-            // Navigate to Weekly Report view via MainWindow
-            var mainWindow = Window.GetWindow(this) as MainWindow.MainWindow;
-            if (mainWindow != null)
-            {
-                // Find and click the Reports nav button
-                var reportsButton = mainWindow.FindName("NavReports") as System.Windows.Controls.Button;
-                reportsButton?.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Button.ClickEvent));
-            }
-        }
+        private MainWindow.MainWindow? Shell => Window.GetWindow(this) as MainWindow.MainWindow;
 
-        private void SetGoal_Click(object sender, RoutedEventArgs e)
-        {
-            // Navigate to Settings view to set the goal
-            var mainWindow = Window.GetWindow(this) as MainWindow.MainWindow;
-            if (mainWindow != null)
-            {
-                // Find and click the Settings nav button
-                var settingsButton = mainWindow.FindName("NavSettings") as System.Windows.Controls.Button;
-                settingsButton?.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Button.ClickEvent));
-            }
-        }
+        private void WeeklySummary_Click(object sender, MouseButtonEventArgs e) => Shell?.NavigateToReports();
+        private void Hearing_Click(object sender, MouseButtonEventArgs e) => Shell?.NavigateToSound();
+        private void MostUsed_Click(object sender, MouseButtonEventArgs e) => Shell?.NavigateToAppUsage();
+        private void EnterFocus_Click(object sender, RoutedEventArgs e) => Shell?.NavigateToFocus();
+        private void SetGoal_Click(object sender, RoutedEventArgs e) => Shell?.NavigateToSettings();
     }
 }
