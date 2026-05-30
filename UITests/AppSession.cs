@@ -33,13 +33,28 @@ public sealed class AppSession : IDisposable
                   ?? Path.Combine(Path.GetTempPath(), "dw-uishots");
         Directory.CreateDirectory(ShotDir);
 
-        App = Application.Launch(exe);
+        // Force dark theme for comparison shots (the design's default). The app reads
+        // theme.json from its working directory, so pin both to the exe folder.
+        var exeDir = Path.GetDirectoryName(exe)!;
+        try { File.WriteAllText(Path.Combine(exeDir, "theme.json"), "{\"Mode\":\"Dark\"}"); }
+        catch { /* ignore */ }
+
+        App = Application.Launch(new ProcessStartInfo(exe) { WorkingDirectory = exeDir });
         Automation = new UIA3Automation();
         Window = App.GetMainWindow(Automation, TimeSpan.FromSeconds(30))
                  ?? throw new InvalidOperationException("Main window did not appear within 30s.");
 
+        // Maximize + foreground so screenshots are clean (not occluded). The content
+        // caps + centers itself to ~1080 so it still matches the prototype when wide.
+        try
+        {
+            Window.Patterns.Window.Pattern.SetWindowVisualState(WindowVisualState.Maximized);
+            Window.SetForeground();
+        }
+        catch { /* ignore */ }
+
         // Give WPF a moment to settle the first view + theme.
-        Thread.Sleep(800);
+        Thread.Sleep(900);
     }
 
     /// <summary>Find an element by AutomationId, retrying briefly for async UI.</summary>

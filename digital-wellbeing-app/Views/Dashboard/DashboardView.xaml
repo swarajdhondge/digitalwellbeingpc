@@ -9,10 +9,11 @@
              FontFamily="{DynamicResource Font.Primary}"
              Background="Transparent">
 
-    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="0,0,0,8">
-        <Grid MaxWidth="1040" HorizontalAlignment="Stretch">
+    <ScrollViewer x:Name="DashScroll" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
+                  Padding="26,0,26,26" SizeChanged="DashScroll_SizeChanged">
+        <Grid x:Name="RootGrid" HorizontalAlignment="Center">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1.75*"/>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="330"/>
             </Grid.ColumnDefinitions>
 
