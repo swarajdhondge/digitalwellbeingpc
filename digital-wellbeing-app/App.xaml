@@ -19,6 +19,8 @@
             <converters:PercentToGridLengthConverter x:Key="PercentToGridLength"/>
             <converters:FractionToDashConverter x:Key="FractionToDash"/>
             <converters:ColorIndexToTintBrushConverter x:Key="ColorIndexToTint"/>
+            <converters:InverseBoolConverter x:Key="InverseBool"/>
+            <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibility"/>
 
             <ResourceDictionary.MergedDictionaries>
 
