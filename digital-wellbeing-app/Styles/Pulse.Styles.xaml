@@ -113,7 +113,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="bd" Background="{TemplateBinding Background}"
-                            CornerRadius="{StaticResource Radius.SM}"
+                            CornerRadius="{StaticResource Radius.Pill}"
                             Padding="{TemplateBinding Padding}">
                         <Border.RenderTransform>
                             <ScaleTransform x:Name="st" ScaleX="1" ScaleY="1"/>
@@ -163,7 +163,7 @@
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="bd" Background="{TemplateBinding Background}"
                             BorderBrush="{DynamicResource Border}" BorderThickness="1"
-                            CornerRadius="{StaticResource Radius.SM}"
+                            CornerRadius="{StaticResource Radius.Pill}"
                             Padding="{TemplateBinding Padding}">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
@@ -263,7 +263,9 @@
     <!-- Container Border: set Background to Track, rounded pill, small padding. -->
     <Style x:Key="Pulse.SegmentBar" TargetType="Border">
         <Setter Property="Background" Value="{DynamicResource Track}"/>
-        <Setter Property="CornerRadius" Value="{StaticResource Radius.SM}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Border}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="{StaticResource Radius.Pill}"/>
         <Setter Property="Padding" Value="3"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
     </Style>
@@ -277,7 +279,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
-                    <Border x:Name="bd" Background="Transparent" CornerRadius="7" Padding="16,7">
+                    <Border x:Name="bd" Background="Transparent" CornerRadius="{StaticResource Radius.Pill}" Padding="18,7">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -365,7 +367,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border Background="{TemplateBinding Background}" CornerRadius="{StaticResource Radius.SM}"
+                    <Border Background="{TemplateBinding Background}" CornerRadius="{StaticResource Radius.Pill}"
                             Padding="{TemplateBinding Padding}">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>

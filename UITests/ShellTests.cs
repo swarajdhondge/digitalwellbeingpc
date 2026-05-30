@@ -43,9 +43,8 @@ public class ShellTests
     }
 
     [Theory]
-    [InlineData("NavDashboard", "Today")]
-    [InlineData("NavScreen", "Screen time")]
-    [InlineData("NavApps", "App usage")]
+    [InlineData("NavScreen", "Screen Time")]
+    [InlineData("NavApps", "App Usage")]
     [InlineData("NavSound", "Hearing")]
     [InlineData("NavFocus", "Focus")]
     [InlineData("NavReports", "Insights")]
@@ -56,6 +55,14 @@ public class ShellTests
         _app.Nav(navId);
         Assert.Equal(expectedTitle, _app.PageTitle());
         _app.Shot("nav-" + navId);
+    }
+
+    [Fact]
+    public void Dashboard_title_is_a_greeting()
+    {
+        _app.Nav("NavDashboard");
+        Assert.StartsWith("Good ", _app.PageTitle());
+        _app.Shot("nav-NavDashboard");
     }
 
     [Fact]

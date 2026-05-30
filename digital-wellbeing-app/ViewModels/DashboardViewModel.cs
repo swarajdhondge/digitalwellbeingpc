@@ -4,8 +4,14 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Brush = System.Windows.Media.Brush;
+using Brushes = System.Windows.Media.Brushes;
+using Color = System.Windows.Media.Color;
+using ColorConverter = System.Windows.Media.ColorConverter;
+using Point = System.Windows.Point;
 using digital_wellbeing_app.Helpers;
 using digital_wellbeing_app.Models;
 using digital_wellbeing_app.Services;
@@ -43,9 +49,38 @@ namespace digital_wellbeing_app.ViewModels
         private string _goalText = "No goal set";
         private bool _isOverGoal;
 
+        // This-week bar chart + categories + sparkline
+        private ObservableCollection<WeekBar> _weekBars = new();
+        private ObservableCollection<CategoryRow> _categories = new();
+        private string _weekTotalText = string.Empty;
+        private string _weekAvgText = string.Empty;
+        private string _vsYesterdayText = string.Empty;
+        private bool _hasVsYesterday;
+        private PointCollection _sparkLine = new();
+        private PointCollection _sparkArea = new();
+
         // Top apps for stacked bar
         private ObservableCollection<TopAppInfo> _topApps = new();
         
+        /// <summary>A single weekday column in the "This week" bar chart.</summary>
+        public class WeekBar
+        {
+            public string Label { get; set; } = string.Empty;
+            public double HeightPx { get; set; }      // against a fixed 110px chart
+            public double Opacity { get; set; } = 0.32;
+            public bool IsToday { get; set; }
+        }
+
+        /// <summary>A category row (tile + bar + duration) on the dashboard.</summary>
+        public class CategoryRow
+        {
+            public string Name { get; set; } = string.Empty;
+            public string Icon { get; set; } = "ShapeOutline";
+            public string Duration { get; set; } = string.Empty;
+            public double BarFraction { get; set; }   // 0..1 of the busiest category
+            public Brush Tint { get; set; } = Brushes.Gray;
+        }
+
         /// <summary>Model for top apps display</summary>
         public class TopAppInfo
         {
@@ -169,6 +204,28 @@ namespace digital_wellbeing_app.ViewModels
             get => _isOverGoal;
             set { if (_isOverGoal != value) { _isOverGoal = value; OnPropertyChanged(); } }
         }
+
+        /// <summary>"This week" 7-day bar chart.</summary>
+        public ObservableCollection<WeekBar> WeekBars
+        {
+            get => _weekBars;
+            set { _weekBars = value; OnPropertyChanged(); }
+        }
+        public string WeekTotalText { get => _weekTotalText; set { if (_weekTotalText != value) { _weekTotalText = value; OnPropertyChanged(); } } }
+        public string WeekAvgText { get => _weekAvgText; set { if (_weekAvgText != value) { _weekAvgText = value; OnPropertyChanged(); } } }
+        public string VsYesterdayText { get => _vsYesterdayText; set { if (_vsYesterdayText != value) { _vsYesterdayText = value; OnPropertyChanged(); } } }
+        public bool HasVsYesterday { get => _hasVsYesterday; set { if (_hasVsYesterday != value) { _hasVsYesterday = value; OnPropertyChanged(); } } }
+
+        /// <summary>Category breakdown (tile + bar + duration).</summary>
+        public ObservableCollection<CategoryRow> Categories
+        {
+            get => _categories;
+            set { _categories = value; OnPropertyChanged(); }
+        }
+
+        /// <summary>Sparkline geometry for the "Most used" card (280x46 space).</summary>
+        public PointCollection SparkLine { get => _sparkLine; set { _sparkLine = value; OnPropertyChanged(); } }
+        public PointCollection SparkArea { get => _sparkArea; set { _sparkArea = value; OnPropertyChanged(); } }
 
         /// <summary>Top 3 apps for stacked bar display</summary>
         public ObservableCollection<TopAppInfo> TopApps
@@ -333,7 +390,112 @@ namespace digital_wellbeing_app.ViewModels
                 WeeklyChangeText = $"{arrow} {Math.Abs(changePercent):F0}% vs last week";
             }
 
+            // — This week bar chart + sparkline (real daily trend) —
+            var weekStart = ReportService.GetWeekStart(today);
+            var weekEnd = ReportService.GetWeekEnd(today);
+            var trend = _reportService.GetDailyScreenTimeTrend(weekStart, weekEnd);
+            var dayLabels = new[] { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
+            double maxMin = Math.Max(1, trend.Count > 0 ? trend.Max(d => d.TotalSeconds / 60.0) : 1);
+            int todayIdx = trend.FindIndex(d => d.Date.Date == today);
+
+            var bars = new ObservableCollection<WeekBar>();
+            for (int i = 0; i < trend.Count && i < 7; i++)
+            {
+                double min = trend[i].TotalSeconds / 60.0;
+                bars.Add(new WeekBar
+                {
+                    Label = i < dayLabels.Length ? dayLabels[i] : trend[i].Date.ToString("ddd"),
+                    HeightPx = Math.Max(6, (min / maxMin) * 110),
+                    IsToday = i == todayIdx,
+                    Opacity = i == todayIdx ? 1.0 : 0.32,
+                });
+            }
+            WeekBars = bars;
+
+            var weekTotalMin = trend.Sum(d => d.TotalSeconds / 60.0);
+            WeekTotalText = TimeFormatHelper.FormatCompact(TimeSpan.FromMinutes(weekTotalMin));
+            WeekAvgText = TimeFormatHelper.FormatCompact(TimeSpan.FromMinutes(weekTotalMin / 7.0));
+
+            if (todayIdx > 0)
+            {
+                double diff = (trend[todayIdx].TotalSeconds - trend[todayIdx - 1].TotalSeconds) / 60.0;
+                HasVsYesterday = true;
+                var sign = diff >= 0 ? "+" : "−";
+                VsYesterdayText = $"{sign}{TimeFormatHelper.FormatCompact(TimeSpan.FromMinutes(Math.Abs(diff)))} vs yesterday";
+            }
+            else { HasVsYesterday = false; }
+
+            BuildSpark(trend.Select(d => d.TotalSeconds / 60.0).ToList());
+
+            // — Categories today (grouped by app category) —
+            var appsForCats = _reportService.GetTopAppsForPeriod(today, today, 40);
+            var catGroups = appsForCats
+                .GroupBy(a => a.Category)
+                .Select(g => new { Cat = g.Key, Sec = g.Sum(a => a.TotalSeconds) })
+                .Where(x => x.Sec > 0)
+                .OrderByDescending(x => x.Sec)
+                .ToList();
+            double catMax = Math.Max(1, catGroups.Count > 0 ? catGroups.Max(x => x.Sec) : 1);
+            var cats = new ObservableCollection<CategoryRow>();
+            foreach (var g in catGroups)
+            {
+                cats.Add(new CategoryRow
+                {
+                    Name = CatName(g.Cat),
+                    Icon = CatIcon(g.Cat),
+                    Duration = TimeFormatHelper.FormatCompact(TimeSpan.FromSeconds(g.Sec)),
+                    BarFraction = g.Sec / catMax,
+                    Tint = BrushFromHex(CatHex(g.Cat)),
+                });
+            }
+            Categories = cats;
+
             await Task.CompletedTask;
+        }
+
+        private void BuildSpark(System.Collections.Generic.List<double> data)
+        {
+            const double w = 280, h = 46;
+            if (data.Count < 2) { SparkLine = new PointCollection(); SparkArea = new PointCollection(); return; }
+            double max = data.Max(), min = data.Min();
+            double range = (max - min) <= 0 ? 1 : (max - min);
+            var line = new PointCollection();
+            for (int i = 0; i < data.Count; i++)
+            {
+                double x = (i / (double)(data.Count - 1)) * w;
+                double y = h - ((data[i] - min) / range) * (h - 8) - 4;
+                line.Add(new Point(x, y));
+            }
+            var area = new PointCollection { new Point(0, h) };
+            foreach (var p in line) area.Add(p);
+            area.Add(new Point(w, h));
+            SparkLine = line;
+            SparkArea = area;
+        }
+
+        private static string CatName(AppCategoryType c) => c switch
+        {
+            AppCategoryType.Work => "Work",
+            AppCategoryType.Entertainment => "Entertainment",
+            _ => "Neutral",
+        };
+        private static string CatIcon(AppCategoryType c) => c switch
+        {
+            AppCategoryType.Work => "BriefcaseOutline",
+            AppCategoryType.Entertainment => "PlayCircleOutline",
+            _ => "ShapeOutline",
+        };
+        private static string CatHex(AppCategoryType c) => c switch
+        {
+            AppCategoryType.Work => "#5B86D6",
+            AppCategoryType.Entertainment => "#C77F8E",
+            _ => "#B79A6B",
+        };
+        private static Brush BrushFromHex(string hex)
+        {
+            var b = new SolidColorBrush((Color)ColorConverter.ConvertFromString(hex));
+            b.Freeze();
+            return b;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

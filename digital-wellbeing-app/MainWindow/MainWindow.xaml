@@ -166,7 +166,7 @@
                                     <TextBlock x:Name="TitleText" Style="{StaticResource Pulse.PageTitle}"
                                                Text="Today" VerticalAlignment="Center"
                                                AutomationProperties.AutomationId="PageTitle"/>
-                                    <Border Style="{StaticResource Pulse.Pill.Good}" Margin="14,4,0,0"
+                                    <Border x:Name="TrackingPill" Style="{StaticResource Pulse.Pill.Good}" Margin="14,4,0,0"
                                             VerticalAlignment="Center">
                                         <StackPanel Orientation="Horizontal">
                                             <Ellipse Style="{StaticResource Pulse.Dot}" VerticalAlignment="Center"/>

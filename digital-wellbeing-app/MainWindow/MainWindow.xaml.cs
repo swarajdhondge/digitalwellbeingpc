@@ -86,9 +86,11 @@ namespace digital_wellbeing_app.MainWindow
                 MainContent.Content = _dashboardView;
             }
 
-            // Initialise Pulse shell state: active rail item, section accent, theme icon
+            // Initialise Pulse shell state: active rail item, section accent, theme icon, greeting
             NavDashboard.IsChecked = true;
             Services.ThemeService.SetSection("Dashboard");
+            TitleText.Text = Greeting();
+            SubtitleText.Text = TodaySubtitle();
             RefreshThemeToggleIcon();
 
             // Restore saved window position/size
@@ -1070,8 +1072,23 @@ namespace digital_wellbeing_app.MainWindow
             Services.ThemeService.SetSection(section);
             if (TitleText != null) TitleText.Text = title;
             if (SubtitleText != null) SubtitleText.Text = subtitle;
+            // Tracking pill is hidden on Settings/Help (matches the Pulse design).
+            if (TrackingPill != null)
+                TrackingPill.Visibility = (section is "Settings" or "Help")
+                    ? Visibility.Collapsed : Visibility.Visible;
             NavigateWithTransition(view);
         }
+
+        /// <summary>Time-of-day greeting used as the dashboard page title.</summary>
+        private static string Greeting()
+        {
+            var h = DateTime.Now.Hour;
+            return h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening";
+        }
+
+        /// <summary>Dashboard subtitle, e.g. "Wednesday, May 30 · your day at a glance."</summary>
+        private static string TodaySubtitle()
+            => $"{DateTime.Now:dddd, MMMM d} · your day at a glance.";
 
         /// <summary>
         /// Navigate to a new view with a fade transition animation.
@@ -1103,28 +1120,28 @@ namespace digital_wellbeing_app.MainWindow
         }
 
         private void Dashboard_Click(object? sender, RoutedEventArgs e)
-            => NavigateTo(_dashboardView, NavDashboard, "Dashboard", "Today", "Your day at a glance");
+            => NavigateTo(_dashboardView, NavDashboard, "Dashboard", Greeting(), TodaySubtitle());
 
         private void ScreenTime_Click(object? sender, RoutedEventArgs e)
-            => NavigateTo(_screenView, NavScreen, "Screentime", "Screen time", "Time spent at your computer");
+            => NavigateTo(_screenView, NavScreen, "Screentime", "Screen Time", "When and how long your display stayed awake.");
 
         private void Sound_Click(object? sender, RoutedEventArgs e)
-            => NavigateTo(_soundView, NavSound, "Sound", "Hearing", "Protect your hearing");
+            => NavigateTo(_soundView, NavSound, "Sound", "Hearing", "Protecting your ears from loud exposure.");
 
         private void AppUsage_Click(object? sender, RoutedEventArgs e)
-            => NavigateTo(_appUsageView, NavApps, "Appusage", "App usage", "Where your time goes");
+            => NavigateTo(_appUsageView, NavApps, "Appusage", "App Usage", "Where your attention actually went.");
 
         private void Focus_Click(object? sender, RoutedEventArgs e)
-            => NavigateTo(_focusView, NavFocus, "Focus", "Focus", "Stay on task");
+            => NavigateTo(_focusView, NavFocus, "Focus", "Focus", "Carve out distraction-free deep work.");
 
         private void Reports_Click(object? sender, RoutedEventArgs e)
-            => NavigateTo(_reportsView, NavReports, "Weekly", "Insights", "Your weekly trends");
+            => NavigateTo(_reportsView, NavReports, "Weekly", "Insights", "Your rhythm across the week.");
 
         private void Help_Click(object? sender, RoutedEventArgs e)
-            => NavigateTo(_helpView, NavHelp, "Help", "Help", "Questions, answered");
+            => NavigateTo(_helpView, NavHelp, "Help", "Help", "How Pulse tracks — and protects your privacy.");
 
         private void Settings_Click(object? sender, RoutedEventArgs e)
-            => NavigateTo(_settingsView, NavSettings, "Settings", "Settings", "Preferences & privacy");
+            => NavigateTo(_settingsView, NavSettings, "Settings", "Settings", "Tune Pulse to fit your habits.");
 
         private void Exit_Click(object? sender, RoutedEventArgs e)
         {

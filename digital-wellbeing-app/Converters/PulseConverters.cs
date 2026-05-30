@@ -8,6 +8,20 @@ using ColorConverter = System.Windows.Media.ColorConverter;
 
 namespace digital_wellbeing_app.Converters
 {
+    /// <summary>fraction (0..1) → width in px. ConverterParameter = the track width.</summary>
+    public class FractionToWidthConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            double frac = value is double d ? d : 0;
+            double width = 100;
+            if (parameter is string s && double.TryParse(s, NumberStyles.Any, CultureInfo.InvariantCulture, out var p)) width = p;
+            return Math.Max(0, Math.Min(1, frac)) * width;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            => throw new NotSupportedException();
+    }
+
     /// <summary>Inverts a boolean (true→false).</summary>
     public class InverseBoolConverter : IValueConverter
     {
