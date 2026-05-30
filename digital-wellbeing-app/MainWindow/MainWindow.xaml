@@ -1,4 +1,4 @@
-﻿<Window
+<Window
     x:Class="digital_wellbeing_app.MainWindow.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -11,239 +11,238 @@
     AllowsTransparency="True"
     Background="Transparent"
     ResizeMode="CanResize"
+    FontFamily="{DynamicResource Font.Primary}"
+    TextOptions.TextFormattingMode="Ideal"
     StateChanged="Window_StateChanged"
     Closing="Window_Closing">
 
-    <!-- Main Window Container with Shadow -->
+    <!-- Window container with soft shadow -->
     <Border x:Name="WindowBorder"
-            Background="{DynamicResource Bg.Primary}"
+            Background="{DynamicResource Bg}"
             CornerRadius="8"
             Margin="10">
         <Border.Effect>
             <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.5" Color="Black"/>
         </Border.Effect>
 
-        <Grid>
-            <Grid.RowDefinitions>
-                <!-- Title Bar -->
-                <RowDefinition Height="48"/>
-                <!-- Content -->
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        <Grid ClipToBounds="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
             <!-- ============================================ -->
-            <!-- CUSTOM TITLE BAR -->
+            <!-- ICON RAIL -->
             <!-- ============================================ -->
-            <Grid Grid.Row="0"
-                  Background="{DynamicResource Bg.Primary}"
-                  MouseLeftButtonDown="TitleBar_MouseLeftButtonDown"
-                  MouseLeftButtonUp="TitleBar_MouseLeftButtonUp">
-
-                <!-- Round top corners -->
-                <Border CornerRadius="8,8,0,0" Background="{DynamicResource Bg.Primary}"/>
-
+            <Border Grid.Column="0"
+                    Background="{DynamicResource Bg2}"
+                    BorderBrush="{DynamicResource Border}"
+                    BorderThickness="0,0,1,0"
+                    CornerRadius="8,0,0,8">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <!-- App Icon + Title -->
-                        <ColumnDefinition Width="Auto"/>
-                        <!-- Spacer -->
-                        <ColumnDefinition Width="*"/>
-                        <!-- Notification Area (future) -->
-                        <ColumnDefinition Width="Auto"/>
-                        <!-- Window Controls -->
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                    <!-- App Icon + Title -->
-                    <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="16,0,0,0" VerticalAlignment="Center">
+                    <!-- Brand mark -->
+                    <Border Grid.Row="0" Width="38" Height="38" CornerRadius="11"
+                            Margin="0,16,0,10" HorizontalAlignment="Center"
+                            Background="{DynamicResource Card2}" ClipToBounds="True"
+                            ToolTip="Digital Wellbeing">
                         <Image Source="/Resources/Icons/digital-balance-icon-32.png"
-                               Width="20" Height="20"
+                               Width="38" Height="38"
                                RenderOptions.BitmapScalingMode="HighQuality"/>
-                        <TextBlock Text="Digital Wellbeing"
-                                   Style="{StaticResource HeadingSmall}"
-                                   Margin="10,0,0,0"
-                                   VerticalAlignment="Center"/>
+                    </Border>
+
+                    <!-- Primary navigation -->
+                    <StackPanel Grid.Row="1" VerticalAlignment="Top" Margin="0,6,0,0">
+                        <RadioButton x:Name="NavDashboard" Style="{StaticResource Pulse.RailItem}"
+                                     GroupName="Rail" IsChecked="True" Click="Dashboard_Click"
+                                     ToolTip="Today" AutomationProperties.AutomationId="NavDashboard"
+                                     AutomationProperties.Name="Today">
+                            <md:PackIcon Kind="ViewDashboardOutline" Width="22" Height="22"/>
+                        </RadioButton>
+                        <RadioButton x:Name="NavScreen" Style="{StaticResource Pulse.RailItem}"
+                                     GroupName="Rail" Click="ScreenTime_Click"
+                                     ToolTip="Screen time" AutomationProperties.AutomationId="NavScreen"
+                                     AutomationProperties.Name="Screen time">
+                            <md:PackIcon Kind="MonitorDashboard" Width="22" Height="22"/>
+                        </RadioButton>
+                        <RadioButton x:Name="NavApps" Style="{StaticResource Pulse.RailItem}"
+                                     GroupName="Rail" Click="AppUsage_Click"
+                                     ToolTip="App usage" AutomationProperties.AutomationId="NavApps"
+                                     AutomationProperties.Name="App usage">
+                            <md:PackIcon Kind="ViewGridOutline" Width="22" Height="22"/>
+                        </RadioButton>
+                        <RadioButton x:Name="NavSound" Style="{StaticResource Pulse.RailItem}"
+                                     GroupName="Rail" Click="Sound_Click"
+                                     ToolTip="Hearing" AutomationProperties.AutomationId="NavSound"
+                                     AutomationProperties.Name="Hearing">
+                            <md:PackIcon Kind="VolumeHigh" Width="22" Height="22"/>
+                        </RadioButton>
+                        <RadioButton x:Name="NavFocus" Style="{StaticResource Pulse.RailItem}"
+                                     GroupName="Rail" Click="Focus_Click"
+                                     ToolTip="Focus" AutomationProperties.AutomationId="NavFocus"
+                                     AutomationProperties.Name="Focus">
+                            <md:PackIcon Kind="Target" Width="22" Height="22"/>
+                        </RadioButton>
+                        <RadioButton x:Name="NavReports" Style="{StaticResource Pulse.RailItem}"
+                                     GroupName="Rail" Click="Reports_Click"
+                                     ToolTip="Insights" AutomationProperties.AutomationId="NavReports"
+                                     AutomationProperties.Name="Insights">
+                            <md:PackIcon Kind="ChartBoxOutline" Width="22" Height="22"/>
+                        </RadioButton>
                     </StackPanel>
 
-                    <!-- Notification Area (reserved for future use) -->
-                    <StackPanel x:Name="NotificationArea"
-                                Grid.Column="2"
-                                Orientation="Horizontal"
-                                Margin="0,0,16,0"
-                                VerticalAlignment="Center">
-                        <!-- Empty for now - break reminders use overlay -->
-                    </StackPanel>
+                    <!-- Footer navigation -->
+                    <StackPanel Grid.Row="2" Margin="0,0,0,10">
+                        <Border Height="1" Width="34" Background="{DynamicResource Border}" Margin="0,6,0,8"/>
 
-                    <!-- Window Controls -->
-                    <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Top">
-                        <!-- Minimize -->
-                        <Button x:Name="MinimizeButton"
-                                Style="{StaticResource ButtonIcon}"
-                                Click="MinimizeButton_Click"
-                                ToolTip="Minimize">
-                            <md:PackIcon Kind="WindowMinimize" Width="16" Height="16"/>
+                        <RadioButton x:Name="NavSettings" Style="{StaticResource Pulse.RailItem}"
+                                     GroupName="Rail" Click="Settings_Click"
+                                     ToolTip="Settings" AutomationProperties.AutomationId="NavSettings"
+                                     AutomationProperties.Name="Settings">
+                            <md:PackIcon Kind="CogOutline" Width="22" Height="22"/>
+                        </RadioButton>
+                        <RadioButton x:Name="NavHelp" Style="{StaticResource Pulse.RailItem}"
+                                     GroupName="Rail" Click="Help_Click"
+                                     ToolTip="Help" AutomationProperties.AutomationId="NavHelp"
+                                     AutomationProperties.Name="Help">
+                            <md:PackIcon Kind="HelpCircleOutline" Width="22" Height="22"/>
+                        </RadioButton>
+                        <Button Style="{StaticResource Pulse.Button.Icon}" Width="46" Height="46"
+                                Margin="0,3" HorizontalAlignment="Center" Click="Exit_Click"
+                                ToolTip="Exit" AutomationProperties.Name="Exit">
+                            <md:PackIcon Kind="LogoutVariant" Width="20" Height="20"/>
                         </Button>
-                        <!-- Maximize/Restore -->
-                        <Button x:Name="MaximizeButton"
-                                Style="{StaticResource ButtonIcon}"
-                                Click="MaximizeButton_Click"
-                                ToolTip="Maximize">
-                            <md:PackIcon x:Name="MaximizeIcon" Kind="WindowMaximize" Width="16" Height="16"/>
-                        </Button>
-                        <!-- Close -->
-                        <Button x:Name="CloseButton"
-                                Style="{StaticResource ButtonIcon}"
-                                Click="CloseButton_Click"
-                                ToolTip="Close">
-                            <md:PackIcon Kind="WindowClose" Width="16" Height="16"/>
-                        </Button>
+
+                        <TextBlock x:Name="SidebarVersionText"
+                                   Text="v2.5.0"
+                                   FontSize="9"
+                                   Foreground="{DynamicResource Ink3}"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,6,0,0"/>
                     </StackPanel>
                 </Grid>
-            </Grid>
+            </Border>
 
             <!-- ============================================ -->
-            <!-- MAIN CONTENT AREA -->
+            <!-- CONTENT AREA -->
             <!-- ============================================ -->
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <!-- Sidebar -->
-                    <ColumnDefinition Width="220"/>
-                    <!-- Content -->
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+            <Border Grid.Column="1"
+                    Background="{DynamicResource Bg}"
+                    CornerRadius="0,8,8,0">
+                <Grid>
+                    <!-- Faint single-hue radial wash behind everything -->
+                    <Border IsHitTestVisible="False" Opacity="0.10">
+                        <Border.Background>
+                            <RadialGradientBrush GradientOrigin="0.5,0" Center="0.5,0" RadiusX="1.0" RadiusY="0.8">
+                                <GradientStop Color="{DynamicResource Accent.Color}" Offset="0"/>
+                                <GradientStop Color="Transparent" Offset="0.65"/>
+                            </RadialGradientBrush>
+                        </Border.Background>
+                    </Border>
 
-                <!-- ============================================ -->
-                <!-- SIDEBAR NAVIGATION -->
-                <!-- ============================================ -->
-                <Border Grid.Column="0"
-                        Style="{StaticResource SidebarContainer}">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
-                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <!-- Main Navigation -->
-                        <StackPanel Grid.Row="0" Margin="0,8,0,0">
-                            <TextBlock Text="OVERVIEW" Style="{StaticResource NavSectionHeader}"/>
+                        <!-- ===== TOP BAR (draggable) ===== -->
+                        <Grid Grid.Row="0" Background="Transparent" Margin="26,16,14,8"
+                              MouseLeftButtonDown="TitleBar_MouseLeftButtonDown"
+                              MouseLeftButtonUp="TitleBar_MouseLeftButtonUp">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
 
-                            <Button x:Name="NavDashboard"
-                                    Style="{StaticResource NavItem}"
-                                    Tag="Active"
-                                    Click="Dashboard_Click">
+                            <!-- Title + tracking + subtitle -->
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
                                 <StackPanel Orientation="Horizontal">
-                                    <md:PackIcon Kind="ViewDashboard" Width="20" Height="20" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Dashboard" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="TitleText" Style="{StaticResource Pulse.PageTitle}"
+                                               Text="Today" VerticalAlignment="Center"
+                                               AutomationProperties.AutomationId="PageTitle"/>
+                                    <Border Style="{StaticResource Pulse.Pill.Good}" Margin="14,4,0,0"
+                                            VerticalAlignment="Center">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Ellipse Style="{StaticResource Pulse.Dot}" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Tracking" Margin="6,0,0,0" FontSize="11"
+                                                       FontWeight="SemiBold" Foreground="{StaticResource Good}"
+                                                       VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Border>
                                 </StackPanel>
-                            </Button>
+                                <TextBlock x:Name="SubtitleText" Style="{StaticResource Pulse.Subtitle}"
+                                           Text="Your day at a glance" Margin="0,3,0,0"/>
+                            </StackPanel>
 
-                            <Button x:Name="NavScreen"
-                                    Style="{StaticResource NavItem}"
-                                    Click="ScreenTime_Click">
-                                <StackPanel Orientation="Horizontal">
-                                    <md:PackIcon Kind="Monitor" Width="20" Height="20" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Screen Time" VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Button>
+                            <!-- Right cluster: theme toggle, privacy pill, window controls -->
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                <Button x:Name="ThemeToggleButton" Style="{StaticResource Pulse.Button.Icon}"
+                                        Click="ThemeToggle_Click" ToolTip="Switch theme"
+                                        AutomationProperties.AutomationId="ThemeToggle">
+                                    <md:PackIcon x:Name="ThemeToggleIcon" Kind="WeatherSunny" Width="20" Height="20"/>
+                                </Button>
 
-                            <Button x:Name="NavSound"
-                                    Style="{StaticResource NavItem}"
-                                    Click="Sound_Click">
-                                <StackPanel Orientation="Horizontal">
-                                    <md:PackIcon Kind="VolumeHigh" Width="20" Height="20" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Sound Output" VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Button>
+                                <Button Click="Settings_Click" Cursor="Hand" Margin="8,0,14,0"
+                                        Foreground="{DynamicResource Ink}" Background="{DynamicResource Accent.Soft}"
+                                        ToolTip="Open settings" AutomationProperties.AutomationId="PrivatePill"
+                                        AutomationProperties.Name="Private on-device">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="pb" Background="{TemplateBinding Background}"
+                                                    CornerRadius="999" Padding="11,7">
+                                                <ContentPresenter VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="pb" Property="Opacity" Value="0.85"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <StackPanel Orientation="Horizontal">
+                                        <md:PackIcon Kind="ShieldCheckOutline" Width="16" Height="16"
+                                                     Foreground="{DynamicResource Accent}" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Private &#183; on-device" Margin="7,0,0,0" FontSize="12"
+                                                   FontWeight="Medium" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
 
-                            <Button x:Name="NavApps"
-                                    Style="{StaticResource NavItem}"
-                                    Click="AppUsage_Click">
-                                <StackPanel Orientation="Horizontal">
-                                    <md:PackIcon Kind="Apps" Width="20" Height="20" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                                    <TextBlock Text="App Usage" VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Button>
+                                <Button x:Name="MinimizeButton" Style="{StaticResource Pulse.Button.Icon}"
+                                        Width="36" Height="36" Click="MinimizeButton_Click" ToolTip="Minimize">
+                                    <md:PackIcon Kind="WindowMinimize" Width="15" Height="15"/>
+                                </Button>
+                                <Button x:Name="MaximizeButton" Style="{StaticResource Pulse.Button.Icon}"
+                                        Width="36" Height="36" Click="MaximizeButton_Click" ToolTip="Maximize">
+                                    <md:PackIcon x:Name="MaximizeIcon" Kind="WindowMaximize" Width="15" Height="15"/>
+                                </Button>
+                                <Button x:Name="CloseButton" Style="{StaticResource Pulse.Button.Icon}"
+                                        Width="36" Height="36" Click="CloseButton_Click" ToolTip="Close">
+                                    <md:PackIcon Kind="WindowClose" Width="15" Height="15"/>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
 
-                            <TextBlock Text="PRODUCTIVITY" Style="{StaticResource NavSectionHeader}"/>
-
-                            <Button x:Name="NavFocus"
-                                    Style="{StaticResource NavItem}"
-                                    Click="Focus_Click">
-                                <StackPanel Orientation="Horizontal">
-                                    <md:PackIcon Kind="Target" Width="20" Height="20" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Focus Mode" VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Button>
-
-                            <TextBlock Text="INSIGHTS" Style="{StaticResource NavSectionHeader}"/>
-
-                            <Button x:Name="NavReports"
-                                    Style="{StaticResource NavItem}"
-                                    Click="Reports_Click">
-                                <StackPanel Orientation="Horizontal">
-                                    <md:PackIcon Kind="ChartBar" Width="20" Height="20" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Weekly Report" VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Button>
-                        </StackPanel>
-
-                        <!-- Bottom Navigation -->
-                        <StackPanel Grid.Row="2" Margin="0,0,0,16">
-                            <Border Style="{StaticResource NavDivider}"/>
-
-                            <Button x:Name="NavHelp"
-                                    Style="{StaticResource NavItem}"
-                                    Click="Help_Click">
-                                <StackPanel Orientation="Horizontal">
-                                    <md:PackIcon Kind="HelpCircleOutline" Width="20" Height="20" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Help" VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Button>
-
-                            <Button x:Name="NavSettings"
-                                    Style="{StaticResource NavItem}"
-                                    Click="Settings_Click">
-                                <StackPanel Orientation="Horizontal">
-                                    <md:PackIcon Kind="Cog" Width="20" Height="20" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Settings" VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Button>
-
-                            <Button Style="{StaticResource NavItem}"
-                                    Click="Exit_Click">
-                                <StackPanel Orientation="Horizontal">
-                                    <md:PackIcon Kind="ExitToApp" Width="20" Height="20" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Exit" VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Button>
-
-                            <!-- Version -->
-                            <TextBlock x:Name="SidebarVersionText"
-                                       Text="v1.7.0"
-                                       Style="{StaticResource LabelMuted}"
-                                       Margin="24,16,0,0"/>
-                        </StackPanel>
+                        <!-- ===== HOSTED VIEW ===== -->
+                        <ContentControl x:Name="MainContent"
+                                        Grid.Row="1"
+                                        Style="{StaticResource AnimatedContentControl}"
+                                        AutomationProperties.AutomationId="MainContent"
+                                        Margin="0"/>
                     </Grid>
-                </Border>
-
-                <!-- ============================================ -->
-                <!-- MAIN CONTENT -->
-                <!-- ============================================ -->
-                <Border Grid.Column="1"
-                        Background="{DynamicResource Bg.Secondary}"
-                        CornerRadius="0,0,8,0">
-                    <ContentControl x:Name="MainContent"
-                                    Style="{StaticResource AnimatedContentControl}"
-                                    Margin="24"/>
-                </Border>
-            </Grid>
+                </Grid>
+            </Border>
 
             <!-- ============================================ -->
-            <!-- RESIZE GRIP (inside window border) -->
+            <!-- RESIZE GRIP -->
             <!-- ============================================ -->
-            <Grid Grid.Row="1" 
-                  HorizontalAlignment="Right" 
+            <Grid Grid.Column="1"
+                  HorizontalAlignment="Right"
                   VerticalAlignment="Bottom"
                   Margin="0,0,4,4"
                   Cursor="SizeNWSE"
@@ -251,7 +250,7 @@
                   Background="Transparent"
                   MouseLeftButtonDown="ResizeGrip_MouseLeftButtonDown">
                 <Path Data="M 0,12 L 12,0 M 4,12 L 12,4 M 8,12 L 12,8"
-                      Stroke="{DynamicResource Text.Tertiary}"
+                      Stroke="{DynamicResource Ink3}"
                       StrokeThickness="1.5"
                       StrokeStartLineCap="Round"
                       StrokeEndLineCap="Round"
@@ -260,10 +259,9 @@
 
             <!-- ============================================ -->
             <!-- WIND DOWN MODE VISUAL CUE -->
-            <!-- Subtle border glow around window edges -->
             <!-- ============================================ -->
             <Border x:Name="WindDownBorder"
-                    Grid.RowSpan="2"
+                    Grid.ColumnSpan="2"
                     BorderThickness="4"
                     BorderBrush="#F59E0B"
                     CornerRadius="8"
@@ -275,101 +273,50 @@
                     <BlurEffect Radius="8"/>
                 </Border.Effect>
             </Border>
-            
+
             <!-- ============================================ -->
             <!-- BREAK REMINDER OVERLAY -->
             <!-- ============================================ -->
-            <Grid x:Name="BreakOverlay" 
-                  Grid.RowSpan="2" 
+            <Grid x:Name="BreakOverlay"
+                  Grid.ColumnSpan="2"
                   Visibility="Collapsed"
                   Panel.ZIndex="1000">
-                
-                <!-- Semi-transparent backdrop -->
+
                 <Border x:Name="BreakBackdrop"
                         Background="#80000000"
                         MouseLeftButtonDown="BreakBackdrop_Click"/>
-                
-                <!-- Centered dialog card (Samsung style: 20px radius) -->
-                <Border Background="{DynamicResource Bg.Card}"
-                        CornerRadius="{DynamicResource Radius.Card}"
+
+                <Border Style="{StaticResource Pulse.Card}"
                         Padding="40"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         MinWidth="400"
                         MaxWidth="500">
-                    <Border.Effect>
-                        <DropShadowEffect BlurRadius="30" ShadowDepth="0" Opacity="0.4" Color="Black"/>
-                    </Border.Effect>
-                    
                     <StackPanel>
-                        <!-- Icon -->
-                        <md:PackIcon Kind="Eye"
-                                     Width="48"
-                                     Height="48"
-                                     Foreground="{DynamicResource Accent.Primary}"
-                                     HorizontalAlignment="Center"
-                                     Margin="0,0,0,16"/>
-                        
-                        <!-- Title -->
+                        <md:PackIcon Kind="Eye" Width="48" Height="48"
+                                     Foreground="{DynamicResource Accent}"
+                                     HorizontalAlignment="Center" Margin="0,0,0,16"/>
                         <TextBlock Text="Time for a break!"
-                                   Style="{StaticResource HeadingLarge}"
-                                   Foreground="{DynamicResource Text.Primary}"
-                                   TextAlignment="Center"
-                                   Margin="0,0,0,12"/>
-                        
-                        <!-- Message -->
+                                   Style="{StaticResource Pulse.CardTitle}" FontSize="22"
+                                   TextAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,12"/>
                         <TextBlock Text="Follow the 20-20-20 rule: Look at something 20 feet away for 20 seconds."
-                                   Style="{StaticResource BodyMedium}"
-                                   Foreground="{DynamicResource Text.Secondary}"
-                                   TextAlignment="Center"
-                                   TextWrapping="Wrap"
-                                   Margin="0,0,0,32"/>
-                        
-                        <!-- Buttons -->
-                        <StackPanel Orientation="Horizontal"
-                                    HorizontalAlignment="Center">
-                            <!-- Dismiss Button -->
+                                   Style="{StaticResource Pulse.Body2}"
+                                   TextAlignment="Center" Margin="0,0,0,32"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <Button x:Name="OverlayDismissButton"
                                     Content="Dismiss"
                                     Click="OverlayDismissButton_Click"
-                                    Style="{StaticResource ButtonSecondary}"
-                                    Padding="24,12"
-                                    Margin="0,0,12,0"
-                                    FontSize="14"/>
-                            
-                            <!-- Snooze Button -->
+                                    Style="{StaticResource Pulse.Button.Ghost}"
+                                    Padding="24,11" Margin="0,0,12,0"/>
                             <Button x:Name="OverlaySnoozeButton"
                                     Content="Snooze 5 min"
                                     Click="OverlaySnoozeButton_Click"
-                                    Background="{DynamicResource Accent.Primary}"
-                                    Foreground="{DynamicResource Accent.OnAccent}"
-                                    BorderThickness="0"
-                                    Padding="24,12"
-                                    FontSize="14"
-                                    Cursor="Hand">
-                                <Button.Style>
-                                    <Style TargetType="Button">
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate TargetType="Button">
-                                                    <Border Background="{TemplateBinding Background}"
-                                                            CornerRadius="8"
-                                                            Padding="{TemplateBinding Padding}">
-                                                        <ContentPresenter HorizontalAlignment="Center" 
-                                                                        VerticalAlignment="Center"/>
-                                                    </Border>
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Style>
-                                </Button.Style>
-                            </Button>
+                                    Style="{StaticResource Pulse.Button.Primary}"
+                                    Padding="24,11"/>
                         </StackPanel>
-                        
-                        <!-- Turn Off Link -->
                         <TextBlock x:Name="TurnOffLink"
                                    Text="Turn off reminders"
-                                   Foreground="{DynamicResource Text.Secondary}"
+                                   Foreground="{DynamicResource Ink2}"
                                    TextDecorations="Underline"
                                    HorizontalAlignment="Center"
                                    Margin="0,24,0,0"
@@ -383,108 +330,52 @@
             <!-- ============================================ -->
             <!-- FOCUS MODE WARNING OVERLAY -->
             <!-- ============================================ -->
-            <Grid x:Name="FocusWarningOverlay" 
-                  Grid.RowSpan="2" 
+            <Grid x:Name="FocusWarningOverlay"
+                  Grid.ColumnSpan="2"
                   Visibility="Collapsed"
                   Panel.ZIndex="1001">
-                
-                <!-- Semi-transparent backdrop -->
+
                 <Border x:Name="FocusBackdrop"
                         Background="#80000000"
                         MouseLeftButtonDown="FocusBackdrop_Click"/>
-                
-                <!-- Centered warning dialog (Samsung style: 20px radius) -->
-                <Border Background="{DynamicResource Bg.Card}"
-                        CornerRadius="{DynamicResource Radius.Card}"
+
+                <Border Style="{StaticResource Pulse.Card}"
                         Padding="40"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         MinWidth="420"
                         MaxWidth="520">
-                    <Border.Effect>
-                        <DropShadowEffect BlurRadius="30" ShadowDepth="0" Opacity="0.4" Color="Black"/>
-                    </Border.Effect>
-                    
                     <StackPanel>
-                        <!-- Icon -->
-                        <md:PackIcon Kind="AlertCircle"
-                                     Width="48"
-                                     Height="48"
-                                     Foreground="{DynamicResource Status.Warning}"
-                                     HorizontalAlignment="Center"
-                                     Margin="0,0,0,16"/>
-                        
-                        <!-- Title -->
+                        <md:PackIcon Kind="AlertCircle" Width="48" Height="48"
+                                     Foreground="{StaticResource Warn}"
+                                     HorizontalAlignment="Center" Margin="0,0,0,16"/>
                         <TextBlock Text="Focus Mode Active"
-                                   Style="{StaticResource HeadingLarge}"
-                                   Foreground="{DynamicResource Text.Primary}"
-                                   TextAlignment="Center"
-                                   Margin="0,0,0,12"/>
-                        
-                        <!-- App Name -->
+                                   Style="{StaticResource Pulse.CardTitle}" FontSize="22"
+                                   TextAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,12"/>
                         <TextBlock x:Name="DistractingAppName"
                                    Text="Chrome"
-                                   Style="{StaticResource HeadingMedium}"
-                                   Foreground="{DynamicResource Status.Danger}"
-                                   TextAlignment="Center"
-                                   Margin="0,0,0,8"/>
-                        
-                        <!-- Message -->
+                                   Style="{StaticResource Pulse.CardTitle}"
+                                   Foreground="{StaticResource Danger}"
+                                   TextAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,8"/>
                         <TextBlock Text="This app is marked as Entertainment. Stay focused on your work!"
-                                   Style="{StaticResource BodyMedium}"
-                                   Foreground="{DynamicResource Text.Secondary}"
-                                   TextAlignment="Center"
-                                   TextWrapping="Wrap"
-                                   Margin="0,0,0,32"/>
-                        
-                        <!-- Buttons -->
-                        <StackPanel Orientation="Horizontal"
-                                    HorizontalAlignment="Center">
-                            <!-- Back to Work Button -->
+                                   Style="{StaticResource Pulse.Body2}"
+                                   TextAlignment="Center" Margin="0,0,0,32"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <Button x:Name="BackToWorkButton"
                                     Content="Back to Work"
                                     Click="BackToWorkButton_Click"
-                                    Background="{DynamicResource Accent.Primary}"
-                                    Foreground="{DynamicResource Accent.OnAccent}"
-                                    BorderThickness="0"
-                                    Padding="24,12"
-                                    FontSize="14"
-                                    Cursor="Hand"
-                                    Margin="0,0,12,0">
-                                <Button.Style>
-                                    <Style TargetType="Button">
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate TargetType="Button">
-                                                    <Border Background="{TemplateBinding Background}"
-                                                            CornerRadius="8"
-                                                            Padding="{TemplateBinding Padding}">
-                                                        <ContentPresenter HorizontalAlignment="Center" 
-                                                                        VerticalAlignment="Center"/>
-                                                    </Border>
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Style>
-                                </Button.Style>
-                            </Button>
-                            
-                            <!-- Continue Anyway Button -->
+                                    Style="{StaticResource Pulse.Button.Primary}"
+                                    Padding="24,11" Margin="0,0,12,0"/>
                             <Button x:Name="ContinueAnywayButton"
                                     Content="Continue Anyway"
                                     Click="ContinueAnywayButton_Click"
-                                    Style="{StaticResource ButtonSecondary}"
-                                    Padding="24,12"
-                                    FontSize="14"/>
+                                    Style="{StaticResource Pulse.Button.Ghost}"
+                                    Padding="24,11"/>
                         </StackPanel>
-                        
-                        <!-- Time Remaining -->
                         <TextBlock x:Name="FocusTimeRemaining"
                                    Text="24:35 remaining in focus session"
-                                   Foreground="{DynamicResource Text.Muted}"
-                                   HorizontalAlignment="Center"
-                                   Margin="0,24,0,0"
-                                   FontSize="12"/>
+                                   Foreground="{DynamicResource Ink3}"
+                                   HorizontalAlignment="Center" Margin="0,24,0,0" FontSize="12"/>
                     </StackPanel>
                 </Border>
             </Grid>
@@ -492,91 +383,42 @@
             <!-- ============================================ -->
             <!-- END SESSION CONFIRMATION OVERLAY -->
             <!-- ============================================ -->
-            <Grid x:Name="EndSessionOverlay" 
-                  Grid.RowSpan="2" 
+            <Grid x:Name="EndSessionOverlay"
+                  Grid.ColumnSpan="2"
                   Visibility="Collapsed"
                   Panel.ZIndex="1002">
-                
-                <!-- Semi-transparent backdrop -->
+
                 <Border Background="#80000000"
                         MouseLeftButtonDown="EndSessionBackdrop_Click"/>
-                
-                <!-- Centered confirmation dialog (Samsung style: 20px radius) -->
-                <Border Background="{DynamicResource Bg.Card}"
-                        CornerRadius="{DynamicResource Radius.Card}"
+
+                <Border Style="{StaticResource Pulse.Card}"
                         Padding="40"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         MinWidth="400"
                         MaxWidth="480">
-                    <Border.Effect>
-                        <DropShadowEffect BlurRadius="30" ShadowDepth="0" Opacity="0.4" Color="Black"/>
-                    </Border.Effect>
-                    
                     <StackPanel>
-                        <!-- Icon -->
-                        <md:PackIcon Kind="TimerOff"
-                                     Width="48"
-                                     Height="48"
-                                     Foreground="{DynamicResource Status.Warning}"
-                                     HorizontalAlignment="Center"
-                                     Margin="0,0,0,16"/>
-                        
-                        <!-- Title -->
+                        <md:PackIcon Kind="TimerOff" Width="48" Height="48"
+                                     Foreground="{StaticResource Warn}"
+                                     HorizontalAlignment="Center" Margin="0,0,0,16"/>
                         <TextBlock Text="End Focus Session?"
-                                   Style="{StaticResource HeadingLarge}"
-                                   Foreground="{DynamicResource Text.Primary}"
-                                   TextAlignment="Center"
-                                   Margin="0,0,0,12"/>
-                        
-                        <!-- Message -->
+                                   Style="{StaticResource Pulse.CardTitle}" FontSize="22"
+                                   TextAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,12"/>
                         <TextBlock x:Name="EndSessionMessage"
                                    Text="You still have 15:30 remaining. Are you sure you want to end early?"
-                                   Style="{StaticResource BodyMedium}"
-                                   Foreground="{DynamicResource Text.Secondary}"
-                                   TextAlignment="Center"
-                                   TextWrapping="Wrap"
-                                   Margin="0,0,0,32"/>
-                        
-                        <!-- Buttons -->
-                        <StackPanel Orientation="Horizontal"
-                                    HorizontalAlignment="Center">
-                            <!-- Keep Going Button -->
+                                   Style="{StaticResource Pulse.Body2}"
+                                   TextAlignment="Center" Margin="0,0,0,32"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <Button x:Name="KeepGoingButton"
                                     Content="Keep Going"
                                     Click="KeepGoingButton_Click"
-                                    Background="{DynamicResource Accent.Primary}"
-                                    Foreground="{DynamicResource Accent.OnAccent}"
-                                    BorderThickness="0"
-                                    Padding="24,12"
-                                    FontSize="14"
-                                    Cursor="Hand"
-                                    Margin="0,0,12,0">
-                                <Button.Style>
-                                    <Style TargetType="Button">
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate TargetType="Button">
-                                                    <Border Background="{TemplateBinding Background}"
-                                                            CornerRadius="8"
-                                                            Padding="{TemplateBinding Padding}">
-                                                        <ContentPresenter HorizontalAlignment="Center" 
-                                                                        VerticalAlignment="Center"/>
-                                                    </Border>
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Style>
-                                </Button.Style>
-                            </Button>
-                            
-                            <!-- End Session Button -->
+                                    Style="{StaticResource Pulse.Button.Primary}"
+                                    Padding="24,11" Margin="0,0,12,0"/>
                             <Button x:Name="ConfirmEndSessionButton"
                                     Content="End Session"
                                     Click="ConfirmEndSessionButton_Click"
-                                    Style="{StaticResource ButtonSecondary}"
-                                    Padding="24,12"
-                                    FontSize="14"/>
+                                    Style="{StaticResource Pulse.Button.Ghost}"
+                                    Padding="24,11"/>
                         </StackPanel>
                     </StackPanel>
                 </Border>

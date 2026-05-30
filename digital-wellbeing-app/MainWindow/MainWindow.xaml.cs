@@ -36,9 +36,6 @@ namespace digital_wellbeing_app.MainWindow
         private readonly HelpView _helpView = new();
         private readonly SettingsView _settingsView = new();
 
-        // Track active nav button
-        private System.Windows.Controls.Button? _activeNavButton;
-
         // Break reminder service
         private Services.BreakReminderService? _breakReminderService;
 
@@ -81,18 +78,18 @@ namespace digital_wellbeing_app.MainWindow
             if (!firstRunSettings.LoadFirstRunCompleted())
             {
                 var welcomeView = new WelcomeView();
-                welcomeView.Completed += () =>
-                {
-                    MainContent.Content = _dashboardView;
-                    SetActiveNav(NavDashboard);
-                };
+                welcomeView.Completed += () => Dashboard_Click(null, new RoutedEventArgs());
                 MainContent.Content = welcomeView;
             }
             else
             {
                 MainContent.Content = _dashboardView;
             }
-            _activeNavButton = NavDashboard;
+
+            // Initialise Pulse shell state: active rail item, section accent, theme icon
+            NavDashboard.IsChecked = true;
+            Services.ThemeService.SetSection("Dashboard");
+            RefreshThemeToggleIcon();
 
             // Restore saved window position/size
             RestoreWindowState();
@@ -1061,99 +1058,107 @@ namespace digital_wellbeing_app.MainWindow
 
         #region Navigation
 
-        private void SetActiveNav(System.Windows.Controls.Button button)
+        /// <summary>
+        /// Switch the hosted view, retint the whole window to the section accent,
+        /// and update the top-bar title/subtitle.
+        /// </summary>
+        private void NavigateTo(System.Windows.Controls.UserControl view,
+                                System.Windows.Controls.Primitives.ToggleButton railItem,
+                                string section, string title, string subtitle)
         {
-            // Remove active state from previous
-            if (_activeNavButton != null)
-                _activeNavButton.Tag = null;
-
-            // Set active state on new button
-            button.Tag = "Active";
-            _activeNavButton = button;
+            railItem.IsChecked = true;
+            Services.ThemeService.SetSection(section);
+            if (TitleText != null) TitleText.Text = title;
+            if (SubtitleText != null) SubtitleText.Text = subtitle;
+            NavigateWithTransition(view);
         }
 
         /// <summary>
-        /// Navigate to a new page with fade transition animation
+        /// Navigate to a new view with a fade transition animation.
         /// </summary>
-        private void NavigateWithTransition(object newContent, System.Windows.Controls.Button navButton)
+        private void NavigateWithTransition(object newContent)
         {
             // Skip if already on this page
             if (MainContent.Content == newContent) return;
 
-            SetActiveNav(navButton);
-
             try
             {
-                // Get the storyboard from resources
                 if (TryFindResource("PageFadeIn") is Storyboard fadeIn)
                 {
-                    // Set initial state for animation
                     MainContent.Opacity = 0;
-
-                    // Change content
                     MainContent.Content = newContent;
-
-                    // Play fade-in animation
                     fadeIn.Begin(MainContent);
                 }
                 else
                 {
-                    // Fallback: just change content without animation
                     MainContent.Content = newContent;
                     MainContent.Opacity = 1;
                 }
             }
             catch
             {
-                // Fallback on any error: just change content
                 MainContent.Content = newContent;
                 MainContent.Opacity = 1;
             }
         }
 
         private void Dashboard_Click(object? sender, RoutedEventArgs e)
-        {
-            NavigateWithTransition(_dashboardView, NavDashboard);
-        }
+            => NavigateTo(_dashboardView, NavDashboard, "Dashboard", "Today", "Your day at a glance");
 
         private void ScreenTime_Click(object? sender, RoutedEventArgs e)
-        {
-            NavigateWithTransition(_screenView, NavScreen);
-        }
+            => NavigateTo(_screenView, NavScreen, "Screentime", "Screen time", "Time spent at your computer");
 
         private void Sound_Click(object? sender, RoutedEventArgs e)
-        {
-            NavigateWithTransition(_soundView, NavSound);
-        }
+            => NavigateTo(_soundView, NavSound, "Sound", "Hearing", "Protect your hearing");
 
         private void AppUsage_Click(object? sender, RoutedEventArgs e)
-        {
-            NavigateWithTransition(_appUsageView, NavApps);
-        }
+            => NavigateTo(_appUsageView, NavApps, "Appusage", "App usage", "Where your time goes");
 
         private void Focus_Click(object? sender, RoutedEventArgs e)
-        {
-            NavigateWithTransition(_focusView, NavFocus);
-        }
+            => NavigateTo(_focusView, NavFocus, "Focus", "Focus", "Stay on task");
 
         private void Reports_Click(object? sender, RoutedEventArgs e)
-        {
-            NavigateWithTransition(_reportsView, NavReports);
-        }
+            => NavigateTo(_reportsView, NavReports, "Weekly", "Insights", "Your weekly trends");
 
         private void Help_Click(object? sender, RoutedEventArgs e)
-        {
-            NavigateWithTransition(_helpView, NavHelp);
-        }
+            => NavigateTo(_helpView, NavHelp, "Help", "Help", "Questions, answered");
 
         private void Settings_Click(object? sender, RoutedEventArgs e)
-        {
-            NavigateWithTransition(_settingsView, NavSettings);
-        }
+            => NavigateTo(_settingsView, NavSettings, "Settings", "Settings", "Preferences & privacy");
 
         private void Exit_Click(object? sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        /// <summary>
+        /// Toggle between the light and dark Pulse palettes from the top bar.
+        /// </summary>
+        private void ThemeToggle_Click(object sender, RoutedEventArgs e)
+        {
+            var ts = new Services.ThemeService();
+            var next = IsEffectiveDark(ts) ? ViewModels.AppTheme.Light : ViewModels.AppTheme.Dark;
+            ts.ApplyTheme(next);
+            ts.Save(next);
+            RefreshThemeToggleIcon();
+        }
+
+        private void RefreshThemeToggleIcon()
+        {
+            var ts = new Services.ThemeService();
+            bool isDark = IsEffectiveDark(ts);
+            ThemeToggleIcon.Kind = isDark ? PackIconKind.WeatherSunny : PackIconKind.WeatherNight;
+            ThemeToggleButton.ToolTip = isDark ? "Switch to light theme" : "Switch to dark theme";
+        }
+
+        private static bool IsEffectiveDark(Services.ThemeService ts)
+        {
+            return ts.Load() switch
+            {
+                ViewModels.AppTheme.Light => false,
+                ViewModels.AppTheme.Dark => true,
+                _ => ts.IsSystemInDarkMode()
+            };
         }
 
         /// <summary>
@@ -1162,15 +1167,8 @@ namespace digital_wellbeing_app.MainWindow
         public void ShowPrivacyInfo()
         {
             var welcomeView = new WelcomeView();
-            welcomeView.Completed += () =>
-            {
-                // Navigate back to settings after closing privacy info
-                NavigateWithTransition(_settingsView, NavSettings);
-            };
+            welcomeView.Completed += () => NavigateWithTransition(_settingsView);
             MainContent.Content = welcomeView;
-            // Clear nav highlight since we're on a non-nav page
-            if (_activeNavButton != null)
-                _activeNavButton.Tag = null;
         }
 
         #endregion
