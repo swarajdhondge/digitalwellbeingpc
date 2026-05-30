@@ -1,0 +1,41 @@
+<!--
+  ============================================================
+  Pulse.Light.xaml  —  LIGHT palette
+  Same keys as Pulse.Dark.xaml. Swap at runtime to switch themes.
+  ============================================================
+-->
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Color x:Key="Bg.Color">#F3F4F6</Color>
+    <Color x:Key="Bg2.Color">#ECEEF1</Color>
+    <Color x:Key="Card.Color">#FFFFFF</Color>
+    <Color x:Key="Card2.Color">#F2F4F7</Color>
+    <Color x:Key="Border.Color">#E4E7EC</Color>
+    <Color x:Key="Border2.Color">#D6DAE1</Color>
+    <Color x:Key="Track.Color">#ECEEF1</Color>
+
+    <Color x:Key="Ink.Color">#181B21</Color>
+    <Color x:Key="Ink2.Color">#59616E</Color>
+    <Color x:Key="Ink3.Color">#8A92A0</Color>
+
+    <SolidColorBrush x:Key="Bg"      Color="{StaticResource Bg.Color}"/>
+    <SolidColorBrush x:Key="Bg2"     Color="{StaticResource Bg2.Color}"/>
+    <SolidColorBrush x:Key="Card"    Color="{StaticResource Card.Color}"/>
+    <SolidColorBrush x:Key="Card2"   Color="{StaticResource Card2.Color}"/>
+    <SolidColorBrush x:Key="Border"  Color="{StaticResource Border.Color}"/>
+    <SolidColorBrush x:Key="Border2" Color="{StaticResource Border2.Color}"/>
+    <SolidColorBrush x:Key="Track"   Color="{StaticResource Track.Color}"/>
+    <SolidColorBrush x:Key="Ink"     Color="{StaticResource Ink.Color}"/>
+    <SolidColorBrush x:Key="Ink2"    Color="{StaticResource Ink2.Color}"/>
+    <SolidColorBrush x:Key="Ink3"    Color="{StaticResource Ink3.Color}"/>
+
+    <Color x:Key="Accent.Color">#6C6FE8</Color>
+    <SolidColorBrush x:Key="Accent"      Color="{StaticResource Accent.Color}"/>
+    <SolidColorBrush x:Key="Accent.Soft" Color="#266C6FE8"/>
+    <SolidColorBrush x:Key="Accent.Ink"  Color="#FFFFFF"/>
+
+    <DropShadowEffect x:Key="Shadow.Card" BlurRadius="24" ShadowDepth="8" Direction="270" Opacity="0.14" Color="#1F345C"/>
+
+</ResourceDictionary>

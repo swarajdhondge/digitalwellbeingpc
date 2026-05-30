@@ -43,6 +43,15 @@
                 <ResourceDictionary Source="Styles/Dialogs.xaml"/>
                 <ResourceDictionary Source="Styles/Transitions.xaml"/>
 
+                <!-- ============================================================
+                     Pulse redesign (active design layer).
+                     Tokens first, then the palette (swapped at runtime by
+                     ThemeService), then the component styles. Merged LAST so
+                     Pulse values win on any shared token key. -->
+                <ResourceDictionary Source="Styles/Pulse.Tokens.xaml"/>
+                <ResourceDictionary x:Name="PulsePalette" Source="Styles/Pulse.Dark.xaml"/>
+                <ResourceDictionary Source="Styles/Pulse.Styles.xaml"/>
+
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

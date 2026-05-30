@@ -1,0 +1,49 @@
+<!--
+  ============================================================
+  Pulse.Dark.xaml  —  DARK palette (default)
+  Neutral graphite base. Swap with Pulse.Light.xaml at runtime
+  (same pattern as the repo's ThemeService swapping ThemeDark/ThemeLight).
+  "Accent" defaults to the Dashboard hue; the active view should
+  override Accent / Accent.Soft to its section hue on navigation.
+  ============================================================
+-->
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- surfaces -->
+    <Color x:Key="Bg.Color">#0E1014</Color>
+    <Color x:Key="Bg2.Color">#0A0C0F</Color>
+    <Color x:Key="Card.Color">#16181D</Color>
+    <Color x:Key="Card2.Color">#1C1F26</Color>
+    <Color x:Key="Border.Color">#24272E</Color>
+    <Color x:Key="Border2.Color">#2D313A</Color>
+    <Color x:Key="Track.Color">#20242B</Color>
+
+    <!-- text -->
+    <Color x:Key="Ink.Color">#EDEFF3</Color>
+    <Color x:Key="Ink2.Color">#99A1AE</Color>
+    <Color x:Key="Ink3.Color">#636A77</Color>
+
+    <!-- brushes -->
+    <SolidColorBrush x:Key="Bg"      Color="{StaticResource Bg.Color}"/>
+    <SolidColorBrush x:Key="Bg2"     Color="{StaticResource Bg2.Color}"/>
+    <SolidColorBrush x:Key="Card"    Color="{StaticResource Card.Color}"/>
+    <SolidColorBrush x:Key="Card2"   Color="{StaticResource Card2.Color}"/>
+    <SolidColorBrush x:Key="Border"  Color="{StaticResource Border.Color}"/>
+    <SolidColorBrush x:Key="Border2" Color="{StaticResource Border2.Color}"/>
+    <SolidColorBrush x:Key="Track"   Color="{StaticResource Track.Color}"/>
+    <SolidColorBrush x:Key="Ink"     Color="{StaticResource Ink.Color}"/>
+    <SolidColorBrush x:Key="Ink2"    Color="{StaticResource Ink2.Color}"/>
+    <SolidColorBrush x:Key="Ink3"    Color="{StaticResource Ink3.Color}"/>
+
+    <!-- live accent (default = Dashboard indigo; retint per section) -->
+    <Color x:Key="Accent.Color">#6C6FE8</Color>
+    <SolidColorBrush x:Key="Accent"      Color="{StaticResource Accent.Color}"/>
+    <SolidColorBrush x:Key="Accent.Soft" Color="#266C6FE8"/>
+    <SolidColorBrush x:Key="Accent.Ink"  Color="#FFFFFF"/>
+
+    <!-- elevation: subtle only. Pulse cards = solid surface + 1px border, soft shadow. -->
+    <DropShadowEffect x:Key="Shadow.Card" BlurRadius="28" ShadowDepth="10" Direction="270" Opacity="0.45" Color="#000000"/>
+
+</ResourceDictionary>
