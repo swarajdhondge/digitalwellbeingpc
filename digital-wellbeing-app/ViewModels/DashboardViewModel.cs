@@ -37,6 +37,12 @@ namespace digital_wellbeing_app.ViewModels
         private string _weeklyChangeText = string.Empty;
         private bool _weeklyImproved = false;
 
+        // Daily goal / day ring
+        private bool _hasGoal;
+        private double _ringFraction;
+        private string _goalText = "No goal set";
+        private bool _isOverGoal;
+
         // Top apps for stacked bar
         private ObservableCollection<TopAppInfo> _topApps = new();
         
@@ -136,6 +142,34 @@ namespace digital_wellbeing_app.ViewModels
             set { if (_weeklyImproved != value) { _weeklyImproved = value; OnPropertyChanged(); } }
         }
 
+        /// <summary>Whether a daily screen-time goal is set.</summary>
+        public bool HasGoal
+        {
+            get => _hasGoal;
+            set { if (_hasGoal != value) { _hasGoal = value; OnPropertyChanged(); } }
+        }
+
+        /// <summary>Day-ring fill fraction (0..1), clamped at the goal.</summary>
+        public double RingFraction
+        {
+            get => _ringFraction;
+            set { if (Math.Abs(_ringFraction - value) > 0.0001) { _ringFraction = value; OnPropertyChanged(); } }
+        }
+
+        /// <summary>Goal caption, e.g. "of 6h goal · 87%" or "No goal set".</summary>
+        public string GoalText
+        {
+            get => _goalText;
+            set { if (_goalText != value) { _goalText = value; OnPropertyChanged(); } }
+        }
+
+        /// <summary>True when today's screen time has passed the goal.</summary>
+        public bool IsOverGoal
+        {
+            get => _isOverGoal;
+            set { if (_isOverGoal != value) { _isOverGoal = value; OnPropertyChanged(); } }
+        }
+
         /// <summary>Top 3 apps for stacked bar display</summary>
         public ObservableCollection<TopAppInfo> TopApps
         {
@@ -197,6 +231,25 @@ namespace digital_wellbeing_app.ViewModels
                 ?? TimeSpan.FromSeconds(
                     DatabaseService.GetScreenTimePeriodForToday()?.AccumulatedActiveSeconds ?? 0);
             ScreenTime = TimeFormatHelper.FormatDuration(tsScreen);
+
+            // — Daily goal / day ring —
+            var goalService = new GoalService();
+            var goalMinutes = goalService.GetDailyScreenTimeGoal();
+            HasGoal = goalMinutes != null;
+            if (HasGoal)
+            {
+                var progress = goalService.GetGoalProgress(tsScreen);
+                RingFraction = Math.Clamp(progress, 0, 1);
+                IsOverGoal = progress > 1.0;
+                var goalTs = TimeSpan.FromMinutes(goalMinutes!.Value);
+                GoalText = $"of {TimeFormatHelper.FormatCompact(goalTs)} goal · {(int)(progress * 100)}%";
+            }
+            else
+            {
+                RingFraction = 0;
+                IsOverGoal = false;
+                GoalText = "No goal set";
+            }
 
             // — Sound Sessions —
             var soundSessions = DatabaseService.GetSoundSessionsForDate(today);

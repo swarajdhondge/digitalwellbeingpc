@@ -1131,6 +1131,16 @@ namespace digital_wellbeing_app.MainWindow
             Close();
         }
 
+        // Public navigation entry points used by in-view links/cards.
+        public void NavigateToDashboard() => Dashboard_Click(null, new RoutedEventArgs());
+        public void NavigateToScreenTime() => ScreenTime_Click(null, new RoutedEventArgs());
+        public void NavigateToSound() => Sound_Click(null, new RoutedEventArgs());
+        public void NavigateToAppUsage() => AppUsage_Click(null, new RoutedEventArgs());
+        public void NavigateToFocus() => Focus_Click(null, new RoutedEventArgs());
+        public void NavigateToReports() => Reports_Click(null, new RoutedEventArgs());
+        public void NavigateToSettings() => Settings_Click(null, new RoutedEventArgs());
+        public void NavigateToHelp() => Help_Click(null, new RoutedEventArgs());
+
         /// <summary>
         /// Toggle between the light and dark Pulse palettes from the top bar.
         /// </summary>
