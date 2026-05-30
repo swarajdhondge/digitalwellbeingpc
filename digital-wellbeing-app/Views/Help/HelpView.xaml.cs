@@ -8,6 +8,7 @@ namespace digital_wellbeing_app.Views.Help
         public HelpView()
         {
             InitializeComponent();
+            digital_wellbeing_app.Helpers.PulseLayout.CapCenter(PageScroll, PageRoot);
         }
 
         private void ReportBug_Click(object sender, MouseButtonEventArgs e)

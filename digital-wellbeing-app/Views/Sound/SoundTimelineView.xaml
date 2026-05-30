@@ -21,9 +21,9 @@
         <conv:HourVisibilityConverter   x:Key="HourVisibilityConverter" />
     </UserControl.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+    <ScrollViewer x:Name="PageScroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
                   Padding="26,4,26,26">
-        <StackPanel MaxWidth="1040" HorizontalAlignment="Stretch">
+        <StackPanel x:Name="PageRoot" HorizontalAlignment="Center">
 
             <!-- Hero: loud listening + 24h dB chart -->
             <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">

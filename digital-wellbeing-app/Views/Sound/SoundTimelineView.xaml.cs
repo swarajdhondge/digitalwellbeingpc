@@ -15,6 +15,7 @@ namespace digital_wellbeing_app.Views.Sound
         public SoundTimelineView()
         {
             InitializeComponent();
+            digital_wellbeing_app.Helpers.PulseLayout.CapCenter(PageScroll, PageRoot);
 
             _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
             _timer.Tick += (_, __) => {

@@ -20,9 +20,9 @@
         <conv:DurationToWidthConverter x:Key="DurationToWidthConverter"/>
     </UserControl.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+    <ScrollViewer x:Name="PageScroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
                   Padding="26,4,26,26">
-        <StackPanel MaxWidth="1040" HorizontalAlignment="Stretch">
+        <StackPanel x:Name="PageRoot" HorizontalAlignment="Center">
 
             <!-- Now using -->
             <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">

@@ -9,6 +9,7 @@ namespace digital_wellbeing_app.Views.AppUsage
         public AppUsageView()
         {
             InitializeComponent();
+            digital_wellbeing_app.Helpers.PulseLayout.CapCenter(PageScroll, PageRoot);
             Unloaded += OnUnloaded;
         }
 

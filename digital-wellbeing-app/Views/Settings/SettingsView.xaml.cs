@@ -19,6 +19,7 @@ namespace digital_wellbeing_app.Views.Settings
         public SettingsView()
         {
             InitializeComponent();
+            digital_wellbeing_app.Helpers.PulseLayout.CapCenter(PageScroll, PageRoot);
 
             // Set version dynamically from assembly PE file version info
             try
