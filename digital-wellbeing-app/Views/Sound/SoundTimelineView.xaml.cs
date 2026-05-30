@@ -45,9 +45,11 @@ namespace digital_wellbeing_app.Views.Sound
             double h = canvas.ActualHeight;
             if (w <= 0 || h <= 0) return;
 
-            var safeBrush = TryFindResource("Accent.Primary") as System.Windows.Media.Brush
+            var safeBrush = TryFindResource("Accent") as System.Windows.Media.Brush
+                            ?? TryFindResource("Accent.Primary") as System.Windows.Media.Brush
                             ?? System.Windows.Media.Brushes.Teal;
-            var harmBrush = TryFindResource("Status.Danger") as System.Windows.Media.Brush
+            var harmBrush = TryFindResource("Danger") as System.Windows.Media.Brush
+                            ?? TryFindResource("Status.Danger") as System.Windows.Media.Brush
                             ?? System.Windows.Media.Brushes.IndianRed;
 
             foreach (var seg in ViewModel.Bars)
