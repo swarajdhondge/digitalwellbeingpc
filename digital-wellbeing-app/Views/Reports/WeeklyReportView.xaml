@@ -7,256 +7,117 @@
              xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
              xmlns:vm="clr-namespace:digital_wellbeing_app.ViewModels"
              mc:Ignorable="d"
-             d:DesignHeight="900" d:DesignWidth="500"
+             d:DesignHeight="900" d:DesignWidth="900"
+             FontFamily="{DynamicResource Font.Primary}"
              Background="Transparent">
 
     <UserControl.DataContext>
         <vm:WeeklyReportViewModel/>
     </UserControl.DataContext>
 
-    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
-                  VerticalScrollBarVisibility="Auto"
-                  Padding="20,16">
-        <StackPanel>
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
+                  Padding="26,4,26,26">
+        <StackPanel MaxWidth="1040" HorizontalAlignment="Stretch">
 
-            <!-- ============================================ -->
-            <!-- PAGE HEADER -->
-            <!-- ============================================ -->
+            <!-- Week nav -->
             <Grid Margin="0,0,0,16">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-
-                <TextBlock Text="Weekly report"
-                           Style="{StaticResource HeadingLarge}"/>
-
-                <!-- Week Navigation Arrows -->
-                <StackPanel Grid.Column="1" 
-                            Orientation="Horizontal"
-                            VerticalAlignment="Center">
-                    <Button Style="{StaticResource ButtonIcon}"
-                            Command="{Binding PreviousWeekCommand}"
-                            ToolTip="Previous Week">
+                <TextBlock Text="{Binding WeekLabel}" Style="{StaticResource Pulse.CardTitle}" FontSize="15" VerticalAlignment="Center"/>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Style="{StaticResource Pulse.Button.Icon}" Width="34" Height="34"
+                            Command="{Binding PreviousWeekCommand}" ToolTip="Previous week">
                         <md:PackIcon Kind="ChevronLeft" Width="20" Height="20"/>
                     </Button>
-                    <Button Style="{StaticResource ButtonIcon}"
-                            Command="{Binding NextWeekCommand}"
-                            IsEnabled="{Binding CanNavigateNext}"
-                            ToolTip="Next Week">
+                    <Button Style="{StaticResource Pulse.Button.Icon}" Width="34" Height="34"
+                            Command="{Binding NextWeekCommand}" IsEnabled="{Binding CanNavigateNext}" ToolTip="Next week">
                         <md:PackIcon Kind="ChevronRight" Width="20" Height="20"/>
                     </Button>
                 </StackPanel>
             </Grid>
 
-            <!-- Date Range Display -->
-            <TextBlock Text="{Binding WeekLabel}"
-                       Style="{StaticResource LabelSecondary}"
-                       Margin="0,0,0,16"/>
-
-            <!-- ============================================ -->
-            <!-- WEEK SELECTOR PILLS (Samsung Style) -->
-            <!-- ============================================ -->
-            <StackPanel Style="{StaticResource WeekSelectorContainer}">
-                <Border x:Name="Week1Pill"
-                        Style="{StaticResource WeekPill}">
-                    <TextBlock Text="W47"
-                               Style="{StaticResource WeekSelectorText}"/>
-                </Border>
-                <Border x:Name="Week2Pill"
-                        Style="{StaticResource WeekPill}">
-                    <TextBlock Text="W48"
-                               Style="{StaticResource WeekSelectorText}"/>
-                </Border>
-                <Border x:Name="Week3Pill"
-                        Style="{StaticResource WeekPill}">
-                    <TextBlock Text="W49"
-                               Style="{StaticResource WeekSelectorText}"/>
-                </Border>
-                <Border x:Name="Week4Pill"
-                        Style="{StaticResource WeekPillActive}">
-                    <TextBlock Text="W50"
-                               Style="{StaticResource WeekSelectorText}"
-                               Foreground="{DynamicResource Text.Primary}"/>
-                </Border>
-            </StackPanel>
-
-            <!-- ============================================ -->
-            <!-- DAILY AVERAGE CARD (Hero) -->
-            <!-- ============================================ -->
-            <Border Style="{StaticResource CardBase}"
-                    Margin="{StaticResource Margin.Card}">
+            <!-- Hero: daily average + trend chart -->
+            <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
                 <StackPanel>
-                    <!-- Hero Stat -->
-                    <TextBlock Text="{Binding AverageDailyTime}"
-                               Style="{StaticResource HeadingHeroLarge}"
-                               HorizontalAlignment="Left"/>
-                    
-                    <TextBlock Text="Daily average screen time"
-                               Style="{StaticResource StatLabel}"
-                               Margin="0,4,0,0"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="DAILY AVERAGE" Style="{StaticResource Pulse.Eyebrow}"/>
+                            <TextBlock Text="{Binding AverageDailyTime}" Style="{StaticResource Pulse.Stat}" Margin="0,6,0,0"/>
+                            <TextBlock Text="Daily average screen time" Style="{StaticResource Pulse.Body2}" Margin="0,2,0,0"/>
+                        </StackPanel>
+                        <Border Grid.Column="1" VerticalAlignment="Top">
+                            <Border.Style>
+                                <Style TargetType="Border" BasedOn="{StaticResource Pulse.Pill.Warn}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ScreenTimeImproved}" Value="True">
+                                            <Setter Property="Background" Value="{StaticResource Good.Soft}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <TextBlock Text="{Binding ChangePercent}" FontSize="12" FontWeight="SemiBold">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{StaticResource Warn}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ScreenTimeImproved}" Value="True">
+                                                <Setter Property="Foreground" Value="{StaticResource Good}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Border>
+                    </Grid>
 
-                    <!-- Daily Trend Chart with Goal Line -->
-                    <Border Margin="0,24,0,0"
-                            Height="160">
+                    <Border Margin="0,18,0,0" Height="180">
                         <lvc:CartesianChart Series="{Binding DailyTrendSeries}"
                                             XAxes="{Binding DailyTrendXAxes}"
                                             YAxes="{Binding DailyTrendYAxes}"
                                             TooltipPosition="Top"/>
                     </Border>
-
-                    <!-- Day Labels with Goal Checkmarks -->
-                    <Grid Margin="0,8,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <StackPanel Grid.Column="0" HorizontalAlignment="Center">
-                            <TextBlock Text="M" Style="{StaticResource ChartAxisLabel}" HorizontalAlignment="Center"/>
-                            <Border Style="{StaticResource GoalCheckmark}" Visibility="Collapsed"/>
-                        </StackPanel>
-                        <StackPanel Grid.Column="1" HorizontalAlignment="Center">
-                            <TextBlock Text="T" Style="{StaticResource ChartAxisLabel}" HorizontalAlignment="Center"/>
-                            <Border Style="{StaticResource GoalCheckmark}" Visibility="Collapsed"/>
-                        </StackPanel>
-                        <StackPanel Grid.Column="2" HorizontalAlignment="Center">
-                            <TextBlock Text="W" Style="{StaticResource ChartAxisLabel}" HorizontalAlignment="Center"/>
-                            <Border Style="{StaticResource GoalCheckmark}" Visibility="Collapsed"/>
-                        </StackPanel>
-                        <StackPanel Grid.Column="3" HorizontalAlignment="Center">
-                            <TextBlock Text="T" Style="{StaticResource ChartAxisLabel}" HorizontalAlignment="Center"/>
-                            <Border Style="{StaticResource GoalCheckmark}" Visibility="Collapsed"/>
-                        </StackPanel>
-                        <StackPanel Grid.Column="4" HorizontalAlignment="Center">
-                            <TextBlock Text="F" Style="{StaticResource ChartAxisLabel}" HorizontalAlignment="Center"/>
-                            <Border Style="{StaticResource GoalCheckmark}" Visibility="Collapsed"/>
-                        </StackPanel>
-                        <StackPanel Grid.Column="5" HorizontalAlignment="Center">
-                            <TextBlock Text="S" Style="{StaticResource ChartAxisLabel}" HorizontalAlignment="Center"/>
-                            <Border Style="{StaticResource GoalCheckmark}" Visibility="Collapsed"/>
-                        </StackPanel>
-                        <StackPanel Grid.Column="6" HorizontalAlignment="Center">
-                            <TextBlock Text="S" Style="{StaticResource ChartAxisLabel}" HorizontalAlignment="Center"/>
-                            <Border Style="{StaticResource GoalCheckmark}" Visibility="Collapsed"/>
-                        </StackPanel>
-                    </Grid>
                 </StackPanel>
             </Border>
 
-            <!-- ============================================ -->
-            <!-- SCREEN ON/OFF CARD -->
-            <!-- ============================================ -->
-            <Border Style="{StaticResource CardBase}"
-                    Margin="{StaticResource Margin.Card}">
-                <StackPanel>
-                    <TextBlock Text="Average daily usage"
-                               Style="{StaticResource SectionHeader}"/>
-                    
-                    <!-- Comparison Bar -->
-                    <Grid Margin="0,8,0,0">
-                        <Border Background="{DynamicResource Text.Muted}"
-                                CornerRadius="{DynamicResource Radius.Full}"
-                                Height="8"/>
-                        <Border Background="{DynamicResource Chart.Primary}"
-                                CornerRadius="{DynamicResource Radius.Full}"
-                                Height="8"
-                                HorizontalAlignment="Left"
-                                Width="120"/>
-                    </Grid>
-                    
-                    <!-- Labels -->
-                    <Grid Margin="0,12,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        
-                        <StackPanel Grid.Column="0" Orientation="Horizontal">
-                            <Ellipse Width="8" Height="8"
-                                     Fill="{DynamicResource Chart.Primary}"
-                                     VerticalAlignment="Center"
-                                     Margin="0,0,8,0"/>
-                            <TextBlock Style="{StaticResource LabelSecondary}">
-                                <Run Text="Screen on "/>
-                                <Run Text="{Binding AverageDailyTime, Mode=OneWay}"
-                                     FontWeight="SemiBold"
-                                     Foreground="{DynamicResource Text.Primary}"/>
-                            </TextBlock>
-                        </StackPanel>
-                        
-                        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                            <Ellipse Width="8" Height="8"
-                                     Fill="{DynamicResource Text.Muted}"
-                                     VerticalAlignment="Center"
-                                     Margin="0,0,8,0"/>
-                            <TextBlock Style="{StaticResource LabelSecondary}">
-                                <Run Text="Screen off "/>
-                                <Run Text="17 h 12 m"
-                                     FontWeight="SemiBold"
-                                     Foreground="{DynamicResource Text.Primary}"/>
-                            </TextBlock>
-                        </StackPanel>
-                    </Grid>
-                </StackPanel>
-            </Border>
-
-            <!-- ============================================ -->
-            <!-- TOTAL SCREEN TIME CARD -->
-            <!-- ============================================ -->
-            <Border Style="{StaticResource CardBase}"
-                    Margin="{StaticResource Margin.Card}">
+            <!-- Total + comparison -->
+            <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    
                     <StackPanel Grid.Column="0">
-                        <TextBlock Text="Total screen time"
-                                   Style="{StaticResource LabelSecondary}"/>
-                        <TextBlock Text="{Binding TotalScreenTime}"
-                                   Style="{StaticResource StatNumberSmall}"
-                                   Margin="0,4,0,0"/>
+                        <TextBlock Text="TOTAL SCREEN TIME" Style="{StaticResource Pulse.Eyebrow}"/>
+                        <TextBlock Text="{Binding TotalScreenTime}" Style="{StaticResource Pulse.CardTitle}" FontSize="22" Margin="0,6,0,0"/>
                     </StackPanel>
-                    
-                    <StackPanel Grid.Column="1"
-                                VerticalAlignment="Center">
-                        <TextBlock HorizontalAlignment="Right">
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock HorizontalAlignment="Right" FontSize="14" FontWeight="SemiBold">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
-                                    <Setter Property="FontSize" Value="14"/>
-                                    <Setter Property="Foreground" Value="{DynamicResource Status.Warning}"/>
+                                    <Setter Property="Foreground" Value="{StaticResource Warn}"/>
                                     <Setter Property="Text" Value="{Binding ChangePercent}"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding ScreenTimeImproved}" Value="True">
-                                            <Setter Property="Foreground" Value="{DynamicResource Status.Success}"/>
+                                            <Setter Property="Foreground" Value="{StaticResource Good}"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Style>
                         </TextBlock>
-                        <TextBlock Text="vs last week"
-                                   Style="{StaticResource LabelSecondary}"
-                                   HorizontalAlignment="Right"/>
+                        <TextBlock Text="vs last week" Style="{StaticResource Pulse.Body2}" HorizontalAlignment="Right"/>
                     </StackPanel>
                 </Grid>
             </Border>
 
-            <!-- ============================================ -->
-            <!-- TOP APPS SECTION -->
-            <!-- ============================================ -->
-            <TextBlock Text="Most used apps"
-                       Style="{StaticResource SectionHeader}"
-                       Margin="0,8,0,0"/>
-
-            <Border Style="{StaticResource CardBase}"
-                    Margin="{StaticResource Margin.Card}">
+            <!-- Most used apps -->
+            <TextBlock Text="Most used apps" Style="{StaticResource Pulse.CardTitle}" FontSize="14" Margin="2,4,0,10"/>
+            <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
                 <ItemsControl ItemsSource="{Binding TopApps}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
@@ -269,27 +130,11 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-
-                                <!-- App Name -->
-                                <TextBlock Grid.Row="0" Grid.Column="0"
-                                           Text="{Binding AppName}"
-                                           Style="{StaticResource ListItemName}"
-                                           TextTrimming="CharacterEllipsis"/>
-
-                                <!-- Duration -->
-                                <TextBlock Grid.Row="0" Grid.Column="1"
-                                           Text="{Binding FormattedTime}"
-                                           Style="{StaticResource ListItemDuration}"/>
-
-                                <!-- Progress Bar -->
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding AppName}" Style="{StaticResource Pulse.Body}" TextTrimming="CharacterEllipsis"/>
+                                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding FormattedTime}" Style="{StaticResource Pulse.Body2}"/>
                                 <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="0,6,0,0">
-                                    <Border Background="{DynamicResource Bg.Elevated}"
-                                            CornerRadius="3"
-                                            Height="6"/>
-                                    <Border Background="{DynamicResource Chart.Primary}"
-                                            CornerRadius="3"
-                                            Height="6"
-                                            HorizontalAlignment="Left">
+                                    <Border Style="{StaticResource Pulse.ProgressTrack}" Height="6"/>
+                                    <Border Background="{DynamicResource Accent}" CornerRadius="999" Height="6" HorizontalAlignment="Left">
                                         <Border.Width>
                                             <MultiBinding Converter="{StaticResource PercentageToWidthConverter}">
                                                 <Binding Path="PercentOfMax"/>
@@ -304,133 +149,75 @@
                 </ItemsControl>
             </Border>
 
-            <!-- ============================================ -->
-            <!-- FOCUS VS LEISURE CARD -->
-            <!-- ============================================ -->
-            <TextBlock Text="Focus vs leisure"
-                       Style="{StaticResource SectionHeader}"
-                       Margin="0,8,0,0"/>
-
-            <Border Style="{StaticResource CardBase}"
-                    Margin="{StaticResource Margin.Card}">
+            <!-- Focus vs leisure -->
+            <TextBlock Text="Focus vs leisure" Style="{StaticResource Pulse.CardTitle}" FontSize="14" Margin="2,4,0,10"/>
+            <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
                 <StackPanel>
-                    <!-- Horizontal Stacked Bar -->
-                    <Border Background="{DynamicResource Bg.Elevated}"
-                            CornerRadius="4"
-                            Height="24"
-                            ClipToBounds="True"
-                            Margin="0,0,0,20">
+                    <Border CornerRadius="6" Height="22" ClipToBounds="True" Margin="0,0,0,18" Background="{DynamicResource Track}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="{Binding FocusPercent, Converter={StaticResource PercentToGridLength}}"/>
                                 <ColumnDefinition Width="{Binding LeisurePercent, Converter={StaticResource PercentToGridLength}}"/>
                                 <ColumnDefinition Width="{Binding OtherPercent, Converter={StaticResource PercentToGridLength}}"/>
                             </Grid.ColumnDefinitions>
-                            <Border Grid.Column="0" Background="{DynamicResource Status.Success}"/>
-                            <Border Grid.Column="1" Background="{DynamicResource Status.Warning}"/>
-                            <Border Grid.Column="2" Background="{DynamicResource Text.Muted}"/>
+                            <Border Grid.Column="0" Background="{StaticResource Good}"/>
+                            <Border Grid.Column="1" Background="{StaticResource Warn}"/>
+                            <Border Grid.Column="2" Background="{DynamicResource Ink3}"/>
                         </Grid>
                     </Border>
 
-                    <!-- Legend List -->
-                    <!-- Focus -->
-                    <Grid Margin="0,0,0,12">
+                    <Grid Margin="0,0,0,10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <Border Grid.Column="0" Width="4" Height="20" CornerRadius="2"
-                                Background="{DynamicResource Status.Success}"
-                                Margin="0,0,12,0"/>
-                        <TextBlock Grid.Column="1" Text="Focus (Work)"
-                                   Style="{StaticResource ListItemName}"
-                                   VerticalAlignment="Center"/>
-                        <TextBlock Grid.Column="2" Text="{Binding FocusTime}"
-                                   Style="{StaticResource ListItemDuration}"
-                                   VerticalAlignment="Center"/>
+                        <Border Grid.Column="0" Width="4" Height="20" CornerRadius="2" Background="{StaticResource Good}" Margin="0,0,12,0"/>
+                        <TextBlock Grid.Column="1" Text="Focus (Work)" Style="{StaticResource Pulse.Body}" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Column="2" Text="{Binding FocusTime}" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"/>
                     </Grid>
-
-                    <!-- Leisure -->
-                    <Grid Margin="0,0,0,12">
+                    <Grid Margin="0,0,0,10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <Border Grid.Column="0" Width="4" Height="20" CornerRadius="2"
-                                Background="{DynamicResource Status.Warning}"
-                                Margin="0,0,12,0"/>
-                        <TextBlock Grid.Column="1" Text="Leisure"
-                                   Style="{StaticResource ListItemName}"
-                                   VerticalAlignment="Center"/>
-                        <TextBlock Grid.Column="2" Text="{Binding LeisureTime}"
-                                   Style="{StaticResource ListItemDuration}"
-                                   VerticalAlignment="Center"/>
+                        <Border Grid.Column="0" Width="4" Height="20" CornerRadius="2" Background="{StaticResource Warn}" Margin="0,0,12,0"/>
+                        <TextBlock Grid.Column="1" Text="Leisure" Style="{StaticResource Pulse.Body}" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Column="2" Text="{Binding LeisureTime}" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"/>
                     </Grid>
-
-                    <!-- Other -->
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <Border Grid.Column="0" Width="4" Height="20" CornerRadius="2"
-                                Background="{DynamicResource Text.Muted}"
-                                Margin="0,0,12,0"/>
-                        <TextBlock Grid.Column="1" Text="Other"
-                                   Style="{StaticResource ListItemName}"
-                                   VerticalAlignment="Center"/>
-                        <TextBlock Grid.Column="2" Text="{Binding OtherTime}"
-                                   Style="{StaticResource ListItemDuration}"
-                                   VerticalAlignment="Center"/>
+                        <Border Grid.Column="0" Width="4" Height="20" CornerRadius="2" Background="{DynamicResource Ink3}" Margin="0,0,12,0"/>
+                        <TextBlock Grid.Column="1" Text="Other" Style="{StaticResource Pulse.Body}" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Column="2" Text="{Binding OtherTime}" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"/>
                     </Grid>
                 </StackPanel>
             </Border>
 
-            <!-- ============================================ -->
-            <!-- FOCUS SESSIONS SUMMARY -->
-            <!-- ============================================ -->
-            <Border Style="{StaticResource CardBase}"
-                    Margin="{StaticResource Margin.Card}">
+            <!-- Focus sessions summary -->
+            <Border Style="{StaticResource Pulse.Card}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-
-                    <!-- Icon -->
-                    <Border Grid.Column="0"
-                            Style="{StaticResource IconContainer}"
-                            Background="{DynamicResource Status.Success}"
-                            Width="40" Height="40">
-                        <md:PackIcon Kind="Target" 
-                                     Width="20" Height="20"
-                                     Foreground="White"
-                                     HorizontalAlignment="Center"
-                                     VerticalAlignment="Center"/>
+                    <Border Grid.Column="0" Width="40" Height="40" CornerRadius="11" Background="{StaticResource Accent.Focus.Soft}">
+                        <md:PackIcon Kind="Target" Width="20" Height="20" Foreground="{StaticResource Accent.Focus}"
+                                     HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
-
-                    <!-- Info -->
-                    <StackPanel Grid.Column="1"
-                                VerticalAlignment="Center">
-                        <TextBlock Text="Focus sessions"
-                                   Style="{StaticResource HeadingSmall}"/>
-                        <TextBlock Text="Completed this week"
-                                   Style="{StaticResource LabelSecondary}"
-                                   Margin="0,2,0,0"/>
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="14,0,0,0">
+                        <TextBlock Text="Focus sessions" Style="{StaticResource Pulse.CardTitle}" FontSize="15"/>
+                        <TextBlock Text="Completed this week" Style="{StaticResource Pulse.Body2}" Margin="0,2,0,0"/>
                     </StackPanel>
-
-                    <!-- Count -->
-                    <TextBlock Grid.Column="2"
-                               Text="{Binding FocusSessionCount}"
-                               Style="{StaticResource StatNumberSmall}"
-                               VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="2" Text="{Binding FocusSessionCount}" Style="{StaticResource Pulse.CardTitle}" FontSize="22" VerticalAlignment="Center"/>
                 </Grid>
             </Border>
-
         </StackPanel>
     </ScrollViewer>
 </UserControl>
