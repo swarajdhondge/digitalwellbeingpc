@@ -124,11 +124,11 @@ namespace digital_wellbeing_app.Views.Focus
 
         private void UpdateDurationSelection()
         {
-            // Get theme-aware brushes
-            var secondaryBg = (Brush)FindResource("Bg.Elevated");
-            var primaryBg = (Brush)FindResource("Accent.Primary");
-            var primaryFg = (Brush)FindResource("Accent.OnAccent");
-            var secondaryFg = (Brush)FindResource("Text.Primary");
+            // Get theme-aware Pulse brushes
+            var secondaryBg = (Brush)FindResource("Card2");
+            var primaryBg = (Brush)FindResource("Accent");
+            var primaryFg = (Brush)FindResource("Accent.Ink");
+            var secondaryFg = (Brush)FindResource("Ink");
 
             // Update each button's Background AND Foreground
             SetDurationButtonStyle(Duration15Btn, _selectedDuration == 15, primaryBg, primaryFg, secondaryBg, secondaryFg);
@@ -262,11 +262,11 @@ namespace digital_wellbeing_app.Views.Focus
         {
             var level = _focusService?.EnforcementLevel ?? FocusEnforcementLevel.Warn;
             
-            var defaultBg = (Brush)FindResource("Bg.Elevated");
-            var accentBg = (Brush)FindResource("Accent.Primary");
-            var accentFg = (Brush)FindResource("Accent.OnAccent");
-            var defaultFg = (Brush)FindResource("Text.Primary");
-            var secondaryFg = (Brush)FindResource("Text.Secondary");
+            var defaultBg = (Brush)FindResource("Card2");
+            var accentBg = (Brush)FindResource("Accent");
+            var accentFg = (Brush)FindResource("Accent.Ink");
+            var defaultFg = (Brush)FindResource("Ink");
+            var secondaryFg = (Brush)FindResource("Ink2");
 
             // Update Warn option
             bool warnSelected = level == FocusEnforcementLevel.Warn;
@@ -444,9 +444,9 @@ namespace digital_wellbeing_app.Views.Focus
                             ? $"{session.DistractionWarnings} distractions" 
                             : "No distractions",
                         StatusIcon = session.Completed ? "Check" : "Close",
-                        StatusColor = session.Completed 
-                            ? (Brush)FindResource("Status.Success")
-                            : (Brush)FindResource("Status.Danger")
+                        StatusColor = session.Completed
+                            ? (Brush)FindResource("Good")
+                            : (Brush)FindResource("Danger")
                     };
                     _sessionHistory.Add(display);
                 }

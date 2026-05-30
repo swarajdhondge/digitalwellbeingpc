@@ -352,4 +352,26 @@
         <Setter Property="HorizontalAlignment" Value="Left"/>
     </Style>
 
+    <!-- Selectable chip (duration choices etc.). Background/Foreground may be set
+         directly from code-behind to mark the selected chip. -->
+    <Style x:Key="Pulse.Chip" TargetType="Button">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{StaticResource Font.Body}"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="{DynamicResource Card2}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Ink}"/>
+        <Setter Property="Padding" Value="16,9"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}" CornerRadius="{StaticResource Radius.SM}"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>
