@@ -151,10 +151,12 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <!-- ===== TOP BAR (draggable) ===== -->
-                        <Grid Grid.Row="0" Background="Transparent" Margin="26,16,14,8"
-                              MouseLeftButtonDown="TitleBar_MouseLeftButtonDown"
-                              MouseLeftButtonUp="TitleBar_MouseLeftButtonUp">
+                        <!-- ===== TOP BAR (draggable) — centered to 1040 like the content ===== -->
+                        <Border x:Name="TopBarBorder" Grid.Row="0" Background="Transparent" Padding="26,16,26,8"
+                                SizeChanged="TopBarBorder_SizeChanged"
+                                MouseLeftButtonDown="TitleBar_MouseLeftButtonDown"
+                                MouseLeftButtonUp="TitleBar_MouseLeftButtonUp">
+                        <Grid x:Name="TopBarGrid" HorizontalAlignment="Center">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
@@ -227,11 +229,14 @@
                                 </Button>
                             </StackPanel>
                         </Grid>
+                        </Border>
 
                         <!-- ===== HOSTED VIEW ===== -->
                         <ContentControl x:Name="MainContent"
                                         Grid.Row="1"
                                         Style="{StaticResource AnimatedContentControl}"
+                                        HorizontalContentAlignment="Stretch"
+                                        VerticalContentAlignment="Stretch"
                                         AutomationProperties.AutomationId="MainContent"
                                         Margin="0"/>
                     </Grid>

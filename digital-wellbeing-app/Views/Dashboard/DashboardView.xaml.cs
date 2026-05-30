@@ -38,6 +38,14 @@ namespace digital_wellbeing_app.Views.Dashboard
                 _vm.StopRefreshing();
         }
 
+        // The hosting ContentControl hands the view an unbounded width, so cap the
+        // content grid to the scroll viewport so the fixed right column can't overflow.
+        private void DashScroll_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            var inner = e.NewSize.Width - DashScroll.Padding.Left - DashScroll.Padding.Right;
+            RootGrid.Width = System.Math.Min(System.Math.Max(inner, 0), 1080);
+        }
+
         private MainWindow.MainWindow? Shell => Window.GetWindow(this) as MainWindow.MainWindow;
 
         private void WeeklySummary_Click(object sender, MouseButtonEventArgs e) => Shell?.NavigateToReports();

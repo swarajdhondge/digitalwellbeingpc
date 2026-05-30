@@ -1079,6 +1079,13 @@ namespace digital_wellbeing_app.MainWindow
             NavigateWithTransition(view);
         }
 
+        // Cap + center the top bar to ~1080 so it aligns with the centered content at any width.
+        private void TopBarBorder_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            var inner = e.NewSize.Width - TopBarBorder.Padding.Left - TopBarBorder.Padding.Right;
+            TopBarGrid.Width = System.Math.Min(System.Math.Max(inner, 0), 1080);
+        }
+
         /// <summary>Time-of-day greeting used as the dashboard page title.</summary>
         private static string Greeting()
         {
