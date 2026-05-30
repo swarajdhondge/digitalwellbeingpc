@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Threading;
+using digital_wellbeing_app.Helpers;
 using digital_wellbeing_app.Models;
 using digital_wellbeing_app.Services;
 
@@ -15,6 +16,7 @@ namespace digital_wellbeing_app.ViewModels
     {
         private readonly SettingsService _settingsService = new();
         private readonly ReportService _reportService = new();
+        private readonly CoreLogic.ScreenTimeTracker? _screenTracker;
         private readonly DispatcherTimer _refreshTimer;
         
         private string _screenTime = string.Empty;
@@ -26,6 +28,10 @@ namespace digital_wellbeing_app.ViewModels
         private string _topAppName = string.Empty;
         private string _topAppDuration = string.Empty;
 
+        // Sound status
+        private string _soundStatus = "Normal";
+        private bool _isSoundWarning = false;
+
         // Weekly summary
         private string _weeklyScreenTime = string.Empty;
         private string _weeklyChangeText = string.Empty;
@@ -35,7 +41,7 @@ namespace digital_wellbeing_app.ViewModels
         private ObservableCollection<TopAppInfo> _topApps = new();
         
         /// <summary>Model for top apps display</summary>
-        public class TopAppInfo : INotifyPropertyChanged
+        public class TopAppInfo
         {
             public string Name { get; set; } = string.Empty;
             public string Duration { get; set; } = string.Empty;
@@ -44,8 +50,6 @@ namespace digital_wellbeing_app.ViewModels
             public ImageSource? Icon { get; set; }
             public string ExecutablePath { get; set; } = string.Empty;
             public int ColorIndex { get; set; }
-            
-            public event PropertyChangedEventHandler? PropertyChanged;
         }
 
         public string ScreenTime
@@ -73,6 +77,18 @@ namespace digital_wellbeing_app.ViewModels
         {
             get => _thresholdLabel;
             set { if (_thresholdLabel != value) { _thresholdLabel = value; OnPropertyChanged(); } }
+        }
+
+        public string SoundStatus
+        {
+            get => _soundStatus;
+            set { if (_soundStatus != value) { _soundStatus = value; OnPropertyChanged(); } }
+        }
+
+        public bool IsSoundWarning
+        {
+            get => _isSoundWarning;
+            set { if (_isSoundWarning != value) { _isSoundWarning = value; OnPropertyChanged(); } }
         }
 
         public string AppTime
@@ -129,6 +145,8 @@ namespace digital_wellbeing_app.ViewModels
 
         public DashboardViewModel()
         {
+            _screenTracker = (System.Windows.Application.Current as App)?.ScreenTracker;
+
             // Set up timer (don't start yet - wait for StartRefreshing)
             _refreshTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
             _refreshTimer.Tick += (_, __) => RefreshData();
@@ -174,12 +192,11 @@ namespace digital_wellbeing_app.ViewModels
             var threshold = _settingsService.LoadHarmfulThreshold();
             ThresholdLabel = $"ABOVE {(int)threshold} dB";
 
-            // — Screen Time —
-            var period = DatabaseService.GetScreenTimePeriodForToday();
-            var tsScreen = period != null
-                ? TimeSpan.FromSeconds(period.AccumulatedActiveSeconds)
-                : TimeSpan.Zero;
-            ScreenTime = FormatSamsung(tsScreen);
+            // — Screen Time (live from tracker, falls back to DB) —
+            var tsScreen = _screenTracker?.CurrentActiveTime
+                ?? TimeSpan.FromSeconds(
+                    DatabaseService.GetScreenTimePeriodForToday()?.AccumulatedActiveSeconds ?? 0);
+            ScreenTime = TimeFormatHelper.FormatDuration(tsScreen);
 
             // — Sound Sessions —
             var soundSessions = DatabaseService.GetSoundSessionsForDate(today);
@@ -188,20 +205,24 @@ namespace digital_wellbeing_app.ViewModels
             var tsSound = soundSessions.Aggregate(
                 TimeSpan.Zero,
                 (sum, s) => sum + s.ActualListeningDuration);
-            SoundTime = FormatSamsung(tsSound);
+            SoundTime = TimeFormatHelper.FormatDuration(tsSound);
 
             // total harmful
             var tsHarm = soundSessions.Aggregate(
                 TimeSpan.Zero,
                 (sum, s) => sum + s.HarmfulDuration);
-            SoundHarmfulTime = FormatSamsung(tsHarm);
+            SoundHarmfulTime = TimeFormatHelper.FormatDuration(tsHarm);
+
+            // — Sound Status Badge —
+            IsSoundWarning = tsHarm.TotalSeconds > 0;
+            SoundStatus = IsSoundWarning ? "Loud" : "Normal";
 
             // — App Usage & Top Apps —
             var appSessions = DatabaseService.GetAppUsageSessionsForDate(today);
             var tsApp = appSessions.Aggregate(
                 TimeSpan.Zero,
                 (sum, s) => sum + (s.EndTime - s.StartTime));
-            AppTime = FormatSamsung(tsApp);
+            AppTime = TimeFormatHelper.FormatDuration(tsApp);
 
             if (appSessions.Count > 0)
             {
@@ -218,7 +239,7 @@ namespace digital_wellbeing_app.ViewModels
 
                 var top = grouped.First();
                 TopAppName = AppNameService.GetDisplayName(top.Name, top.Path);
-                TopAppDuration = FormatSamsung(top.Total);
+                TopAppDuration = TimeFormatHelper.FormatDuration(top.Total);
                 TopAppIcon = AppIconService.GetIconForExe(top.Path) ?? null!;
 
                 // Build top apps list for stacked bar
@@ -226,7 +247,7 @@ namespace digital_wellbeing_app.ViewModels
                 var topAppsList = grouped.Select((app, index) => new TopAppInfo
                 {
                     Name = AppNameService.GetDisplayName(app.Name, app.Path),
-                    Duration = FormatSamsung(app.Total),
+                    Duration = TimeFormatHelper.FormatDuration(app.Total),
                     TotalTime = app.Total,
                     Percentage = totalTicks > 0 ? (double)app.Total.Ticks / totalTicks * 100 : 0,
                     Icon = AppIconService.GetIconForExe(app.Path),
@@ -246,7 +267,7 @@ namespace digital_wellbeing_app.ViewModels
 
             // — Weekly Summary —
             var (weeklyTotal, changePercent, improved) = _reportService.GetCurrentWeekSummary();
-            WeeklyScreenTime = FormatShort(weeklyTotal);
+            WeeklyScreenTime = TimeFormatHelper.FormatCompact(weeklyTotal);
             WeeklyImproved = improved;
             
             if (Math.Abs(changePercent) < 1)
@@ -261,29 +282,6 @@ namespace digital_wellbeing_app.ViewModels
 
             await Task.CompletedTask;
         }
-
-        /// <summary>Samsung style short format: "4h 20m" for weekly summary</summary>
-        private static string FormatShort(TimeSpan ts)
-        {
-            if (ts.TotalHours >= 1)
-                return $"{(int)ts.TotalHours}h {ts.Minutes}m";
-            return $"{ts.Minutes}m";
-        }
-
-        /// <summary>Samsung style format with spaces: "4 h 20 m"</summary>
-        private static string FormatSamsung(TimeSpan ts)
-        {
-            var hours = (int)ts.TotalHours;
-            var minutes = ts.Minutes;
-            
-            if (hours > 0)
-                return $"{hours} h {minutes} m";
-            return $"{minutes} m";
-        }
-
-        /// <summary>Legacy format for backward compatibility</summary>
-        private static string Format(TimeSpan ts)
-            => $"{(int)ts.TotalHours}:{ts.Minutes:D2}:{ts.Seconds:D2}";
 
         public event PropertyChangedEventHandler? PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string? n = null)

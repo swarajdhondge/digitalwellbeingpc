@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Threading;
+using digital_wellbeing_app.Helpers;
 using digital_wellbeing_app.Models;
 using digital_wellbeing_app.Services;
 using digital_wellbeing_app.CoreLogic;
@@ -327,8 +328,7 @@ namespace digital_wellbeing_app.ViewModels
         private void UpdateTodayUsage()
         {
             var ts = _tracker.CurrentActiveTime;
-            int totalSec = (int)ts.TotalSeconds;
-            TodayTimeText = $"{totalSec / 3600} hr {(totalSec % 3600) / 60} min";
+            TodayTimeText = TimeFormatHelper.FormatDuration(ts);
 
             UpdateTimelineSegments();
         }
@@ -358,19 +358,11 @@ namespace digital_wellbeing_app.ViewModels
             var diff = todayMinutes - yesterdayMinutes;
             if (diff > 0)
             {
-                var diffHours = Math.Abs(diff) / 60;
-                var diffMins = Math.Abs(diff) % 60;
-                ContextLine = diffHours > 0
-                    ? $"↑ {diffHours}h {diffMins}m more than yesterday"
-                    : $"↑ {diffMins}m more than yesterday";
+                ContextLine = $"↑ {TimeFormatHelper.FormatDuration(TimeSpan.FromMinutes(Math.Abs(diff)))} more than yesterday";
             }
             else if (diff < 0)
             {
-                var diffHours = Math.Abs(diff) / 60;
-                var diffMins = Math.Abs(diff) % 60;
-                ContextLine = diffHours > 0
-                    ? $"↓ {diffHours}h {diffMins}m less than yesterday"
-                    : $"↓ {diffMins}m less than yesterday";
+                ContextLine = $"↓ {TimeFormatHelper.FormatDuration(TimeSpan.FromMinutes(Math.Abs(diff)))} less than yesterday";
             }
             else
             {
@@ -458,21 +450,7 @@ namespace digital_wellbeing_app.ViewModels
             if (longestSec > totalActiveSec)
                 longestSec = totalActiveSec;
 
-            // Format longest session display
-            if (longestSec >= 3600)
-            {
-                var hours = longestSec / 3600;
-                var mins = (longestSec % 3600) / 60;
-                LongestSession = $"{hours}h {mins}m";
-            }
-            else if (longestSec >= 60)
-            {
-                LongestSession = $"{longestSec / 60} min";
-            }
-            else
-            {
-                LongestSession = $"{longestSec} sec";
-            }
+            LongestSession = TimeFormatHelper.FormatDuration(TimeSpan.FromSeconds(longestSec));
 
             // Breaks (gaps >= 15 minutes between sessions)
             int breaks = 0;
@@ -526,7 +504,7 @@ namespace digital_wellbeing_app.ViewModels
             if (todayItem == null) return;
 
             var ts = _tracker.CurrentActiveTime;
-            var newUsage = $"{(int)ts.TotalHours} hr {ts.Minutes} min";
+            var newUsage = TimeFormatHelper.FormatDuration(ts);
             var newMinutes = (int)ts.TotalMinutes;
 
             if (todayItem.Usage != newUsage)
@@ -543,9 +521,7 @@ namespace digital_wellbeing_app.ViewModels
                 if (daysWithData > 0)
                 {
                     WeeklyAverageMinutes = totalMinutes / daysWithData;
-                    var avgHours = WeeklyAverageMinutes / 60;
-                    var avgMins = WeeklyAverageMinutes % 60;
-                    WeeklyAverageText = $"{avgHours} hr {avgMins} min";
+                    WeeklyAverageText = TimeFormatHelper.FormatDuration(TimeSpan.FromMinutes(WeeklyAverageMinutes));
                 }
 
                 OnPropertyChanged(nameof(WeeklyUsage));
@@ -589,7 +565,7 @@ namespace digital_wellbeing_app.ViewModels
                 WeeklyUsage.Add(new WeeklyUsageItem
                 {
                     Day = day.DayOfWeek.ToString(),
-                    Usage = $"{(int)ts.TotalHours} hr {ts.Minutes} min",
+                    Usage = TimeFormatHelper.FormatDuration(ts),
                     Minutes = (int)ts.TotalMinutes,
                     IsToday = isToday
                 });
@@ -602,14 +578,12 @@ namespace digital_wellbeing_app.ViewModels
             if (daysWithData > 0)
             {
                 WeeklyAverageMinutes = totalMinutes / daysWithData;
-                var avgHours = WeeklyAverageMinutes / 60;
-                var avgMins = WeeklyAverageMinutes % 60;
-                WeeklyAverageText = $"{avgHours} hr {avgMins} min";
+                WeeklyAverageText = TimeFormatHelper.FormatDuration(TimeSpan.FromMinutes(WeeklyAverageMinutes));
             }
             else
             {
                 WeeklyAverageMinutes = 0;
-                WeeklyAverageText = "0 hr 0 min";
+                WeeklyAverageText = "0 m";
             }
         }
 

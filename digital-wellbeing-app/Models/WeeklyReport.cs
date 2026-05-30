@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using digital_wellbeing_app.Helpers;
 
 namespace digital_wellbeing_app.Models
 {
@@ -24,14 +25,7 @@ namespace digital_wellbeing_app.Models
         public int TotalSeconds { get; set; }
 
         /// <summary>Formatted display string (e.g., "5h 23m")</summary>
-        public string FormattedTime => FormatTimeSpan(TimeSpan.FromSeconds(TotalSeconds));
-
-        private static string FormatTimeSpan(TimeSpan ts)
-        {
-            if (ts.TotalHours >= 1)
-                return $"{(int)ts.TotalHours}h {ts.Minutes}m";
-            return $"{ts.Minutes}m";
-        }
+        public string FormattedTime => TimeFormatHelper.FormatCompact(TimeSpan.FromSeconds(TotalSeconds));
     }
 
     /// <summary>
@@ -61,14 +55,7 @@ namespace digital_wellbeing_app.Models
         public AppCategoryType Category { get; set; } = AppCategoryType.Uncategorized;
 
         /// <summary>Formatted display string</summary>
-        public string FormattedTime => FormatTimeSpan(TimeSpan.FromSeconds(TotalSeconds));
-
-        private static string FormatTimeSpan(TimeSpan ts)
-        {
-            if (ts.TotalHours >= 1)
-                return $"{(int)ts.TotalHours}h {ts.Minutes}m";
-            return $"{ts.Minutes}m";
-        }
+        public string FormattedTime => TimeFormatHelper.FormatCompact(TimeSpan.FromSeconds(TotalSeconds));
     }
 
     /// <summary>
@@ -103,16 +90,9 @@ namespace digital_wellbeing_app.Models
             ? (OtherTime.TotalSeconds / TotalTime.TotalSeconds) * 100
             : 0;
 
-        public string FocusFormatted => FormatTimeSpan(FocusTime);
-        public string LeisureFormatted => FormatTimeSpan(LeisureTime);
-        public string OtherFormatted => FormatTimeSpan(OtherTime);
-
-        private static string FormatTimeSpan(TimeSpan ts)
-        {
-            if (ts.TotalHours >= 1)
-                return $"{(int)ts.TotalHours}h {ts.Minutes}m";
-            return $"{ts.Minutes}m";
-        }
+        public string FocusFormatted => TimeFormatHelper.FormatCompact(FocusTime);
+        public string LeisureFormatted => TimeFormatHelper.FormatCompact(LeisureTime);
+        public string OtherFormatted => TimeFormatHelper.FormatCompact(OtherTime);
     }
 
     /// <summary>
@@ -156,18 +136,10 @@ namespace digital_wellbeing_app.Models
         public bool FocusSessionsImproved => FocusSessionChange > 0;
 
         // Formatted strings for UI
-        public string ThisWeekFormatted => FormatTimeSpan(ThisWeekScreenTime);
-        public string LastWeekFormatted => FormatTimeSpan(LastWeekScreenTime);
-        public string ChangeFormatted => (ScreenTimeChange.TotalSeconds >= 0 ? "+" : "") + FormatTimeSpan(ScreenTimeChange);
+        public string ThisWeekFormatted => TimeFormatHelper.FormatCompact(ThisWeekScreenTime);
+        public string LastWeekFormatted => TimeFormatHelper.FormatCompact(LastWeekScreenTime);
+        public string ChangeFormatted => (ScreenTimeChange.TotalSeconds >= 0 ? "+" : "-") + TimeFormatHelper.FormatCompact(ScreenTimeChange.Duration());
         public string ChangePercentFormatted => $"{(ScreenTimeChangePercent >= 0 ? "+" : "")}{ScreenTimeChangePercent:F0}%";
-
-        private static string FormatTimeSpan(TimeSpan ts)
-        {
-            var absTs = ts.Duration();
-            if (absTs.TotalHours >= 1)
-                return $"{(int)ts.TotalHours}h {Math.Abs(ts.Minutes)}m";
-            return $"{ts.Minutes}m";
-        }
     }
 
     /// <summary>
@@ -206,15 +178,8 @@ namespace digital_wellbeing_app.Models
         public int FocusSessionCount { get; set; }
 
         // Formatted display strings
-        public string TotalFormatted => FormatTimeSpan(TotalScreenTime);
-        public string AverageFormatted => FormatTimeSpan(AverageDailyTime);
-
-        private static string FormatTimeSpan(TimeSpan ts)
-        {
-            if (ts.TotalHours >= 1)
-                return $"{(int)ts.TotalHours}h {ts.Minutes}m";
-            return $"{ts.Minutes}m";
-        }
+        public string TotalFormatted => TimeFormatHelper.FormatCompact(TotalScreenTime);
+        public string AverageFormatted => TimeFormatHelper.FormatCompact(AverageDailyTime);
     }
 }
 

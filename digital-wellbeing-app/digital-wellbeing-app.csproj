@@ -17,7 +17,7 @@
     <ApplicationIcon>Resources\Icons\digital-balance-icon.ico</ApplicationIcon>
     <Win32Icon>Resources\Icons\digital-balance-icon.ico</Win32Icon>
 
-    <Version>2.0.0</Version>
+    <Version>2.5.0</Version>
     
     <!-- Disable assembly info generation to fix WPF temp project duplicate attribute issue -->
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -36,9 +36,6 @@
   <ItemGroup>
     <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
     <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
-    <PackageReference Include="xunit.abstractions" Version="2.0.3" />
-    <PackageReference Include="xunit.assert" Version="2.9.3" />
-    <PackageReference Include="xunit.extensibility.core" Version="2.9.3" />
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
     <PackageReference Include="NAudio" Version="2.1.0" />
     <PackageReference Include="MaterialDesignThemes" Version="5.2.1" />

@@ -15,6 +15,8 @@ namespace digital_wellbeing_app.Services
         public static void Enable(bool enable)
         {
             using var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(RunKey, writable: true);
+            if (key == null) return;
+
             if (enable)
             {
                 var exe = System.Reflection.Assembly.GetExecutingAssembly().Location;

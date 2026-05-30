@@ -1,4 +1,5 @@
 using System;
+using digital_wellbeing_app.Helpers;
 using digital_wellbeing_app.Models;
 
 namespace digital_wellbeing_app.Services
@@ -137,22 +138,12 @@ namespace digital_wellbeing_app.Services
 
             var progress = GetGoalProgress(currentTime);
             var percent = (int)(progress * 100);
-            var goalHours = goal.Value / 60;
-            var goalMins = goal.Value % 60;
-
-            string goalText = goalMins > 0 
-                ? $"{goalHours}h {goalMins}m" 
-                : $"{goalHours}h";
+            var goalText = TimeFormatHelper.FormatCompact(TimeSpan.FromMinutes(goal.Value));
 
             if (progress > 1.0)
             {
                 var overTime = currentTime - TimeSpan.FromMinutes(goal.Value);
-                var overHours = (int)overTime.TotalHours;
-                var overMins = overTime.Minutes;
-                string overText = overHours > 0 
-                    ? $"{overHours}h {overMins}m" 
-                    : $"{overMins}m";
-                return $"{percent}% - Over goal by {overText}";
+                return $"{percent}% - Over goal by {TimeFormatHelper.FormatCompact(overTime)}";
             }
 
             return $"{percent}% of {goalText} goal";

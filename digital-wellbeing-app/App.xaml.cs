@@ -106,7 +106,7 @@ namespace digital_wellbeing_app
             ScreenTracker.Start();
             AppTracker = new CoreLogic.AppUsageTracker();
             AppTracker.Start();
-            _soundService = new Services.SoundMonitoringService();
+            _soundService = new Services.SoundMonitoringService(SoundExposureMgr);
 
             Services.LogService.Info("Trackers started successfully");
 

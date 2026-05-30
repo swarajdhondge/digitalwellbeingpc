@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using digital_wellbeing_app.CoreLogic;
+using digital_wellbeing_app.Helpers;
 using digital_wellbeing_app.Models;
 using digital_wellbeing_app.Services;
 
@@ -154,12 +155,12 @@ namespace digital_wellbeing_app.ViewModels
 
             if (session != null)
             {
-                CurrentAppName = session.AppName;
+                CurrentAppName = AppNameService.GetDisplayName(session.AppName, session.ExecutablePath);
                 CurrentWindowTitle = TruncateWindowTitle(session.WindowTitle ?? string.Empty);
 
                 // Calculate live duration
                 var duration = DateTime.Now - session.StartTime;
-                CurrentAppDuration = FormatDuration(duration);
+                CurrentAppDuration = TimeFormatHelper.FormatCompact(duration);
 
                 // Load icon if changed
                 if (CurrentAppIcon == null || !string.Equals(_currentIconPath, session.ExecutablePath))
@@ -210,11 +211,11 @@ namespace digital_wellbeing_app.ViewModels
 
             // Longest session
             var longest = durations.Max();
-            LongestSessionTime = FormatDurationShort(longest);
+            LongestSessionTime = TimeFormatHelper.FormatCompact(longest);
 
             // Average focus time
             var avgSeconds = durations.Average(d => d.TotalSeconds);
-            AverageFocusTime = FormatDurationShort(TimeSpan.FromSeconds(avgSeconds));
+            AverageFocusTime = TimeFormatHelper.FormatCompact(TimeSpan.FromSeconds(avgSeconds));
         }
 
         private void LoadTodaysUsage()
@@ -226,7 +227,7 @@ namespace digital_wellbeing_app.ViewModels
                 .GroupBy(s => new { s.AppName, s.ExecutablePath })
                 .Select(g => new AppUsageSummary
                 {
-                    AppName = g.Key.AppName,
+                    AppName = AppNameService.GetDisplayName(g.Key.AppName, g.Key.ExecutablePath),
                     ExecutablePath = g.Key.ExecutablePath,
                     TotalDuration = TimeSpan.FromSeconds(g.Sum(s => s.Duration.TotalSeconds))
                 })
@@ -250,7 +251,7 @@ namespace digital_wellbeing_app.ViewModels
                 {
                     grouped.Insert(0, new AppUsageSummary
                     {
-                        AppName = currentSession.AppName,
+                        AppName = AppNameService.GetDisplayName(currentSession.AppName, currentSession.ExecutablePath),
                         ExecutablePath = currentSession.ExecutablePath,
                         TotalDuration = currentDuration
                     });
@@ -267,24 +268,6 @@ namespace digital_wellbeing_app.ViewModels
             }
 
             HasApps = TodaysUsage.Count > 0;
-        }
-
-        private static string FormatDuration(TimeSpan ts)
-        {
-            if (ts.TotalHours >= 1)
-                return $"{(int)ts.TotalHours}h {ts.Minutes}m {ts.Seconds}s";
-            if (ts.TotalMinutes >= 1)
-                return $"{(int)ts.TotalMinutes}m {ts.Seconds}s";
-            return $"{ts.Seconds}s";
-        }
-
-        private static string FormatDurationShort(TimeSpan ts)
-        {
-            if (ts.TotalHours >= 1)
-                return $"{(int)ts.TotalHours}h {ts.Minutes}m";
-            if (ts.TotalMinutes >= 1)
-                return $"{(int)ts.TotalMinutes}m";
-            return $"{ts.Seconds}s";
         }
 
         private static string TruncateWindowTitle(string title)
@@ -326,15 +309,7 @@ namespace digital_wellbeing_app.ViewModels
             }
         }
 
-        public string DurationFormatted
-        {
-            get
-            {
-                if (TotalDuration.TotalHours >= 1)
-                    return $"{(int)TotalDuration.TotalHours}h {TotalDuration.Minutes}m";
-                return $"{(int)TotalDuration.TotalMinutes}m";
-            }
-        }
+        public string DurationFormatted => TimeFormatHelper.FormatCompact(TotalDuration);
 
         private BitmapImage? _icon;
         public BitmapImage? Icon

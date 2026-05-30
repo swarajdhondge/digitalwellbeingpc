@@ -180,9 +180,17 @@
                     
                     <!-- Status Badge -->
                     <Border Grid.Column="1"
-                            Style="{StaticResource PillBadgeSuccess}"
                             VerticalAlignment="Top">
-                        <TextBlock Text="Normal"
+                        <Border.Style>
+                            <Style TargetType="Border" BasedOn="{StaticResource PillBadgeSuccess}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsSoundWarning}" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource Status.Danger}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <TextBlock Text="{Binding SoundStatus}"
                                    Style="{StaticResource BadgeText}"/>
                     </Border>
                 </Grid>

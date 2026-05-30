@@ -18,7 +18,6 @@ namespace digital_wellbeing_app.Services
         private FocusSession? _currentSession;
         private bool _isDisposed = false;
         private readonly Dictionary<string, AppCategoryType> _appCategories;
-        private Process? _lastForegroundProcess;
         private readonly HashSet<string> _appsFailedToBlock = new(StringComparer.OrdinalIgnoreCase);
         private readonly HashSet<string> _sessionOverrideApps = new(StringComparer.OrdinalIgnoreCase);
         
@@ -196,7 +195,6 @@ namespace digital_wellbeing_app.Services
 
             _sessionTimer.Start();
             _focusCheckTimer.Start();
-            _lastForegroundProcess = null;
 
             SessionStarted?.Invoke();
         }
