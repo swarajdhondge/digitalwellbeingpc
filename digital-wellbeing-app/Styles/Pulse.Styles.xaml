@@ -1,0 +1,355 @@
+<!--
+  ============================================================
+  Pulse.Styles.xaml  —  Pulse redesign component styles
+  Reusable building blocks (cards, buttons, pills, switch,
+  segmented control, rail item, text) consumed by the Pulse
+  shell and views. All colours via DynamicResource so theme +
+  per-section accent retint live.
+  ============================================================
+-->
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- ===================== TEXT ===================== -->
+    <Style x:Key="Pulse.Eyebrow" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{StaticResource Font.XS}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{DynamicResource Ink2}"/>
+        <Setter Property="TextOptions.TextFormattingMode" Value="Ideal"/>
+    </Style>
+
+    <Style x:Key="Pulse.PageTitle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{StaticResource Font.Display}"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{DynamicResource Ink}"/>
+        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+    </Style>
+
+    <Style x:Key="Pulse.Subtitle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{StaticResource Font.Body}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Ink2}"/>
+    </Style>
+
+    <Style x:Key="Pulse.Stat" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{StaticResource Font.Stat}"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{DynamicResource Ink}"/>
+    </Style>
+
+    <Style x:Key="Pulse.CardTitle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{StaticResource Font.LG}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{DynamicResource Ink}"/>
+    </Style>
+
+    <Style x:Key="Pulse.Body" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{StaticResource Font.Body}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Ink}"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+    </Style>
+
+    <Style x:Key="Pulse.Body2" TargetType="TextBlock" BasedOn="{StaticResource Pulse.Body}">
+        <Setter Property="Foreground" Value="{DynamicResource Ink2}"/>
+    </Style>
+
+    <Style x:Key="Pulse.Muted" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{StaticResource Font.SM}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Ink3}"/>
+    </Style>
+
+    <!-- ===================== CARD ===================== -->
+    <Style x:Key="Pulse.Card" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Card}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Border}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="{StaticResource Radius.XL}"/>
+        <Setter Property="Padding" Value="{StaticResource Pad.Card}"/>
+        <Setter Property="Effect" Value="{DynamicResource Shadow.Card}"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+    </Style>
+
+    <!-- Interactive card: brightens border + lifts background on hover -->
+    <Style x:Key="Pulse.Card.Interactive" TargetType="Border" BasedOn="{StaticResource Pulse.Card}">
+        <Setter Property="Cursor" Value="Hand"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource Card2}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource Border2}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- ===================== ICON TILE ===================== -->
+    <!-- 40x40 rounded tinted tile; set Background to a *.Soft brush and the
+         child glyph Foreground to the matching full-strength brush. -->
+    <Style x:Key="Pulse.IconTile" TargetType="Border">
+        <Setter Property="Width" Value="{StaticResource Tile.Size}"/>
+        <Setter Property="Height" Value="{StaticResource Tile.Size}"/>
+        <Setter Property="CornerRadius" Value="{StaticResource Radius.Tile}"/>
+        <Setter Property="Background" Value="{DynamicResource Accent.Soft}"/>
+    </Style>
+
+    <!-- ===================== BUTTONS ===================== -->
+    <Style x:Key="Pulse.Button.Primary" TargetType="Button">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{StaticResource Font.MD}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{DynamicResource Accent.Ink}"/>
+        <Setter Property="Background" Value="{DynamicResource Accent}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Padding" Value="18,11"/>
+        <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="bd" Background="{TemplateBinding Background}"
+                            CornerRadius="{StaticResource Radius.SM}"
+                            Padding="{TemplateBinding Padding}">
+                        <Border.RenderTransform>
+                            <ScaleTransform x:Name="st" ScaleX="1" ScaleY="1"/>
+                        </Border.RenderTransform>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="bd" Property="Opacity" Value="0.9"/>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="st" Storyboard.TargetProperty="ScaleX" To="0.97" Duration="0:0:0.08"/>
+                                        <DoubleAnimation Storyboard.TargetName="st" Storyboard.TargetProperty="ScaleY" To="0.97" Duration="0:0:0.08"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="st" Storyboard.TargetProperty="ScaleX" To="1" Duration="0:0:0.12"/>
+                                        <DoubleAnimation Storyboard.TargetName="st" Storyboard.TargetProperty="ScaleY" To="1" Duration="0:0:0.12"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="bd" Property="Opacity" Value="0.4"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Ghost / secondary button: bordered, transparent, hover fills Card2 -->
+    <Style x:Key="Pulse.Button.Ghost" TargetType="Button">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{StaticResource Font.Body}"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Foreground" Value="{DynamicResource Ink}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Padding" Value="14,8"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="bd" Background="{TemplateBinding Background}"
+                            BorderBrush="{DynamicResource Border}" BorderThickness="1"
+                            CornerRadius="{StaticResource Radius.SM}"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="{DynamicResource Card2}"/>
+                            <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource Border2}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="bd" Property="Opacity" Value="0.4"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Square rounded icon button (title bar / top bar) -->
+    <Style x:Key="Pulse.Button.Icon" TargetType="Button">
+        <Setter Property="Foreground" Value="{DynamicResource Ink2}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Width" Value="42"/>
+        <Setter Property="Height" Value="42"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="bd" Background="{TemplateBinding Background}"
+                            CornerRadius="{StaticResource Radius.SM}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="{DynamicResource Card2}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource Ink}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ===================== PILLS / BADGES ===================== -->
+    <!-- Rounded status pill (Border). Put a TextBlock/StackPanel inside. -->
+    <Style x:Key="Pulse.Pill" TargetType="Border">
+        <Setter Property="CornerRadius" Value="{StaticResource Radius.Pill}"/>
+        <Setter Property="Padding" Value="10,4"/>
+        <Setter Property="Background" Value="{DynamicResource Card2}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <Style x:Key="Pulse.Pill.Good" TargetType="Border" BasedOn="{StaticResource Pulse.Pill}">
+        <Setter Property="Background" Value="{StaticResource Good.Soft}"/>
+    </Style>
+    <Style x:Key="Pulse.Pill.Warn" TargetType="Border" BasedOn="{StaticResource Pulse.Pill}">
+        <Setter Property="Background" Value="{StaticResource Warn.Soft}"/>
+    </Style>
+    <Style x:Key="Pulse.Pill.Danger" TargetType="Border" BasedOn="{StaticResource Pulse.Pill}">
+        <Setter Property="Background" Value="{StaticResource Danger.Soft}"/>
+    </Style>
+    <Style x:Key="Pulse.Pill.Accent" TargetType="Border" BasedOn="{StaticResource Pulse.Pill}">
+        <Setter Property="Background" Value="{DynamicResource Accent.Soft}"/>
+    </Style>
+
+    <!-- Live "Tracking" dot -->
+    <Style x:Key="Pulse.Dot" TargetType="Ellipse">
+        <Setter Property="Width" Value="8"/>
+        <Setter Property="Height" Value="8"/>
+        <Setter Property="Fill" Value="{StaticResource Good}"/>
+    </Style>
+
+    <!-- ===================== SWITCH ===================== -->
+    <Style x:Key="Pulse.Switch" TargetType="ToggleButton">
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Width" Value="44"/>
+        <Setter Property="Height" Value="24"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border x:Name="track" CornerRadius="12" Background="{DynamicResource Track}">
+                        <Ellipse x:Name="knob" Width="18" Height="18" Fill="{DynamicResource Ink3}"
+                                 HorizontalAlignment="Left" Margin="3,0,0,0"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="track" Property="Background" Value="{DynamicResource Accent}"/>
+                            <Setter TargetName="knob" Property="Fill" Value="#FFFFFF"/>
+                            <Setter TargetName="knob" Property="HorizontalAlignment" Value="Right"/>
+                            <Setter TargetName="knob" Property="Margin" Value="0,0,3,0"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ===================== SEGMENTED CONTROL ===================== -->
+    <!-- Container Border: set Background to Track, rounded pill, small padding. -->
+    <Style x:Key="Pulse.SegmentBar" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Track}"/>
+        <Setter Property="CornerRadius" Value="{StaticResource Radius.SM}"/>
+        <Setter Property="Padding" Value="3"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+    </Style>
+    <!-- Segment item: RadioButton with GroupName; selected = Card fill + shadow. -->
+    <Style x:Key="Pulse.Segment" TargetType="RadioButton">
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Primary}"/>
+        <Setter Property="FontSize" Value="{StaticResource Font.Body}"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Foreground" Value="{DynamicResource Ink2}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Border x:Name="bd" Background="Transparent" CornerRadius="7" Padding="16,7">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="{DynamicResource Card}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource Ink}"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsChecked" Value="False"/>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Foreground" Value="{DynamicResource Ink}"/>
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ===================== RAIL NAV ITEM ===================== -->
+    <!-- 46px rounded icon button. Use as RadioButton GroupName="Rail".
+         Active (IsChecked) = Accent.Soft fill + 3px Accent left bar + Accent glyph.
+         Hover = Card2 fill. Put a md:PackIcon as Content; ToolTip = label. -->
+    <Style x:Key="Pulse.RailItem" TargetType="RadioButton">
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Width" Value="{StaticResource RailItem.Size}"/>
+        <Setter Property="Height" Value="{StaticResource RailItem.Size}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Ink2}"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,3"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Grid>
+                        <Border x:Name="bar" Width="3" Height="22" CornerRadius="0,2,2,0"
+                                HorizontalAlignment="Left" Background="{DynamicResource Accent}"
+                                Visibility="Collapsed"/>
+                        <Border x:Name="bd" Background="Transparent" CornerRadius="{StaticResource Radius.MD}"
+                                Margin="6,0" TextElement.Foreground="{TemplateBinding Foreground}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="{DynamicResource Card2}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource Ink}"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="{DynamicResource Accent.Soft}"/>
+                            <Setter TargetName="bar" Property="Visibility" Value="Visible"/>
+                            <Setter Property="Foreground" Value="{DynamicResource Accent}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Thin progress bar: place a Track-filled rounded Border, overlay an
+         Accent-filled Border of proportional width (set in markup/binding). -->
+    <Style x:Key="Pulse.ProgressTrack" TargetType="Border">
+        <Setter Property="Height" Value="8"/>
+        <Setter Property="CornerRadius" Value="{StaticResource Radius.Pill}"/>
+        <Setter Property="Background" Value="{DynamicResource Track}"/>
+    </Style>
+    <Style x:Key="Pulse.ProgressFill" TargetType="Border">
+        <Setter Property="Height" Value="8"/>
+        <Setter Property="CornerRadius" Value="{StaticResource Radius.Pill}"/>
+        <Setter Property="Background" Value="{DynamicResource Accent}"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+    </Style>
+
+</ResourceDictionary>

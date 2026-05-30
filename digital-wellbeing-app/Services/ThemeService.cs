@@ -14,6 +14,14 @@ namespace digital_wellbeing_app.Services
         private const string FileName = "theme.json";
         private const string DarkThemeUri = "Styles/ThemeDark.xaml";
         private const string LightThemeUri = "Styles/ThemeLight.xaml";
+        private const string PulseDarkUri = "Styles/Pulse.Dark.xaml";
+        private const string PulseLightUri = "Styles/Pulse.Light.xaml";
+
+        /// <summary>
+        /// The section whose accent hue is currently promoted to the live Accent keys.
+        /// Re-applied after a theme swap so the per-section retint survives.
+        /// </summary>
+        public static string CurrentSection { get; private set; } = "Dashboard";
 
         public void Save(AppTheme mode)
         {
@@ -58,8 +66,15 @@ namespace digital_wellbeing_app.Services
                 _ => IsSystemInDarkMode() // Auto
             };
 
-            // Swap our custom palette dictionary
-            SwapThemeDictionary(isDark);
+            // Swap the legacy palette (still used by any not-yet-migrated views)
+            SwapPalette(isDark, DarkThemeUri, LightThemeUri, "ThemeDark", "ThemeLight");
+
+            // Swap the Pulse palette (active design layer)
+            SwapPalette(isDark, PulseDarkUri, PulseLightUri, "Pulse.Dark", "Pulse.Light");
+
+            // A palette swap resets Accent to its default hue; re-promote the
+            // active section's accent so the per-section retint survives.
+            SetSection(CurrentSection);
 
             // Also update MaterialDesign's base theme for their components
             UpdateMaterialDesignTheme(isDark);
@@ -68,34 +83,52 @@ namespace digital_wellbeing_app.Services
             App.ConfigureLiveChartsTheme(isDark);
         }
 
-        private void SwapThemeDictionary(bool isDark)
+        /// <summary>
+        /// Replaces a palette ResourceDictionary at the end of the merged set so
+        /// DynamicResource lookups pick up the new colours.
+        /// </summary>
+        private void SwapPalette(bool isDark, string darkUri, string lightUri,
+                                 string darkMatch, string lightMatch)
         {
             var app = System.Windows.Application.Current;
             if (app == null) return;
 
             var dictionaries = app.Resources.MergedDictionaries;
-            
-            // Find and remove existing theme palette
-            var existingPalette = dictionaries.FirstOrDefault(d =>
-                d.Source != null && 
-                (d.Source.OriginalString.Contains("ThemeDark") || 
-                 d.Source.OriginalString.Contains("ThemeLight")));
 
-            if (existingPalette != null)
+            var existing = dictionaries.FirstOrDefault(d =>
+                d.Source != null &&
+                (d.Source.OriginalString.Contains(darkMatch) ||
+                 d.Source.OriginalString.Contains(lightMatch)));
+
+            if (existing != null)
             {
-                dictionaries.Remove(existingPalette);
+                dictionaries.Remove(existing);
             }
 
-            // Add the correct palette at the END
-            // DynamicResource bindings will pick up the new values
-            var newPaletteUri = isDark ? DarkThemeUri : LightThemeUri;
-            var newPalette = new ResourceDictionary
+            dictionaries.Add(new ResourceDictionary
             {
-                Source = new Uri(newPaletteUri, UriKind.Relative)
-            };
-            
-            // Add at the end - DynamicResource uses the last definition found
-            dictionaries.Add(newPalette);
+                Source = new Uri(isDark ? darkUri : lightUri, UriKind.Relative)
+            });
+        }
+
+        /// <summary>
+        /// Promote a section's signature hue to the live Accent / Accent.Soft keys so
+        /// the whole window retints to the active view (Pulse signature behaviour).
+        /// section ∈ Dashboard, Screentime, Appusage, Sound, Focus, Weekly, Settings, Help.
+        /// </summary>
+        public static void SetSection(string section)
+        {
+            CurrentSection = section;
+            var app = System.Windows.Application.Current;
+            if (app == null) return;
+
+            if (app.Resources[$"Accent.{section}.Color"] is not System.Windows.Media.Color color)
+                return;
+
+            app.Resources["Accent.Color"] = color;
+            app.Resources["Accent"] = new System.Windows.Media.SolidColorBrush(color);
+            app.Resources["Accent.Soft"] = new System.Windows.Media.SolidColorBrush(
+                System.Windows.Media.Color.FromArgb(0x26, color.R, color.G, color.B));
         }
 
         private void UpdateMaterialDesignTheme(bool isDark)

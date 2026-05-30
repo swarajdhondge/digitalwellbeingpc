@@ -1,0 +1,118 @@
+<!--
+  ============================================================
+  Pulse.Tokens.xaml  —  SHARED design tokens (theme-independent)
+  Pulse redesign for Digital Wellbeing (WPF).
+  Mirrors the repo's Styles/Theme.xaml convention.
+  Merge this FIRST, then a palette (Pulse.Dark.xaml or Pulse.Light.xaml).
+  ============================================================
+-->
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- ===================== SPACING (4px grid) ===================== -->
+    <sys:Double x:Key="Space.XS">4</sys:Double>
+    <sys:Double x:Key="Space.SM">8</sys:Double>
+    <sys:Double x:Key="Space.MD">12</sys:Double>
+    <sys:Double x:Key="Space.LG">16</sys:Double>
+    <sys:Double x:Key="Space.XL">20</sys:Double>
+    <sys:Double x:Key="Space.XXL">24</sys:Double>
+    <sys:Double x:Key="Space.XXXL">32</sys:Double>
+    <Thickness x:Key="Pad.Card">22</Thickness>          <!-- standard card padding -->
+    <Thickness x:Key="Pad.CardTight">16</Thickness>
+    <Thickness x:Key="Margin.CardGap">0,0,0,16</Thickness>
+
+    <!-- ===================== RADIUS ===================== -->
+    <CornerRadius x:Key="Radius.SM">10</CornerRadius>
+    <CornerRadius x:Key="Radius.MD">14</CornerRadius>
+    <CornerRadius x:Key="Radius.LG">18</CornerRadius>
+    <CornerRadius x:Key="Radius.XL">24</CornerRadius>   <!-- card radius -->
+    <CornerRadius x:Key="Radius.Pill">999</CornerRadius>
+    <CornerRadius x:Key="Radius.Tile">11</CornerRadius> <!-- icon tile -->
+
+    <!-- ===================== LAYOUT ===================== -->
+    <sys:Double x:Key="Rail.Width">70</sys:Double>      <!-- slim icon rail -->
+    <sys:Double x:Key="RailItem.Size">46</sys:Double>
+    <sys:Double x:Key="Content.MaxWidth">1040</sys:Double>
+    <sys:Double x:Key="Tile.Size">40</sys:Double>
+
+    <!-- ===================== TYPE =====================
+         Brand font: Hanken Grotesk. Add the TTFs under /Fonts and reference
+         via pack URI, e.g.:
+         <FontFamily x:Key="Font.Primary">/YourApp;component/Fonts/#Hanken Grotesk</FontFamily>
+         The fallback below renders Segoe UI if the font is not installed. -->
+    <FontFamily x:Key="Font.Primary">Hanken Grotesk, Segoe UI</FontFamily>
+
+    <sys:Double x:Key="Font.XS">11</sys:Double>
+    <sys:Double x:Key="Font.SM">12</sys:Double>
+    <sys:Double x:Key="Font.Body">13</sys:Double>
+    <sys:Double x:Key="Font.MD">14</sys:Double>
+    <sys:Double x:Key="Font.LG">16</sys:Double>
+    <sys:Double x:Key="Font.XL">18</sys:Double>
+    <sys:Double x:Key="Font.Title">20</sys:Double>
+    <sys:Double x:Key="Font.Heading">24</sys:Double>
+    <sys:Double x:Key="Font.Display">27</sys:Double>   <!-- page greeting -->
+    <sys:Double x:Key="Font.Stat">33</sys:Double>      <!-- hero ring stat -->
+
+    <!-- ===================== MOTION ===================== -->
+    <Duration x:Key="Dur.Fast">0:0:0.12</Duration>
+    <Duration x:Key="Dur.Normal">0:0:0.22</Duration>
+    <CubicEase x:Key="Ease.Out" EasingMode="EaseOut"/>
+    <CubicEase x:Key="Ease.InOut" EasingMode="EaseInOut"/>
+
+    <!-- ===================== SEMANTIC COLORS =====================
+         Constant across themes & sections. Color carries MEANING:
+         Danger = harmful / over-limit, Warn = caution, Good = safe / normal-ok.
+         *Soft variants are ~15% alpha fills (badge backgrounds). -->
+    <Color x:Key="Danger.Color">#E5484D</Color>
+    <Color x:Key="Warn.Color">#E0A23C</Color>
+    <Color x:Key="Good.Color">#30A46C</Color>
+    <SolidColorBrush x:Key="Danger"     Color="{StaticResource Danger.Color}"/>
+    <SolidColorBrush x:Key="Warn"       Color="{StaticResource Warn.Color}"/>
+    <SolidColorBrush x:Key="Good"       Color="{StaticResource Good.Color}"/>
+    <SolidColorBrush x:Key="Danger.Soft" Color="#26E5484D"/>
+    <SolidColorBrush x:Key="Warn.Soft"   Color="#26E0A23C"/>
+    <SolidColorBrush x:Key="Good.Soft"   Color="#2630A46C"/>
+
+    <!-- ===================== SECTION ACCENTS =====================
+         Each nav section has its own calm signature hue. The ACTIVE section's
+         hue should be promoted to the live "Accent"/"Accent.Soft" keys (see
+         WPF-INTEGRATION.md) so the whole window retints, exactly like the
+         prototype. *.Soft = ~15% alpha tint used for card backgrounds & chips. -->
+    <Color x:Key="Accent.Dashboard.Color">#6C6FE8</Color>   <!-- Today  · indigo -->
+    <Color x:Key="Accent.Screentime.Color">#2BA3C7</Color>  <!-- Screen Time · cyan -->
+    <Color x:Key="Accent.Appusage.Color">#A867D0</Color>    <!-- App Usage · orchid -->
+    <Color x:Key="Accent.Sound.Color">#23B39A</Color>       <!-- Hearing · teal -->
+    <Color x:Key="Accent.Focus.Color">#E0892C</Color>       <!-- Focus · amber -->
+    <Color x:Key="Accent.Weekly.Color">#CE6A8E</Color>      <!-- Insights · rose -->
+    <Color x:Key="Accent.Settings.Color">#6E84A6</Color>    <!-- Settings · steel -->
+    <Color x:Key="Accent.Help.Color">#7C8696</Color>        <!-- Help · slate -->
+
+    <SolidColorBrush x:Key="Accent.Dashboard"  Color="{StaticResource Accent.Dashboard.Color}"/>
+    <SolidColorBrush x:Key="Accent.Screentime" Color="{StaticResource Accent.Screentime.Color}"/>
+    <SolidColorBrush x:Key="Accent.Appusage"   Color="{StaticResource Accent.Appusage.Color}"/>
+    <SolidColorBrush x:Key="Accent.Sound"      Color="{StaticResource Accent.Sound.Color}"/>
+    <SolidColorBrush x:Key="Accent.Focus"      Color="{StaticResource Accent.Focus.Color}"/>
+    <SolidColorBrush x:Key="Accent.Weekly"     Color="{StaticResource Accent.Weekly.Color}"/>
+    <SolidColorBrush x:Key="Accent.Settings"   Color="{StaticResource Accent.Settings.Color}"/>
+    <SolidColorBrush x:Key="Accent.Help"       Color="{StaticResource Accent.Help.Color}"/>
+
+    <SolidColorBrush x:Key="Accent.Dashboard.Soft"  Color="#266C6FE8"/>
+    <SolidColorBrush x:Key="Accent.Screentime.Soft" Color="#262BA3C7"/>
+    <SolidColorBrush x:Key="Accent.Appusage.Soft"   Color="#26A867D0"/>
+    <SolidColorBrush x:Key="Accent.Sound.Soft"      Color="#2623B39A"/>
+    <SolidColorBrush x:Key="Accent.Focus.Soft"      Color="#26E0892C"/>
+    <SolidColorBrush x:Key="Accent.Weekly.Soft"     Color="#26CE6A8E"/>
+    <SolidColorBrush x:Key="Accent.Settings.Soft"   Color="#266E84A6"/>
+    <SolidColorBrush x:Key="Accent.Help.Soft"       Color="#267C8696"/>
+
+    <!-- App-tile tints (muted, calm — for app/category icon tiles & legends).
+         Use the color at ~15% alpha for the tile fill + full color for glyph. -->
+    <Color x:Key="Tint.Work.Color">#5B86D6</Color>
+    <Color x:Key="Tint.Browsing.Color">#C77F8E</Color>
+    <Color x:Key="Tint.Comms.Color">#8A7FD0</Color>
+    <Color x:Key="Tint.Audio.Color">#5FA98C</Color>
+    <Color x:Key="Tint.System.Color">#B79A6B</Color>
+
+</ResourceDictionary>
