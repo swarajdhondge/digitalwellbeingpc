@@ -566,8 +566,8 @@ namespace digital_wellbeing_app.Views.Settings
 
         private void UpdateVisualStyleSelection(WindDownVisualStyle selected)
         {
-            var defaultBrush = (System.Windows.Media.Brush)FindResource("Bg.Elevated");
-            var accentBrush = (System.Windows.Media.Brush)FindResource("Accent.Primary");
+            var defaultBrush = (System.Windows.Media.Brush)FindResource("Card2");
+            var accentBrush = (System.Windows.Media.Brush)FindResource("Accent");
 
             AmberStyleOption.Background = defaultBrush;
             PurpleStyleOption.Background = defaultBrush;
@@ -616,13 +616,13 @@ namespace digital_wellbeing_app.Views.Settings
         private void UpdateThemeSelection(string selectedTheme)
         {
             // Reset all to default style
-            var defaultBrush = (System.Windows.Media.Brush)FindResource("Bg.Elevated");
+            var defaultBrush = (System.Windows.Media.Brush)FindResource("Card2");
             LightThemeOption.Background = defaultBrush;
             DarkThemeOption.Background = defaultBrush;
             AutoThemeOption.Background = defaultBrush;
 
             // Highlight selected
-            var accentBrush = (System.Windows.Media.Brush)FindResource("Accent.Primary");
+            var accentBrush = (System.Windows.Media.Brush)FindResource("Accent");
             switch (selectedTheme)
             {
                 case "Light":
