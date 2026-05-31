@@ -38,164 +38,145 @@
                 </StackPanel>
             </Grid>
 
-            <!-- Hero: daily average + trend chart -->
-            <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
-                <StackPanel>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0">
-                            <TextBlock Text="DAILY AVERAGE" Style="{StaticResource Pulse.Eyebrow}"/>
-                            <TextBlock Text="{Binding AverageDailyTime}" Style="{StaticResource Pulse.Stat}" Margin="0,6,0,0"/>
-                            <TextBlock Text="Daily average screen time" Style="{StaticResource Pulse.Body2}" Margin="0,2,0,0"/>
-                        </StackPanel>
-                        <Border Grid.Column="1" VerticalAlignment="Top">
-                            <Border.Style>
-                                <Style TargetType="Border" BasedOn="{StaticResource Pulse.Pill.Warn}">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding ScreenTimeImproved}" Value="True">
-                                            <Setter Property="Background" Value="{StaticResource Good.Soft}"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Border.Style>
-                            <TextBlock Text="{Binding ChangePercent}" FontSize="12" FontWeight="SemiBold">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Foreground" Value="{StaticResource Warn}"/>
+            <!-- 2-column: daily average + chart  |  total + focus/leisure -->
+            <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="330"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- LEFT: daily average + trend -->
+                <Border Grid.Column="0" Style="{StaticResource Pulse.Card}" Padding="26" Margin="0,0,16,0">
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="DAILY AVERAGE" Style="{StaticResource Pulse.Eyebrow}"/>
+                                <TextBlock Text="{Binding AverageDailyTime}" Style="{StaticResource Pulse.Stat}" FontSize="44" Margin="0,6,0,0"/>
+                            </StackPanel>
+                            <Border Grid.Column="1" VerticalAlignment="Top" Padding="11,6" CornerRadius="999">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Background" Value="{StaticResource Warn.Soft}"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding ScreenTimeImproved}" Value="True">
-                                                <Setter Property="Foreground" Value="{StaticResource Good}"/>
+                                                <Setter Property="Background" Value="{StaticResource Good.Soft}"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
+                                </Border.Style>
+                                <TextBlock Text="{Binding ChangePercent}" FontSize="12.5" FontWeight="SemiBold">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Foreground" Value="{StaticResource Warn}"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ScreenTimeImproved}" Value="True">
+                                                    <Setter Property="Foreground" Value="{StaticResource Good}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </Border>
+                        </Grid>
+                        <Border Margin="0,18,0,0" Height="190">
+                            <lvc:CartesianChart Series="{Binding DailyTrendSeries}"
+                                                XAxes="{Binding DailyTrendXAxes}"
+                                                YAxes="{Binding DailyTrendYAxes}"
+                                                TooltipPosition="Top"/>
                         </Border>
-                    </Grid>
+                    </StackPanel>
+                </Border>
 
-                    <Border Margin="0,18,0,0" Height="180">
-                        <lvc:CartesianChart Series="{Binding DailyTrendSeries}"
-                                            XAxes="{Binding DailyTrendXAxes}"
-                                            YAxes="{Binding DailyTrendYAxes}"
-                                            TooltipPosition="Top"/>
+                <!-- RIGHT: total + focus/leisure -->
+                <StackPanel Grid.Column="1">
+                    <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
+                        <StackPanel>
+                            <TextBlock Text="TOTAL SCREEN TIME" Style="{StaticResource Pulse.Eyebrow}"/>
+                            <TextBlock Text="{Binding TotalScreenTime}" Style="{StaticResource Pulse.Stat}" FontSize="34" Margin="0,4,0,4"/>
+                            <TextBlock Style="{StaticResource Pulse.Body2}">
+                                <Run Text="{Binding ChangePercent, Mode=OneWay}"/><Run Text=" vs last week"/>
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource Pulse.Card}">
+                        <StackPanel>
+                            <TextBlock Text="FOCUS VS LEISURE" Style="{StaticResource Pulse.Eyebrow}" Margin="0,0,0,14"/>
+                            <Border CornerRadius="7" Height="14" ClipToBounds="True" Margin="0,0,0,14" Background="{DynamicResource Track}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="{Binding FocusPercent, Converter={StaticResource PercentToGridLength}}"/>
+                                        <ColumnDefinition Width="{Binding LeisurePercent, Converter={StaticResource PercentToGridLength}}"/>
+                                        <ColumnDefinition Width="{Binding OtherPercent, Converter={StaticResource PercentToGridLength}}"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Grid.Column="0" Background="{StaticResource Good}"/>
+                                    <Border Grid.Column="1" Background="{StaticResource Warn}"/>
+                                    <Border Grid.Column="2" Background="{DynamicResource Ink3}"/>
+                                </Grid>
+                            </Border>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                                <Ellipse Grid.Column="0" Width="9" Height="9" Fill="{StaticResource Good}" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Grid.Column="1" Text="Focus" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="2" Text="{Binding FocusTime}" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"/>
+                            </Grid>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                                <Ellipse Grid.Column="0" Width="9" Height="9" Fill="{StaticResource Warn}" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Grid.Column="1" Text="Leisure" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="2" Text="{Binding LeisureTime}" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"/>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                                <Ellipse Grid.Column="0" Width="9" Height="9" Fill="{DynamicResource Ink3}" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Grid.Column="1" Text="Other" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="2" Text="{Binding OtherTime}" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"/>
+                            </Grid>
+                        </StackPanel>
                     </Border>
                 </StackPanel>
-            </Border>
+            </Grid>
 
-            <!-- Total + comparison -->
-            <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Column="0">
-                        <TextBlock Text="TOTAL SCREEN TIME" Style="{StaticResource Pulse.Eyebrow}"/>
-                        <TextBlock Text="{Binding TotalScreenTime}" Style="{StaticResource Pulse.CardTitle}" FontSize="22" Margin="0,6,0,0"/>
-                    </StackPanel>
-                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                        <TextBlock HorizontalAlignment="Right" FontSize="14" FontWeight="SemiBold">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="Foreground" Value="{StaticResource Warn}"/>
-                                    <Setter Property="Text" Value="{Binding ChangePercent}"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding ScreenTimeImproved}" Value="True">
-                                            <Setter Property="Foreground" Value="{StaticResource Good}"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                        <TextBlock Text="vs last week" Style="{StaticResource Pulse.Body2}" HorizontalAlignment="Right"/>
-                    </StackPanel>
-                </Grid>
-            </Border>
-
-            <!-- Most used apps -->
-            <TextBlock Text="Most used apps" Style="{StaticResource Pulse.CardTitle}" FontSize="14" Margin="2,4,0,10"/>
-            <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
-                <ItemsControl ItemsSource="{Binding TopApps}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Margin="0,0,0,16">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding AppName}" Style="{StaticResource Pulse.Body}" TextTrimming="CharacterEllipsis"/>
-                                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding FormattedTime}" Style="{StaticResource Pulse.Body2}"/>
-                                <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="0,6,0,0">
-                                    <Border Style="{StaticResource Pulse.ProgressTrack}" Height="6"/>
-                                    <Border Background="{DynamicResource Accent}" CornerRadius="999" Height="6" HorizontalAlignment="Left">
-                                        <Border.Width>
-                                            <MultiBinding Converter="{StaticResource PercentageToWidthConverter}">
-                                                <Binding Path="PercentOfMax"/>
-                                                <Binding RelativeSource="{RelativeSource AncestorType=Grid}" Path="ActualWidth"/>
-                                            </MultiBinding>
-                                        </Border.Width>
-                                    </Border>
-                                </Grid>
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </Border>
-
-            <!-- Focus vs leisure -->
-            <TextBlock Text="Focus vs leisure" Style="{StaticResource Pulse.CardTitle}" FontSize="14" Margin="2,4,0,10"/>
+            <!-- Top apps this week (2-column grid) -->
             <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
                 <StackPanel>
-                    <Border CornerRadius="6" Height="22" ClipToBounds="True" Margin="0,0,0,18" Background="{DynamicResource Track}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="{Binding FocusPercent, Converter={StaticResource PercentToGridLength}}"/>
-                                <ColumnDefinition Width="{Binding LeisurePercent, Converter={StaticResource PercentToGridLength}}"/>
-                                <ColumnDefinition Width="{Binding OtherPercent, Converter={StaticResource PercentToGridLength}}"/>
-                            </Grid.ColumnDefinitions>
-                            <Border Grid.Column="0" Background="{StaticResource Good}"/>
-                            <Border Grid.Column="1" Background="{StaticResource Warn}"/>
-                            <Border Grid.Column="2" Background="{DynamicResource Ink3}"/>
-                        </Grid>
-                    </Border>
-
-                    <Grid Margin="0,0,0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <Border Grid.Column="0" Width="4" Height="20" CornerRadius="2" Background="{StaticResource Good}" Margin="0,0,12,0"/>
-                        <TextBlock Grid.Column="1" Text="Focus (Work)" Style="{StaticResource Pulse.Body}" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Column="2" Text="{Binding FocusTime}" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"/>
-                    </Grid>
-                    <Grid Margin="0,0,0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <Border Grid.Column="0" Width="4" Height="20" CornerRadius="2" Background="{StaticResource Warn}" Margin="0,0,12,0"/>
-                        <TextBlock Grid.Column="1" Text="Leisure" Style="{StaticResource Pulse.Body}" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Column="2" Text="{Binding LeisureTime}" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <Border Grid.Column="0" Width="4" Height="20" CornerRadius="2" Background="{DynamicResource Ink3}" Margin="0,0,12,0"/>
-                        <TextBlock Grid.Column="1" Text="Other" Style="{StaticResource Pulse.Body}" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Column="2" Text="{Binding OtherTime}" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"/>
-                    </Grid>
+                    <TextBlock Text="TOP APPS THIS WEEK" Style="{StaticResource Pulse.Eyebrow}" Margin="0,0,0,16"/>
+                    <ItemsControl ItemsSource="{Binding TopApps}" AlternationCount="8">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate><UniformGrid Columns="2"/></ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,0,16,14">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding AppName}" Style="{StaticResource Pulse.Body}" TextTrimming="CharacterEllipsis"/>
+                                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding FormattedTime}" Style="{StaticResource Pulse.Muted}"/>
+                                    <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="0,6,0,0" Height="5">
+                                        <Border Style="{StaticResource Pulse.ProgressTrack}" Height="5"/>
+                                        <Border CornerRadius="999" Height="5" HorizontalAlignment="Left"
+                                                Background="{Binding (ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource ColorIndexToTint}}">
+                                            <Border.Width>
+                                                <MultiBinding Converter="{StaticResource PercentageToWidthConverter}">
+                                                    <Binding Path="PercentOfMax"/>
+                                                    <Binding RelativeSource="{RelativeSource AncestorType=Grid}" Path="ActualWidth"/>
+                                                </MultiBinding>
+                                            </Border.Width>
+                                        </Border>
+                                    </Grid>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </StackPanel>
             </Border>
 
@@ -215,7 +196,7 @@
                         <TextBlock Text="Focus sessions" Style="{StaticResource Pulse.CardTitle}" FontSize="15"/>
                         <TextBlock Text="Completed this week" Style="{StaticResource Pulse.Body2}" Margin="0,2,0,0"/>
                     </StackPanel>
-                    <TextBlock Grid.Column="2" Text="{Binding FocusSessionCount}" Style="{StaticResource Pulse.CardTitle}" FontSize="22" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="2" Text="{Binding FocusSessionCount}" Style="{StaticResource Pulse.Stat}" FontSize="26" VerticalAlignment="Center"/>
                 </Grid>
             </Border>
         </StackPanel>
