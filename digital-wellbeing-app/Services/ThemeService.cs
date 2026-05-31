@@ -23,6 +23,12 @@ namespace digital_wellbeing_app.Services
         /// </summary>
         public static string CurrentSection { get; private set; } = "Dashboard";
 
+        /// <summary>
+        /// True while the dark palette is active. Drives per-section light/dark
+        /// accent selection in <see cref="SetSection"/>. Defaults to dark (App.xaml default).
+        /// </summary>
+        public static bool IsDarkTheme { get; private set; } = true;
+
         public void Save(AppTheme mode)
         {
             var doc = JsonSerializer.Serialize(new { Mode = mode });
@@ -65,6 +71,7 @@ namespace digital_wellbeing_app.Services
                 AppTheme.Dark => true,
                 _ => IsSystemInDarkMode() // Auto
             };
+            IsDarkTheme = isDark;
 
             // Swap the legacy palette (still used by any not-yet-migrated views)
             SwapPalette(isDark, DarkThemeUri, LightThemeUri, "ThemeDark", "ThemeLight");
@@ -122,7 +129,12 @@ namespace digital_wellbeing_app.Services
             var app = System.Windows.Application.Current;
             if (app == null) return;
 
-            if (app.Resources[$"Accent.{section}.Color"] is not System.Windows.Media.Color color)
+            // Pulse uses a slightly deeper hue per section in light mode (better
+            // contrast on white); fall back to the dark hue if no light variant exists.
+            var accentKey = (!IsDarkTheme && app.Resources.Contains($"Accent.{section}.Light.Color"))
+                ? $"Accent.{section}.Light.Color"
+                : $"Accent.{section}.Color";
+            if (app.Resources[accentKey] is not System.Windows.Media.Color color)
                 return;
 
             app.Resources["Accent.Color"] = color;

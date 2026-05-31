@@ -2,16 +2,19 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- 
+    <!--
     ============================================
     SHARED DESIGN TOKENS (Theme-Independent)
-    v1.7 Design Revamp - Samsung Digital Wellbeing Style
+    PULSE redesign — calm graphite base, soft surfaces, generous radii.
+    Drop-in replacement for digital-wellbeing-app/Styles/Theme.xaml.
+    Every x:Key is identical to the original; only VALUES changed,
+    so existing Views and bindings keep working untouched.
     ============================================
     -->
 
-    <!-- 
+    <!--
     ============================================
-    SPACING SYSTEM (4px grid)
+    SPACING SYSTEM (4px grid) — unchanged
     ============================================
     -->
     <sys:Double x:Key="Spacing.XS" xmlns:sys="clr-namespace:System;assembly=mscorlib">4</sys:Double>
@@ -22,43 +25,44 @@
     <sys:Double x:Key="Spacing.XXL" xmlns:sys="clr-namespace:System;assembly=mscorlib">24</sys:Double>
     <sys:Double x:Key="Spacing.XXXL" xmlns:sys="clr-namespace:System;assembly=mscorlib">32</sys:Double>
 
-    <!-- Padding (Samsung style: generous 20-24px) -->
+    <!-- Padding (Pulse: generous, calm 20-24px) -->
     <Thickness x:Key="Padding.XS">4</Thickness>
     <Thickness x:Key="Padding.SM">8</Thickness>
     <Thickness x:Key="Padding.MD">12</Thickness>
     <Thickness x:Key="Padding.LG">16</Thickness>
     <Thickness x:Key="Padding.XL">20</Thickness>
     <Thickness x:Key="Padding.XXL">24</Thickness>
-    <Thickness x:Key="Padding.Card">20</Thickness>          <!-- Standard card padding -->
+    <Thickness x:Key="Padding.Card">22</Thickness>          <!-- Pulse standard card padding -->
 
-    <!-- Card Spacing (Samsung: 16-20px between cards) -->
+    <!-- Card Spacing (Pulse: 16-20px between cards) -->
     <Thickness x:Key="Margin.Card">0,0,0,16</Thickness>
     <Thickness x:Key="Margin.CardGrid">0,0,0,20</Thickness>
 
-    <!-- 
+    <!--
     ============================================
-    BORDER RADIUS (Samsung Style)
+    BORDER RADIUS (Pulse: softer, larger)
+    Pulse scale: sm 10 · md 14 · lg 18 · xl/card 24
     ============================================
     -->
-    <CornerRadius x:Key="Radius.XS">4</CornerRadius>
-    <CornerRadius x:Key="Radius.SM">8</CornerRadius>
-    <CornerRadius x:Key="Radius.MD">12</CornerRadius>
-    <CornerRadius x:Key="Radius.LG">16</CornerRadius>
-    <CornerRadius x:Key="Radius.XL">20</CornerRadius>       <!-- Card radius (Samsung) -->
+    <CornerRadius x:Key="Radius.XS">6</CornerRadius>
+    <CornerRadius x:Key="Radius.SM">10</CornerRadius>
+    <CornerRadius x:Key="Radius.MD">14</CornerRadius>
+    <CornerRadius x:Key="Radius.LG">18</CornerRadius>
+    <CornerRadius x:Key="Radius.XL">24</CornerRadius>       <!-- Card radius (Pulse) -->
     <CornerRadius x:Key="Radius.Full">9999</CornerRadius>   <!-- Pill shape -->
-    
+
     <!-- Card-specific radius -->
-    <CornerRadius x:Key="Radius.Card">20</CornerRadius>     <!-- Samsung: 16-20px -->
-    
+    <CornerRadius x:Key="Radius.Card">24</CornerRadius>     <!-- Pulse: 24px -->
+
     <!-- Chart bar corners (rounded top only) -->
     <CornerRadius x:Key="Radius.BarTop">6,6,0,0</CornerRadius>
-    
-    <!-- Icon container radius (Samsung: ~12px) -->
-    <CornerRadius x:Key="Radius.Icon">12</CornerRadius>
 
-    <!-- 
+    <!-- Icon container radius (Pulse: ~14px squircle) -->
+    <CornerRadius x:Key="Radius.Icon">14</CornerRadius>
+
+    <!--
     ============================================
-    LAYOUT DIMENSIONS
+    LAYOUT DIMENSIONS — unchanged
     ============================================
     -->
     <sys:Double x:Key="Sidebar.Width" xmlns:sys="clr-namespace:System;assembly=mscorlib">220</sys:Double>
@@ -73,9 +77,9 @@
     <sys:Double x:Key="Dot.Size" xmlns:sys="clr-namespace:System;assembly=mscorlib">10</sys:Double>
     <sys:Double x:Key="IconContainer.Size" xmlns:sys="clr-namespace:System;assembly=mscorlib">40</sys:Double>
 
-    <!-- 
+    <!--
     ============================================
-    FONT SIZES (Samsung Typography Scale)
+    FONT SIZES (Pulse typographic scale) — unchanged
     ============================================
     -->
     <sys:Double x:Key="Font.XS" xmlns:sys="clr-namespace:System;assembly=mscorlib">11</sys:Double>
@@ -85,23 +89,29 @@
     <sys:Double x:Key="Font.XL" xmlns:sys="clr-namespace:System;assembly=mscorlib">18</sys:Double>
     <sys:Double x:Key="Font.XXL" xmlns:sys="clr-namespace:System;assembly=mscorlib">24</sys:Double>
     <sys:Double x:Key="Font.XXXL" xmlns:sys="clr-namespace:System;assembly=mscorlib">32</sys:Double>
-    <sys:Double x:Key="Font.Stat" xmlns:sys="clr-namespace:System;assembly=mscorlib">40</sys:Double>   <!-- Volume stat size -->
-    <sys:Double x:Key="Font.Hero" xmlns:sys="clr-namespace:System;assembly=mscorlib">48</sys:Double>   <!-- Main hero stats -->
-    <sys:Double x:Key="Font.HeroLG" xmlns:sys="clr-namespace:System;assembly=mscorlib">56</sys:Double> <!-- Weekly report stat -->
+    <sys:Double x:Key="Font.Stat" xmlns:sys="clr-namespace:System;assembly=mscorlib">40</sys:Double>   <!-- secondary stat -->
+    <sys:Double x:Key="Font.Hero" xmlns:sys="clr-namespace:System;assembly=mscorlib">48</sys:Double>   <!-- main hero stats -->
+    <sys:Double x:Key="Font.HeroLG" xmlns:sys="clr-namespace:System;assembly=mscorlib">56</sys:Double> <!-- weekly report stat -->
 
-    <!-- Font Family -->
-    <FontFamily x:Key="Font.Primary">Segoe UI, San Francisco, Helvetica Neue, Arial</FontFamily>
+    <!--
+    Font Family.
+    Pulse ships in "Hanken Grotesk". It is NOT a Windows system font — to match the
+    reference exactly, bundle the TTFs as Resources and point this key at the packed
+    font (e.g. "pack://application:,,,/Resources/Fonts/#Hanken Grotesk").
+    Until then it falls back cleanly to Segoe UI Variable / Segoe UI.
+    -->
+    <FontFamily x:Key="Font.Primary">Hanken Grotesk, Segoe UI Variable, Segoe UI, San Francisco, Arial</FontFamily>
 
-    <!-- 
+    <!--
     ============================================
-    ANIMATION DURATIONS
+    ANIMATION DURATIONS (Pulse: 0.22s standard)
     ============================================
     -->
-    <Duration x:Key="Duration.Fast">0:0:0.1</Duration>
-    <Duration x:Key="Duration.Normal">0:0:0.2</Duration>
-    <Duration x:Key="Duration.Slow">0:0:0.3</Duration>
+    <Duration x:Key="Duration.Fast">0:0:0.12</Duration>
+    <Duration x:Key="Duration.Normal">0:0:0.22</Duration>
+    <Duration x:Key="Duration.Slow">0:0:0.32</Duration>
 
-    <!-- Easing Functions -->
+    <!-- Easing Functions (Pulse uses a standard ease-out curve) -->
     <CubicEase x:Key="Ease.Out" EasingMode="EaseOut"/>
     <CubicEase x:Key="Ease.In" EasingMode="EaseIn"/>
     <CubicEase x:Key="Ease.InOut" EasingMode="EaseInOut"/>
