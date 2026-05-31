@@ -74,3 +74,4 @@ docs/*
 # AI tooling
 .claude/
 .cursor/
+.playwright-mcp/
