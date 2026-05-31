@@ -42,8 +42,8 @@
                         </StackPanel>
                         <Border Grid.Column="1" Style="{StaticResource Pulse.Pill.Good}" VerticalAlignment="Top">
                             <StackPanel Orientation="Horizontal">
-                                <Ellipse Style="{StaticResource Pulse.Dot}" VerticalAlignment="Center"/>
-                                <TextBlock Text="Safe levels" Margin="6,0,0,0" FontSize="12" FontWeight="SemiBold"
+                                <md:PackIcon Kind="ShieldCheckOutline" Width="15" Height="15" Foreground="{StaticResource Good}" VerticalAlignment="Center"/>
+                                <TextBlock Text="Safe levels" Margin="7,0,0,0" FontSize="12.5" FontWeight="SemiBold"
                                            Foreground="{StaticResource Good}" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Border>
@@ -80,23 +80,6 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
 
-                    <!-- Average / comparison -->
-                    <Grid Margin="0,20,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="Average level" Style="{StaticResource Pulse.Body2}"/>
-                        <TextBlock Grid.Column="1" Text="{Binding AverageSPLText}" Style="{StaticResource Pulse.CardTitle}" FontSize="14"/>
-                    </Grid>
-                    <Grid Margin="0,10,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="Compared to yesterday" Style="{StaticResource Pulse.Body2}"/>
-                        <TextBlock Grid.Column="1" Text="{Binding ComparisonText}" Style="{StaticResource Pulse.Body2}"/>
-                    </Grid>
                 </StackPanel>
             </Border>
 
@@ -107,28 +90,48 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Border Grid.Column="0" Style="{StaticResource Pulse.Card}" Margin="0,0,8,0">
-                    <StackPanel>
-                        <TextBlock Text="HARMFUL THRESHOLD" Style="{StaticResource Pulse.Eyebrow}"/>
-                        <TextBlock Text="{Binding ThresholdLabel}" Style="{StaticResource Pulse.CardTitle}" FontSize="15" Margin="0,6,0,0"/>
-                    </StackPanel>
+                    <Grid VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="HARMFUL THRESHOLD" Style="{StaticResource Pulse.Eyebrow}"/>
+                            <TextBlock Text="{Binding ThresholdLabel}" Style="{StaticResource Pulse.CardTitle}" FontSize="15" Margin="0,6,0,0"/>
+                        </StackPanel>
+                        <md:PackIcon Grid.Column="1" Kind="InformationOutline" Width="20" Height="20"
+                                     Foreground="{DynamicResource Ink3}" VerticalAlignment="Center"/>
+                    </Grid>
                 </Border>
                 <Border Grid.Column="1" Style="{StaticResource Pulse.Card}" Margin="8,0,0,0">
-                    <StackPanel>
-                        <TextBlock Text="WHO GUIDANCE" Style="{StaticResource Pulse.Eyebrow}"/>
-                        <TextBlock Text="Keep under 85 dB" Style="{StaticResource Pulse.CardTitle}" FontSize="15" Margin="0,6,0,0"/>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Border Width="40" Height="40" CornerRadius="11" Background="{DynamicResource Accent.Soft}" Margin="0,0,14,0">
+                            <md:PackIcon Kind="VolumeHigh" Width="20" Height="20" Foreground="{DynamicResource Accent}"
+                                         HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="WHO guidance" Style="{StaticResource Pulse.CardTitle}" FontSize="15"/>
+                            <TextBlock Text="Keep under 85 dB · take breaks" Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
+                        </StackPanel>
                     </StackPanel>
                 </Border>
             </Grid>
 
             <!-- Session details -->
-            <TextBlock Text="Session details" Style="{StaticResource Pulse.CardTitle}" FontSize="14" Margin="2,0,0,10"/>
             <Border Style="{StaticResource Pulse.Card}">
                 <StackPanel>
-                    <Button x:Name="ToggleDetailsButton" Content="Show detailed tracking"
-                            Click="ToggleDetailsButton_Click" Style="{StaticResource Pulse.Button.Ghost}"
-                            HorizontalAlignment="Left" Margin="0,0,0,14"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="SESSION DETAILS" Style="{StaticResource Pulse.Eyebrow}" VerticalAlignment="Center"/>
+                        <Button x:Name="ToggleDetailsButton" Grid.Column="1" Content="Show tracking"
+                                Click="ToggleDetailsButton_Click" Style="{StaticResource Pulse.Button.Ghost}"
+                                Foreground="{DynamicResource Accent}" Padding="12,6"/>
+                    </Grid>
 
-                    <TextBlock Text="{Binding SessionSummaryText}" Style="{StaticResource Pulse.Body2}" Margin="0,0,0,14"/>
+                    <TextBlock Text="{Binding SessionSummaryText}" Style="{StaticResource Pulse.Body2}" Margin="0,14,0,0"/>
 
                     <ScrollViewer x:Name="SessionsList" MaxHeight="320" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
                         <ItemsControl ItemsSource="{Binding RecentSessions}">

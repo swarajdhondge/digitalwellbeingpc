@@ -92,12 +92,12 @@ namespace digital_wellbeing_app.Views.Sound
             if (SessionsList.Visibility == Visibility.Collapsed)
             {
                 SessionsList.Visibility = Visibility.Visible;
-                ToggleDetailsButton.Content = "Hide detailed tracking";
+                ToggleDetailsButton.Content = "Hide tracking";
             }
             else
             {
                 SessionsList.Visibility = Visibility.Collapsed;
-                ToggleDetailsButton.Content = "Show detailed tracking";
+                ToggleDetailsButton.Content = "Show tracking";
             }
         }
     }
