@@ -89,6 +89,18 @@
     <Color x:Key="Accent.Settings.Color">#6E84A6</Color>    <!-- Settings · steel -->
     <Color x:Key="Accent.Help.Color">#7C8696</Color>        <!-- Help · slate -->
 
+    <!-- Section accents — LIGHT variants (deeper, for legibility on white;
+         from reference/section-accents.md). Promoted by ThemeService.SetSection
+         when the light theme is active; dark hues above are used otherwise. -->
+    <Color x:Key="Accent.Dashboard.Light.Color">#5256D8</Color>   <!-- Today · indigo -->
+    <Color x:Key="Accent.Screentime.Light.Color">#2391B5</Color>  <!-- Screen Time · cyan -->
+    <Color x:Key="Accent.Appusage.Light.Color">#9A55C6</Color>    <!-- App Usage · orchid -->
+    <Color x:Key="Accent.Sound.Light.Color">#1FA08A</Color>       <!-- Hearing · teal -->
+    <Color x:Key="Accent.Focus.Light.Color">#C9772A</Color>       <!-- Focus · amber -->
+    <Color x:Key="Accent.Weekly.Light.Color">#BE5C80</Color>      <!-- Insights · rose -->
+    <Color x:Key="Accent.Settings.Light.Color">#5E7596</Color>    <!-- Settings · steel -->
+    <Color x:Key="Accent.Help.Light.Color">#6C7686</Color>        <!-- Help · slate -->
+
     <SolidColorBrush x:Key="Accent.Dashboard"  Color="{StaticResource Accent.Dashboard.Color}"/>
     <SolidColorBrush x:Key="Accent.Screentime" Color="{StaticResource Accent.Screentime.Color}"/>
     <SolidColorBrush x:Key="Accent.Appusage"   Color="{StaticResource Accent.Appusage.Color}"/>

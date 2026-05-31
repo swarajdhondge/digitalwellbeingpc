@@ -2,16 +2,15 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- 
+    <!--
     ============================================
-    CARD STYLES
-    v1.7 Design Revamp - Samsung Digital Wellbeing Style
-    
-    KEY RULES:
-    - Corner radius: 20px
-    - NO shadows
-    - NO borders
-    - Generous padding: 20-24px
+    CARD STYLES — PULSE redesign
+    Drop-in replacement for digital-wellbeing-app/Styles/Cards.xaml.
+    Same x:Keys as the original — only the look changed.
+
+    PULSE CARD = solid surface + 1px border + soft shadow + 24px radius.
+    (The previous Samsung style was borderless/shadowless; Pulse cards
+    read as calm, lifted panels.)
     ============================================
     -->
 
@@ -19,30 +18,36 @@
     <!-- BASE CARD STYLE -->
     <!-- ============================================ -->
 
-    <!-- Base Card - Samsung style: 20px radius, no shadow, no border -->
+    <!-- Base Card - Pulse: 24px radius, 1px border, soft shadow -->
     <Style x:Key="CardBase" TargetType="Border">
         <Setter Property="Background" Value="{DynamicResource Bg.Card}"/>
         <Setter Property="CornerRadius" Value="{DynamicResource Radius.Card}"/>
         <Setter Property="Padding" Value="{DynamicResource Padding.Card}"/>
-        <!-- NO shadow, NO border - Samsung style -->
+        <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Effect" Value="{DynamicResource Shadow.MD}"/>
     </Style>
 
     <!-- ============================================ -->
     <!-- CARD VARIANTS -->
     <!-- ============================================ -->
 
-    <!-- Elevated Card - Same as base (no shadows in Samsung style) -->
-    <Style x:Key="CardElevated" TargetType="Border" BasedOn="{StaticResource CardBase}"/>
+    <!-- Elevated Card - stronger lift -->
+    <Style x:Key="CardElevated" TargetType="Border" BasedOn="{StaticResource CardBase}">
+        <Setter Property="Effect" Value="{DynamicResource Shadow.LG}"/>
+    </Style>
 
-    <!-- Flat Card - Same as base (no borders in Samsung style) -->
-    <Style x:Key="CardFlat" TargetType="Border" BasedOn="{StaticResource CardBase}"/>
+    <!-- Flat Card - surface + border, no shadow -->
+    <Style x:Key="CardFlat" TargetType="Border" BasedOn="{StaticResource CardBase}">
+        <Setter Property="Effect" Value="{x:Null}"/>
+    </Style>
 
     <!-- Stat Card (dashboard) - Main hero card -->
     <Style x:Key="CardStat" TargetType="Border" BasedOn="{StaticResource CardBase}">
         <Setter Property="Margin" Value="{DynamicResource Margin.Card}"/>
     </Style>
 
-    <!-- Interactive Card - Subtle hover effect -->
+    <!-- Interactive Card - hover lifts border + surface -->
     <Style x:Key="CardInteractive" TargetType="Border" BasedOn="{StaticResource CardBase}">
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
@@ -54,6 +59,7 @@
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{DynamicResource Bg.Elevated}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource Accent.Primary}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -62,10 +68,10 @@
     <!-- LIST ITEM CARD -->
     <!-- ============================================ -->
 
-    <!-- List Item - For app/category rows -->
+    <!-- List Item - For app/category rows (flat, no shadow) -->
     <Style x:Key="CardListItem" TargetType="Border">
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="CornerRadius" Value="{DynamicResource Radius.SM}"/>
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.MD}"/>
         <Setter Property="Padding" Value="12,10"/>
         <Setter Property="Margin" Value="0,2"/>
         <Style.Triggers>
@@ -76,29 +82,29 @@
     </Style>
 
     <!-- ============================================ -->
-    <!-- ACCENT/STATUS CARDS (Optional left border) -->
+    <!-- ACCENT/STATUS CARDS (colored left edge) -->
     <!-- ============================================ -->
 
     <!-- Card with Accent left border -->
     <Style x:Key="CardAccented" TargetType="Border" BasedOn="{StaticResource CardBase}">
         <Setter Property="BorderBrush" Value="{DynamicResource Accent.Primary}"/>
-        <Setter Property="BorderThickness" Value="3,0,0,0"/>
+        <Setter Property="BorderThickness" Value="3,1,1,1"/>
     </Style>
 
-    <!-- Status Cards with colored left border -->
+    <!-- Status Cards with colored left edge -->
     <Style x:Key="CardSuccess" TargetType="Border" BasedOn="{StaticResource CardBase}">
         <Setter Property="BorderBrush" Value="{DynamicResource Status.Success}"/>
-        <Setter Property="BorderThickness" Value="3,0,0,0"/>
+        <Setter Property="BorderThickness" Value="3,1,1,1"/>
     </Style>
 
     <Style x:Key="CardWarning" TargetType="Border" BasedOn="{StaticResource CardBase}">
         <Setter Property="BorderBrush" Value="{DynamicResource Status.Warning}"/>
-        <Setter Property="BorderThickness" Value="3,0,0,0"/>
+        <Setter Property="BorderThickness" Value="3,1,1,1"/>
     </Style>
 
     <Style x:Key="CardDanger" TargetType="Border" BasedOn="{StaticResource CardBase}">
         <Setter Property="BorderBrush" Value="{DynamicResource Status.Danger}"/>
-        <Setter Property="BorderThickness" Value="3,0,0,0"/>
+        <Setter Property="BorderThickness" Value="3,1,1,1"/>
     </Style>
 
     <!-- ============================================ -->
@@ -118,7 +124,7 @@
     <!-- Chart Card - Card containing a chart -->
     <Style x:Key="CardChart" TargetType="Border" BasedOn="{StaticResource CardBase}">
         <Setter Property="Margin" Value="{DynamicResource Margin.Card}"/>
-        <Setter Property="Padding" Value="20,20,20,16"/>
+        <Setter Property="Padding" Value="22,22,22,18"/>
     </Style>
 
     <!-- Category Card - For category items with icon -->

@@ -2,48 +2,51 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- 
+    <!--
     ============================================
-    LIGHT THEME - Samsung Digital Wellbeing Style
-    v1.7 Design Revamp - Extracted from Screenshots
+    LIGHT THEME — PULSE redesign
+    Soft neutral light surfaces · indigo signature accent.
+    Drop-in replacement for digital-wellbeing-app/Styles/ThemeLight.xaml.
+    Same x:Keys as ThemeDark.xaml — swapped at runtime by ThemeService.
+    Accents are nudged slightly deeper than dark for legibility on white.
     ============================================
     -->
 
-    <!-- Background Colors (Off-white/White) -->
-    <Color x:Key="Bg.PrimaryColor">#F5F5F5</Color>         <!-- Off-white main background -->
-    <Color x:Key="Bg.SecondaryColor">#F5F5F5</Color>       <!-- Same for sidebar -->
-    <Color x:Key="Bg.CardColor">#FFFFFF</Color>            <!-- Pure white cards -->
-    <Color x:Key="Bg.ElevatedColor">#EBEBEB</Color>        <!-- Slightly darker for hover -->
+    <!-- Background Colors (soft off-white) -->
+    <Color x:Key="Bg.PrimaryColor">#F3F4F6</Color>        <!-- app background -->
+    <Color x:Key="Bg.SecondaryColor">#ECEEF1</Color>      <!-- rail / sidebar -->
+    <Color x:Key="Bg.CardColor">#FFFFFF</Color>           <!-- card surface -->
+    <Color x:Key="Bg.ElevatedColor">#F2F4F7</Color>       <!-- hover / elevated / track fill -->
 
     <!-- Border Colors -->
-    <Color x:Key="Border.DefaultColor">#E5E5E5</Color>     <!-- Subtle light border -->
-    <Color x:Key="Border.SubtleColor">#F0F0F0</Color>      <!-- Very subtle -->
+    <Color x:Key="Border.DefaultColor">#E4E7EC</Color>    <!-- visible 1px card border -->
+    <Color x:Key="Border.SubtleColor">#EDEFF2</Color>     <!-- faint divider -->
 
     <!-- Text Colors -->
-    <Color x:Key="Text.PrimaryColor">#0F0F0F</Color>       <!-- Near-black for headings/stats -->
-    <Color x:Key="Text.SecondaryColor">#6B7280</Color>     <!-- Gray for labels -->
-    <Color x:Key="Text.MutedColor">#9CA3AF</Color>         <!-- Lighter gray for hints -->
+    <Color x:Key="Text.PrimaryColor">#181B21</Color>      <!-- primary ink -->
+    <Color x:Key="Text.SecondaryColor">#59616E</Color>    <!-- secondary labels -->
+    <Color x:Key="Text.MutedColor">#8A92A0</Color>        <!-- muted hints -->
 
-    <!-- Accent Colors (Teal - slightly darker for light bg) -->
-    <Color x:Key="Accent.PrimaryColor">#14B8A6</Color>     <!-- Teal 500 -->
-    <Color x:Key="Accent.HoverColor">#0D9488</Color>       <!-- Teal 600 -->
-    <Color x:Key="Accent.SubtleColor">#CCFBF1</Color>      <!-- Teal 100 - icon badges -->
-    <Color x:Key="Accent.OnAccentColor">#FFFFFF</Color>    <!-- White - text on accent -->
+    <!-- Accent Colors (Pulse indigo, deeper for light bg) -->
+    <Color x:Key="Accent.PrimaryColor">#5256D8</Color>    <!-- active toggle / primary action -->
+    <Color x:Key="Accent.HoverColor">#4347C4</Color>      <!-- darker on hover -->
+    <Color x:Key="Accent.SubtleColor">#E9EAFB</Color>     <!-- soft tinted icon badge bg -->
+    <Color x:Key="Accent.OnAccentColor">#FFFFFF</Color>   <!-- white text on accent -->
 
-    <!-- Chart Colors (Samsung Blue - same as dark) -->
-    <Color x:Key="Chart.PrimaryColor">#3B82F6</Color>      <!-- Blue - main chart bars -->
-    <Color x:Key="Chart.Segment1Color">#2DD4BF</Color>     <!-- Teal/Cyan - stacked bar -->
-    <Color x:Key="Chart.Segment2Color">#3B82F6</Color>     <!-- Blue - stacked bar -->
-    <Color x:Key="Chart.Segment3Color">#8B5CF6</Color>     <!-- Purple - stacked bar -->
+    <!-- Chart Colors (calm Pulse hues, deeper for light) -->
+    <Color x:Key="Chart.PrimaryColor">#5256D8</Color>     <!-- indigo - main chart bars -->
+    <Color x:Key="Chart.Segment1Color">#1FA08A</Color>   <!-- teal - stacked bar -->
+    <Color x:Key="Chart.Segment2Color">#2391B5</Color>   <!-- cyan - stacked bar -->
+    <Color x:Key="Chart.Segment3Color">#9A55C6</Color>   <!-- orchid - stacked bar -->
 
-    <!-- Status Colors (Same as dark) -->
-    <Color x:Key="Status.SuccessColor">#22C55E</Color>     <!-- Green 500 - Normal badge -->
-    <Color x:Key="Status.WarningColor">#F59E0B</Color>     <!-- Amber 500 -->
-    <Color x:Key="Status.DangerColor">#EF4444</Color>      <!-- Red 500 - Goal line -->
-    <Color x:Key="Status.InfoColor">#3B82F6</Color>        <!-- Blue 500 -->
+    <!-- Status Colors (semantic) -->
+    <Color x:Key="Status.SuccessColor">#2A8F5E</Color>   <!-- good -->
+    <Color x:Key="Status.WarningColor">#C9882B</Color>   <!-- caution -->
+    <Color x:Key="Status.DangerColor">#D43B40</Color>    <!-- harmful / goal line -->
+    <Color x:Key="Status.InfoColor">#3F7BD0</Color>      <!-- info -->
 
     <!-- Week Selector -->
-    <Color x:Key="Selector.ActiveColor">#E5E7EB</Color>    <!-- Light gray fill when selected -->
+    <Color x:Key="Selector.ActiveColor">#E5E7EB</Color>   <!-- fill when selected -->
     <Color x:Key="Selector.InactiveColor">Transparent</Color>
 
     <!-- ============================================ -->
@@ -88,10 +91,10 @@
     <SolidColorBrush x:Key="Selector.Inactive" Color="{StaticResource Selector.InactiveColor}"/>
 
     <!-- ============================================ -->
-    <!-- SHADOWS (None for Samsung style) -->
+    <!-- SHADOWS (Pulse: soft, subtle elevation on light) -->
     <!-- ============================================ -->
-    <DropShadowEffect x:Key="Shadow.SM" BlurRadius="0" ShadowDepth="0" Opacity="0" Color="#000000"/>
-    <DropShadowEffect x:Key="Shadow.MD" BlurRadius="0" ShadowDepth="0" Opacity="0" Color="#000000"/>
-    <DropShadowEffect x:Key="Shadow.LG" BlurRadius="0" ShadowDepth="0" Opacity="0" Color="#000000"/>
+    <DropShadowEffect x:Key="Shadow.SM" BlurRadius="10" ShadowDepth="4" Direction="270" Opacity="0.06" Color="#1F345C"/>
+    <DropShadowEffect x:Key="Shadow.MD" BlurRadius="24" ShadowDepth="8" Direction="270" Opacity="0.12" Color="#1F345C"/>
+    <DropShadowEffect x:Key="Shadow.LG" BlurRadius="36" ShadowDepth="14" Direction="270" Opacity="0.16" Color="#1F345C"/>
 
 </ResourceDictionary>
