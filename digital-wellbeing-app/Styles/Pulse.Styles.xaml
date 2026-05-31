@@ -113,7 +113,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="bd" Background="{TemplateBinding Background}"
-                            CornerRadius="{StaticResource Radius.Pill}"
+                            CornerRadius="{StaticResource Radius.MD}"
                             Padding="{TemplateBinding Padding}">
                         <Border.RenderTransform>
                             <ScaleTransform x:Name="st" ScaleX="1" ScaleY="1"/>
@@ -163,7 +163,7 @@
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="bd" Background="{TemplateBinding Background}"
                             BorderBrush="{DynamicResource Border}" BorderThickness="1"
-                            CornerRadius="{StaticResource Radius.Pill}"
+                            CornerRadius="{StaticResource Radius.MD}"
                             Padding="{TemplateBinding Padding}">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
@@ -265,7 +265,7 @@
         <Setter Property="Background" Value="{DynamicResource Track}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource Border}"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="CornerRadius" Value="{StaticResource Radius.Pill}"/>
+        <Setter Property="CornerRadius" Value="{StaticResource Radius.MD}"/>
         <Setter Property="Padding" Value="3"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
     </Style>
@@ -279,7 +279,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
-                    <Border x:Name="bd" Background="Transparent" CornerRadius="{StaticResource Radius.Pill}" Padding="18,7">
+                    <Border x:Name="bd" Background="Transparent" CornerRadius="{StaticResource Radius.SM}" Padding="18,7">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -344,12 +344,12 @@
          Accent-filled Border of proportional width (set in markup/binding). -->
     <Style x:Key="Pulse.ProgressTrack" TargetType="Border">
         <Setter Property="Height" Value="8"/>
-        <Setter Property="CornerRadius" Value="{StaticResource Radius.Pill}"/>
+        <Setter Property="CornerRadius" Value="3"/>
         <Setter Property="Background" Value="{DynamicResource Track}"/>
     </Style>
     <Style x:Key="Pulse.ProgressFill" TargetType="Border">
         <Setter Property="Height" Value="8"/>
-        <Setter Property="CornerRadius" Value="{StaticResource Radius.Pill}"/>
+        <Setter Property="CornerRadius" Value="3"/>
         <Setter Property="Background" Value="{DynamicResource Accent}"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
     </Style>
@@ -367,7 +367,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border Background="{TemplateBinding Background}" CornerRadius="{StaticResource Radius.Pill}"
+                    <Border Background="{TemplateBinding Background}" CornerRadius="{StaticResource Radius.MD}"
                             Padding="{TemplateBinding Padding}">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>

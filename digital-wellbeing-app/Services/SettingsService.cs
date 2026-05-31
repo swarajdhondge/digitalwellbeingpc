@@ -6,7 +6,7 @@ namespace digital_wellbeing_app.Services
 {
     public class SettingsService
     {
-        private const string FolderName = "Digital Wellbeing";
+        private const string FolderName = "Pulse";
         private const string FileName = "settings.json";
         private readonly string _path;
         private readonly System.Collections.Generic.Dictionary<string, object> _values;

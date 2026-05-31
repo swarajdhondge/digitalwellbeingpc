@@ -24,7 +24,7 @@
                            VerticalAlignment="Center"/>
                 </Border>
 
-                <TextBlock Text="Welcome to Digital Wellbeing"
+                <TextBlock Text="Welcome to Pulse"
                            Style="{StaticResource HeadingLarge}"
                            TextAlignment="Center"
                            Margin="0,0,0,8"/>
@@ -146,7 +146,7 @@
                             Padding="12,8"
                             Margin="0,0,0,8">
                         <TextBlock x:Name="DataPathText"
-                                   Text="%LocalAppData%\Digital Wellbeing\"
+                                   Text="%LocalAppData%\Pulse\"
                                    Style="{StaticResource BodySmall}"
                                    Foreground="{DynamicResource Accent.Primary}"
                                    FontFamily="Consolas"/>

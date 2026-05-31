@@ -183,21 +183,21 @@
                         <StackPanel x:Name="VisualStylePanel" Margin="0,8,0,0">
                             <TextBlock Text="Visual style" Style="{StaticResource Pulse.Body2}" Margin="0,0,0,8"/>
                             <StackPanel Orientation="Horizontal">
-                                <Border x:Name="AmberStyleOption" Background="{DynamicResource Accent}" CornerRadius="{StaticResource Radius.Pill}"
+                                <Border x:Name="AmberStyleOption" Background="{DynamicResource Accent}" CornerRadius="{StaticResource Radius.MD}"
                                         Padding="16,8" Margin="0,0,8,0" Cursor="Hand" MouseLeftButtonDown="AmberStyle_Click">
                                     <StackPanel Orientation="Horizontal">
                                         <Ellipse Width="14" Height="14" Fill="#F59E0B" Margin="0,0,8,0"/>
                                         <TextBlock Text="Amber" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource Ink}"/>
                                     </StackPanel>
                                 </Border>
-                                <Border x:Name="PurpleStyleOption" Background="{DynamicResource Card2}" CornerRadius="{StaticResource Radius.Pill}"
+                                <Border x:Name="PurpleStyleOption" Background="{DynamicResource Card2}" CornerRadius="{StaticResource Radius.MD}"
                                         Padding="16,8" Margin="0,0,8,0" Cursor="Hand" MouseLeftButtonDown="PurpleStyle_Click">
                                     <StackPanel Orientation="Horizontal">
                                         <Ellipse Width="14" Height="14" Fill="#8B5CF6" Margin="0,0,8,0"/>
                                         <TextBlock Text="Purple" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource Ink}"/>
                                     </StackPanel>
                                 </Border>
-                                <Border x:Name="DimStyleOption" Background="{DynamicResource Card2}" CornerRadius="{StaticResource Radius.Pill}"
+                                <Border x:Name="DimStyleOption" Background="{DynamicResource Card2}" CornerRadius="{StaticResource Radius.MD}"
                                         Padding="16,8" Cursor="Hand" MouseLeftButtonDown="DimStyle_Click">
                                     <StackPanel Orientation="Horizontal">
                                         <Ellipse Width="14" Height="14" Fill="#6B7280" Margin="0,0,8,0"/>
@@ -258,7 +258,7 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" VerticalAlignment="Center">
                         <TextBlock Text="Launch on Windows startup" Style="{StaticResource Pulse.Body}"/>
-                        <TextBlock Text="Start Digital Wellbeing when you log in" Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
+                        <TextBlock Text="Start Pulse when you log in" Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
                     </StackPanel>
                     <ToggleButton x:Name="StartupCheckBox" Grid.Column="1" Style="{StaticResource Pulse.Switch}"
                                   Checked="StartupCheckBox_Checked" Unchecked="StartupCheckBox_Checked" VerticalAlignment="Center"/>
@@ -336,8 +336,8 @@
                             <Image Source="/Resources/Icons/digital-balance-icon-32.png" Width="48" Height="48" RenderOptions.BitmapScalingMode="HighQuality"/>
                         </Border>
                         <StackPanel VerticalAlignment="Center" Margin="14,0,0,0">
-                            <TextBlock Text="Digital Wellbeing" Style="{StaticResource Pulse.CardTitle}" FontSize="15"/>
-                            <TextBlock x:Name="AboutVersionText" Text="Version 2.5.0" Style="{StaticResource Pulse.Body2}"/>
+                            <TextBlock Text="Pulse - DigitalWellbeingPC" Style="{StaticResource Pulse.CardTitle}" FontSize="15"/>
+                            <TextBlock x:Name="AboutVersionText" Text="Version 2.1.0" Style="{StaticResource Pulse.Body2}"/>
                         </StackPanel>
                     </StackPanel>
                     <TextBlock Text="Track your screen time, app usage, and audio exposure to maintain a healthy digital lifestyle."

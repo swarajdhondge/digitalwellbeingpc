@@ -1,5 +1,32 @@
 # Changelog
 
+## [v2.1.0] - 2026-05-31
+
+### Pulse Redesign
+
+A complete visual redesign to the **Pulse** design language — a calm graphite base, soft solid surfaces with a 1px border and gentle shadow, generous 24px radii, and a per-section signature accent — recreated from the Pulse design reference.
+
+### New Look
+- **Rebranded to Pulse** - the app is now **Pulse - DigitalWellbeingPC** ("Pulse" in the UI, full name in About/installer). Existing data, settings, and logs **migrate automatically** on first launch, so updates and reinstalls keep all your history.
+- **New shell** - a slim icon navigation rail and a top bar with a time-of-day greeting ("Good morning/afternoon/evening"), a live "Tracking" indicator, and a one-click theme toggle.
+- **Every view rebuilt** to the Pulse layout: Today (Dashboard), Screen Time, App Usage, Hearing (Sound), Focus, Insights (Weekly Report), Settings, and Help.
+  - Dashboard now leads with a goal ring, a "split across your top apps" bar, a most-used sparkline, and a this-week mini chart.
+  - Two-column layouts with content centered to a comfortable max width.
+- **Per-section signature accents** - each section carries its own calm hue (Dashboard indigo, Screen Time cyan, App Usage orchid, Hearing teal, Focus amber, Insights rose, Settings steel, Help slate), applied live as you navigate.
+- **Refined light & dark themes** - a graphite/indigo dark palette and a soft-neutral light palette; per-section accents deepen slightly in light mode for legibility on white.
+- **Rounded-rectangle controls** - buttons, duration chips, segmented tabs, and progress bars use clean rounded rectangles; small status badges stay pill-shaped.
+
+### Improvements
+- Fixed a screen-time calculation mismatch and tightened UI consistency.
+
+### Technical
+- New token-driven theming foundation (Pulse design tokens, palettes, and a per-section accent service).
+- `ThemeService` now retints the live accent per section and is theme-aware (deeper hues in light mode).
+- Added FlaUI-based UI smoke tests for the shell.
+- Reconciled version metadata: `csproj`, `AssemblyInfo`, and the in-app version displays now all report **2.1.0**.
+
+---
+
 ## [v2.0.0] - 2026-01-31
 
 ### Production Hardening and Feature Update

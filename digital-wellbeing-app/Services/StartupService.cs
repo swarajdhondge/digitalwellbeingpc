@@ -4,7 +4,7 @@ namespace digital_wellbeing_app.Services
     public static class StartupService
     {
         private const string RunKey = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
-        private const string AppName = "Digital Wellbeing";
+        private const string AppName = "Pulse";
 
         public static bool IsEnabled()
         {

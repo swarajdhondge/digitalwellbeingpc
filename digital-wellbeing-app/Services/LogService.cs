@@ -5,7 +5,7 @@ namespace digital_wellbeing_app.Services
 {
     /// <summary>
     /// Simple file-based logging service for diagnostics and crash reporting.
-    /// Writes to %LocalAppData%\Digital Wellbeing\logs\
+    /// Writes to %LocalAppData%\Pulse\logs\
     /// Auto-rotates: keeps last 7 days of logs.
     /// </summary>
     public static class LogService
@@ -35,7 +35,7 @@ namespace digital_wellbeing_app.Services
             {
                 var appDataFolder = Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                    "Digital Wellbeing");
+                    "Pulse");
                 var logFolder = Path.Combine(appDataFolder, LogFolderName);
                 Directory.CreateDirectory(logFolder);
 
@@ -126,7 +126,7 @@ namespace digital_wellbeing_app.Services
         {
             return Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                "Digital Wellbeing",
+                "Pulse",
                 LogFolderName);
         }
     }

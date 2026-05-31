@@ -3,7 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
-    Title="Digital Wellbeing"
+    Title="Pulse"
     Height="750" Width="1100"
     MinHeight="500" MinWidth="800"
     WindowStartupLocation="CenterScreen"
@@ -50,7 +50,7 @@
                     <Border Grid.Row="0" Width="38" Height="38" CornerRadius="11"
                             Margin="0,16,0,10" HorizontalAlignment="Center"
                             Background="{DynamicResource Card2}" ClipToBounds="True"
-                            ToolTip="Digital Wellbeing">
+                            ToolTip="Pulse - DigitalWellbeingPC">
                         <Image Source="/Resources/Icons/digital-balance-icon-32.png"
                                Width="38" Height="38"
                                RenderOptions.BitmapScalingMode="HighQuality"/>
@@ -119,7 +119,7 @@
                         </Button>
 
                         <TextBlock x:Name="SidebarVersionText"
-                                   Text="v2.5.0"
+                                   Text="v2.1.0"
                                    FontSize="9"
                                    Foreground="{DynamicResource Ink3}"
                                    HorizontalAlignment="Center"

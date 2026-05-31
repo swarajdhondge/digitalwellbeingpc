@@ -123,8 +123,8 @@ namespace digital_wellbeing_app.Services
             { "leagueclient", "League of Legends" },
             
             // Our app
-            { "digitalwellbeing", "Digital Wellbeing" },
-            { "digital-wellbeing-app", "Digital Wellbeing" },
+            { "digitalwellbeing", "Pulse" },
+            { "digital-wellbeing-app", "Pulse" },
         };
 
         /// <summary>

@@ -62,7 +62,7 @@ namespace digital_wellbeing_app.MainWindow
                 if (!string.IsNullOrEmpty(location))
                 {
                     var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(location);
-                    SidebarVersionText.Text = $"v{fvi.ProductVersion ?? "1.7.0"}";
+                    SidebarVersionText.Text = $"v{fvi.ProductVersion ?? "2.1.0"}";
                 }
             }
             catch { /* Keep default text from XAML */ }
@@ -727,7 +727,7 @@ namespace digital_wellbeing_app.MainWindow
             {
                 Icon = new Icon(iconPath),
                 Visible = true,
-                Text = "Digital Wellbeing"
+                Text = "Pulse"
             };
 
             _trayIcon.ContextMenuStrip = new ContextMenuStrip();

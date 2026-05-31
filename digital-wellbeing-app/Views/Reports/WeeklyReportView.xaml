@@ -163,7 +163,7 @@
                                     <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding FormattedTime}" Style="{StaticResource Pulse.Muted}"/>
                                     <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="0,6,0,0" Height="5">
                                         <Border Style="{StaticResource Pulse.ProgressTrack}" Height="5"/>
-                                        <Border CornerRadius="999" Height="5" HorizontalAlignment="Left"
+                                        <Border CornerRadius="3" Height="5" HorizontalAlignment="Left"
                                                 Background="{Binding (ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource ColorIndexToTint}}">
                                             <Border.Width>
                                                 <MultiBinding Converter="{StaticResource PercentageToWidthConverter}">

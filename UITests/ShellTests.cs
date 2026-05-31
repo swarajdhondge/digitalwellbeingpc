@@ -17,7 +17,7 @@ public class ShellTests
     [Fact]
     public void Window_opens_with_correct_title()
     {
-        Assert.Equal("Digital Wellbeing", _app.Window.Title);
+        Assert.Equal("Pulse", _app.Window.Title);
         _app.Shot("00-launch");
     }
 

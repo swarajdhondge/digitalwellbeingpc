@@ -63,7 +63,7 @@ namespace digital_wellbeing_app.Tests.Services
         {
             var path = DatabaseService.GetDatabaseFilePath();
             Assert.False(string.IsNullOrWhiteSpace(path));
-            Assert.Contains("Digital Wellbeing", path);
+            Assert.Contains("Pulse", path);
         }
 
         [Fact]

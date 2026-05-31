@@ -15,7 +15,7 @@ namespace digital_wellbeing_app.Services
         private static readonly object _dbLock = new();
 
         // folder & filename constants
-        private const string AppFolderName = "Digital Wellbeing";
+        private const string AppFolderName = "Pulse";
         private const string DbFileName = "digital_wellbeing.db";
 
         // full path to the DB, under %LocalAppData%
