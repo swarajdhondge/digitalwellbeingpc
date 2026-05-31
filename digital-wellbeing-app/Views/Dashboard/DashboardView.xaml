@@ -131,7 +131,7 @@
                                 </StackPanel>
                             </StackPanel>
                             <Border Grid.Column="1" Background="{DynamicResource Card2}" BorderBrush="{DynamicResource Border}" BorderThickness="1"
-                                    CornerRadius="999" Padding="13,8" VerticalAlignment="Center">
+                                    CornerRadius="{StaticResource Radius.MD}" Padding="13,8" VerticalAlignment="Center">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="Insights" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource Accent.Weekly}" VerticalAlignment="Center"/>
                                     <md:PackIcon Kind="ArrowTopRight" Width="15" Height="15" Foreground="{StaticResource Accent.Weekly}" VerticalAlignment="Center" Margin="5,0,0,0"/>
@@ -301,8 +301,8 @@
                             <TextBlock Grid.Column="1" Text="{Binding GoalText}" Style="{StaticResource Pulse.Muted}" VerticalAlignment="Center"/>
                         </Grid>
                         <Grid Height="9" Margin="0,0,0,14">
-                            <Border x:Name="GoalTrack" Height="9" CornerRadius="999" Background="{DynamicResource Track}"/>
-                            <Border Height="9" CornerRadius="999" HorizontalAlignment="Left">
+                            <Border x:Name="GoalTrack" Height="9" CornerRadius="3" Background="{DynamicResource Track}"/>
+                            <Border Height="9" CornerRadius="3" HorizontalAlignment="Left">
                                 <Border.Style>
                                     <Style TargetType="Border">
                                         <Setter Property="Background" Value="{StaticResource Accent.Screentime}"/>

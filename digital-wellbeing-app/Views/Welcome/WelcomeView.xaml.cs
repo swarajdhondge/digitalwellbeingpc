@@ -19,7 +19,7 @@ namespace digital_wellbeing_app.Views.Welcome
             {
                 var folder = System.IO.Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                    "Digital Wellbeing");
+                    "Pulse");
                 DataPathText.Text = folder;
             }
             catch { /* Keep placeholder text */ }

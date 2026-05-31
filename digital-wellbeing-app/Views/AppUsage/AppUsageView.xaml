@@ -123,8 +123,8 @@
                                     </Border>
                                     <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,16,0">
                                         <TextBlock Text="{Binding AppName}" Style="{StaticResource Pulse.Body}" Margin="0,0,0,7"/>
-                                        <Border Height="5" CornerRadius="999" Background="{DynamicResource Track}">
-                                            <Border Height="5" CornerRadius="999" HorizontalAlignment="Left"
+                                        <Border Height="5" CornerRadius="3" Background="{DynamicResource Track}">
+                                            <Border Height="5" CornerRadius="3" HorizontalAlignment="Left"
                                                     Background="{Binding (ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource ColorIndexToTint}}"
                                                     Width="{Binding TotalDuration, Converter={StaticResource DurationToWidthConverter}}"/>
                                         </Border>

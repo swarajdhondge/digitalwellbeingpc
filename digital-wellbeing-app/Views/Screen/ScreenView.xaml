@@ -90,7 +90,7 @@
                         </Grid>
                         <Grid Height="8">
                             <Border x:Name="GoalProgressContainer" Style="{StaticResource Pulse.ProgressTrack}"/>
-                            <Border Height="8" CornerRadius="999" HorizontalAlignment="Left"
+                            <Border Height="8" CornerRadius="3" HorizontalAlignment="Left"
                                     Background="{Binding GoalProgress, Converter={StaticResource GoalProgressToColorConverter}}">
                                 <Border.Width>
                                     <MultiBinding Converter="{StaticResource GoalProgressToWidthConverter}">
@@ -177,7 +177,7 @@
                                                    FontWeight="{Binding IsToday, Converter={StaticResource BoolToFontWeight}}"/>
                                         <Border x:Name="WeekBarContainer" Grid.Column="1" Height="8" Margin="12,0"
                                                 VerticalAlignment="Center" Style="{StaticResource Pulse.ProgressTrack}">
-                                            <Border Background="{DynamicResource Accent}" CornerRadius="999" HorizontalAlignment="Left">
+                                            <Border Background="{DynamicResource Accent}" CornerRadius="3" HorizontalAlignment="Left">
                                                 <Border.Width>
                                                     <MultiBinding Converter="{StaticResource PercentageToWidthConverter}">
                                                         <Binding Path="Percentage"/>

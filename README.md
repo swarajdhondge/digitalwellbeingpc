@@ -1,4 +1,6 @@
-# Digital Wellbeing for Windows
+# Pulse — DigitalWellbeingPC
+
+_Android-style Digital Wellbeing for Windows — calm, private, and fully on-device._
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![.NET 9](https://img.shields.io/badge/.NET-9.0-purple.svg)](https://dotnet.microsoft.com/)
@@ -6,7 +8,7 @@
 [![GitHub release](https://img.shields.io/github/v/release/swarajdhondge/digitalwellbeingpc)](https://github.com/swarajdhondge/digitalwellbeingpc/releases)
 [![Downloads](https://img.shields.io/github/downloads/swarajdhondge/digitalwellbeingpc/total)](https://github.com/swarajdhondge/digitalwellbeingpc/releases)
 
-A privacy-focused desktop app that brings Android's Digital Wellbeing experience to Windows. Track your screen time, monitor app usage, manage focus sessions, and protect your hearing. All data stays local on your machine.
+**Pulse** is a privacy-focused desktop app that brings the Android Digital Wellbeing experience to Windows. Track your screen time, monitor app usage, manage focus sessions, and protect your hearing — all in a calm, redesigned interface. Every byte of data stays local on your machine.
 
 <p align="center">
   <img src=".github/screenshots/dashboard.png" alt="Digital Wellbeing Dashboard - Screen Time Tracker for Windows" width="800"/>
@@ -50,7 +52,7 @@ Runs quietly in the tray. Double-click to open, right-click for quick access to 
 A first-run welcome screen shows how your data is stored. Built-in Help with FAQ is always in the sidebar.
 
 **Themes**
-Light, Dark, or Auto to match your system settings.
+A calm graphite design with a signature accent color per section. Light, Dark, or Auto to match your system.
 
 <p align="center">
   <img src=".github/screenshots/dashboard-light.png" alt="Light Theme - Digital Wellbeing" width="400"/>

@@ -71,7 +71,7 @@ namespace digital_wellbeing_app.Tests.Services
         {
             var dir = LogService.GetLogDirectory();
             Assert.False(string.IsNullOrWhiteSpace(dir));
-            Assert.Contains("Digital Wellbeing", dir);
+            Assert.Contains("Pulse", dir);
             Assert.Contains("logs", dir);
         }
     }

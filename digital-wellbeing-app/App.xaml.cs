@@ -67,6 +67,10 @@ namespace digital_wellbeing_app
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
             System.Threading.Tasks.TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
 
+            // Migrate legacy "Digital Wellbeing" data/registry to the "Pulse" identity.
+            // Must run before any service touches the data folder (e.g. LogService below).
+            Services.DataMigrationService.RunMigrations();
+
             // Initialize logging
             Services.LogService.Initialize();
             Services.LogService.Info("App starting up");
@@ -76,7 +80,7 @@ namespace digital_wellbeing_app
             if (!isNewInstance)
             {
                 System.Windows.MessageBox.Show(
-                    "Digital Wellbeing is already running.\nCheck the system tray.",
+                    "Pulse is already running.\nCheck the system tray.",
                     "Already Running",
                     System.Windows.MessageBoxButton.OK,
                     System.Windows.MessageBoxImage.Information);
@@ -148,7 +152,7 @@ namespace digital_wellbeing_app
                     $"An unexpected error occurred:\n\n{e.Exception.Message}\n\n" +
                     "The error has been logged. The application will try to continue.\n" +
                     "If the problem persists, please restart the application.",
-                    "Digital Wellbeing - Error",
+                    "Pulse - Error",
                     System.Windows.MessageBoxButton.OK,
                     System.Windows.MessageBoxImage.Error);
             }
