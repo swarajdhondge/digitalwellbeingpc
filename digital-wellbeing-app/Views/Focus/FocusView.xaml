@@ -13,173 +13,229 @@
                   Padding="26,4,26,26">
         <StackPanel x:Name="PageRoot" HorizontalAlignment="Center">
 
-            <!-- Focus session card -->
-            <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
-                <Grid>
-                    <!-- Setup state -->
-                    <StackPanel x:Name="FocusInactivePanel" Visibility="Visible">
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
-                            <Border Width="40" Height="40" CornerRadius="11" Background="{DynamicResource Accent.Soft}">
-                                <md:PackIcon Kind="Target" Width="20" Height="20" Foreground="{DynamicResource Accent}"
-                                             HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                            <TextBlock Text="Start a focus session" Style="{StaticResource Pulse.CardTitle}"
-                                       VerticalAlignment="Center" Margin="12,0,0,0"/>
-                        </StackPanel>
+            <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="340"/>
+                </Grid.ColumnDefinitions>
 
-                        <TextBlock Text="Mute distractions and stay on task. Choose a duration and how distracting apps are handled."
-                                   Style="{StaticResource Pulse.Body2}" Margin="0,0,0,20"/>
+                <!-- ===== LEFT: setup / running + enforcement ===== -->
+                <StackPanel Grid.Column="0" Margin="0,0,16,0">
 
-                        <TextBlock Text="DURATION" Style="{StaticResource Pulse.Eyebrow}" Margin="0,0,0,10"/>
-                        <WrapPanel Margin="0,0,0,20">
-                            <Button x:Name="Duration15Btn" Content="15 min" Style="{StaticResource Pulse.Chip}" Margin="0,0,8,8" Click="DurationButton_Click" Tag="15"/>
-                            <Button x:Name="Duration25Btn" Content="25 min" Style="{StaticResource Pulse.Chip}" Margin="0,0,8,8" Click="DurationButton_Click" Tag="25"/>
-                            <Button x:Name="Duration45Btn" Content="45 min" Style="{StaticResource Pulse.Chip}" Margin="0,0,8,8" Click="DurationButton_Click" Tag="45"/>
-                            <Button x:Name="Duration60Btn" Content="60 min" Style="{StaticResource Pulse.Chip}" Margin="0,0,8,8" Click="DurationButton_Click" Tag="60"/>
-                            <Button x:Name="Duration90Btn" Content="90 min" Style="{StaticResource Pulse.Chip}" Margin="0,0,8,8" Click="DurationButton_Click" Tag="90"/>
-                            <Button x:Name="DurationCustomBtn" Content="Custom…" Style="{StaticResource Pulse.Button.Ghost}" Margin="0,0,8,8" Click="CustomDuration_Click"/>
-                        </WrapPanel>
-
-                        <StackPanel x:Name="CustomDurationPanel" Orientation="Horizontal" Visibility="Collapsed" Margin="0,0,0,20">
-                            <TextBox x:Name="CustomDurationTextBox" Width="80" Padding="12,8" TextAlignment="Center" FontSize="16"
-                                     Background="{DynamicResource Card2}" Foreground="{DynamicResource Ink}" BorderThickness="0" Text="30"/>
-                            <TextBlock Text="minutes" Style="{StaticResource Pulse.Body}" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                        </StackPanel>
-
-                        <Button x:Name="StartFocusButton" Content="Begin session" Style="{StaticResource Pulse.Button.Primary}"
-                                Padding="28,12" FontSize="15" HorizontalAlignment="Left" Click="StartFocusButton_Click">
-                            <Button.ContentTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <md:PackIcon Kind="Play" Width="18" Height="18" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                        <TextBlock Text="{Binding}" VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </Button.ContentTemplate>
-                        </Button>
-                    </StackPanel>
-
-                    <!-- Running state -->
-                    <StackPanel x:Name="FocusActivePanel" Visibility="Collapsed">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
-                            <Ellipse Width="10" Height="10" Fill="{StaticResource Good}" Margin="0,0,10,0" VerticalAlignment="Center">
-                                <Ellipse.Triggers>
-                                    <EventTrigger RoutedEvent="Loaded">
-                                        <BeginStoryboard>
-                                            <Storyboard RepeatBehavior="Forever">
-                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0.4" Duration="0:0:1" AutoReverse="True"/>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </EventTrigger>
-                                </Ellipse.Triggers>
-                            </Ellipse>
-                            <TextBlock Text="Focus session active" Style="{StaticResource Pulse.CardTitle}" FontSize="15"
-                                       Foreground="{StaticResource Good}" VerticalAlignment="Center"/>
-                        </StackPanel>
-
-                        <TextBlock x:Name="TimerDisplay" Text="25:00" Style="{StaticResource Pulse.Stat}" FontSize="56"
-                                   HorizontalAlignment="Center" Margin="0,0,0,4"/>
-                        <TextBlock x:Name="TimerSubtext" Text="remaining" Style="{StaticResource Pulse.Body2}"
-                                   HorizontalAlignment="Center" Margin="0,0,0,22"/>
-
-                        <Grid Margin="0,0,0,22" Height="8">
-                            <Border Style="{StaticResource Pulse.ProgressTrack}"/>
-                            <Border x:Name="ProgressBar" Background="{DynamicResource Accent}" CornerRadius="999"
-                                    Height="8" HorizontalAlignment="Left" Width="0"/>
-                        </Grid>
-
-                        <Grid Margin="0,0,0,22">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0" HorizontalAlignment="Center">
-                                <TextBlock x:Name="DistractionsCount" Text="0" Style="{StaticResource Pulse.CardTitle}" FontSize="20" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Distractions" Style="{StaticResource Pulse.Body2}" HorizontalAlignment="Center" Margin="0,4,0,0"/>
-                            </StackPanel>
-                            <StackPanel Grid.Column="1" HorizontalAlignment="Center">
-                                <TextBlock x:Name="EnforcementDisplay" Text="Warn" Style="{StaticResource Pulse.CardTitle}" FontSize="20" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Enforcement" Style="{StaticResource Pulse.Body2}" HorizontalAlignment="Center" Margin="0,4,0,0"/>
-                            </StackPanel>
-                            <StackPanel Grid.Column="2" HorizontalAlignment="Center">
-                                <TextBlock x:Name="BlockedAppsCount" Text="3" Style="{StaticResource Pulse.CardTitle}" FontSize="20" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Blocked" Style="{StaticResource Pulse.Body2}" HorizontalAlignment="Center" Margin="0,4,0,0"/>
-                            </StackPanel>
-                        </Grid>
-
-                        <Button x:Name="StopFocusButton" Content="End session early" Style="{StaticResource Pulse.Button.Primary}"
-                                Background="{StaticResource Danger}" Padding="24,11" HorizontalAlignment="Center" Click="StopFocusButton_Click"/>
-                    </StackPanel>
-                </Grid>
-            </Border>
-
-            <!-- Enforcement settings -->
-            <TextBlock Text="Enforcement" Style="{StaticResource Pulse.CardTitle}" FontSize="14" Margin="2,4,0,10"/>
-            <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
-                <StackPanel>
-                    <TextBlock Text="How should distracting apps be handled?" Style="{StaticResource Pulse.Body2}" Margin="0,0,0,14"/>
-
-                    <Border x:Name="WarnOption" Background="{DynamicResource Accent}" CornerRadius="{StaticResource Radius.MD}"
-                            Padding="16,12" Margin="0,0,0,8" Cursor="Hand" MouseLeftButtonDown="WarnOption_Click">
+                    <Border Style="{StaticResource Pulse.Card}" Padding="28" Margin="0,0,0,16">
                         <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <md:PackIcon x:Name="WarnIcon" Kind="AlertCircle" Width="24" Height="24" Foreground="{DynamicResource Accent.Ink}" VerticalAlignment="Center"/>
-                            <StackPanel Grid.Column="1" Margin="12,0,0,0">
-                                <TextBlock x:Name="WarnTitle" Text="Warn" FontWeight="SemiBold" FontSize="14" Foreground="{DynamicResource Accent.Ink}"/>
-                                <TextBlock x:Name="WarnDescription" Text="Show a popup when you open a distracting app" FontSize="12" Foreground="{DynamicResource Accent.Ink}" Opacity="0.8"/>
-                            </StackPanel>
-                            <md:PackIcon x:Name="WarnCheck" Grid.Column="2" Kind="Check" Width="20" Height="20" Foreground="{DynamicResource Accent.Ink}" VerticalAlignment="Center"/>
-                        </Grid>
-                    </Border>
+                            <!-- Setup state -->
+                            <StackPanel x:Name="FocusInactivePanel" Visibility="Visible">
+                                <Border Width="46" Height="46" CornerRadius="13" HorizontalAlignment="Left" Background="{DynamicResource Accent.Soft}">
+                                    <md:PackIcon Kind="Target" Width="23" Height="23" Foreground="{DynamicResource Accent}"
+                                                 HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <TextBlock Text="Start a focus session" Style="{StaticResource Pulse.Stat}" FontSize="24" Margin="0,16,0,8"/>
+                                <TextBlock Text="Pick a length and how strictly distractions should be handled. Pulse watches your foreground app and keeps you on track."
+                                           Style="{StaticResource Pulse.Body2}" FontSize="14.5" MaxWidth="440" HorizontalAlignment="Left" Margin="0,0,0,24"/>
 
-                    <Border x:Name="BlockOption" Background="{DynamicResource Card2}" CornerRadius="{StaticResource Radius.MD}"
-                            Padding="16,12" Margin="0,0,0,8" Cursor="Hand" MouseLeftButtonDown="BlockOption_Click">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <md:PackIcon x:Name="BlockIcon" Kind="Block" Width="24" Height="24" Foreground="{DynamicResource Ink2}" VerticalAlignment="Center"/>
-                            <StackPanel Grid.Column="1" Margin="12,0,0,0">
-                                <TextBlock x:Name="BlockTitle" Text="Block" Style="{StaticResource Pulse.Body}" FontWeight="SemiBold"/>
-                                <TextBlock x:Name="BlockDescription" Text="Minimize distracting apps automatically" Style="{StaticResource Pulse.Muted}"/>
-                            </StackPanel>
-                            <md:PackIcon x:Name="BlockCheck" Grid.Column="2" Kind="Check" Width="20" Height="20" Foreground="{DynamicResource Accent}" VerticalAlignment="Center" Visibility="Collapsed"/>
-                        </Grid>
-                    </Border>
+                                <TextBlock Text="DURATION" Style="{StaticResource Pulse.Eyebrow}" Margin="0,0,0,12"/>
+                                <WrapPanel Margin="0,0,0,24">
+                                    <Button x:Name="Duration15Btn" Content="15 min" Style="{StaticResource Pulse.Chip}" Margin="0,0,10,10" Click="DurationButton_Click" Tag="15"/>
+                                    <Button x:Name="Duration25Btn" Content="25 min" Style="{StaticResource Pulse.Chip}" Margin="0,0,10,10" Click="DurationButton_Click" Tag="25"/>
+                                    <Button x:Name="Duration45Btn" Content="45 min" Style="{StaticResource Pulse.Chip}" Margin="0,0,10,10" Click="DurationButton_Click" Tag="45"/>
+                                    <Button x:Name="Duration60Btn" Content="60 min" Style="{StaticResource Pulse.Chip}" Margin="0,0,10,10" Click="DurationButton_Click" Tag="60"/>
+                                    <Button x:Name="Duration90Btn" Content="90 min" Style="{StaticResource Pulse.Chip}" Margin="0,0,10,10" Click="DurationButton_Click" Tag="90"/>
+                                    <Button x:Name="DurationCustomBtn" Content="Custom…" Style="{StaticResource Pulse.Button.Ghost}" Margin="0,0,10,10" Click="CustomDuration_Click"/>
+                                </WrapPanel>
 
-                    <Border x:Name="HideOption" Background="{DynamicResource Card2}" CornerRadius="{StaticResource Radius.MD}"
-                            Padding="16,12" Opacity="0.5" IsEnabled="False">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <md:PackIcon Kind="EyeOff" Width="24" Height="24" Foreground="{DynamicResource Ink3}" VerticalAlignment="Center"/>
-                            <StackPanel Grid.Column="1" Margin="12,0,0,0">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Hide" Style="{StaticResource Pulse.Body}" FontWeight="SemiBold" Foreground="{DynamicResource Ink3}"/>
-                                    <Border Background="{DynamicResource Ink3}" CornerRadius="4" Padding="6,2" Margin="8,0,0,0">
-                                        <TextBlock Text="Coming soon" FontSize="10" Foreground="{DynamicResource Bg}"/>
-                                    </Border>
+                                <StackPanel x:Name="CustomDurationPanel" Orientation="Horizontal" Visibility="Collapsed" Margin="0,0,0,24">
+                                    <TextBox x:Name="CustomDurationTextBox" Width="80" Padding="12,8" TextAlignment="Center" FontSize="16"
+                                             Background="{DynamicResource Card2}" Foreground="{DynamicResource Ink}" BorderThickness="0" Text="30"/>
+                                    <TextBlock Text="minutes" Style="{StaticResource Pulse.Body}" VerticalAlignment="Center" Margin="10,0,0,0"/>
                                 </StackPanel>
-                                <TextBlock Text="Remove from taskbar and Start menu" Style="{StaticResource Pulse.Muted}"/>
+
+                                <Button x:Name="StartFocusButton" Content="Begin session" Style="{StaticResource Pulse.Button.Primary}"
+                                        Padding="28,12" FontSize="15" HorizontalAlignment="Left" Click="StartFocusButton_Click">
+                                    <Button.ContentTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <md:PackIcon Kind="Play" Width="18" Height="18" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                                <TextBlock Text="{Binding}" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </Button.ContentTemplate>
+                                </Button>
+                            </StackPanel>
+
+                            <!-- Running state -->
+                            <StackPanel x:Name="FocusActivePanel" Visibility="Collapsed">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
+                                    <Ellipse Width="10" Height="10" Fill="{StaticResource Good}" Margin="0,0,10,0" VerticalAlignment="Center">
+                                        <Ellipse.Triggers>
+                                            <EventTrigger RoutedEvent="Loaded">
+                                                <BeginStoryboard>
+                                                    <Storyboard RepeatBehavior="Forever">
+                                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0.4" Duration="0:0:1" AutoReverse="True"/>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                        </Ellipse.Triggers>
+                                    </Ellipse>
+                                    <TextBlock Text="Focus session active" Style="{StaticResource Pulse.CardTitle}" FontSize="15"
+                                               Foreground="{StaticResource Good}" VerticalAlignment="Center"/>
+                                </StackPanel>
+
+                                <TextBlock x:Name="TimerDisplay" Text="25:00" Style="{StaticResource Pulse.Stat}" FontSize="64"
+                                           HorizontalAlignment="Center" Margin="0,0,0,4"/>
+                                <TextBlock x:Name="TimerSubtext" Text="remaining" Style="{StaticResource Pulse.Body2}"
+                                           HorizontalAlignment="Center" Margin="0,0,0,22"/>
+
+                                <Grid Margin="0,0,0,22" Height="8">
+                                    <Border Style="{StaticResource Pulse.ProgressTrack}"/>
+                                    <Border x:Name="ProgressBar" Background="{DynamicResource Accent}" CornerRadius="999"
+                                            Height="8" HorizontalAlignment="Left" Width="0"/>
+                                </Grid>
+
+                                <Grid Margin="0,0,0,22">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                                        <TextBlock x:Name="DistractionsCount" Text="0" Style="{StaticResource Pulse.CardTitle}" FontSize="20" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="Distractions" Style="{StaticResource Pulse.Body2}" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                                        <TextBlock x:Name="EnforcementDisplay" Text="Warn" Style="{StaticResource Pulse.CardTitle}" FontSize="20" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="Enforcement" Style="{StaticResource Pulse.Body2}" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="2" HorizontalAlignment="Center">
+                                        <TextBlock x:Name="BlockedAppsCount" Text="3" Style="{StaticResource Pulse.CardTitle}" FontSize="20" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="Blocked" Style="{StaticResource Pulse.Body2}" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                                    </StackPanel>
+                                </Grid>
+
+                                <Button x:Name="StopFocusButton" Content="End session early" Style="{StaticResource Pulse.Button.Primary}"
+                                        Background="{StaticResource Danger}" Padding="24,11" HorizontalAlignment="Center" Click="StopFocusButton_Click"/>
                             </StackPanel>
                         </Grid>
+                    </Border>
+
+                    <!-- Enforcement -->
+                    <Border Style="{StaticResource Pulse.Card}">
+                        <StackPanel>
+                            <TextBlock Text="HOW SHOULD DISTRACTIONS BE HANDLED?" Style="{StaticResource Pulse.Eyebrow}" Margin="0,0,0,14"/>
+
+                            <Border x:Name="WarnOption" Background="{DynamicResource Accent}" CornerRadius="{StaticResource Radius.LG}"
+                                    Padding="16,14" Margin="0,0,0,10" Cursor="Hand" MouseLeftButtonDown="WarnOption_Click">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <md:PackIcon x:Name="WarnIcon" Kind="BellRing" Width="24" Height="24" Foreground="{DynamicResource Accent.Ink}" VerticalAlignment="Center"/>
+                                    <StackPanel Grid.Column="1" Margin="14,0,0,0">
+                                        <TextBlock x:Name="WarnTitle" Text="Warn" FontWeight="SemiBold" FontSize="14.5" Foreground="{DynamicResource Accent.Ink}"/>
+                                        <TextBlock x:Name="WarnDescription" Text="Show a gentle popup when you open a distracting app" FontSize="13" Foreground="{DynamicResource Accent.Ink}" Opacity="0.85"/>
+                                    </StackPanel>
+                                    <md:PackIcon x:Name="WarnCheck" Grid.Column="2" Kind="Check" Width="20" Height="20" Foreground="{DynamicResource Accent.Ink}" VerticalAlignment="Center"/>
+                                </Grid>
+                            </Border>
+
+                            <Border x:Name="BlockOption" Background="{DynamicResource Card2}" CornerRadius="{StaticResource Radius.LG}"
+                                    Padding="16,14" Margin="0,0,0,10" Cursor="Hand" MouseLeftButtonDown="BlockOption_Click">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <md:PackIcon x:Name="BlockIcon" Kind="Block" Width="24" Height="24" Foreground="{DynamicResource Ink2}" VerticalAlignment="Center"/>
+                                    <StackPanel Grid.Column="1" Margin="14,0,0,0">
+                                        <TextBlock x:Name="BlockTitle" Text="Block" FontWeight="SemiBold" FontSize="14.5" Foreground="{DynamicResource Ink}"/>
+                                        <TextBlock x:Name="BlockDescription" Text="Automatically minimize distracting apps" FontSize="13" Foreground="{DynamicResource Ink2}"/>
+                                    </StackPanel>
+                                    <md:PackIcon x:Name="BlockCheck" Grid.Column="2" Kind="Check" Width="20" Height="20" Foreground="{DynamicResource Accent}" VerticalAlignment="Center" Visibility="Collapsed"/>
+                                </Grid>
+                            </Border>
+
+                            <Border x:Name="HideOption" Background="{DynamicResource Card2}" CornerRadius="{StaticResource Radius.LG}"
+                                    Padding="16,14" Opacity="0.5" IsEnabled="False">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <md:PackIcon Kind="EyeOff" Width="24" Height="24" Foreground="{DynamicResource Ink3}" VerticalAlignment="Center"/>
+                                    <StackPanel Grid.Column="1" Margin="14,0,0,0">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Hide" FontWeight="SemiBold" FontSize="14.5" Foreground="{DynamicResource Ink3}"/>
+                                            <Border Background="{DynamicResource Ink3}" CornerRadius="4" Padding="6,2" Margin="8,0,0,0">
+                                                <TextBlock Text="Coming soon" FontSize="10" Foreground="{DynamicResource Bg}"/>
+                                            </Border>
+                                        </StackPanel>
+                                        <TextBlock Text="Remove from taskbar and Start menu" Style="{StaticResource Pulse.Muted}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
                     </Border>
                 </StackPanel>
-            </Border>
 
-            <!-- App categories -->
-            <TextBlock Text="App categories" Style="{StaticResource Pulse.CardTitle}" FontSize="14" Margin="2,4,0,10"/>
-            <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
+                <!-- ===== RIGHT: recent sessions ===== -->
+                <StackPanel Grid.Column="1">
+                    <Border Style="{StaticResource Pulse.Card}">
+                        <StackPanel>
+                            <TextBlock Text="RECENT SESSIONS" Style="{StaticResource Pulse.Eyebrow}" Margin="0,0,0,16"/>
+                            <Grid Margin="0,0,0,16">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock x:Name="TodayFocusTime" Text="0 h 0 m" Style="{StaticResource Pulse.CardTitle}" FontSize="18"/>
+                                    <TextBlock Text="Today's focus" Style="{StaticResource Pulse.Muted}" Margin="0,4,0,0"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock x:Name="TodaySessionCount" Text="0" Style="{StaticResource Pulse.CardTitle}" FontSize="18"/>
+                                    <TextBlock Text="Completed" Style="{StaticResource Pulse.Muted}" Margin="0,4,0,0"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <Border Height="1" Background="{DynamicResource Border}" Margin="0,0,0,14"/>
+
+                            <ItemsControl x:Name="SessionHistoryList">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,0,0,13">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Border Width="36" Height="36" CornerRadius="10" Background="{DynamicResource Card2}" Margin="0,0,12,0">
+                                                <md:PackIcon Kind="{Binding StatusIcon}" Width="18" Height="18" Foreground="{Binding StatusColor}"
+                                                             HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding DurationText}" Style="{StaticResource Pulse.Body}"/>
+                                                <TextBlock Text="{Binding TimeText}" Style="{StaticResource Pulse.Muted}"/>
+                                            </StackPanel>
+                                            <TextBlock Grid.Column="2" Text="{Binding DistractionsText}" Style="{StaticResource Pulse.Muted}" VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <TextBlock x:Name="NoHistoryText" Text="No focus sessions yet. Start your first session."
+                                       Style="{StaticResource Pulse.Body2}" TextWrapping="Wrap" Margin="0,4,0,0"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Grid>
+
+            <!-- App categories (full width; backend needs categorization) -->
+            <Border Style="{StaticResource Pulse.Card}">
                 <StackPanel>
+                    <TextBlock Text="APP CATEGORIES" Style="{StaticResource Pulse.Eyebrow}" Margin="0,0,0,6"/>
                     <TextBlock Text="Categorize your apps to control what's blocked during focus sessions." Style="{StaticResource Pulse.Body2}" Margin="0,0,0,14"/>
 
                     <ItemsControl x:Name="AppCategoryList">
@@ -247,55 +303,9 @@
                         <StackPanel Orientation="Horizontal">
                             <md:PackIcon Kind="InformationOutline" Width="16" Height="16" Foreground="{DynamicResource Accent}" VerticalAlignment="Top" Margin="0,2,8,0"/>
                             <TextBlock Text="Entertainment apps are blocked during focus. Work and Neutral apps are always allowed."
-                                       Style="{StaticResource Pulse.Body2}" MaxWidth="600"/>
+                                       Style="{StaticResource Pulse.Body2}" MaxWidth="700"/>
                         </StackPanel>
                     </Border>
-                </StackPanel>
-            </Border>
-
-            <!-- Recent sessions -->
-            <TextBlock Text="Recent sessions" Style="{StaticResource Pulse.CardTitle}" FontSize="14" Margin="2,4,0,10"/>
-            <Border Style="{StaticResource Pulse.Card}">
-                <StackPanel>
-                    <Grid Margin="0,0,0,16">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0">
-                            <TextBlock x:Name="TodayFocusTime" Text="0 h 0 m" Style="{StaticResource Pulse.CardTitle}" FontSize="18"/>
-                            <TextBlock Text="Today's focus time" Style="{StaticResource Pulse.Body2}" Margin="0,4,0,0"/>
-                        </StackPanel>
-                        <StackPanel Grid.Column="1">
-                            <TextBlock x:Name="TodaySessionCount" Text="0" Style="{StaticResource Pulse.CardTitle}" FontSize="18"/>
-                            <TextBlock Text="Sessions completed" Style="{StaticResource Pulse.Body2}" Margin="0,4,0,0"/>
-                        </StackPanel>
-                    </Grid>
-
-                    <Border Height="1" Background="{DynamicResource Border}" Margin="0,0,0,16"/>
-
-                    <ItemsControl x:Name="SessionHistoryList">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Margin="0,0,0,12">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <md:PackIcon Kind="{Binding StatusIcon}" Width="20" Height="20" Foreground="{Binding StatusColor}" VerticalAlignment="Center"/>
-                                    <StackPanel Grid.Column="1" Margin="12,0,0,0">
-                                        <TextBlock Text="{Binding DurationText}" Style="{StaticResource Pulse.Body}"/>
-                                        <TextBlock Text="{Binding TimeText}" Style="{StaticResource Pulse.Muted}"/>
-                                    </StackPanel>
-                                    <TextBlock Grid.Column="2" Text="{Binding DistractionsText}" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-
-                    <TextBlock x:Name="NoHistoryText" Text="No focus sessions yet. Start your first session above."
-                               Style="{StaticResource Pulse.Body2}" HorizontalAlignment="Center" Margin="0,8,0,0"/>
                 </StackPanel>
             </Border>
         </StackPanel>
