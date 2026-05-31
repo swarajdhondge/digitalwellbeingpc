@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+/* ---- Pulse design tokens (mirrors the desktop app: graphite base + indigo accent) ---- */
+@theme {
+  --color-base: #0e1014;
+  --color-base2: #0a0c0f;
+  --color-surface: #16181d;
+  --color-surface2: #1c1f26;
+  --color-line: #24272e;
+  --color-ink: #edeff3;
+  --color-muted: #99a1ae;
+  --color-faint: #636a77;
+  --color-accent: #6c6fe8;
+  --color-accent2: #8487ee;
+
+  --font-sans: var(--font-hanken), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-base);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* soft radial glow used behind the hero */
+.pulse-glow {
+  background:
+    radial-gradient(60% 50% at 50% 0%, rgba(108, 111, 232, 0.18), transparent 70%),
+    radial-gradient(40% 40% at 85% 20%, rgba(43, 163, 199, 0.10), transparent 70%);
+}
+
+@keyframes pulse-rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.rise { animation: pulse-rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; }
