@@ -30,7 +30,7 @@ namespace digital_wellbeing_app.Views.Settings
                 if (!string.IsNullOrEmpty(location))
                 {
                     var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(location);
-                    AboutVersionText.Text = $"Version {fvi.ProductVersion ?? "2.1.0"}";
+                    AboutVersionText.Text = $"Version {fvi.ProductVersion ?? "2.2.0"}";
                 }
             }
             catch { /* Keep default text from XAML */ }
