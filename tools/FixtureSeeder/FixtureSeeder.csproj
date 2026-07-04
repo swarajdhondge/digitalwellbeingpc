@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Fixture seeder for the Pulse screenshot pipeline.
+
+    A tiny console app that writes believable (not empty) demo data into the
+    Pulse SQLite database so the captured screenshots show a realistic day/week.
+
+    It references the main app project on purpose: that gives it the REAL model
+    classes (with their SQLite attributes) and the REAL DB path resolver
+    (DatabaseService.GetDatabaseFilePath), so there is no schema guessing and no
+    drift. sqlite-net-pcl flows in transitively from that project reference.
+
+    Run it with "dotnet run" against this project; it writes to
+    %LocalAppData%\Pulse\digital_wellbeing.db by default, or to a redirected DB
+    file via the "db" argument (see Program.cs) to test without touching the
+    real database.
+  -->
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!-- Must match the app project's TFM so the ProjectReference is compatible. -->
+    <TargetFramework>net9.0-windows10.0.19041.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Pulse.FixtureSeeder</RootNamespace>
+    <AssemblyName>FixtureSeeder</AssemblyName>
+    <!-- This is dev tooling; keep it out of any normal solution build/pack. -->
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\digital-wellbeing-app\digital-wellbeing-app.csproj" />
+  </ItemGroup>
+
+</Project>
