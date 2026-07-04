@@ -283,10 +283,8 @@ namespace digital_wellbeing_app.ViewModels
             var threshold = _settingsService.LoadHarmfulThreshold();
             ThresholdLabel = $"ABOVE {(int)threshold} dB";
 
-            // — Screen Time (live from tracker, falls back to DB) —
-            var tsScreen = _screenTracker?.CurrentActiveTime
-                ?? TimeSpan.FromSeconds(
-                    DatabaseService.GetScreenTimePeriodForToday()?.AccumulatedActiveSeconds ?? 0);
+            // — Screen Time (single source of truth: live session + persisted) —
+            var tsScreen = LiveUsageProvider.GetTodayActiveTime();
             ScreenTime = TimeFormatHelper.FormatDuration(tsScreen);
 
             // — Daily goal / day ring —
@@ -327,21 +325,18 @@ namespace digital_wellbeing_app.ViewModels
             IsSoundWarning = tsHarm.TotalSeconds > 0;
             SoundStatus = IsSoundWarning ? "Loud" : "Normal";
 
-            // — App Usage & Top Apps —
-            var appSessions = DatabaseService.GetAppUsageSessionsForDate(today);
-            var tsApp = appSessions.Aggregate(
-                TimeSpan.Zero,
-                (sum, s) => sum + (s.EndTime - s.StartTime));
+            // — App Usage & Top Apps (shared "today so far": persisted + live session) —
+            var appEntries = LiveUsageProvider.GetTodayAppEntries();
+            var tsApp = appEntries.Aggregate(TimeSpan.Zero, (sum, e) => sum + e.Duration);
             AppTime = TimeFormatHelper.FormatDuration(tsApp);
 
-            if (appSessions.Count > 0)
+            if (appEntries.Count > 0)
             {
-                var grouped = appSessions
-                    .GroupBy(s => s.ExecutablePath)
-                    .Select(g => new {
-                        Path = g.Key,
-                        Name = g.First().AppName,
-                        Total = new TimeSpan(g.Sum(s => (s.EndTime - s.StartTime).Ticks))
+                var grouped = appEntries
+                    .Select(e => new {
+                        Path = e.ExecutablePath,
+                        Name = e.AppName,
+                        Total = e.Duration
                     })
                     .OrderByDescending(x => x.Total)
                     .Take(3)

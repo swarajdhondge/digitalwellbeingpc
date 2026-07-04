@@ -70,9 +70,14 @@ namespace digital_wellbeing_app.Services
             {
                 var dateKey = date.ToString("yyyy-MM-dd");
                 var period = periods.FirstOrDefault(p => p.SessionDate == dateKey);
-                
+
                 var totalSeconds = period?.AccumulatedActiveSeconds ?? 0;
-                
+
+                // Today's bucket must include the live session so the weekly chart's "today" bar
+                // matches the Dashboard's live headline instead of lagging by the flush interval.
+                if (date == DateTime.Today)
+                    totalSeconds = (int)LiveUsageProvider.GetTodayActiveTime().TotalSeconds;
+
                 result.Add(new DailyScreenTime
                 {
                     Date = date,
