@@ -78,6 +78,13 @@ namespace digital_wellbeing_app.Models
         /// Date key for queries (yyyy-MM-dd format)
         /// </summary>
         public string SessionDate { get; set; } = DateTime.Now.ToString("yyyy-MM-dd");
+
+        /// <summary>
+        /// Heartbeat updated periodically while the session is active. If the app crashes, orphan
+        /// recovery ends the session at this time instead of fabricating the full planned duration.
+        /// Stored in UTC. Default (MinValue) means "no heartbeat recorded" (legacy rows).
+        /// </summary>
+        public DateTime LastSeenUtc { get; set; } = DateTime.UtcNow;
     }
 
     /// <summary>

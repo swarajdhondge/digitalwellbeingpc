@@ -29,6 +29,11 @@ namespace digital_wellbeing_app.Services
         private static readonly TimeSpan WarnCooldown = TimeSpan.FromSeconds(30);
         private static readonly TimeSpan BlockCooldown = TimeSpan.FromSeconds(5); // Re-minimize faster
 
+        // Persist a heartbeat this often so crash recovery ends orphaned sessions near their real
+        // end instead of the fabricated planned duration.
+        private static readonly TimeSpan HeartbeatInterval = TimeSpan.FromSeconds(60);
+        private DateTime _lastHeartbeatUtc = DateTime.MinValue;
+
         /// <summary>
         /// System apps that should never be blocked (Windows shell, our app, etc.)
         /// </summary>
@@ -149,13 +154,24 @@ namespace digital_wellbeing_app.Services
 
                 foreach (var session in todaySessions)
                 {
-                    // Orphaned = no end time set (EndTime defaults to MinValue)
-                    if (session.EndTime == DateTime.MinValue && !session.Completed)
+                    // Orphaned = still active (no real end time) and never completed. Handle both
+                    // null and MinValue, since older rows may have persisted either.
+                    var hasEnd = session.EndTime.HasValue && session.EndTime.Value > DateTime.MinValue;
+                    if (!hasEnd && !session.Completed)
                     {
-                        session.EndTime = session.StartTime.AddMinutes(session.PlannedDurationMinutes);
+                        // Recover to the last heartbeat (when the app was last alive) rather than
+                        // fabricating the full planned duration. Fall back to planned end for legacy
+                        // rows that predate the heartbeat, and never end before the session started.
+                        var recoveredEnd = session.LastSeenUtc > DateTime.MinValue
+                            ? session.LastSeenUtc.ToLocalTime()
+                            : session.StartTime.AddMinutes(session.PlannedDurationMinutes);
+                        if (recoveredEnd < session.StartTime)
+                            recoveredEnd = session.StartTime;
+
+                        session.EndTime = recoveredEnd;
                         session.Completed = false;
                         DatabaseService.SaveFocusSession(session);
-                        System.Diagnostics.Debug.WriteLine($"[Focus] Recovered orphaned session from {session.StartTime}");
+                        System.Diagnostics.Debug.WriteLine($"[Focus] Recovered orphaned session from {session.StartTime} to {recoveredEnd}");
                     }
                 }
             }
@@ -183,8 +199,10 @@ namespace digital_wellbeing_app.Services
                 PlannedDurationMinutes = durationMinutes,
                 EnforcementLevel = EnforcementLevel,
                 SessionDate = DateTime.Now.ToString("yyyy-MM-dd"),
-                Completed = false
+                Completed = false,
+                LastSeenUtc = DateTime.UtcNow
             };
+            _lastHeartbeatUtc = DateTime.UtcNow;
 
             // Persist immediately so crash recovery can find it
             DatabaseService.SaveFocusSession(_currentSession);
@@ -435,6 +453,16 @@ namespace digital_wellbeing_app.Services
             {
                 EndSession(true);
                 return;
+            }
+
+            // Persist a lightweight heartbeat so a crash mid-session recovers to (roughly) now.
+            var utcNow = DateTime.UtcNow;
+            if (utcNow - _lastHeartbeatUtc >= HeartbeatInterval)
+            {
+                _lastHeartbeatUtc = utcNow;
+                _currentSession.LastSeenUtc = utcNow;
+                try { DatabaseService.SaveFocusSession(_currentSession); }
+                catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"[Focus] Heartbeat save failed: {ex.Message}"); }
             }
 
             SessionTick?.Invoke();
