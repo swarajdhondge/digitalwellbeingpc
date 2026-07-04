@@ -1,0 +1,37 @@
+name: Feature request
+description: Suggest an idea or improvement for Pulse.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for helping shape Pulse! Please search existing issues and discussions first.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Is your request related to a problem or frustration? Describe it.
+      placeholder: I'm always frustrated when...
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: What would you like Pulse to do?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Any alternative solutions or features you've considered.
+    validations:
+      required: false
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Mockups, references to how other apps do this, etc.
+    validations:
+      required: false

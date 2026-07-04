@@ -342,7 +342,7 @@
                     </StackPanel>
                     <TextBlock Text="Track your screen time, app usage, and audio exposure to maintain a healthy digital lifestyle."
                                Style="{StaticResource Pulse.Body2}" Margin="0,0,0,12"/>
-                    <TextBlock Text="Licensed under the Apache License 2.0" Style="{StaticResource Pulse.Muted}" Margin="0,0,0,16"/>
+                    <TextBlock Text="Licensed under the GNU General Public License v3.0" Style="{StaticResource Pulse.Muted}" Margin="0,0,0,16"/>
                     <StackPanel Orientation="Horizontal">
                         <Button Content="Check for updates" Click="CheckForUpdates_Click" Style="{StaticResource Pulse.Button.Ghost}" Padding="16,6" Margin="0,0,8,0"/>
                         <Border Background="{DynamicResource Card2}" CornerRadius="{StaticResource Radius.SM}" Padding="12,6" Cursor="Hand" MouseLeftButtonDown="OpenGitHub_Click">

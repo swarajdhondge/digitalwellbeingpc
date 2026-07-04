@@ -16,7 +16,7 @@
 - Platform-specific: `Platform/Windows/` (native interop, idle detection, focus changes)
 - WPF converters: `Converters/`
 - Tests: `Tests/Tests.csproj` (nested xUnit project)
-- Solution: `DigitalWellbeing.sln` (main app + installer)
+- Solution: `DigitalWellbeing.sln` (main app + unit tests + UI tests)
 
 ## Commands
 ```powershell
