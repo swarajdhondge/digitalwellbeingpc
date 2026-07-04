@@ -110,6 +110,7 @@ namespace digital_wellbeing_app
             // categories reconcile with the Dashboard/Report category attribution.
             try { Services.DatabaseService.NormalizeAppCategoryKeys(); }
             catch (Exception ex) { Services.LogService.Warning($"AppCategory normalization skipped: {ex.Message}"); }
+            RunDailyRetentionPurge();
             ScreenTracker = new CoreLogic.ScreenTimeTracker();
             ScreenTracker.Start();
             AppTracker = new CoreLogic.AppUsageTracker();
@@ -146,6 +147,35 @@ namespace digital_wellbeing_app
         /// Handles unhandled exceptions on the UI dispatcher thread.
         /// Shows a user-friendly error dialog and logs the crash.
         /// </summary>
+        /// <summary>
+        /// Run the usage-history retention purge at most once per calendar day. Keeps the DB from
+        /// growing forever; the retention window is configurable in Settings (0 = keep forever).
+        /// </summary>
+        private static void RunDailyRetentionPurge()
+        {
+            try
+            {
+                var settings = new Services.SettingsService();
+                var today = DateOnly.FromDateTime(DateTime.Today).DayNumber;
+                if (settings.LoadLastRetentionPurgeDay() == today)
+                    return;
+
+                var months = settings.LoadRetentionMonths();
+                if (months > 0)
+                {
+                    var cutoff = DateTime.Today.AddMonths(-months);
+                    Services.DatabaseService.PurgeDataOlderThan(cutoff);
+                    Services.LogService.Info($"Retention purge: removed usage older than {cutoff:yyyy-MM-dd}");
+                }
+
+                settings.SaveLastRetentionPurgeDay(today);
+            }
+            catch (Exception ex)
+            {
+                Services.LogService.Warning($"Retention purge skipped: {ex.Message}");
+            }
+        }
+
         private void OnDispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
             Services.LogService.Error("Unhandled UI exception", e.Exception);

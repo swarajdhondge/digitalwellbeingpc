@@ -486,6 +486,48 @@ namespace digital_wellbeing_app.Services
                 conn.DeleteAll<ScreenTimeSession>();
                 conn.DeleteAll<SoundUsageSession>();
                 conn.DeleteAll<FocusSession>();
+                conn.Execute("VACUUM");
+            }
+        }
+
+        /// <summary>
+        /// Delete all usage rows older than <paramref name="cutoff"/> and reclaim space. Used by
+        /// the daily retention job. App-category preferences are intentionally preserved.
+        /// </summary>
+        public static void PurgeDataOlderThan(DateTime cutoff)
+        {
+            var cutoffKey = cutoff.ToString("yyyy-MM-dd");
+            lock (_dbLock)
+            {
+                var conn = GetConnection();
+                conn.Execute("DELETE FROM AppUsageSession WHERE StartTime < ?", cutoff);
+                conn.Execute("DELETE FROM SoundUsageSession WHERE StartTime < ?", cutoff);
+                conn.Execute("DELETE FROM FocusSession WHERE StartTime < ?", cutoff);
+                conn.Execute("DELETE FROM ScreenTimeSession WHERE SessionDate < ?", cutoffKey);
+                conn.Execute("DELETE FROM ScreenTimePeriod WHERE SessionDate < ?", cutoffKey);
+                conn.Execute("VACUUM");
+            }
+        }
+
+        /// <summary>
+        /// Delete usage rows whose local day falls within [startDate, endDate] (inclusive) and
+        /// reclaim space. Backs the Settings "delete a date range" option.
+        /// </summary>
+        public static void DeleteDataInRange(DateTime startDate, DateTime endDate)
+        {
+            var rangeStart = startDate.Date;
+            var rangeEndExclusive = endDate.Date.AddDays(1);
+            var startKey = rangeStart.ToString("yyyy-MM-dd");
+            var endKey = endDate.Date.ToString("yyyy-MM-dd");
+            lock (_dbLock)
+            {
+                var conn = GetConnection();
+                conn.Execute("DELETE FROM AppUsageSession WHERE StartTime >= ? AND StartTime < ?", rangeStart, rangeEndExclusive);
+                conn.Execute("DELETE FROM SoundUsageSession WHERE StartTime >= ? AND StartTime < ?", rangeStart, rangeEndExclusive);
+                conn.Execute("DELETE FROM FocusSession WHERE StartTime >= ? AND StartTime < ?", rangeStart, rangeEndExclusive);
+                conn.Execute("DELETE FROM ScreenTimeSession WHERE SessionDate >= ? AND SessionDate <= ?", startKey, endKey);
+                conn.Execute("DELETE FROM ScreenTimePeriod WHERE SessionDate >= ? AND SessionDate <= ?", startKey, endKey);
+                conn.Execute("VACUUM");
             }
         }
 

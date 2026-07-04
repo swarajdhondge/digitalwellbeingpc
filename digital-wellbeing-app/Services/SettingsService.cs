@@ -364,6 +364,25 @@ namespace digital_wellbeing_app.Services
             SaveToDisk();
         }
 
+        // --- Data retention ---
+        /// <summary>How many months of usage history to keep. 0 = keep forever. Default 12.</summary>
+        public int LoadRetentionMonths() => LoadIntSetting("RetentionMonths", 12);
+
+        public void SaveRetentionMonths(int months)
+        {
+            _values["RetentionMonths"] = months;
+            SaveToDisk();
+        }
+
+        /// <summary>DateOnly.DayNumber of the last day the retention purge ran (0 = never).</summary>
+        public int LoadLastRetentionPurgeDay() => LoadIntSetting("LastRetentionPurgeDay", 0);
+
+        public void SaveLastRetentionPurgeDay(int dayNumber)
+        {
+            _values["LastRetentionPurgeDay"] = dayNumber;
+            SaveToDisk();
+        }
+
         // --- Wind Down persistence ---
         public bool LoadWindDownEnabled()
         {
