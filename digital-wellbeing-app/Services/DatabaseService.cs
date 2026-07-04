@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using SQLite;
+using digital_wellbeing_app.Helpers;
 using digital_wellbeing_app.Models;
 
 namespace digital_wellbeing_app.Services
@@ -18,11 +19,18 @@ namespace digital_wellbeing_app.Services
         private const string AppFolderName = "Pulse";
         private const string DbFileName = "digital_wellbeing.db";
 
+        // Optional override for the DB file path. Used by the test suite to isolate tests from
+        // the user's real database; null in normal operation.
+        private static string? _dbPathOverride;
+
         // full path to the DB, under %LocalAppData%
         private static string DbPath
         {
             get
             {
+                if (_dbPathOverride != null)
+                    return _dbPathOverride;
+
                 var localAppData = Environment.GetFolderPath(
                     Environment.SpecialFolder.LocalApplicationData);
                 var folder = Path.Combine(localAppData, AppFolderName);
@@ -35,6 +43,23 @@ namespace digital_wellbeing_app.Services
                 }
 
                 return Path.Combine(folder, DbFileName);
+            }
+        }
+
+        /// <summary>
+        /// Redirect the database to a specific file and reset the open connection. Intended for
+        /// the test suite so it never touches the user's real database. Passing a path under a
+        /// throwaway temp directory gives each test run an isolated, deterministic store.
+        /// </summary>
+        public static void SetDatabasePathForTesting(string path)
+        {
+            lock (_dbLock)
+            {
+                CloseConnection();
+                var dir = Path.GetDirectoryName(path);
+                if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                _dbPathOverride = path;
             }
         }
 
@@ -288,6 +313,51 @@ namespace digital_wellbeing_app.Services
                 return GetConnection()
                        .Table<AppCategory>()
                        .FirstOrDefault(x => x.AppIdentifier == appIdentifier);
+            }
+        }
+
+        /// <summary>
+        /// One-time (idempotent) migration that rewrites each <see cref="AppCategory.AppIdentifier"/>
+        /// to its canonical key (see <see cref="AppIdentity.NormalizeKey(string?)"/>). Legacy rows
+        /// stored full paths or mixed casing, which never matched the process-name lookups used by
+        /// the reports. Rows that collapse to the same key are merged, keeping the most recently
+        /// updated category. Safe to run on every startup: a fully-normalized table produces no writes.
+        /// </summary>
+        public static void NormalizeAppCategoryKeys()
+        {
+            lock (_dbLock)
+            {
+                var conn = GetConnection();
+                var rows = conn.Table<AppCategory>().ToList();
+                if (rows.Count == 0) return;
+
+                // Group by the canonical key; keep the newest row per key.
+                var groups = rows
+                    .GroupBy(r => AppIdentity.NormalizeKey(
+                        !string.IsNullOrWhiteSpace(r.ExecutablePath) ? r.ExecutablePath : r.AppIdentifier));
+
+                foreach (var group in groups)
+                {
+                    var key = group.Key;
+                    var ordered = group.OrderByDescending(r => r.LastUpdated).ToList();
+                    var winner = ordered[0];
+
+                    // Delete any duplicate rows that collapse to the same key.
+                    foreach (var dup in ordered.Skip(1))
+                        conn.Delete(dup);
+
+                    // Rewrite the surviving row's identifier if it isn't already canonical.
+                    if (string.IsNullOrEmpty(key))
+                    {
+                        // Un-normalizable (blank) identifier — drop the orphan row.
+                        conn.Delete(winner);
+                    }
+                    else if (winner.AppIdentifier != key)
+                    {
+                        winner.AppIdentifier = key;
+                        conn.Update(winner);
+                    }
+                }
             }
         }
 

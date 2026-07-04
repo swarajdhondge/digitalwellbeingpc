@@ -349,7 +349,8 @@ namespace digital_wellbeing_app.Views.Focus
                     
                     var display = new AppCategoryDisplay
                     {
-                        AppIdentifier = app.AppName,
+                        // Canonical identity so category writes/reads reconcile with reports.
+                        AppIdentifier = AppIdentity.NormalizeKey(app.ExecutablePath, app.AppName),
                         AppName = AppNameService.GetDisplayName(app.AppName, app.ExecutablePath),
                         ExecutablePath = app.ExecutablePath,
                         Category = CategoryToDisplayName(category),

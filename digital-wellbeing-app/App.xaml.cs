@@ -106,6 +106,10 @@ namespace digital_wellbeing_app
 
             // Initialize database & trackers
             Services.DatabaseService.GetConnection();
+            // One-time (idempotent) migration: canonicalize app-category keys so Focus Mode
+            // categories reconcile with the Dashboard/Report category attribution.
+            try { Services.DatabaseService.NormalizeAppCategoryKeys(); }
+            catch (Exception ex) { Services.LogService.Warning($"AppCategory normalization skipped: {ex.Message}"); }
             ScreenTracker = new CoreLogic.ScreenTimeTracker();
             ScreenTracker.Start();
             AppTracker = new CoreLogic.AppUsageTracker();

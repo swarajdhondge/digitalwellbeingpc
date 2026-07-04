@@ -12,6 +12,9 @@ namespace digital_wellbeing_app.Tests.ScreenTime
         {
             // Arrange
             var tracker = new ScreenTimeTracker();
+            // Force the "active" path regardless of real machine input, so accumulation is
+            // deterministic on idle dev machines and headless CI.
+            tracker.IdleTimeProvider = () => TimeSpan.Zero;
             var beforeStartTime = tracker.CurrentActiveTime; // likely zero on fresh day
 
             // Act

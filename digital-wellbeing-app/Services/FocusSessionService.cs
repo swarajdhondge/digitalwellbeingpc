@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using digital_wellbeing_app.Helpers;
 using digital_wellbeing_app.Models;
 using digital_wellbeing_app.Platform.Windows;
 
@@ -234,7 +235,11 @@ namespace digital_wellbeing_app.Services
         {
             if (string.IsNullOrEmpty(appIdentifier)) return false;
 
-            // Never block system apps
+            // Collapse process name / path variants to one canonical key.
+            appIdentifier = AppIdentity.NormalizeKey(appIdentifier);
+            if (appIdentifier.Length == 0) return false;
+
+            // Never block system apps (exclusion entries are already extension-less process names)
             if (SystemExclusionList.Contains(appIdentifier))
                 return false;
 
@@ -263,12 +268,19 @@ namespace digital_wellbeing_app.Services
         /// </summary>
         public void SetAppCategory(string appIdentifier, string appName, string executablePath, AppCategoryType category)
         {
-            _appCategories[appIdentifier] = category;
+            // Store under the canonical key so runtime enforcement (keyed by process name) and
+            // the reports (keyed by normalized executable path) both resolve to the same row.
+            // Honor the caller's explicit identifier first, falling back to the path/name.
+            var key = AppIdentity.NormalizeKey(appIdentifier);
+            if (key.Length == 0) key = AppIdentity.NormalizeKey(executablePath, appName);
+            if (key.Length == 0) return;
+
+            _appCategories[key] = category;
 
             // Save to database
             DatabaseService.SaveAppCategory(new AppCategory
             {
-                AppIdentifier = appIdentifier,
+                AppIdentifier = key,
                 AppName = appName,
                 ExecutablePath = executablePath,
                 Category = category,
@@ -281,7 +293,8 @@ namespace digital_wellbeing_app.Services
         /// </summary>
         public AppCategoryType GetAppCategory(string appIdentifier)
         {
-            if (_appCategories.TryGetValue(appIdentifier, out var category))
+            var key = AppIdentity.NormalizeKey(appIdentifier);
+            if (_appCategories.TryGetValue(key, out var category))
                 return category;
             return AppCategoryType.Uncategorized;
         }
@@ -322,12 +335,13 @@ namespace digital_wellbeing_app.Services
         /// </summary>
         public void AllowAppForSession(string appIdentifier)
         {
-            if (!string.IsNullOrEmpty(appIdentifier))
+            var key = AppIdentity.NormalizeKey(appIdentifier);
+            if (key.Length > 0)
             {
-                _sessionOverrideApps.Add(appIdentifier);
+                _sessionOverrideApps.Add(key);
                 // Remove from action tracking since it's now allowed
-                _appLastActionTime.Remove(appIdentifier);
-                System.Diagnostics.Debug.WriteLine($"[Focus] App allowed for session: {appIdentifier}");
+                _appLastActionTime.Remove(key);
+                System.Diagnostics.Debug.WriteLine($"[Focus] App allowed for session: {key}");
             }
         }
 
@@ -338,10 +352,11 @@ namespace digital_wellbeing_app.Services
         public void DismissWarning(string appIdentifier)
         {
             // Remove the cooldown entry so next time they go to this app, they get warned immediately
-            if (!string.IsNullOrEmpty(appIdentifier))
+            var key = AppIdentity.NormalizeKey(appIdentifier);
+            if (key.Length > 0)
             {
-                _appLastActionTime.Remove(appIdentifier);
-                System.Diagnostics.Debug.WriteLine($"[Focus] Warning dismissed for: {appIdentifier}");
+                _appLastActionTime.Remove(key);
+                System.Diagnostics.Debug.WriteLine($"[Focus] Warning dismissed for: {key}");
             }
         }
 
@@ -350,7 +365,7 @@ namespace digital_wellbeing_app.Services
         /// </summary>
         public bool IsAppOverriddenForSession(string appIdentifier)
         {
-            return _sessionOverrideApps.Contains(appIdentifier);
+            return _sessionOverrideApps.Contains(AppIdentity.NormalizeKey(appIdentifier));
         }
 
         /// <summary>
@@ -399,7 +414,10 @@ namespace digital_wellbeing_app.Services
                 var categories = DatabaseService.GetAllAppCategories();
                 foreach (var cat in categories)
                 {
-                    _appCategories[cat.AppIdentifier] = cat.Category;
+                    // Normalize on load so legacy rows (path-keyed) map to the canonical key.
+                    var key = AppIdentity.NormalizeKey(cat.AppIdentifier);
+                    if (key.Length > 0)
+                        _appCategories[key] = cat.Category;
                 }
             }
             catch
@@ -438,7 +456,10 @@ namespace digital_wellbeing_app.Services
                 using var process = Process.GetProcessById((int)processId);
                 if (process == null) return;
 
-                var appIdentifier = process.ProcessName;
+                // displayName is shown in the warning UI; appIdentifier is the canonical
+                // internal key used for category lookup, cooldowns and session overrides.
+                var displayName = process.ProcessName;
+                var appIdentifier = AppIdentity.NormalizeKey(displayName);
 
                 // Check if this is a distracting app
                 if (!IsDistractingApp(appIdentifier))
@@ -474,7 +495,7 @@ namespace digital_wellbeing_app.Services
                     case FocusEnforcementLevel.Warn:
                         System.Diagnostics.Debug.WriteLine($"[Focus] Warn mode - showing notification");
                         RecordDistractionWarning();
-                        DistractingAppDetected?.Invoke(appIdentifier, execPath);
+                        DistractingAppDetected?.Invoke(displayName, execPath);
                         break;
 
                     case FocusEnforcementLevel.Block:
@@ -486,7 +507,7 @@ namespace digital_wellbeing_app.Services
                         
                         // Show notification (only if minimize failed OR first time)
                         RecordDistractionWarning();
-                        DistractingAppDetected?.Invoke(appIdentifier, execPath);
+                        DistractingAppDetected?.Invoke(displayName, execPath);
                         break;
                 }
             }

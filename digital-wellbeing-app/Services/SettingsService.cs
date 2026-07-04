@@ -12,9 +12,15 @@ namespace digital_wellbeing_app.Services
         private readonly System.Collections.Generic.Dictionary<string, object> _values;
         private static bool _aclApplied = false;
 
+        /// <summary>
+        /// Optional override for the settings folder. Used by the test suite to isolate tests from
+        /// the user's real settings.json; null in normal operation.
+        /// </summary>
+        public static string? FolderOverride;
+
         public SettingsService()
         {
-            var folder = System.IO.Path.Combine(
+            var folder = FolderOverride ?? System.IO.Path.Combine(
                 System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData),
                 FolderName);
 

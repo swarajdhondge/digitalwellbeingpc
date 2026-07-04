@@ -66,6 +66,13 @@ namespace digital_wellbeing_app.CoreLogic
         /// <summary>Event fired when tracking state changes</summary>
         public event EventHandler<TrackingState>? StateChanged;
 
+        /// <summary>
+        /// Source of the user's idle duration. Defaults to the real Win32 helper; overridable so
+        /// tests can drive the active/idle path deterministically. (Headless CI and idle machines
+        /// have no recent input, which would otherwise make activity-based accumulation flaky.)
+        /// </summary>
+        public Func<TimeSpan> IdleTimeProvider { get; set; } = WindowsIdleTimeHelper.GetIdleTime;
+
         public ScreenTimeTracker()
         {
             var (initialActive, start, sessions) = LoadSessionData();
@@ -171,7 +178,7 @@ namespace digital_wellbeing_app.CoreLogic
                 CheckDayRollover();
 
                 // Get current idle state
-                var idleTime = WindowsIdleTimeHelper.GetIdleTime();
+                var idleTime = IdleTimeProvider();
                 bool isUserIdle = idleTime.TotalSeconds > IdleThresholdSeconds;
                 bool isPassivelyConsuming = ActivityDetector.IsPassivelyConsuming();
 
