@@ -122,20 +122,21 @@ public sealed class ScreenshotCapture
         }
     }
 
-    /// <summary>Resize + reposition to a fixed, on-screen 1600x1000 rectangle.</summary>
+    /// <summary>Resize + reposition to a fixed, on-screen 1600x1000 rectangle (Normal state).</summary>
     private static void SizeWindow(Window window)
     {
         try
         {
-            // Ensure it is in the Normal state first (the custom chrome supports
-            // WindowPattern like the smoke tests use).
+            // Normal state keeps the content capped/centered exactly like the design;
+            // we avoid the transparent shadow margin by capturing the opaque WindowBorder
+            // element (see Shot) rather than the window bounds.
             window.Patterns.Window.PatternOrDefault?.SetWindowVisualState(WindowVisualState.Normal);
             Thread.Sleep(150);
 
             var transform = window.Patterns.Transform.PatternOrDefault;
             if (transform != null)
             {
-                if (transform.CanMove) transform.Move(60, 40);
+                if (transform.CanMove) transform.Move(40, 30);
                 if (transform.CanResize) transform.Resize(WinWidth, WinHeight);
             }
             window.SetForeground();
@@ -160,11 +161,35 @@ public sealed class ScreenshotCapture
         Find(window, "ThemeToggle").Click();
     }
 
+    // The window uses AllowsTransparency chrome: a 10px margin + drop shadow around the opaque
+    // WindowBorder, plus 8px rounded corners. Capturing the window bounds composites whatever is
+    // behind that transparent frame into the PNG. Capture the opaque WindowBorder element instead
+    // (deterministic bounds via its AutomationId), then trim only the rounded corners.
+    private const int CornerTrim = 10;
+
     private static void Shot(Window window, string path)
     {
         try { window.Focus(); window.SetForeground(); } catch { /* best effort */ }
         Thread.Sleep(250);
-        Capture.Element(window).ToFile(path);
+
+        // Opaque root Border (AutomationProperties.AutomationId="WindowBorder" in MainWindow.xaml).
+        var target = window.FindFirstDescendant(cf => cf.ByAutomationId("WindowBorder"))
+                     ?? (AutomationElement)window;
+
+        using var capture = Capture.Element(target);
+        var bmp = capture.Bitmap; // owned by `capture`; do not dispose separately
+
+        var inset = CornerTrim;
+        if (bmp.Width <= inset * 2 || bmp.Height <= inset * 2)
+        {
+            bmp.Save(path, System.Drawing.Imaging.ImageFormat.Png);
+            return;
+        }
+
+        // Trim the rounded-corner band so no background shows through at the corners.
+        var rect = new System.Drawing.Rectangle(inset, inset, bmp.Width - inset * 2, bmp.Height - inset * 2);
+        using var cropped = bmp.Clone(rect, bmp.PixelFormat);
+        cropped.Save(path, System.Drawing.Imaging.ImageFormat.Png);
     }
 
     private static AutomationElement Find(Window window, string automationId, int timeoutMs = 8000)

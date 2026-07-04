@@ -111,9 +111,11 @@ for (int d = DaysBack; d >= 0; d--)
     var dayEnd = day.AddHours(22);
     if (isToday)
     {
-        // Only seed up to "now" for today so the dashboard reads as a live day.
-        dayEnd = DateTime.Now;
-        if (cursor > dayEnd) cursor = day.AddHours(8);
+        // Seed today as a believable partial day up to mid-afternoon, independent of the
+        // actual wall-clock time the seeder runs (so screenshots are never empty when captured
+        // early in the morning). The dashboard reads today's total live, so this drives its hero.
+        dayEnd = day.AddHours(15).AddMinutes(rng.Next(0, 50));
+        targetMinutes = 195 + rng.Next(-20, 40); // ~3h of "so far" activity
     }
 
     int accumulatedSeconds = 0;

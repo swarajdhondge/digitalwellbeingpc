@@ -18,6 +18,7 @@
 
     <!-- Window container with soft shadow -->
     <Border x:Name="WindowBorder"
+            AutomationProperties.AutomationId="WindowBorder"
             Background="{DynamicResource Bg}"
             CornerRadius="8"
             Margin="10">
