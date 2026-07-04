@@ -83,6 +83,15 @@ public sealed class ScreenshotCapture
         try { File.WriteAllText(Path.Combine(exeDir, "theme.json"), "{\"Mode\":\"Dark\"}"); }
         catch { /* best effort */ }
 
+        // Drop a flag file under %LocalAppData%\Pulse (the app's known data dir) so it enters
+        // screenshot mode (edge-to-edge opaque window) — captures then have zero desktop bleed and
+        // need no cropping. A fixed absolute path is reliable where env vars / exe-dir are not.
+        var pulseDir = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Pulse");
+        Directory.CreateDirectory(pulseDir);
+        var screenshotFlag = Path.Combine(pulseDir, ".screenshot-mode");
+        try { File.WriteAllText(screenshotFlag, "1"); } catch { /* best effort */ }
+
         var app = Application.Launch(new ProcessStartInfo(exe) { WorkingDirectory = exeDir });
         using var automation = new UIA3Automation();
         try
@@ -110,6 +119,7 @@ public sealed class ScreenshotCapture
             try { app.Close(); } catch { /* ignore */ }
             try { app.Kill(); } catch { /* ignore */ }
             try { app.Dispose(); } catch { /* ignore */ }
+            try { File.Delete(screenshotFlag); } catch { /* ignore */ }
         }
     }
 
@@ -161,35 +171,36 @@ public sealed class ScreenshotCapture
         Find(window, "ThemeToggle").Click();
     }
 
-    // The window uses AllowsTransparency chrome: a 10px margin + drop shadow around the opaque
-    // WindowBorder, plus 8px rounded corners. Capturing the window bounds composites whatever is
-    // behind that transparent frame into the PNG. Capture the opaque WindowBorder element instead
-    // (deterministic bounds via its AutomationId), then trim only the rounded corners.
-    private const int CornerTrim = 10;
+    [System.Runtime.InteropServices.DllImport("dwmapi.dll")]
+    private static extern int DwmGetWindowAttribute(IntPtr hwnd, int attr, out RECT rect, int size);
+
+    [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
+    private struct RECT { public int Left, Top, Right, Bottom; }
+
+    private const int DWMWA_EXTENDED_FRAME_BOUNDS = 9;
 
     private static void Shot(Window window, string path)
     {
         try { window.Focus(); window.SetForeground(); } catch { /* best effort */ }
         Thread.Sleep(250);
 
-        // Opaque root Border (AutomationProperties.AutomationId="WindowBorder" in MainWindow.xaml).
-        var target = window.FindFirstDescendant(cf => cf.ByAutomationId("WindowBorder"))
-                     ?? (AutomationElement)window;
-
-        using var capture = Capture.Element(target);
-        var bmp = capture.Bitmap; // owned by `capture`; do not dispose separately
-
-        var inset = CornerTrim;
-        if (bmp.Width <= inset * 2 || bmp.Height <= inset * 2)
+        // FlaUI's Capture.Element uses the UIA BoundingRectangle, which for this WPF
+        // AllowsTransparency window extends beyond the visible window and composites the desktop
+        // into the edges. Capture the TRUE visible bounds from DWM instead (in screenshot mode the
+        // window is opaque edge-to-edge, so this is exactly the app with no bleed and no content
+        // cut). Fall back to element capture if DWM bounds are unavailable.
+        var hwnd = window.Properties.NativeWindowHandle.ValueOrDefault;
+        if (hwnd != IntPtr.Zero &&
+            DwmGetWindowAttribute(hwnd, DWMWA_EXTENDED_FRAME_BOUNDS, out var r, System.Runtime.InteropServices.Marshal.SizeOf<RECT>()) == 0 &&
+            r.Right > r.Left && r.Bottom > r.Top)
         {
-            bmp.Save(path, System.Drawing.Imaging.ImageFormat.Png);
-            return;
+            var rect = new System.Drawing.Rectangle(r.Left, r.Top, r.Right - r.Left, r.Bottom - r.Top);
+            Capture.Rectangle(rect).ToFile(path);
         }
-
-        // Trim the rounded-corner band so no background shows through at the corners.
-        var rect = new System.Drawing.Rectangle(inset, inset, bmp.Width - inset * 2, bmp.Height - inset * 2);
-        using var cropped = bmp.Clone(rect, bmp.PixelFormat);
-        cropped.Save(path, System.Drawing.Imaging.ImageFormat.Png);
+        else
+        {
+            Capture.Element(window).ToFile(path);
+        }
     }
 
     private static AutomationElement Find(Window window, string automationId, int timeoutMs = 8000)

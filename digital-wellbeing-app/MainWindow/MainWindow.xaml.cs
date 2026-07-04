@@ -55,6 +55,27 @@ namespace digital_wellbeing_app.MainWindow
         {
             InitializeComponent();
 
+            // Screenshot mode (flag file dropped by the capture pipeline under %LocalAppData%\Pulse):
+            // make the window edge-to-edge opaque so captures have no desktop bleed and need no
+            // cropping. The transparent frame is the Window's own Background="Transparent" (needed
+            // for the drop shadow) plus WindowBorder's 10px margin + rounded corners; an opaque
+            // window background fills all of it. A file flag under the known DB folder is used
+            // because env vars don't reliably reach the FlaUI-launched process.
+            try
+            {
+                var flag = System.IO.Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    "Pulse", ".screenshot-mode");
+                if (System.IO.File.Exists(flag))
+                {
+                    Background = System.Windows.Media.Brushes.Black;
+                    WindowBorder.Margin = new Thickness(0);
+                    WindowBorder.CornerRadius = new CornerRadius(0);
+                    WindowBorder.Effect = null;
+                }
+            }
+            catch { /* never let screenshot mode break startup */ }
+
             // Set version dynamically from assembly PE file version info
             try
             {

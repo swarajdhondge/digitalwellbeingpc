@@ -113,8 +113,8 @@ export default function Home() {
               <img
                 src="/screenshots/dashboard.png"
                 alt="Pulse dashboard showing screen time, top apps, and weekly trends"
-                width={1400}
-                height={900}
+                width={1600}
+                height={1000}
                 className="w-full"
               />
             </div>
