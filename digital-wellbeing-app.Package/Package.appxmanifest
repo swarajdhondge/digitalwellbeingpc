@@ -15,7 +15,6 @@
   <Properties>
     <DisplayName>Pulse - Digital Wellbeing PC</DisplayName>
     <PublisherDisplayName>Swaraj Dhondge</PublisherDisplayName>
-    <!-- TODO(assets): produce real 50x50 PNG via scripts\generate-store-assets.ps1 -->
     <Logo>Images\StoreLogo.png</Logo>
   </Properties>
 
@@ -41,11 +40,10 @@
         BackgroundColor="transparent"
         Square150x150Logo="Images\Square150x150Logo.png"
         Square44x44Logo="Images\Square44x44Logo.png">
-        <!-- TODO(assets): all logo PNGs below are placeholders until a >=512px master exists -->
         <uap:DefaultTile
           Wide310x150Logo="Images\Wide310x150Logo.png"
           Square310x310Logo="Images\LargeTile.png"
-          Square71x71Logo="Images\SmallTile.png">
+          Square71x71Logo="Images\Square71x71Logo.png">
           <uap:ShowNameOnTiles>
             <uap:ShowOn Tile="square150x150Logo" />
             <uap:ShowOn Tile="wide310x150Logo" />

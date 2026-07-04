@@ -47,7 +47,7 @@
 #>
 [CmdletBinding()]
 param(
-    [string]$Master = "$PSScriptRoot\..\..\digital-wellbeing-app\Resources\Icons\digital-balance-icon-512.png",
+    [string]$Master = "$PSScriptRoot\..\..\digital-wellbeing-app\Resources\Icons\digital-balance-icon-1024.png",
     [string]$OutDir = "$PSScriptRoot\..\Images"
 )
 
