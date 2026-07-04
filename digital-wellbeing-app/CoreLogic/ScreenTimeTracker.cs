@@ -161,6 +161,33 @@ namespace digital_wellbeing_app.CoreLogic
             StateChanged?.Invoke(this, TrackingState.Active);
         }
 
+        /// <summary>
+        /// Force-flush persisted data and restart the current segment at the new wall-clock time.
+        /// Called on a system clock/timezone change so day buckets stay coherent. Screen-time
+        /// buckets are keyed by local date (yyyy-MM-dd); a mid-session clock jump would otherwise
+        /// split one activity across days between the save-time and query-time keys.
+        /// </summary>
+        public void HandleTimeChanged()
+        {
+            lock (_stateLock)
+            {
+                if (_state == TrackingState.Active)
+                {
+                    SaveSessionData();
+                    SaveCurrentScreenSession();
+                }
+
+                CheckDayRollover();
+
+                var now = DateTime.Now;
+                _currentSegmentStart = now;
+                _currentSegmentAccumulated = 0;
+                _continuousSessionStart = now;
+                _continuousSessionSeconds = 0;
+                _lastSaved = now;
+            }
+        }
+
         public void Dispose()
         {
             _timer.Stop();

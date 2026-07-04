@@ -111,6 +111,33 @@ namespace digital_wellbeing_app.CoreLogic
             }
         }
 
+        /// <summary>
+        /// Force-close the current app segment and restart a fresh one for the same app at the new
+        /// wall-clock time. Called on a system clock/timezone change so a single session cannot
+        /// straddle two local-date buckets. Reversed/oversized intervals from a backward jump are
+        /// rejected by DatabaseService, so no corrupt row is written.
+        /// </summary>
+        public void FlushCurrentSession()
+        {
+            lock (_sessionLock)
+            {
+                if (_currentSession == null) return;
+
+                var now = DateTime.Now;
+                _currentSession.EndTime = now;
+                SaveSessionToDb(_currentSession);
+
+                _currentSession = new AppUsageSession
+                {
+                    AppName = _currentSession.AppName,
+                    ExecutablePath = _currentSession.ExecutablePath,
+                    WindowTitle = _currentSession.WindowTitle,
+                    StartTime = now
+                };
+                _lastSaved = now;
+            }
+        }
+
         private void OnAppChanged(Process? process)
         {
             bool shouldNotify = false;

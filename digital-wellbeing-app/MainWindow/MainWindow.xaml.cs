@@ -102,6 +102,7 @@ namespace digital_wellbeing_app.MainWindow
             // Subscribe to system events for pause/resume of services
             SystemEvents.SessionSwitch += OnSystemSessionSwitch;
             SystemEvents.PowerModeChanged += OnSystemPowerModeChanged;
+            SystemEvents.TimeChanged += OnSystemTimeChanged;
         }
 
         private void InitFocusSession()
@@ -927,6 +928,7 @@ namespace digital_wellbeing_app.MainWindow
             // Unsubscribe from system events
             SystemEvents.SessionSwitch -= OnSystemSessionSwitch;
             SystemEvents.PowerModeChanged -= OnSystemPowerModeChanged;
+            SystemEvents.TimeChanged -= OnSystemTimeChanged;
 
             _goalCheckTimer?.Stop();
             _breakReminderService?.Dispose();
@@ -1030,6 +1032,26 @@ namespace digital_wellbeing_app.MainWindow
                     _windDownService?.Start(resetNotification: false);
                     System.Diagnostics.Debug.WriteLine("[System] Session unlocked - services resumed");
                     break;
+            }
+        }
+
+        /// <summary>
+        /// Handle a system clock or timezone change. Usage buckets are keyed by local date, so a
+        /// mid-session jump would otherwise split one activity across day buckets. Force both
+        /// trackers to close and restart their current segments at the new wall-clock time.
+        /// </summary>
+        private void OnSystemTimeChanged(object? sender, EventArgs e)
+        {
+            try
+            {
+                var app = System.Windows.Application.Current as App;
+                app?.ScreenTracker?.HandleTimeChanged();
+                app?.AppTracker?.FlushCurrentSession();
+                Services.LogService.Info("System time changed - tracker segments flushed");
+            }
+            catch (Exception ex)
+            {
+                Services.LogService.Warning($"Time-change flush error: {ex.Message}");
             }
         }
 
