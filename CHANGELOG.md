@@ -1,5 +1,28 @@
 # Changelog
 
+## [v2.2.0] - 2026-07-05
+
+Release-hardening: real data-consistency fixes, a Microsoft Store channel, an open-source relicense, and a repeatable screenshot pipeline.
+
+### Data accuracy
+- **Categories now count.** Focus-Mode app categories are attributed correctly on the Dashboard "Categories" tile and the Weekly Report "Focus vs Leisure" — previously everything showed as Uncategorized because lookups keyed on a process name but were queried by full path.
+- **Consistent "today" everywhere.** The Dashboard, App Usage page, and reports now read today's totals through one shared source (persisted rows + the live session), so App Time and Screen Time agree across the app instead of drifting by up to the 5-minute save interval.
+- **Corrupt rows can't poison totals.** Session writes are validated (no reversed intervals, no >24h durations) and reads filter bad rows; a clock/timezone change mid-session flushes the trackers so a day's usage can't split across buckets.
+- **Truthful exports & recovery.** Sound CSV exports now include actual listening/harmful seconds (not just wall-clock span); a crashed focus session recovers to its last heartbeat instead of its full planned length.
+- **Housekeeping.** Configurable retention (default 12 months) with a daily purge + VACUUM, and a Settings option to delete a specific date range.
+
+### Microsoft Store
+- Official **Microsoft Store** channel (MSIX) alongside the existing GitHub/Velopack build, from one codebase. Runtime channel detection disables self-update and switches launch-at-startup to the OS StartupTask API when installed from the Store.
+
+### Open source & privacy
+- Relicensed to **GPL-3.0** with third-party notices; added `PRIVACY.md`, `SECURITY.md`, `CONTRIBUTING.md`, a Code of Conduct, and issue/PR templates.
+
+### Tooling
+- Repeatable, DPI-correct **screenshot pipeline** (FlaUI + fixture seeder) — README/site screenshots are generated full and uncropped, in Light and Dark.
+- CI: test-gated release pipeline (Velopack + MSIX + SHA256SUMS), PR build/test + site build, winget auto-publish, and single-sourced versioning from the git tag.
+
+---
+
 ## [v2.1.0] - 2026-05-31
 
 ### Pulse Redesign
