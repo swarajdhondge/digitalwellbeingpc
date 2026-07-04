@@ -166,9 +166,36 @@ namespace digital_wellbeing_app.Services
             }
         }
 
+        // --- Data validation ---
+        // One corrupt row (EndTime before StartTime, or an absurd duration from a clock change)
+        // silently corrupts every total that sums (End - Start). Guard the write paths centrally
+        // and defensively filter the reads.
+        private const long MaxSessionSeconds = 24L * 60 * 60;
+
+        /// <summary>
+        /// True when a [start, end] interval is sane enough to persist. Rejects reversed intervals
+        /// and durations beyond a single day; logs the reason. StartTime==EndTime is allowed (a
+        /// zero-length row is harmless and filtered elsewhere by the &lt;30s noise rule).
+        /// </summary>
+        private static bool IsValidInterval(DateTime start, DateTime end, string kind)
+        {
+            if (end < start)
+            {
+                LogService.Warning($"Rejected {kind}: EndTime {end:o} precedes StartTime {start:o}");
+                return false;
+            }
+            if ((end - start).TotalSeconds > MaxSessionSeconds)
+            {
+                LogService.Warning($"Rejected {kind}: duration {(end - start).TotalHours:F1}h exceeds 24h cap");
+                return false;
+            }
+            return true;
+        }
+
         // --- App Usage ---
         public static void SaveAppUsageSession(AppUsageSession session)
         {
+            if (!IsValidInterval(session.StartTime, session.EndTime, nameof(AppUsageSession))) return;
             lock (_dbLock) { GetConnection().Insert(session); }
         }
 
@@ -181,7 +208,8 @@ namespace digital_wellbeing_app.Services
                 var dayEnd = dayStart.AddDays(1);
 
                 return conn.Table<AppUsageSession>()
-                           .Where(s => s.StartTime >= dayStart && s.StartTime < dayEnd)
+                           .Where(s => s.StartTime >= dayStart && s.StartTime < dayEnd
+                                       && s.EndTime >= s.StartTime)
                            .ToList();
             }
         }
@@ -205,6 +233,11 @@ namespace digital_wellbeing_app.Services
 
         public static void SaveScreenTimeSession(ScreenTimeSession session)
         {
+            if (session.DurationSeconds < 0 || session.DurationSeconds > MaxSessionSeconds)
+            {
+                LogService.Warning($"Rejected ScreenTimeSession: duration {session.DurationSeconds}s out of range");
+                return;
+            }
             lock (_dbLock) { GetConnection().Insert(session); }
         }
 
@@ -223,6 +256,7 @@ namespace digital_wellbeing_app.Services
         // --- Sound Usage ---
         public static void SaveSoundSession(SoundUsageSession session)
         {
+            if (!IsValidInterval(session.StartTime, session.EndTime, nameof(SoundUsageSession))) return;
             lock (_dbLock) { GetConnection().Insert(session); }
         }
 
@@ -235,7 +269,8 @@ namespace digital_wellbeing_app.Services
                 var dayEnd = dayStart.AddDays(1);
 
                 return conn.Table<SoundUsageSession>()
-                           .Where(s => s.StartTime >= dayStart && s.StartTime < dayEnd)
+                           .Where(s => s.StartTime >= dayStart && s.StartTime < dayEnd
+                                       && s.EndTime >= s.StartTime)
                            .ToList();
             }
         }
@@ -393,7 +428,8 @@ namespace digital_wellbeing_app.Services
                 var rangeEnd = endDate.Date.AddDays(1);
 
                 return conn.Table<AppUsageSession>()
-                           .Where(s => s.StartTime >= rangeStart && s.StartTime < rangeEnd)
+                           .Where(s => s.StartTime >= rangeStart && s.StartTime < rangeEnd
+                                       && s.EndTime >= s.StartTime)
                            .ToList();
             }
         }
