@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--
+    Windows Application Packaging Project (.wapproj) for Pulse - Digital Wellbeing PC.
+
+    This is intentionally a SEPARATE packaging project (classic .wapproj), NOT
+    single-project MSIX. Single-project MSIX is a WinUI 3 / Windows App SDK
+    feature and is not supported/safe for a WPF + WinForms .NET app. See README.md.
+
+    The app project (..\digital-wellbeing-app\digital-wellbeing-app.csproj) is
+    referenced below and used as the package entry point. Its .exe is
+    DigitalWellbeing.exe (AssemblyName=DigitalWellbeing).
+
+    Targets x64 and arm64 only (no x86 / AnyCPU) per the Store submission plan.
+  -->
+  <PropertyGroup Label="Globals">
+    <WapProjPath Condition="'$(WapProjPath)'==''">$(MSBuildExtensionsPath)\Microsoft\DesktopBridge\</WapProjPath>
+  </PropertyGroup>
+  <Import Project="$(WapProjPath)\Microsoft.DesktopBridge.props" />
+
+  <PropertyGroup>
+    <ProjectGuid>0EF84C68-E254-4AD8-A2FA-316CB9270503</ProjectGuid>
+    <TargetPlatformVersion>10.0.19041.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <AppxPackageSigningEnabled>False</AppxPackageSigningEnabled>
+    <!-- The .NET project that provides the FullTrust entry point executable. -->
+    <EntryPointProjectUniqueName>..\digital-wellbeing-app\digital-wellbeing-app.csproj</EntryPointProjectUniqueName>
+    <!-- Bundle all targeted architectures into one .msixupload for Store submission. -->
+    <GenerateAppxPackageOnBuild>False</GenerateAppxPackageOnBuild>
+    <AppxBundle>Always</AppxBundle>
+    <AppxBundlePlatforms>x64|arm64</AppxBundlePlatforms>
+    <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
+  </PropertyGroup>
+
+  <!-- ==== Supported Configuration | Platform combinations (x64 + arm64) ==== -->
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <UseDotNetNativeToolchain>false</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|arm64'">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|arm64'">
+    <UseDotNetNativeToolchain>false</UseDotNetNativeToolchain>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
+  </ItemGroup>
+
+  <!--
+    Tile / logo assets. These paths are referenced by Package.appxmanifest.
+    Run scripts\generate-store-assets.ps1 against a >=512px master to (re)generate
+    the real PNGs before packaging. Until then these are TODO placeholders.
+  -->
+  <ItemGroup>
+    <Content Include="Images\**\*.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\digital-wellbeing-app\digital-wellbeing-app.csproj">
+      <Name>digital-wellbeing-app</Name>
+    </ProjectReference>
+  </ItemGroup>
+
+  <Import Project="$(WapProjPath)\Microsoft.DesktopBridge.targets" />
+</Project>

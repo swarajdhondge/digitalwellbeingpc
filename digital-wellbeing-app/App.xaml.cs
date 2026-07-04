@@ -59,8 +59,10 @@ namespace digital_wellbeing_app
 
         protected override void OnStartup(System.Windows.StartupEventArgs e)
         {
-            // Velopack update hooks - must be first
-            VelopackApp.Build().Run();
+            // Velopack update hooks - must be first. Skipped for the Store (packaged) build,
+            // which must not self-update (the Microsoft Store delivers updates instead).
+            if (!Services.PackagedAppInfo.IsPackaged)
+                VelopackApp.Build().Run();
 
             // Global exception handlers - catch unhandled crashes
             DispatcherUnhandledException += OnDispatcherUnhandledException;
@@ -123,7 +125,8 @@ namespace digital_wellbeing_app
             SystemEvents.SessionSwitch += OnSessionSwitch;
             SystemEvents.PowerModeChanged += OnPowerModeChanged;
 
-            // Auto-check for updates (non-blocking, fire-and-forget)
+            // Auto-check for updates (non-blocking, fire-and-forget). Not for the Store build.
+            if (!Services.PackagedAppInfo.IsPackaged)
             _ = System.Threading.Tasks.Task.Run(async () =>
             {
                 try

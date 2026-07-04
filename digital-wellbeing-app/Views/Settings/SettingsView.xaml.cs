@@ -16,6 +16,7 @@ namespace digital_wellbeing_app.Views.Settings
         private bool _isLoadingBreakReminder;
         private bool _isLoadingWindDown;
         private bool _isLoadingRetention;
+        private bool _isLoadingStartup;
 
         public SettingsView()
         {
@@ -52,8 +53,8 @@ namespace digital_wellbeing_app.Views.Settings
                     break;
             }
             
-            // Load startup preference
-            StartupCheckBox.IsChecked = StartupService.IsEnabled();
+            // Load startup preference (async: routes to Run key or MSIX StartupTask by build).
+            _ = LoadStartupSettingAsync();
 
             // Load goal settings
             LoadGoalSettings();
@@ -745,10 +746,18 @@ namespace digital_wellbeing_app.Views.Settings
 
         #region Startup Settings
 
-        private void StartupCheckBox_Checked(object sender, RoutedEventArgs e)
+        private async System.Threading.Tasks.Task LoadStartupSettingAsync()
         {
+            _isLoadingStartup = true;
+            try { StartupCheckBox.IsChecked = await StartupService.IsEnabledAsync(); }
+            finally { _isLoadingStartup = false; }
+        }
+
+        private async void StartupCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            if (_isLoadingStartup) return;
             bool enable = (StartupCheckBox.IsChecked == true);
-            StartupService.Enable(enable);
+            await StartupService.SetEnabledAsync(enable);
         }
 
         #endregion

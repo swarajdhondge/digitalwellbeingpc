@@ -765,6 +765,14 @@ namespace digital_wellbeing_app.MainWindow
             {
                 try
                 {
+                    // Store build: updates come from the Store, so deep-link to the listing.
+                    if (Services.PackagedAppInfo.IsPackaged)
+                    {
+                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(
+                            Services.PackagedAppInfo.GetStoreDeepLink()) { UseShellExecute = true });
+                        return;
+                    }
+
                     var updateService = new Services.UpdateService();
                     await Dispatcher.InvokeAsync(async () =>
                     {
