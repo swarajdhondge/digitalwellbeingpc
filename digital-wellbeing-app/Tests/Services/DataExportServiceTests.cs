@@ -1,6 +1,8 @@
 using System;
 using System.IO;
+using System.Linq;
 using Xunit;
+using digital_wellbeing_app.Models;
 using digital_wellbeing_app.Services;
 
 namespace digital_wellbeing_app.Tests.Services
@@ -65,6 +67,37 @@ namespace digital_wellbeing_app.Tests.Services
                 Assert.Contains("SessionDate", lines[0]);
                 Assert.Contains("AccumulatedActiveSeconds", lines[0]);
             }
+        }
+
+        [Fact]
+        public void SoundExport_IncludesActualListeningAndHarmfulSeconds()
+        {
+            // Phase 1.5: StartTime..EndTime includes silence; the export must also carry the
+            // actual listening/harmful durations the UI shows, so they can't be conflated.
+            DatabaseService.DeleteAllData();
+            var start = DateTime.Now.AddMinutes(-60);
+            DatabaseService.SaveSoundSession(new SoundUsageSession
+            {
+                StartTime = start,
+                EndTime = start.AddMinutes(60),                 // 3600s wall-clock
+                ActualListeningDuration = TimeSpan.FromSeconds(1200), // only 20 min of sound
+                HarmfulDuration = TimeSpan.FromSeconds(300),          // 5 min harmful
+                AvgVolume = 0.5,
+                EstimatedMaxSPL = 88,
+                WasHarmful = true
+            });
+
+            DataExportService.ExportAllToCsv(_testDir);
+            var lines = File.ReadAllLines(Path.Combine(_testDir, "SoundUsageSessions.csv"));
+
+            Assert.Contains("ActualListeningSeconds", lines[0]);
+            Assert.Contains("HarmfulSeconds", lines[0]);
+
+            var dataRow = lines.Skip(1).First(l => l.Length > 0);
+            var cols = dataRow.Split(',');
+            // Header: Id,StartTime,EndTime,ActualListeningSeconds,HarmfulSeconds,...
+            Assert.Equal("1200", cols[3]);
+            Assert.Equal("300", cols[4]);
         }
 
         [Fact]
