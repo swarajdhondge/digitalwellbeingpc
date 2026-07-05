@@ -11,7 +11,10 @@ _Android-style Digital Wellbeing for Windows — calm, private, and fully on-dev
 **Pulse** is a privacy-focused desktop app that brings the Android Digital Wellbeing experience to Windows. Track your screen time, monitor app usage, manage focus sessions, and protect your hearing — all in a calm, redesigned interface. Every byte of data stays local on your machine.
 
 <p align="center">
-  <img src=".github/screenshots/dashboard.png" alt="Digital Wellbeing Dashboard - Screen Time Tracker for Windows" width="800"/>
+  <!-- Auto-updates on every published release: GitHub redirects the "latest" URL to
+       the newest release's demo.gif asset (attached by .github/workflows/release.yml).
+       Recorded locally before tagging via scripts/record-demo.ps1. -->
+  <img src="https://github.com/swarajdhondge/digitalwellbeingpc/releases/latest/download/demo.gif" alt="Pulse demo — a quick tour of the Digital Wellbeing dashboard, screen time, app usage, hearing, focus, and insights on Windows" width="800"/>
 </p>
 
 ---
@@ -130,6 +133,20 @@ The app checks for updates automatically and installs them seamlessly.
 3. Run it and you're done
 
 The app installs without admin rights and updates automatically.
+
+> [!NOTE]
+> **"Windows protected your PC"?** That's Microsoft SmartScreen, and you'll likely see it the
+> first time you run `Setup.exe`. It appears because Pulse isn't code-signed *yet* — not because
+> anything is wrong. Pulse is fully open-source (this repo) and stores everything locally.
+>
+> To install: click **More info** → **Run anyway**.
+>
+> If you'd rather avoid the prompt entirely, install from the **Microsoft Store** (coming soon) —
+> Store builds are signed by Microsoft and never trigger SmartScreen. Code signing for the
+> `Setup.exe` download is [in progress](https://about.signpath.io/product/open-source) and will
+> remove the warning for direct downloads too.
+>
+> Every release also ships a `SHA256SUMS.txt` if you want to verify your download.
 
 ### Run from Source
 

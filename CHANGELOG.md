@@ -1,5 +1,25 @@
 # Changelog
 
+## [v2.2.2] - 2026-07-05
+
+Interface polish and a more trustworthy installer.
+
+### Interface
+- **Right-sized window.** The default window is now a smaller, centered 1220×870 and opens centered (only the maximized flag is restored between runs).
+- **App Usage, by week.** App Usage gains a Today / Week toggle, and the Screen Time week carousel is bounded to the first tracked week so you can't page into empty history.
+- **Tidier chrome.** Window controls (theme, Private, minimize/maximize/close) are pinned to the top-right corner while the page title stays aligned with the centered content.
+- **Sharper details.** An HD app logo, a dashboard gauge ring that shows even with no goal set, and cleaner separated split-bar pills.
+- **Theme toggle fixed.** Switching Light/Dark now applies and persists correctly.
+
+### Installer & distribution
+- **The installer looks like a real app.** `Setup.exe` now carries the Pulse name, icon, and publisher instead of a generic unbranded bundle. (Heads-up: Windows SmartScreen may still warn until code signing lands — see the README download note.)
+- **A demo video leads the README and website**, and refreshes automatically with each release.
+
+### Performance
+- **No more switch/resize lag.** App Usage and Sound refresh timers are gated to the visible page instead of always running.
+
+---
+
 ## [v2.2.1] - 2026-07-05
 
 Reliability and release-pipeline fixes.

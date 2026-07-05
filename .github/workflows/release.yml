@@ -86,8 +86,24 @@ jobs:
       - name: Publish application
         run: dotnet publish ${{ env.PROJECT }} -c Release -p:Version=${{ needs.version.outputs.version }} -o ./publish
 
+      # Brand the Setup.exe so it doesn't look like a generic/untrusted bundle:
+      #   --icon        the Pulse app icon on Setup.exe + Add/Remove Programs
+      #   --packTitle   friendly display name ("Pulse", not the packId) in the installer UI
+      #   --packAuthors publisher shown in the installer + Programs and Features
+      # (packId stays DigitalWellbeingPC — it's the stable update identity, not a display name.)
+      # NOTE: the "unknown publisher" SmartScreen warning is separate — that needs code signing
+      # (the SignPath step at the boundary below), not packaging metadata.
       - name: Create Velopack release
-        run: vpk pack -u ${{ env.PACKAGE_NAME }} -v ${{ needs.version.outputs.version }} -p ./publish -o ./releases --mainExe ${{ env.MAIN_EXE }}
+        run: >
+          vpk pack
+          -u ${{ env.PACKAGE_NAME }}
+          -v ${{ needs.version.outputs.version }}
+          -p ./publish
+          -o ./releases
+          --mainExe ${{ env.MAIN_EXE }}
+          --packTitle "Pulse"
+          --packAuthors "Swaraj Dhondge"
+          --icon digital-wellbeing-app/Resources/Icons/digital-balance-icon.ico
 
       - name: Upload Velopack artifacts (unsigned)
         uses: actions/upload-artifact@v4
@@ -217,6 +233,16 @@ jobs:
     needs: [version, velopack-build]
     runs-on: ubuntu-latest
     steps:
+      # Checkout so the pre-recorded demo assets committed at this tag
+      # (.github/demo/demo.{mp4,gif}) can be attached as release assets. The site
+      # <video> and README <img> point at releases/latest/download/demo.*, so
+      # publishing this release auto-swaps the demo everywhere — no push to main.
+      # The demo can't be recorded on CI (no GUI); it is produced locally before
+      # tagging via scripts/record-demo.ps1. Missing files are tolerated below
+      # (fail_on_unmatched_files: false) so a release without a demo still ships.
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Download Velopack artifacts
         uses: actions/download-artifact@v4
         with:
@@ -254,5 +280,7 @@ jobs:
             ./releases/*
             ./msix/*.msix
             SHA256SUMS.txt
+            .github/demo/demo.mp4
+            .github/demo/demo.gif
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
