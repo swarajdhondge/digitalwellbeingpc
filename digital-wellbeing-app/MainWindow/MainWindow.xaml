@@ -157,14 +157,10 @@
                                 SizeChanged="TopBarBorder_SizeChanged"
                                 MouseLeftButtonDown="TitleBar_MouseLeftButtonDown"
                                 MouseLeftButtonUp="TitleBar_MouseLeftButtonUp">
-                        <Grid x:Name="TopBarGrid" HorizontalAlignment="Center">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-
-                            <!-- Title + tracking + subtitle -->
-                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                        <Grid>
+                            <!-- Title band: centered + capped to the content width so the page
+                                 title lines up with the centered content below it. -->
+                            <StackPanel x:Name="TitleBand" HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock x:Name="TitleText" Style="{StaticResource Pulse.PageTitle}"
                                                Text="Today" VerticalAlignment="Center"
@@ -183,8 +179,8 @@
                                            Text="Your day at a glance" Margin="0,3,0,0"/>
                             </StackPanel>
 
-                            <!-- Right cluster: theme toggle, privacy pill, window controls -->
-                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                            <!-- App chrome pinned to the window's top-right corner at all widths -->
+                            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal">
                                 <Button x:Name="ThemeToggleButton" Style="{StaticResource Pulse.Button.Icon}"
                                         Click="ThemeToggle_Click" ToolTip="Switch theme"
                                         AutomationProperties.AutomationId="ThemeToggle">

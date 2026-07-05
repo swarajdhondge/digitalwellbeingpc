@@ -1110,8 +1110,11 @@ namespace digital_wellbeing_app.MainWindow
         // Cap + center the top bar to ~1080 so it aligns with the centered content at any width.
         private void TopBarBorder_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+            // Cap the title band to the same 1080 centered column as the page content so the
+            // title aligns with it. The window chrome (theme/Private/min-max-close) is pinned
+            // to the right corner separately and is unaffected by this cap.
             var inner = e.NewSize.Width - TopBarBorder.Padding.Left - TopBarBorder.Padding.Right;
-            TopBarGrid.Width = System.Math.Min(System.Math.Max(inner, 0), 1080);
+            TitleBand.Width = System.Math.Min(System.Math.Max(inner, 0), 1080);
         }
 
         /// <summary>Time-of-day greeting used as the dashboard page title.</summary>
