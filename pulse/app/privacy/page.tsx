@@ -101,7 +101,7 @@ export default function Privacy() {
             Questions about privacy: open an issue at{" "}
             <a href={`${REPO_URL}/issues`} className="text-accent underline-offset-2 hover:underline">{REPO_URL.replace("https://", "")}/issues</a>{" "}
             or email{" "}
-            <a href="mailto:swarajdhondge009@gmail.com" className="text-accent underline-offset-2 hover:underline">swarajdhondge009@gmail.com</a>.
+            <a href="mailto:tosdhondge@gmail.com" className="text-accent underline-offset-2 hover:underline">tosdhondge@gmail.com</a>.
           </p>
         </Section>
 

@@ -64,4 +64,4 @@ Microsoft Store users, at the listing's privacy policy link.
 
 Questions about privacy: open an issue at
 <https://github.com/swarajdhondge/digitalwellbeingpc/issues> or email
-swarajdhondge009@gmail.com.
+tosdhondge@gmail.com.

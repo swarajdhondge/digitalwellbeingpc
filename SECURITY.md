@@ -26,7 +26,7 @@ issue for anything exploitable.
 
 - Preferred: use GitHub's **[Private vulnerability reporting](https://github.com/swarajdhondge/digitalwellbeingpc/security/advisories/new)**
   (Security → Report a vulnerability).
-- Alternatively, email **swarajdhondge009@gmail.com** with the subject
+- Alternatively, email **tosdhondge@gmail.com** with the subject
   `SECURITY: Pulse`.
 
 Please include:
