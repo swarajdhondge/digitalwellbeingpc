@@ -14,9 +14,11 @@ env:
   PROJECT: 'digital-wellbeing-app/digital-wellbeing-app.csproj'
   PACKAGE_NAME: 'DigitalWellbeingPC'
   MAIN_EXE: 'DigitalWellbeing.exe'
-  # Intended final path of the MSIX packaging project (.wapproj). It may not
-  # exist yet; the msix job below references it as the agreed target location.
-  WAPPROJ: 'digital-wellbeing-app.Package/digital-wellbeing-app.Package.wapproj'
+
+# NOTE: the Microsoft Store MSIX is intentionally NOT built here. Nothing consumes it
+# from the GitHub release (winget uses Setup.exe; the auto-updater uses the nupkg/RELEASES),
+# and Store submission is a manual Partner Center upload. Build it locally when submitting:
+#   ./scripts/build-msix.ps1 -Version <x.y.z>   ->  artifacts/store/Pulse-<x.y.z>-x64.msix
 
 jobs:
   # --------------------------------------------------------------------------
@@ -113,99 +115,20 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
-  # --------------------------------------------------------------------------
-  # MSIX BUILD (unsigned x64 .msix for Partner Center)
-  # Builds via the Windows SDK (makeappx). Store submission stays MANUAL for now —
-  # we only upload the package as a workflow artifact for you to hand-upload.
-  # --------------------------------------------------------------------------
-  msix-build:
-    needs: [version, test]
-    # Build the Store MSIX with the Windows SDK (dotnet publish -> makepri ->
-    # makeappx) rather than the .wapproj. The wapproj needs the Visual Studio UWP
-    # workload, which the hosted images no longer reliably ship: windows-latest
-    # (VS 18) throws APPX3217 ("UAP.props for 10.0.19041.0 cannot be located") and
-    # windows-2022 silently skips packaging. The SDK tools are always present.
-    # Store identity is fixed in the manifest (Identity/Name
-    # SwarajDhondge.DigitalWellbeingPC, Publisher CN=516C9AB9-2BCA-4787-9354-4A2FFCDBED01,
-    # Store ID 9ND5GNMBQVQ7). Produces an unsigned x64 .msix; the Store re-signs.
-    runs-on: windows-latest
-    # Non-blocking: a packaging hiccup must never block the Velopack GitHub release.
-    continue-on-error: true
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup .NET 9.0
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '9.0.x'
-
-      - name: Stamp version into AssemblyInfo.cs and app.manifest
-        shell: pwsh
-        run: ./.github/scripts/stamp-version.ps1 -Version "${{ needs.version.outputs.version }}"
-
-      - name: Build MSIX (x64) via Windows SDK
-        shell: pwsh
-        env:
-          VER: ${{ needs.version.outputs.version }}
-        run: |
-          $ErrorActionPreference = 'Stop'
-          $ws = $env:GITHUB_WORKSPACE
-          $stage = Join-Path $ws 'stage'
-          $out = Join-Path $ws 'AppPackages'
-          New-Item -ItemType Directory -Force -Path $out | Out-Null
-
-          dotnet publish digital-wellbeing-app/digital-wellbeing-app.csproj -c Release -r win-x64 `
-            --self-contained true -p:Version=$env:VER -p:PublishSingleFile=false -o $stage
-
-          Copy-Item digital-wellbeing-app.Package/Package.appxmanifest (Join-Path $stage 'AppxManifest.xml') -Force
-          New-Item -ItemType Directory -Force -Path (Join-Path $stage 'Images') | Out-Null
-          Copy-Item digital-wellbeing-app.Package/Images/*.png (Join-Path $stage 'Images') -Force
-
-          # Stamp the 4-part version (tag + ".0") and declare x64 on the identity.
-          $mf = Join-Path $stage 'AppxManifest.xml'
-          $x = Get-Content $mf -Raw
-          $x = $x -replace 'Version="[\d.]+"\s*/>', ("Version=`"$($env:VER).0`" ProcessorArchitecture=`"x64`" />")
-          Set-Content $mf $x
-
-          # Newest installed Windows SDK bin\<ver>\x64 that has makeappx/makepri.
-          $sdkRoot = 'C:\Program Files (x86)\Windows Kits\10\bin'
-          $sdk = Get-ChildItem $sdkRoot -Directory |
-            Where-Object { $_.Name -match '^10\.0\.' -and (Test-Path (Join-Path $_.FullName 'x64\makeappx.exe')) } |
-            Sort-Object Name -Descending | Select-Object -First 1
-          $tool = Join-Path $sdk.FullName 'x64'
-          Write-Host "Using SDK tools: $tool"
-
-          & "$tool\makepri.exe" createconfig /cf (Join-Path $ws 'priconfig.xml') /dq en-US /pv 10.0.0 /o
-          & "$tool\makepri.exe" new /pr $stage /cf (Join-Path $ws 'priconfig.xml') /mn $mf /of (Join-Path $stage 'resources.pri') /o
-          $msix = Join-Path $out "Pulse-$($env:VER)-x64.msix"
-          & "$tool\makeappx.exe" pack /d $stage /p $msix /o
-          if (-not (Test-Path $msix)) { Write-Error 'makeappx did not produce a .msix'; exit 1 }
-          Write-Host ("Built {0} ({1} MB)" -f $msix, [math]::Round((Get-Item $msix).Length/1MB,1))
-
-      - name: Upload MSIX artifact (unsigned)
-        uses: actions/upload-artifact@v4
-        with:
-          name: msix-package
-          path: 'AppPackages/*.msix'
-          if-no-files-found: error
-          retention-days: 7
-
   # ==========================================================================
   # >>> UNSIGNED-ARTIFACT BOUNDARY <<<
   #
   # Everything ABOVE produces UNSIGNED build outputs (uploaded as the
-  # `velopack-releases` and `msix-package` artifacts). Everything BELOW consumes
-  # already-built artifacts and attaches them to the GitHub Release.
+  # `velopack-releases` artifact). Everything BELOW consumes already-built
+  # artifacts and attaches them to the GitHub Release.
   #
   # A future code-signing step slots in HERE without restructuring: add a
-  # `sign` job that `needs: [velopack-build, msix-build]`, downloads the
-  # unsigned artifacts, submits them to SignPath, and re-uploads SIGNED
-  # artifacts under the SAME artifact names. The `release` job then only needs
-  # to depend on `sign` instead of the two build jobs.
+  # `sign` job that `needs: [velopack-build]`, downloads the unsigned artifact,
+  # submits it to SignPath, and re-uploads the SIGNED artifact under the SAME
+  # name. The `release` job then only needs to depend on `sign` instead.
   #
   #  sign:
-  #    needs: [velopack-build, msix-build]
+  #    needs: [velopack-build]
   #    runs-on: ubuntu-latest
   #    steps:
   #      - uses: actions/download-artifact@v4
@@ -228,8 +151,6 @@ jobs:
   # at `sign` once the boundary above is filled in.
   # --------------------------------------------------------------------------
   release:
-    # Depends only on the Velopack build so a missing-MSIX-asset failure never
-    # blocks the GitHub release. The MSIX artifact is attached opportunistically.
     needs: [version, velopack-build]
     runs-on: ubuntu-latest
     steps:
@@ -249,21 +170,11 @@ jobs:
           name: velopack-releases
           path: ./releases
 
-      - name: Download MSIX artifact (if the packaging build succeeded)
-        continue-on-error: true
-        uses: actions/download-artifact@v4
-        with:
-          name: msix-package
-          path: ./msix
-
-      # SHA256SUMS.txt over the Velopack release set plus the MSIX output (if any).
-      # Paths are relativized so the checksum file is portable for verifiers.
+      # SHA256SUMS.txt over the Velopack release set. Paths are relativized so the
+      # checksum file is portable for verifiers.
       - name: Generate SHA256SUMS.txt
         run: |
-          {
-            find ./releases -type f
-            [ -d ./msix ] && find ./msix -type f -name '*.msix'
-          } | while read -r f; do
+          find ./releases -type f | while read -r f; do
             sha256sum "$f"
           done | sed 's|\./||' > SHA256SUMS.txt
           echo "----- SHA256SUMS.txt -----"
@@ -278,7 +189,6 @@ jobs:
           fail_on_unmatched_files: false
           files: |
             ./releases/*
-            ./msix/*.msix
             SHA256SUMS.txt
             .github/demo/demo.mp4
             .github/demo/demo.gif
