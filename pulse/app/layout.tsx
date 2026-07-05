@@ -9,10 +9,10 @@ const hanken = Hanken_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Pulse — Digital Wellbeing for Windows",
+  title: "Pulse - Digital Wellbeing PC",
   description:
     "A calm, private digital-wellbeing app for Windows. Track screen time, app usage, and focus sessions, and protect your hearing — all on-device, no account, no cloud.",
-  applicationName: "Pulse",
+  applicationName: "Pulse - Digital Wellbeing PC",
   keywords: [
     "screen time",
     "digital wellbeing",
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     "Pulse",
   ],
   openGraph: {
-    title: "Pulse — Digital Wellbeing for Windows",
+    title: "Pulse - Digital Wellbeing PC",
     description:
       "Track your screen time, app usage, and focus — privately, on your Windows PC.",
     type: "website",

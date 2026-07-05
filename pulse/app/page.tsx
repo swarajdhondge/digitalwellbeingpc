@@ -62,7 +62,7 @@ export default function Home() {
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <a href="#top" className="flex items-center gap-2.5">
             <img src="/pulse-logo.png" alt="Pulse logo" width={32} height={32} className="h-8 w-8 rounded-xl" />
-            <span className="text-lg font-bold tracking-tight">Pulse</span>
+            <span className="text-lg font-bold tracking-tight">Pulse <span className="font-medium text-muted">- Digital Wellbeing PC</span></span>
           </a>
           <nav className="hidden items-center gap-8 text-sm text-muted sm:flex">
             <a href="#features" className="transition hover:text-ink">Features</a>
@@ -190,7 +190,7 @@ export default function Home() {
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-10 text-sm text-muted sm:flex-row">
           <div className="flex items-center gap-2.5">
             <img src="/pulse-logo.png" alt="Pulse logo" width={28} height={28} className="h-7 w-7 rounded-lg" />
-            <span className="font-semibold text-ink">Pulse</span>
+            <span className="font-semibold text-ink">Pulse - Digital Wellbeing PC</span>
           </div>
           <div className="flex items-center gap-6">
             <a href={REPO_URL} target="_blank" rel="noopener noreferrer" className="transition hover:text-ink">GitHub</a>
