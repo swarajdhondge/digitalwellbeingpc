@@ -139,4 +139,12 @@ if (-not $NoGif) {
     Write-Host "Wrote $gif ($([math]::Round((Get-Item $gif).Length / 1MB, 2)) MB)" -ForegroundColor Green
 }
 
-Write-Host "Done. Demo assets in $OutDir" -ForegroundColor Green
+# --- 5. Refresh the marketing-site copy ----------------------------------------
+# The site hero plays this same-origin (GitHub release assets are octet-stream and won't
+# play inline). README uses .github/demo/demo.gif directly. Commit both after recording.
+$siteDemo = Join-Path $repoRoot 'pulse\public\demo'
+New-Item -ItemType Directory -Force -Path $siteDemo | Out-Null
+Copy-Item $mp4 (Join-Path $siteDemo 'demo.mp4') -Force
+Write-Host "Copied demo.mp4 -> pulse/public/demo/" -ForegroundColor DarkGray
+
+Write-Host "Done. Demo assets in $OutDir (+ pulse/public/demo/demo.mp4). Commit them." -ForegroundColor Green
