@@ -10,6 +10,10 @@ namespace digital_wellbeing_app.Tests.Services
     /// Tests for write-side validation and read-side filtering (v2.2 Phase 1.3). A single row with
     /// EndTime before StartTime, or an absurd duration from a clock change, used to silently
     /// corrupt every total that sums (End - Start).
+    ///
+    /// Times are anchored to mid-day today (not DateTime.Now): a "now minus N minutes/hours"
+    /// anchor crosses into the previous day when the suite runs shortly after local midnight
+    /// (CI runners are UTC), which drops the row from day-bucketed queries and flakes the gate.
     /// </summary>
     public class DataValidationTests
     {
@@ -17,7 +21,7 @@ namespace digital_wellbeing_app.Tests.Services
         public void SaveAppUsageSession_RejectsReversedInterval()
         {
             DatabaseService.DeleteAllData();
-            var now = DateTime.Now;
+            var now = DateTime.Today.AddHours(12);
             DatabaseService.SaveAppUsageSession(new AppUsageSession
             {
                 AppName = "x",
@@ -33,7 +37,7 @@ namespace digital_wellbeing_app.Tests.Services
         public void SaveAppUsageSession_RejectsDurationOver24h()
         {
             DatabaseService.DeleteAllData();
-            var now = DateTime.Now;
+            var now = DateTime.Today.AddHours(12);
             DatabaseService.SaveAppUsageSession(new AppUsageSession
             {
                 AppName = "x",
@@ -49,7 +53,7 @@ namespace digital_wellbeing_app.Tests.Services
         public void SaveAppUsageSession_AcceptsValidInterval()
         {
             DatabaseService.DeleteAllData();
-            var now = DateTime.Now;
+            var now = DateTime.Today.AddHours(12);
             DatabaseService.SaveAppUsageSession(new AppUsageSession
             {
                 AppName = "x",
@@ -65,7 +69,7 @@ namespace digital_wellbeing_app.Tests.Services
         public void GetAppUsageSessionsForRange_FiltersPreexistingCorruptRows()
         {
             DatabaseService.DeleteAllData();
-            var now = DateTime.Now;
+            var now = DateTime.Today.AddHours(12);
             // Bypass validation to simulate a corrupt row written by an older build.
             DatabaseService.GetConnection().Insert(new AppUsageSession
             {
@@ -83,7 +87,7 @@ namespace digital_wellbeing_app.Tests.Services
         public void SaveSoundSession_RejectsReversedInterval()
         {
             DatabaseService.DeleteAllData();
-            var now = DateTime.Now;
+            var now = DateTime.Today.AddHours(12);
             DatabaseService.SaveSoundSession(new SoundUsageSession
             {
                 StartTime = now,

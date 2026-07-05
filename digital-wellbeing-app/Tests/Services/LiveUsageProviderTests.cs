@@ -17,20 +17,23 @@ namespace digital_wellbeing_app.Tests.Services
         public void CombineTodayAppEntries_FoldsLiveSessionIntoMatchingApp()
         {
             DatabaseService.DeleteAllData();
-            var now = DateTime.Now;
+            // Persisted row is anchored to mid-day today so it stays in today's bucket even when
+            // this runs just after UTC midnight. The live session keeps real DateTime.Now because
+            // the provider folds it as (DateTime.Now - StartTime).
+            var midday = DateTime.Today.AddHours(9);
             DatabaseService.SaveAppUsageSession(new AppUsageSession
             {
                 AppName = "chrome",
                 ExecutablePath = @"C:\chrome.exe",
-                StartTime = now.AddMinutes(-30),
-                EndTime = now.AddMinutes(-20) // 10 persisted minutes
+                StartTime = midday,
+                EndTime = midday.AddMinutes(10) // 10 persisted minutes
             });
 
             var live = new AppUsageSession
             {
                 AppName = "chrome",
                 ExecutablePath = @"C:\chrome.exe",
-                StartTime = now.AddMinutes(-5) // ~5 live minutes, no EndTime
+                StartTime = DateTime.Now.AddMinutes(-5) // ~5 live minutes, no EndTime
             };
 
             var chrome = LiveUsageProvider.CombineTodayAppEntries(live)
@@ -60,13 +63,14 @@ namespace digital_wellbeing_app.Tests.Services
         public void CombineTodayAppEntries_PersistedOnly_WhenNoLiveSession()
         {
             DatabaseService.DeleteAllData();
-            var now = DateTime.Now;
+            // Anchor to mid-day today so the row stays in today's bucket near UTC midnight.
+            var midday = DateTime.Today.AddHours(9);
             DatabaseService.SaveAppUsageSession(new AppUsageSession
             {
                 AppName = "notepad",
                 ExecutablePath = @"C:\notepad.exe",
-                StartTime = now.AddMinutes(-15),
-                EndTime = now.AddMinutes(-10)
+                StartTime = midday,
+                EndTime = midday.AddMinutes(5)
             });
 
             var entry = LiveUsageProvider.CombineTodayAppEntries(null).Single();

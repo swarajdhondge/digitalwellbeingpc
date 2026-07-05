@@ -17,7 +17,10 @@ namespace digital_wellbeing_app.Tests.Services
         public void DashboardAppTime_EqualsAppUsagePageTotal()
         {
             DatabaseService.DeleteAllData();
-            var now = DateTime.Now;
+            // Mid-day anchor, not DateTime.Now: a "now minus 3h" session crosses into the previous
+            // day when this runs shortly after local midnight (CI is UTC), dropping it from the
+            // day-bucketed GetToday* readers and flaking the gate.
+            var now = DateTime.Today.AddHours(12);
             DatabaseService.SaveAppUsageSession(new AppUsageSession
             {
                 AppName = "code", ExecutablePath = @"C:\code.exe",
