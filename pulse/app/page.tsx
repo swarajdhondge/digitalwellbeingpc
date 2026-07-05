@@ -113,8 +113,8 @@ export default function Home() {
               <img
                 src="/screenshots/dashboard.png"
                 alt="Pulse dashboard showing screen time, top apps, and weekly trends"
-                width={1400}
-                height={900}
+                width={1600}
+                height={1000}
                 className="w-full"
               />
             </div>
@@ -189,7 +189,8 @@ export default function Home() {
           <div className="flex items-center gap-6">
             <a href={REPO_URL} target="_blank" rel="noopener noreferrer" className="transition hover:text-ink">GitHub</a>
             <a href={`${REPO_URL}/releases`} target="_blank" rel="noopener noreferrer" className="transition hover:text-ink">Releases</a>
-            <span className="text-faint">MIT licensed</span>
+            <a href={`${REPO_URL}/blob/main/PRIVACY.md`} target="_blank" rel="noopener noreferrer" className="transition hover:text-ink">Privacy</a>
+            <a href={`${REPO_URL}/blob/main/LICENSE`} target="_blank" rel="noopener noreferrer" className="text-faint transition hover:text-ink">GPL-3.0 licensed</a>
           </div>
         </div>
         <p className="px-6 pb-8 text-center text-xs text-faint">

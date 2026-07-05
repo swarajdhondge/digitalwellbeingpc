@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using SQLite;
+using digital_wellbeing_app.Helpers;
 using digital_wellbeing_app.Models;
 
 namespace digital_wellbeing_app.Services
@@ -18,11 +19,18 @@ namespace digital_wellbeing_app.Services
         private const string AppFolderName = "Pulse";
         private const string DbFileName = "digital_wellbeing.db";
 
+        // Optional override for the DB file path. Used by the test suite to isolate tests from
+        // the user's real database; null in normal operation.
+        private static string? _dbPathOverride;
+
         // full path to the DB, under %LocalAppData%
         private static string DbPath
         {
             get
             {
+                if (_dbPathOverride != null)
+                    return _dbPathOverride;
+
                 var localAppData = Environment.GetFolderPath(
                     Environment.SpecialFolder.LocalApplicationData);
                 var folder = Path.Combine(localAppData, AppFolderName);
@@ -35,6 +43,23 @@ namespace digital_wellbeing_app.Services
                 }
 
                 return Path.Combine(folder, DbFileName);
+            }
+        }
+
+        /// <summary>
+        /// Redirect the database to a specific file and reset the open connection. Intended for
+        /// the test suite so it never touches the user's real database. Passing a path under a
+        /// throwaway temp directory gives each test run an isolated, deterministic store.
+        /// </summary>
+        public static void SetDatabasePathForTesting(string path)
+        {
+            lock (_dbLock)
+            {
+                CloseConnection();
+                var dir = Path.GetDirectoryName(path);
+                if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                _dbPathOverride = path;
             }
         }
 
@@ -141,9 +166,36 @@ namespace digital_wellbeing_app.Services
             }
         }
 
+        // --- Data validation ---
+        // One corrupt row (EndTime before StartTime, or an absurd duration from a clock change)
+        // silently corrupts every total that sums (End - Start). Guard the write paths centrally
+        // and defensively filter the reads.
+        private const long MaxSessionSeconds = 24L * 60 * 60;
+
+        /// <summary>
+        /// True when a [start, end] interval is sane enough to persist. Rejects reversed intervals
+        /// and durations beyond a single day; logs the reason. StartTime==EndTime is allowed (a
+        /// zero-length row is harmless and filtered elsewhere by the &lt;30s noise rule).
+        /// </summary>
+        private static bool IsValidInterval(DateTime start, DateTime end, string kind)
+        {
+            if (end < start)
+            {
+                LogService.Warning($"Rejected {kind}: EndTime {end:o} precedes StartTime {start:o}");
+                return false;
+            }
+            if ((end - start).TotalSeconds > MaxSessionSeconds)
+            {
+                LogService.Warning($"Rejected {kind}: duration {(end - start).TotalHours:F1}h exceeds 24h cap");
+                return false;
+            }
+            return true;
+        }
+
         // --- App Usage ---
         public static void SaveAppUsageSession(AppUsageSession session)
         {
+            if (!IsValidInterval(session.StartTime, session.EndTime, nameof(AppUsageSession))) return;
             lock (_dbLock) { GetConnection().Insert(session); }
         }
 
@@ -156,7 +208,8 @@ namespace digital_wellbeing_app.Services
                 var dayEnd = dayStart.AddDays(1);
 
                 return conn.Table<AppUsageSession>()
-                           .Where(s => s.StartTime >= dayStart && s.StartTime < dayEnd)
+                           .Where(s => s.StartTime >= dayStart && s.StartTime < dayEnd
+                                       && s.EndTime >= s.StartTime)
                            .ToList();
             }
         }
@@ -180,6 +233,11 @@ namespace digital_wellbeing_app.Services
 
         public static void SaveScreenTimeSession(ScreenTimeSession session)
         {
+            if (session.DurationSeconds < 0 || session.DurationSeconds > MaxSessionSeconds)
+            {
+                LogService.Warning($"Rejected ScreenTimeSession: duration {session.DurationSeconds}s out of range");
+                return;
+            }
             lock (_dbLock) { GetConnection().Insert(session); }
         }
 
@@ -198,6 +256,7 @@ namespace digital_wellbeing_app.Services
         // --- Sound Usage ---
         public static void SaveSoundSession(SoundUsageSession session)
         {
+            if (!IsValidInterval(session.StartTime, session.EndTime, nameof(SoundUsageSession))) return;
             lock (_dbLock) { GetConnection().Insert(session); }
         }
 
@@ -210,7 +269,8 @@ namespace digital_wellbeing_app.Services
                 var dayEnd = dayStart.AddDays(1);
 
                 return conn.Table<SoundUsageSession>()
-                           .Where(s => s.StartTime >= dayStart && s.StartTime < dayEnd)
+                           .Where(s => s.StartTime >= dayStart && s.StartTime < dayEnd
+                                       && s.EndTime >= s.StartTime)
                            .ToList();
             }
         }
@@ -291,6 +351,51 @@ namespace digital_wellbeing_app.Services
             }
         }
 
+        /// <summary>
+        /// One-time (idempotent) migration that rewrites each <see cref="AppCategory.AppIdentifier"/>
+        /// to its canonical key (see <see cref="AppIdentity.NormalizeKey(string?)"/>). Legacy rows
+        /// stored full paths or mixed casing, which never matched the process-name lookups used by
+        /// the reports. Rows that collapse to the same key are merged, keeping the most recently
+        /// updated category. Safe to run on every startup: a fully-normalized table produces no writes.
+        /// </summary>
+        public static void NormalizeAppCategoryKeys()
+        {
+            lock (_dbLock)
+            {
+                var conn = GetConnection();
+                var rows = conn.Table<AppCategory>().ToList();
+                if (rows.Count == 0) return;
+
+                // Group by the canonical key; keep the newest row per key.
+                var groups = rows
+                    .GroupBy(r => AppIdentity.NormalizeKey(
+                        !string.IsNullOrWhiteSpace(r.ExecutablePath) ? r.ExecutablePath : r.AppIdentifier));
+
+                foreach (var group in groups)
+                {
+                    var key = group.Key;
+                    var ordered = group.OrderByDescending(r => r.LastUpdated).ToList();
+                    var winner = ordered[0];
+
+                    // Delete any duplicate rows that collapse to the same key.
+                    foreach (var dup in ordered.Skip(1))
+                        conn.Delete(dup);
+
+                    // Rewrite the surviving row's identifier if it isn't already canonical.
+                    if (string.IsNullOrEmpty(key))
+                    {
+                        // Un-normalizable (blank) identifier — drop the orphan row.
+                        conn.Delete(winner);
+                    }
+                    else if (winner.AppIdentifier != key)
+                    {
+                        winner.AppIdentifier = key;
+                        conn.Update(winner);
+                    }
+                }
+            }
+        }
+
         // --- Multi-Day Queries (for Weekly Reports) ---
 
         /// <summary>
@@ -323,7 +428,8 @@ namespace digital_wellbeing_app.Services
                 var rangeEnd = endDate.Date.AddDays(1);
 
                 return conn.Table<AppUsageSession>()
-                           .Where(s => s.StartTime >= rangeStart && s.StartTime < rangeEnd)
+                           .Where(s => s.StartTime >= rangeStart && s.StartTime < rangeEnd
+                                       && s.EndTime >= s.StartTime)
                            .ToList();
             }
         }
@@ -380,6 +486,48 @@ namespace digital_wellbeing_app.Services
                 conn.DeleteAll<ScreenTimeSession>();
                 conn.DeleteAll<SoundUsageSession>();
                 conn.DeleteAll<FocusSession>();
+                conn.Execute("VACUUM");
+            }
+        }
+
+        /// <summary>
+        /// Delete all usage rows older than <paramref name="cutoff"/> and reclaim space. Used by
+        /// the daily retention job. App-category preferences are intentionally preserved.
+        /// </summary>
+        public static void PurgeDataOlderThan(DateTime cutoff)
+        {
+            var cutoffKey = cutoff.ToString("yyyy-MM-dd");
+            lock (_dbLock)
+            {
+                var conn = GetConnection();
+                conn.Execute("DELETE FROM AppUsageSession WHERE StartTime < ?", cutoff);
+                conn.Execute("DELETE FROM SoundUsageSession WHERE StartTime < ?", cutoff);
+                conn.Execute("DELETE FROM FocusSession WHERE StartTime < ?", cutoff);
+                conn.Execute("DELETE FROM ScreenTimeSession WHERE SessionDate < ?", cutoffKey);
+                conn.Execute("DELETE FROM ScreenTimePeriod WHERE SessionDate < ?", cutoffKey);
+                conn.Execute("VACUUM");
+            }
+        }
+
+        /// <summary>
+        /// Delete usage rows whose local day falls within [startDate, endDate] (inclusive) and
+        /// reclaim space. Backs the Settings "delete a date range" option.
+        /// </summary>
+        public static void DeleteDataInRange(DateTime startDate, DateTime endDate)
+        {
+            var rangeStart = startDate.Date;
+            var rangeEndExclusive = endDate.Date.AddDays(1);
+            var startKey = rangeStart.ToString("yyyy-MM-dd");
+            var endKey = endDate.Date.ToString("yyyy-MM-dd");
+            lock (_dbLock)
+            {
+                var conn = GetConnection();
+                conn.Execute("DELETE FROM AppUsageSession WHERE StartTime >= ? AND StartTime < ?", rangeStart, rangeEndExclusive);
+                conn.Execute("DELETE FROM SoundUsageSession WHERE StartTime >= ? AND StartTime < ?", rangeStart, rangeEndExclusive);
+                conn.Execute("DELETE FROM FocusSession WHERE StartTime >= ? AND StartTime < ?", rangeStart, rangeEndExclusive);
+                conn.Execute("DELETE FROM ScreenTimeSession WHERE SessionDate >= ? AND SessionDate <= ?", startKey, endKey);
+                conn.Execute("DELETE FROM ScreenTimePeriod WHERE SessionDate >= ? AND SessionDate <= ?", startKey, endKey);
+                conn.Execute("VACUUM");
             }
         }
 

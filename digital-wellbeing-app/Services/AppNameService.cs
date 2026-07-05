@@ -156,11 +156,11 @@ namespace digital_wellbeing_app.Services
                     if (!string.IsNullOrWhiteSpace(versionInfo.FileDescription))
                     {
                         var desc = versionInfo.FileDescription.Trim();
-                        // Filter out generic descriptions
-                        if (!string.IsNullOrEmpty(desc) && 
+                        // Prefer the file's own description, but reject generic placeholders so we
+                        // fall through to ProductName / a prettified process name instead.
+                        if (!string.IsNullOrEmpty(desc) &&
                             !desc.Equals(cleanName, StringComparison.OrdinalIgnoreCase) &&
-                            !desc.Equals("Windows Application", StringComparison.OrdinalIgnoreCase) &&
-                            !desc.Equals("Application", StringComparison.OrdinalIgnoreCase))
+                            !IsGenericDescription(desc))
                         {
                             return desc;
                         }
@@ -180,6 +180,16 @@ namespace digital_wellbeing_app.Services
             // Fallback: capitalize and clean up the process name
             return PrettifyName(cleanName);
         }
+
+        // Generic descriptions many executables carry that are worse than a prettified name.
+        private static readonly HashSet<string> GenericDescriptions = new(StringComparer.OrdinalIgnoreCase)
+        {
+            "Application", "Windows Application", "Microsoft Windows",
+            "Host Process for Windows Services", "COM Surrogate", "Windows Shell Experience Host"
+        };
+
+        private static bool IsGenericDescription(string description)
+            => GenericDescriptions.Contains(description);
 
         /// <summary>
         /// Prettifies a raw process name by capitalizing and adding spaces.

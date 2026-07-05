@@ -220,46 +220,16 @@ namespace digital_wellbeing_app.ViewModels
 
         private void LoadTodaysUsage()
         {
-            var sessions = DatabaseService.GetAppUsageSessionsForDate(DateTime.Now);
-
-            // Group by (AppName, ExecutablePath)
-            var grouped = sessions
-                .GroupBy(s => new { s.AppName, s.ExecutablePath })
-                .Select(g => new AppUsageSummary
+            // Shared "today so far" source (persisted + live session) so this page's total
+            // matches the Dashboard's App Time exactly.
+            var grouped = LiveUsageProvider.GetTodayAppEntries()
+                .Select(e => new AppUsageSummary
                 {
-                    AppName = AppNameService.GetDisplayName(g.Key.AppName, g.Key.ExecutablePath),
-                    ExecutablePath = g.Key.ExecutablePath,
-                    TotalDuration = TimeSpan.FromSeconds(g.Sum(s => s.Duration.TotalSeconds))
+                    AppName = AppNameService.GetDisplayName(e.AppName, e.ExecutablePath),
+                    ExecutablePath = e.ExecutablePath,
+                    TotalDuration = e.Duration
                 })
-                .OrderByDescending(x => x.TotalDuration)
                 .ToList();
-
-            // Add current session's time to the matching app
-            var currentSession = _tracker.CurrentSession;
-            if (currentSession != null)
-            {
-                var currentDuration = DateTime.Now - currentSession.StartTime;
-                var existing = grouped.FirstOrDefault(g => 
-                    g.AppName == currentSession.AppName && 
-                    g.ExecutablePath == currentSession.ExecutablePath);
-
-                if (existing != null)
-                {
-                    existing.TotalDuration += currentDuration;
-                }
-                else
-                {
-                    grouped.Insert(0, new AppUsageSummary
-                    {
-                        AppName = AppNameService.GetDisplayName(currentSession.AppName, currentSession.ExecutablePath),
-                        ExecutablePath = currentSession.ExecutablePath,
-                        TotalDuration = currentDuration
-                    });
-                }
-
-                // Re-sort after adding current session time
-                grouped = grouped.OrderByDescending(x => x.TotalDuration).ToList();
-            }
 
             TodaysUsage.Clear();
             foreach (var item in grouped)

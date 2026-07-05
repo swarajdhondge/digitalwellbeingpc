@@ -299,11 +299,48 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Keep history" Style="{StaticResource Pulse.Body}"/>
+                            <TextBlock Text="Automatically delete usage older than this" Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
+                        </StackPanel>
+                        <ComboBox x:Name="RetentionCombo" Grid.Column="1" Width="150" VerticalAlignment="Center"
+                                  SelectionChanged="RetentionCombo_SelectionChanged">
+                            <ComboBoxItem Content="3 months" Tag="3"/>
+                            <ComboBoxItem Content="6 months" Tag="6"/>
+                            <ComboBoxItem Content="12 months" Tag="12"/>
+                            <ComboBoxItem Content="24 months" Tag="24"/>
+                            <ComboBoxItem Content="Forever" Tag="0"/>
+                        </ComboBox>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
                             <TextBlock Text="Export my data" Style="{StaticResource Pulse.Body}"/>
                             <TextBlock Text="Save all tracked data as CSV files" Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
                         </StackPanel>
                         <Button Content="Export" Grid.Column="1" Click="ExportData_Click" Style="{StaticResource Pulse.Button.Ghost}" Padding="16,6" VerticalAlignment="Center"/>
                     </Grid>
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Delete a date range" Style="{StaticResource Pulse.Body}"/>
+                            <TextBlock Text="Remove tracked data between two dates" Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                            <DatePicker x:Name="RangeFromPicker" Width="130" VerticalAlignment="Center"/>
+                            <TextBlock Text="to" Style="{StaticResource Pulse.Muted}" VerticalAlignment="Center" Margin="8,0"/>
+                            <DatePicker x:Name="RangeToPicker" Width="130" VerticalAlignment="Center"/>
+                            <Button Content="Delete" Click="DeleteDateRange_Click" Style="{StaticResource Pulse.Button.Ghost}"
+                                    Foreground="{StaticResource Danger}" Padding="16,6" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Grid>
+
                     <Grid Margin="0,0,0,12">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -342,7 +379,7 @@
                     </StackPanel>
                     <TextBlock Text="Track your screen time, app usage, and audio exposure to maintain a healthy digital lifestyle."
                                Style="{StaticResource Pulse.Body2}" Margin="0,0,0,12"/>
-                    <TextBlock Text="Licensed under the Apache License 2.0" Style="{StaticResource Pulse.Muted}" Margin="0,0,0,16"/>
+                    <TextBlock Text="Licensed under the GNU General Public License v3.0" Style="{StaticResource Pulse.Muted}" Margin="0,0,0,16"/>
                     <StackPanel Orientation="Horizontal">
                         <Button Content="Check for updates" Click="CheckForUpdates_Click" Style="{StaticResource Pulse.Button.Ghost}" Padding="16,6" Margin="0,0,8,0"/>
                         <Border Background="{DynamicResource Card2}" CornerRadius="{StaticResource Radius.SM}" Padding="12,6" Cursor="Hand" MouseLeftButtonDown="OpenGitHub_Click">

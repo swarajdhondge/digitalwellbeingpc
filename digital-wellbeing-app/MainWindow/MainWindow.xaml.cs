@@ -55,6 +55,27 @@ namespace digital_wellbeing_app.MainWindow
         {
             InitializeComponent();
 
+            // Screenshot mode (flag file dropped by the capture pipeline under %LocalAppData%\Pulse):
+            // make the window edge-to-edge opaque so captures have no desktop bleed and need no
+            // cropping. The transparent frame is the Window's own Background="Transparent" (needed
+            // for the drop shadow) plus WindowBorder's 10px margin + rounded corners; an opaque
+            // window background fills all of it. A file flag under the known DB folder is used
+            // because env vars don't reliably reach the FlaUI-launched process.
+            try
+            {
+                var flag = System.IO.Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    "Pulse", ".screenshot-mode");
+                if (System.IO.File.Exists(flag))
+                {
+                    Background = System.Windows.Media.Brushes.Black;
+                    WindowBorder.Margin = new Thickness(0);
+                    WindowBorder.CornerRadius = new CornerRadius(0);
+                    WindowBorder.Effect = null;
+                }
+            }
+            catch { /* never let screenshot mode break startup */ }
+
             // Set version dynamically from assembly PE file version info
             try
             {
@@ -62,7 +83,7 @@ namespace digital_wellbeing_app.MainWindow
                 if (!string.IsNullOrEmpty(location))
                 {
                     var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(location);
-                    SidebarVersionText.Text = $"v{fvi.ProductVersion ?? "2.1.0"}";
+                    SidebarVersionText.Text = $"v{fvi.ProductVersion ?? "2.2.0"}";
                 }
             }
             catch { /* Keep default text from XAML */ }
@@ -102,6 +123,7 @@ namespace digital_wellbeing_app.MainWindow
             // Subscribe to system events for pause/resume of services
             SystemEvents.SessionSwitch += OnSystemSessionSwitch;
             SystemEvents.PowerModeChanged += OnSystemPowerModeChanged;
+            SystemEvents.TimeChanged += OnSystemTimeChanged;
         }
 
         private void InitFocusSession()
@@ -764,6 +786,14 @@ namespace digital_wellbeing_app.MainWindow
             {
                 try
                 {
+                    // Store build: updates come from the Store, so deep-link to the listing.
+                    if (Services.PackagedAppInfo.IsPackaged)
+                    {
+                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(
+                            Services.PackagedAppInfo.GetStoreDeepLink()) { UseShellExecute = true });
+                        return;
+                    }
+
                     var updateService = new Services.UpdateService();
                     await Dispatcher.InvokeAsync(async () =>
                     {
@@ -927,6 +957,7 @@ namespace digital_wellbeing_app.MainWindow
             // Unsubscribe from system events
             SystemEvents.SessionSwitch -= OnSystemSessionSwitch;
             SystemEvents.PowerModeChanged -= OnSystemPowerModeChanged;
+            SystemEvents.TimeChanged -= OnSystemTimeChanged;
 
             _goalCheckTimer?.Stop();
             _breakReminderService?.Dispose();
@@ -1030,6 +1061,26 @@ namespace digital_wellbeing_app.MainWindow
                     _windDownService?.Start(resetNotification: false);
                     System.Diagnostics.Debug.WriteLine("[System] Session unlocked - services resumed");
                     break;
+            }
+        }
+
+        /// <summary>
+        /// Handle a system clock or timezone change. Usage buckets are keyed by local date, so a
+        /// mid-session jump would otherwise split one activity across day buckets. Force both
+        /// trackers to close and restart their current segments at the new wall-clock time.
+        /// </summary>
+        private void OnSystemTimeChanged(object? sender, EventArgs e)
+        {
+            try
+            {
+                var app = System.Windows.Application.Current as App;
+                app?.ScreenTracker?.HandleTimeChanged();
+                app?.AppTracker?.FlushCurrentSession();
+                Services.LogService.Info("System time changed - tracker segments flushed");
+            }
+            catch (Exception ex)
+            {
+                Services.LogService.Warning($"Time-change flush error: {ex.Message}");
             }
         }
 

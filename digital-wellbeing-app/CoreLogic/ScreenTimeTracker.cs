@@ -66,6 +66,13 @@ namespace digital_wellbeing_app.CoreLogic
         /// <summary>Event fired when tracking state changes</summary>
         public event EventHandler<TrackingState>? StateChanged;
 
+        /// <summary>
+        /// Source of the user's idle duration. Defaults to the real Win32 helper; overridable so
+        /// tests can drive the active/idle path deterministically. (Headless CI and idle machines
+        /// have no recent input, which would otherwise make activity-based accumulation flaky.)
+        /// </summary>
+        public Func<TimeSpan> IdleTimeProvider { get; set; } = WindowsIdleTimeHelper.GetIdleTime;
+
         public ScreenTimeTracker()
         {
             var (initialActive, start, sessions) = LoadSessionData();
@@ -154,6 +161,33 @@ namespace digital_wellbeing_app.CoreLogic
             StateChanged?.Invoke(this, TrackingState.Active);
         }
 
+        /// <summary>
+        /// Force-flush persisted data and restart the current segment at the new wall-clock time.
+        /// Called on a system clock/timezone change so day buckets stay coherent. Screen-time
+        /// buckets are keyed by local date (yyyy-MM-dd); a mid-session clock jump would otherwise
+        /// split one activity across days between the save-time and query-time keys.
+        /// </summary>
+        public void HandleTimeChanged()
+        {
+            lock (_stateLock)
+            {
+                if (_state == TrackingState.Active)
+                {
+                    SaveSessionData();
+                    SaveCurrentScreenSession();
+                }
+
+                CheckDayRollover();
+
+                var now = DateTime.Now;
+                _currentSegmentStart = now;
+                _currentSegmentAccumulated = 0;
+                _continuousSessionStart = now;
+                _continuousSessionSeconds = 0;
+                _lastSaved = now;
+            }
+        }
+
         public void Dispose()
         {
             _timer.Stop();
@@ -171,7 +205,7 @@ namespace digital_wellbeing_app.CoreLogic
                 CheckDayRollover();
 
                 // Get current idle state
-                var idleTime = WindowsIdleTimeHelper.GetIdleTime();
+                var idleTime = IdleTimeProvider();
                 bool isUserIdle = idleTime.TotalSeconds > IdleThresholdSeconds;
                 bool isPassivelyConsuming = ActivityDetector.IsPassivelyConsuming();
 

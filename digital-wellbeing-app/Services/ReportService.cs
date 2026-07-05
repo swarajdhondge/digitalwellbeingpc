@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using digital_wellbeing_app.Helpers;
 using digital_wellbeing_app.Models;
 
 namespace digital_wellbeing_app.Services
@@ -69,9 +70,14 @@ namespace digital_wellbeing_app.Services
             {
                 var dateKey = date.ToString("yyyy-MM-dd");
                 var period = periods.FirstOrDefault(p => p.SessionDate == dateKey);
-                
+
                 var totalSeconds = period?.AccumulatedActiveSeconds ?? 0;
-                
+
+                // Today's bucket must include the live session so the weekly chart's "today" bar
+                // matches the Dashboard's live headline instead of lagging by the flush interval.
+                if (date == DateTime.Today)
+                    totalSeconds = (int)LiveUsageProvider.GetTodayActiveTime().TotalSeconds;
+
                 result.Add(new DailyScreenTime
                 {
                     Date = date,
@@ -84,30 +90,49 @@ namespace digital_wellbeing_app.Services
         }
 
         /// <summary>
+        /// Build a category lookup keyed by the canonical app identity (normalized process name).
+        /// Legacy rows whose <c>AppIdentifier</c> was a full path collapse to the same key here,
+        /// so the last-updated value wins on collision (safe — no ToDictionary duplicate throw).
+        /// </summary>
+        private static Dictionary<string, AppCategoryType> BuildCategoryLookup()
+        {
+            var map = new Dictionary<string, AppCategoryType>(StringComparer.OrdinalIgnoreCase);
+            foreach (var c in DatabaseService.GetAllAppCategories())
+            {
+                var key = AppIdentity.NormalizeKey(c.AppIdentifier);
+                if (key.Length > 0)
+                    map[key] = c.Category;
+            }
+            return map;
+        }
+
+        /// <summary>
         /// Get top apps by usage for the specified date range
         /// </summary>
         /// <param name="topCount">Number of top apps to return (default 5)</param>
         public List<AppUsageSummary> GetTopAppsForPeriod(DateTime startDate, DateTime endDate, int topCount = 5)
         {
             var sessions = DatabaseService.GetAppUsageSessionsForRange(startDate, endDate);
-            var categories = DatabaseService.GetAllAppCategories()
-                .ToDictionary(c => c.AppIdentifier, c => c.Category);
+            var categories = BuildCategoryLookup();
 
             // Group by executable path and sum durations
             var appUsage = sessions
                 .GroupBy(s => s.ExecutablePath)
-                .Select(g => 
+                .Select(g =>
                 {
                     var totalSeconds = (int)g.Sum(s => (s.EndTime - s.StartTime).TotalSeconds);
-                    var appIdentifier = g.Key;
-                    
+                    // Category keys are the canonical app identity (process name), so look up by
+                    // the normalized executable path (falling back to the app name) rather than
+                    // the raw full path — which never matched the stored process-name keys.
+                    var categoryKey = AppIdentity.NormalizeKey(g.Key, g.First().AppName);
+
                     return new AppUsageSummary
                     {
                         AppName = g.First().AppName,
                         ExecutablePath = g.Key,
                         TotalSeconds = totalSeconds,
-                        Category = categories.TryGetValue(appIdentifier, out var cat) 
-                            ? cat 
+                        Category = categories.TryGetValue(categoryKey, out var cat)
+                            ? cat
                             : AppCategoryType.Uncategorized
                     };
                 })
@@ -144,8 +169,7 @@ namespace digital_wellbeing_app.Services
         public FocusLeisureComparison GetFocusVsLeisureTime(DateTime startDate, DateTime endDate)
         {
             var sessions = DatabaseService.GetAppUsageSessionsForRange(startDate, endDate);
-            var categories = DatabaseService.GetAllAppCategories()
-                .ToDictionary(c => c.AppIdentifier, c => c.Category);
+            var categories = BuildCategoryLookup();
 
             var focusSeconds = 0.0;
             var leisureSeconds = 0.0;
@@ -154,8 +178,10 @@ namespace digital_wellbeing_app.Services
             foreach (var session in sessions)
             {
                 var duration = (session.EndTime - session.StartTime).TotalSeconds;
-                
-                if (categories.TryGetValue(session.ExecutablePath, out var category))
+
+                // Look up by the canonical app identity, not the raw executable path.
+                var categoryKey = AppIdentity.NormalizeKey(session.ExecutablePath, session.AppName);
+                if (categories.TryGetValue(categoryKey, out var category))
                 {
                     switch (category)
                     {

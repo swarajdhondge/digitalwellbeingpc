@@ -15,6 +15,8 @@ namespace digital_wellbeing_app.Views.Settings
         private bool _isLoadingGoal;
         private bool _isLoadingBreakReminder;
         private bool _isLoadingWindDown;
+        private bool _isLoadingRetention;
+        private bool _isLoadingStartup;
 
         public SettingsView()
         {
@@ -28,7 +30,7 @@ namespace digital_wellbeing_app.Views.Settings
                 if (!string.IsNullOrEmpty(location))
                 {
                     var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(location);
-                    AboutVersionText.Text = $"Version {fvi.ProductVersion ?? "2.1.0"}";
+                    AboutVersionText.Text = $"Version {fvi.ProductVersion ?? "2.2.0"}";
                 }
             }
             catch { /* Keep default text from XAML */ }
@@ -51,8 +53,8 @@ namespace digital_wellbeing_app.Views.Settings
                     break;
             }
             
-            // Load startup preference
-            StartupCheckBox.IsChecked = StartupService.IsEnabled();
+            // Load startup preference (async: routes to Run key or MSIX StartupTask by build).
+            _ = LoadStartupSettingAsync();
 
             // Load goal settings
             LoadGoalSettings();
@@ -84,6 +86,67 @@ namespace digital_wellbeing_app.Views.Settings
             }
 
             RefreshDbSize();
+            LoadRetentionSetting();
+        }
+
+        private void LoadRetentionSetting()
+        {
+            _isLoadingRetention = true;
+            var months = _settingsService.LoadRetentionMonths();
+            foreach (var item in RetentionCombo.Items)
+            {
+                if (item is System.Windows.Controls.ComboBoxItem cbi &&
+                    cbi.Tag is string tag && int.TryParse(tag, out var m) && m == months)
+                {
+                    RetentionCombo.SelectedItem = cbi;
+                    break;
+                }
+            }
+            _isLoadingRetention = false;
+        }
+
+        private void RetentionCombo_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (_isLoadingRetention) return;
+            if (RetentionCombo.SelectedItem is System.Windows.Controls.ComboBoxItem cbi &&
+                cbi.Tag is string tag && int.TryParse(tag, out var months))
+            {
+                _settingsService.SaveRetentionMonths(months);
+            }
+        }
+
+        private void DeleteDateRange_Click(object sender, RoutedEventArgs e)
+        {
+            var from = RangeFromPicker.SelectedDate;
+            var to = RangeToPicker.SelectedDate;
+            if (from == null || to == null)
+            {
+                System.Windows.MessageBox.Show("Pick both a start and end date.", "Delete a date range",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+            if (from > to)
+            {
+                (from, to) = (to, from);
+            }
+
+            var result = System.Windows.MessageBox.Show(
+                $"Permanently delete all tracked data from {from:yyyy-MM-dd} to {to:yyyy-MM-dd}?\n\nThis cannot be undone.",
+                "Delete a date range", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result != MessageBoxResult.Yes) return;
+
+            try
+            {
+                DatabaseService.DeleteDataInRange(from.Value, to.Value);
+                RefreshDbSize();
+                System.Windows.MessageBox.Show("The selected date range has been deleted.", "Data Deleted",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (System.Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Failed to delete data: {ex.Message}", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void RefreshDbSize()
@@ -683,10 +746,18 @@ namespace digital_wellbeing_app.Views.Settings
 
         #region Startup Settings
 
-        private void StartupCheckBox_Checked(object sender, RoutedEventArgs e)
+        private async System.Threading.Tasks.Task LoadStartupSettingAsync()
         {
+            _isLoadingStartup = true;
+            try { StartupCheckBox.IsChecked = await StartupService.IsEnabledAsync(); }
+            finally { _isLoadingStartup = false; }
+        }
+
+        private async void StartupCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            if (_isLoadingStartup) return;
             bool enable = (StartupCheckBox.IsChecked == true);
-            StartupService.Enable(enable);
+            await StartupService.SetEnabledAsync(enable);
         }
 
         #endregion

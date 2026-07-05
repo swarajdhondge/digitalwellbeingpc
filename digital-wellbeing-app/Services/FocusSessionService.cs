@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using digital_wellbeing_app.Helpers;
 using digital_wellbeing_app.Models;
 using digital_wellbeing_app.Platform.Windows;
 
@@ -27,6 +28,11 @@ namespace digital_wellbeing_app.Services
         // How long to wait before re-warning about the same app (if user ignores)
         private static readonly TimeSpan WarnCooldown = TimeSpan.FromSeconds(30);
         private static readonly TimeSpan BlockCooldown = TimeSpan.FromSeconds(5); // Re-minimize faster
+
+        // Persist a heartbeat this often so crash recovery ends orphaned sessions near their real
+        // end instead of the fabricated planned duration.
+        private static readonly TimeSpan HeartbeatInterval = TimeSpan.FromSeconds(60);
+        private DateTime _lastHeartbeatUtc = DateTime.MinValue;
 
         /// <summary>
         /// System apps that should never be blocked (Windows shell, our app, etc.)
@@ -148,13 +154,24 @@ namespace digital_wellbeing_app.Services
 
                 foreach (var session in todaySessions)
                 {
-                    // Orphaned = no end time set (EndTime defaults to MinValue)
-                    if (session.EndTime == DateTime.MinValue && !session.Completed)
+                    // Orphaned = still active (no real end time) and never completed. Handle both
+                    // null and MinValue, since older rows may have persisted either.
+                    var hasEnd = session.EndTime.HasValue && session.EndTime.Value > DateTime.MinValue;
+                    if (!hasEnd && !session.Completed)
                     {
-                        session.EndTime = session.StartTime.AddMinutes(session.PlannedDurationMinutes);
+                        // Recover to the last heartbeat (when the app was last alive) rather than
+                        // fabricating the full planned duration. Fall back to planned end for legacy
+                        // rows that predate the heartbeat, and never end before the session started.
+                        var recoveredEnd = session.LastSeenUtc > DateTime.MinValue
+                            ? session.LastSeenUtc.ToLocalTime()
+                            : session.StartTime.AddMinutes(session.PlannedDurationMinutes);
+                        if (recoveredEnd < session.StartTime)
+                            recoveredEnd = session.StartTime;
+
+                        session.EndTime = recoveredEnd;
                         session.Completed = false;
                         DatabaseService.SaveFocusSession(session);
-                        System.Diagnostics.Debug.WriteLine($"[Focus] Recovered orphaned session from {session.StartTime}");
+                        System.Diagnostics.Debug.WriteLine($"[Focus] Recovered orphaned session from {session.StartTime} to {recoveredEnd}");
                     }
                 }
             }
@@ -182,8 +199,10 @@ namespace digital_wellbeing_app.Services
                 PlannedDurationMinutes = durationMinutes,
                 EnforcementLevel = EnforcementLevel,
                 SessionDate = DateTime.Now.ToString("yyyy-MM-dd"),
-                Completed = false
+                Completed = false,
+                LastSeenUtc = DateTime.UtcNow
             };
+            _lastHeartbeatUtc = DateTime.UtcNow;
 
             // Persist immediately so crash recovery can find it
             DatabaseService.SaveFocusSession(_currentSession);
@@ -234,7 +253,11 @@ namespace digital_wellbeing_app.Services
         {
             if (string.IsNullOrEmpty(appIdentifier)) return false;
 
-            // Never block system apps
+            // Collapse process name / path variants to one canonical key.
+            appIdentifier = AppIdentity.NormalizeKey(appIdentifier);
+            if (appIdentifier.Length == 0) return false;
+
+            // Never block system apps (exclusion entries are already extension-less process names)
             if (SystemExclusionList.Contains(appIdentifier))
                 return false;
 
@@ -263,12 +286,19 @@ namespace digital_wellbeing_app.Services
         /// </summary>
         public void SetAppCategory(string appIdentifier, string appName, string executablePath, AppCategoryType category)
         {
-            _appCategories[appIdentifier] = category;
+            // Store under the canonical key so runtime enforcement (keyed by process name) and
+            // the reports (keyed by normalized executable path) both resolve to the same row.
+            // Honor the caller's explicit identifier first, falling back to the path/name.
+            var key = AppIdentity.NormalizeKey(appIdentifier);
+            if (key.Length == 0) key = AppIdentity.NormalizeKey(executablePath, appName);
+            if (key.Length == 0) return;
+
+            _appCategories[key] = category;
 
             // Save to database
             DatabaseService.SaveAppCategory(new AppCategory
             {
-                AppIdentifier = appIdentifier,
+                AppIdentifier = key,
                 AppName = appName,
                 ExecutablePath = executablePath,
                 Category = category,
@@ -281,7 +311,8 @@ namespace digital_wellbeing_app.Services
         /// </summary>
         public AppCategoryType GetAppCategory(string appIdentifier)
         {
-            if (_appCategories.TryGetValue(appIdentifier, out var category))
+            var key = AppIdentity.NormalizeKey(appIdentifier);
+            if (_appCategories.TryGetValue(key, out var category))
                 return category;
             return AppCategoryType.Uncategorized;
         }
@@ -322,12 +353,13 @@ namespace digital_wellbeing_app.Services
         /// </summary>
         public void AllowAppForSession(string appIdentifier)
         {
-            if (!string.IsNullOrEmpty(appIdentifier))
+            var key = AppIdentity.NormalizeKey(appIdentifier);
+            if (key.Length > 0)
             {
-                _sessionOverrideApps.Add(appIdentifier);
+                _sessionOverrideApps.Add(key);
                 // Remove from action tracking since it's now allowed
-                _appLastActionTime.Remove(appIdentifier);
-                System.Diagnostics.Debug.WriteLine($"[Focus] App allowed for session: {appIdentifier}");
+                _appLastActionTime.Remove(key);
+                System.Diagnostics.Debug.WriteLine($"[Focus] App allowed for session: {key}");
             }
         }
 
@@ -338,10 +370,11 @@ namespace digital_wellbeing_app.Services
         public void DismissWarning(string appIdentifier)
         {
             // Remove the cooldown entry so next time they go to this app, they get warned immediately
-            if (!string.IsNullOrEmpty(appIdentifier))
+            var key = AppIdentity.NormalizeKey(appIdentifier);
+            if (key.Length > 0)
             {
-                _appLastActionTime.Remove(appIdentifier);
-                System.Diagnostics.Debug.WriteLine($"[Focus] Warning dismissed for: {appIdentifier}");
+                _appLastActionTime.Remove(key);
+                System.Diagnostics.Debug.WriteLine($"[Focus] Warning dismissed for: {key}");
             }
         }
 
@@ -350,7 +383,7 @@ namespace digital_wellbeing_app.Services
         /// </summary>
         public bool IsAppOverriddenForSession(string appIdentifier)
         {
-            return _sessionOverrideApps.Contains(appIdentifier);
+            return _sessionOverrideApps.Contains(AppIdentity.NormalizeKey(appIdentifier));
         }
 
         /// <summary>
@@ -399,7 +432,10 @@ namespace digital_wellbeing_app.Services
                 var categories = DatabaseService.GetAllAppCategories();
                 foreach (var cat in categories)
                 {
-                    _appCategories[cat.AppIdentifier] = cat.Category;
+                    // Normalize on load so legacy rows (path-keyed) map to the canonical key.
+                    var key = AppIdentity.NormalizeKey(cat.AppIdentifier);
+                    if (key.Length > 0)
+                        _appCategories[key] = cat.Category;
                 }
             }
             catch
@@ -417,6 +453,16 @@ namespace digital_wellbeing_app.Services
             {
                 EndSession(true);
                 return;
+            }
+
+            // Persist a lightweight heartbeat so a crash mid-session recovers to (roughly) now.
+            var utcNow = DateTime.UtcNow;
+            if (utcNow - _lastHeartbeatUtc >= HeartbeatInterval)
+            {
+                _lastHeartbeatUtc = utcNow;
+                _currentSession.LastSeenUtc = utcNow;
+                try { DatabaseService.SaveFocusSession(_currentSession); }
+                catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"[Focus] Heartbeat save failed: {ex.Message}"); }
             }
 
             SessionTick?.Invoke();
@@ -438,7 +484,10 @@ namespace digital_wellbeing_app.Services
                 using var process = Process.GetProcessById((int)processId);
                 if (process == null) return;
 
-                var appIdentifier = process.ProcessName;
+                // displayName is shown in the warning UI; appIdentifier is the canonical
+                // internal key used for category lookup, cooldowns and session overrides.
+                var displayName = process.ProcessName;
+                var appIdentifier = AppIdentity.NormalizeKey(displayName);
 
                 // Check if this is a distracting app
                 if (!IsDistractingApp(appIdentifier))
@@ -474,7 +523,7 @@ namespace digital_wellbeing_app.Services
                     case FocusEnforcementLevel.Warn:
                         System.Diagnostics.Debug.WriteLine($"[Focus] Warn mode - showing notification");
                         RecordDistractionWarning();
-                        DistractingAppDetected?.Invoke(appIdentifier, execPath);
+                        DistractingAppDetected?.Invoke(displayName, execPath);
                         break;
 
                     case FocusEnforcementLevel.Block:
@@ -486,7 +535,7 @@ namespace digital_wellbeing_app.Services
                         
                         // Show notification (only if minimize failed OR first time)
                         RecordDistractionWarning();
-                        DistractingAppDetected?.Invoke(appIdentifier, execPath);
+                        DistractingAppDetected?.Invoke(displayName, execPath);
                         break;
                 }
             }

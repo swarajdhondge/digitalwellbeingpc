@@ -2,7 +2,7 @@
 
 _Android-style Digital Wellbeing for Windows — calm, private, and fully on-device._
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License: GPL-3.0](https://img.shields.io/badge/License-GPL%203.0-blue.svg)](LICENSE)
 [![.NET 9](https://img.shields.io/badge/.NET-9.0-purple.svg)](https://dotnet.microsoft.com/)
 [![Platform](https://img.shields.io/badge/Platform-Windows-0078D6.svg)](https://www.microsoft.com/windows)
 [![GitHub release](https://img.shields.io/github/v/release/swarajdhondge/digitalwellbeingpc)](https://github.com/swarajdhondge/digitalwellbeingpc/releases)
@@ -204,4 +204,8 @@ A Windows variant of Android's Digital Wellbeing. Track screen time, monitor app
 
 ## License
 
-[MIT](LICENSE) - use it however you like.
+Copyright (C) 2026 Swaraj Dhondge.
+
+Pulse is free software licensed under the [GNU General Public License v3.0](LICENSE). You may redistribute and/or modify it under the terms of the GPL; it comes with **no warranty**. Derivative works must also be licensed under GPL-3.0.
+
+Third-party dependencies and their licenses are listed in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md). Privacy details are in [PRIVACY.md](PRIVACY.md).

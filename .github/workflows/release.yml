@@ -1,5 +1,7 @@
 name: Build and Release
 
+# Fires on version tags like v2.1.0. The tag is the single source of truth
+# for the release version (see the `version` job below).
 on:
   push:
     tags:
@@ -11,9 +13,57 @@ permissions:
 env:
   PROJECT: 'digital-wellbeing-app/digital-wellbeing-app.csproj'
   PACKAGE_NAME: 'DigitalWellbeingPC'
+  MAIN_EXE: 'DigitalWellbeing.exe'
+  # Intended final path of the MSIX packaging project (.wapproj). It may not
+  # exist yet; the msix job below references it as the agreed target location.
+  WAPPROJ: 'digital-wellbeing-app.Package/digital-wellbeing-app.Package.wapproj'
 
 jobs:
-  build-and-release:
+  # --------------------------------------------------------------------------
+  # VERSION SINGLE-SOURCING
+  # Compute the version exactly once (git tag minus the leading `v`) and expose
+  # it to every downstream job. Consumers: csproj <Version>, `vpk pack -v`,
+  # and /p:AppxManifestVersion.
+  # --------------------------------------------------------------------------
+  version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+    steps:
+      - name: Derive version from tag
+        id: v
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Resolved version: $VERSION"
+
+  # --------------------------------------------------------------------------
+  # TEST GATE
+  # Unit tests must pass before anything is packaged. Every build job `needs`
+  # this job, so a red test run blocks the entire release.
+  # --------------------------------------------------------------------------
+  test:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 9.0
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Run unit tests
+        run: dotnet test digital-wellbeing-app/Tests/Tests.csproj -c Release
+
+  # --------------------------------------------------------------------------
+  # VELOPACK BUILD (unsigned)
+  # Publishes the app and produces the Velopack release set (Setup exe + delta
+  # packages) as an UNSIGNED workflow artifact. It intentionally does NOT touch
+  # the GitHub Release — see the UNSIGNED-ARTIFACT BOUNDARY note further down.
+  # --------------------------------------------------------------------------
+  velopack-build:
+    needs: [version, test]
     runs-on: windows-latest
     steps:
       - name: Checkout code
@@ -27,18 +77,145 @@ jobs:
       - name: Install Velopack CLI
         run: dotnet tool install -g vpk
 
-      - name: Get version from tag
-        id: version
-        shell: powershell
-        run: |
-          $version = '${{ github.ref_name }}'.TrimStart('v')
-          echo "VERSION=$version" >> $env:GITHUB_OUTPUT
+      - name: Stamp version into AssemblyInfo.cs and app.manifest
+        shell: pwsh
+        run: ./.github/scripts/stamp-version.ps1 -Version "${{ needs.version.outputs.version }}"
 
+      # Inject the tag version into the csproj <Version> via an MSBuild property
+      # override (cleaner than rewriting the file on disk).
       - name: Publish application
-        run: dotnet publish ${{ env.PROJECT }} -c Release -o ./publish
+        run: dotnet publish ${{ env.PROJECT }} -c Release -p:Version=${{ needs.version.outputs.version }} -o ./publish
 
       - name: Create Velopack release
-        run: vpk pack -u ${{ env.PACKAGE_NAME }} -v ${{ steps.version.outputs.VERSION }} -p ./publish -o ./releases --mainExe DigitalWellbeing.exe
+        run: vpk pack -u ${{ env.PACKAGE_NAME }} -v ${{ needs.version.outputs.version }} -p ./publish -o ./releases --mainExe ${{ env.MAIN_EXE }}
+
+      - name: Upload Velopack artifacts (unsigned)
+        uses: actions/upload-artifact@v4
+        with:
+          name: velopack-releases
+          path: ./releases/*
+          if-no-files-found: error
+          retention-days: 7
+
+  # --------------------------------------------------------------------------
+  # MSIX BUILD (unsigned, Store-upload package)
+  # Builds the .wapproj into a .msixupload for Partner Center. Store submission
+  # stays MANUAL for now — we only upload the package as a workflow artifact.
+  # --------------------------------------------------------------------------
+  msix-build:
+    needs: [version, test]
+    runs-on: windows-latest
+    # Non-blocking: until the >=512px master icon + tile assets exist (see
+    # digital-wellbeing-app.Package/README.md), the packaging build will fail on
+    # missing logos. That must NOT block the Velopack GitHub release below.
+    continue-on-error: true
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 9.0
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Stamp version into AssemblyInfo.cs and app.manifest
+        shell: pwsh
+        run: ./.github/scripts/stamp-version.ps1 -Version "${{ needs.version.outputs.version }}"
+
+      # AppxManifestVersion must be a 4-part version, so append `.0` to the
+      # 3-part tag version (e.g. 2.1.0 -> 2.1.0.0). Store identity is fixed in
+      # the manifest (Identity/Name SwarajDhondge.DigitalWellbeingPC,
+      # Publisher CN=516C9AB9-2BCA-4787-9354-4A2FFCDBED01, Store ID 9ND5GNMBQVQ7).
+      # `/restore` pulls NuGet deps before the packaging build.
+      - name: Build MSIX (StoreUpload bundle)
+        run: >
+          msbuild "${{ env.WAPPROJ }}"
+          /restore
+          /p:Configuration=Release
+          /p:AppxBundle=Always
+          /p:UapAppxPackageBuildMode=StoreUpload
+          /p:AppxBundlePlatforms="x64|arm64"
+          /p:AppxManifestVersion=${{ needs.version.outputs.version }}.0
+          /p:AppxPackageDir="${{ github.workspace }}\AppPackages\\"
+
+      - name: Upload MSIX artifact (unsigned)
+        uses: actions/upload-artifact@v4
+        with:
+          name: msix-package
+          path: '**/*.msixupload'
+          if-no-files-found: error
+          retention-days: 7
+
+  # ==========================================================================
+  # >>> UNSIGNED-ARTIFACT BOUNDARY <<<
+  #
+  # Everything ABOVE produces UNSIGNED build outputs (uploaded as the
+  # `velopack-releases` and `msix-package` artifacts). Everything BELOW consumes
+  # already-built artifacts and attaches them to the GitHub Release.
+  #
+  # A future code-signing step slots in HERE without restructuring: add a
+  # `sign` job that `needs: [velopack-build, msix-build]`, downloads the
+  # unsigned artifacts, submits them to SignPath, and re-uploads SIGNED
+  # artifacts under the SAME artifact names. The `release` job then only needs
+  # to depend on `sign` instead of the two build jobs.
+  #
+  #  sign:
+  #    needs: [velopack-build, msix-build]
+  #    runs-on: ubuntu-latest
+  #    steps:
+  #      - uses: actions/download-artifact@v4
+  #      - name: Submit signing request to SignPath
+  #        uses: signpath/github-action-submit-signing-request@v2
+  #        with:
+  #          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+  #          organization-id: ${{ secrets.SIGNPATH_ORGANIZATION_ID }}
+  #          project-slug: DigitalWellbeingPC
+  #          signing-policy-slug: release-signing
+  #          github-artifact-id: ${{ ... }}
+  #          wait-for-completion: true
+  #      - uses: actions/upload-artifact@v4   # re-upload SIGNED under same names
+  # ==========================================================================
+
+  # --------------------------------------------------------------------------
+  # RELEASE ATTACH
+  # Downloads the built (currently unsigned) artifacts, generates checksums, and
+  # publishes the GitHub Release. Depends only on the build jobs today; point it
+  # at `sign` once the boundary above is filled in.
+  # --------------------------------------------------------------------------
+  release:
+    # Depends only on the Velopack build so a missing-MSIX-asset failure never
+    # blocks the GitHub release. The MSIX artifact is attached opportunistically.
+    needs: [version, velopack-build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Velopack artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: velopack-releases
+          path: ./releases
+
+      - name: Download MSIX artifact (if the packaging build succeeded)
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: msix-package
+          path: ./msix
+
+      # SHA256SUMS.txt over the Velopack release set plus the MSIX output (if any).
+      # Paths are relativized so the checksum file is portable for verifiers.
+      - name: Generate SHA256SUMS.txt
+        run: |
+          {
+            find ./releases -type f
+            [ -d ./msix ] && find ./msix -type f -name '*.msixupload'
+          } | while read -r f; do
+            sha256sum "$f"
+          done | sed 's|\./||' > SHA256SUMS.txt
+          echo "----- SHA256SUMS.txt -----"
+          cat SHA256SUMS.txt
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -46,6 +223,10 @@ jobs:
           tag_name: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
           generate_release_notes: true
-          files: ./releases/*
+          fail_on_unmatched_files: false
+          files: |
+            ./releases/*
+            ./msix/**/*.msixupload
+            SHA256SUMS.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

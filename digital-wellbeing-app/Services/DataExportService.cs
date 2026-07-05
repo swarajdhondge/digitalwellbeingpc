@@ -92,10 +92,13 @@ namespace digital_wellbeing_app.Services
             var rows = DatabaseService.GetAllSoundUsageSessions();
             var path = Path.Combine(dir, "SoundUsageSessions.csv");
             var sb = new StringBuilder();
-            sb.AppendLine("Id,StartTime,EndTime,AvgVolume,EstimatedMaxSPL,DeviceName,DeviceType,WasHarmful");
+            // StartTime..EndTime spans wall-clock time (silence included); the UI reports
+            // ActualListeningDuration/HarmfulDuration instead. Export both explicitly so a naive
+            // (End-Start) can't be mistaken for actual listening time.
+            sb.AppendLine("Id,StartTime,EndTime,ActualListeningSeconds,HarmfulSeconds,AvgVolume,EstimatedMaxSPL,DeviceName,DeviceType,WasHarmful");
             foreach (var r in rows)
             {
-                sb.AppendLine($"{r.Id},{r.StartTime:O},{r.EndTime:O},{r.AvgVolume:F4},{r.EstimatedMaxSPL:F1},{Escape(r.DeviceName)},{Escape(r.DeviceType)},{r.WasHarmful}");
+                sb.AppendLine($"{r.Id},{r.StartTime:O},{r.EndTime:O},{r.ActualListeningDuration.TotalSeconds:F0},{r.HarmfulDuration.TotalSeconds:F0},{r.AvgVolume:F4},{r.EstimatedMaxSPL:F1},{Escape(r.DeviceName)},{Escape(r.DeviceType)},{r.WasHarmful}");
             }
             File.WriteAllText(path, sb.ToString(), Encoding.UTF8);
         }

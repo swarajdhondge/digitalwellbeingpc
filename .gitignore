@@ -67,9 +67,10 @@ Desktop.ini
 # Swap files, temp
 *.swp
 
-# Documentation and planning files
-docs/
+# Documentation: ignore generated/planning artifacts but keep committed reference docs (*.md)
 docs/*
+!docs/*.md
+!docs/**/*.md
 
 # AI tooling
 .claude/

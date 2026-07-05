@@ -12,9 +12,15 @@ namespace digital_wellbeing_app.Services
         private readonly System.Collections.Generic.Dictionary<string, object> _values;
         private static bool _aclApplied = false;
 
+        /// <summary>
+        /// Optional override for the settings folder. Used by the test suite to isolate tests from
+        /// the user's real settings.json; null in normal operation.
+        /// </summary>
+        public static string? FolderOverride;
+
         public SettingsService()
         {
-            var folder = System.IO.Path.Combine(
+            var folder = FolderOverride ?? System.IO.Path.Combine(
                 System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData),
                 FolderName);
 
@@ -355,6 +361,25 @@ namespace digital_wellbeing_app.Services
         public void SaveFirstRunCompleted(bool completed)
         {
             _values["FirstRunCompleted"] = completed;
+            SaveToDisk();
+        }
+
+        // --- Data retention ---
+        /// <summary>How many months of usage history to keep. 0 = keep forever. Default 12.</summary>
+        public int LoadRetentionMonths() => LoadIntSetting("RetentionMonths", 12);
+
+        public void SaveRetentionMonths(int months)
+        {
+            _values["RetentionMonths"] = months;
+            SaveToDisk();
+        }
+
+        /// <summary>DateOnly.DayNumber of the last day the retention purge ran (0 = never).</summary>
+        public int LoadLastRetentionPurgeDay() => LoadIntSetting("LastRetentionPurgeDay", 0);
+
+        public void SaveLastRetentionPurgeDay(int dayNumber)
+        {
+            _values["LastRetentionPurgeDay"] = dayNumber;
             SaveToDisk();
         }
 
