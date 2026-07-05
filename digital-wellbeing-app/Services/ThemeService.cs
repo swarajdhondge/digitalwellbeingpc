@@ -11,7 +11,12 @@ namespace digital_wellbeing_app.Services
 {
     public class ThemeService
     {
-        private const string FileName = "theme.json";
+        // Absolute path under the app's data folder. A relative "theme.json" landed in the
+        // process CWD (unpredictable, and different between launch methods), so the saved
+        // theme didn't reliably persist across restarts.
+        private static readonly string FileName = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "Pulse", "theme.json");
         private const string DarkThemeUri = "Styles/ThemeDark.xaml";
         private const string LightThemeUri = "Styles/ThemeLight.xaml";
         private const string PulseDarkUri = "Styles/Pulse.Dark.xaml";
@@ -31,7 +36,11 @@ namespace digital_wellbeing_app.Services
 
         public void Save(AppTheme mode)
         {
-            var doc = JsonSerializer.Serialize(new { Mode = mode });
+            // Serialize the enum as its NAME ("Dark"/"Light"/"Auto"); Load() reads it back
+            // with GetString(). Writing the raw enum here emits a number, which GetString()
+            // then rejects — so Load() always fell back to Dark and the toggle got stuck.
+            var doc = JsonSerializer.Serialize(new { Mode = mode.ToString() });
+            Directory.CreateDirectory(Path.GetDirectoryName(FileName)!);
             File.WriteAllText(FileName, doc);
         }
 

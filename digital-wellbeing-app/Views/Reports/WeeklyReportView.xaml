@@ -57,7 +57,7 @@
                                 <TextBlock Text="DAILY AVERAGE" Style="{StaticResource Pulse.Eyebrow}"/>
                                 <TextBlock Text="{Binding AverageDailyTime}" Style="{StaticResource Pulse.Stat}" FontSize="44" Margin="0,6,0,0"/>
                             </StackPanel>
-                            <Border Grid.Column="1" VerticalAlignment="Top" Padding="11,6" CornerRadius="999">
+                            <Border Grid.Column="1" VerticalAlignment="Top" Padding="11,6" CornerRadius="{StaticResource Radius.SM}">
                                 <Border.Style>
                                     <Style TargetType="Border">
                                         <Setter Property="Background" Value="{StaticResource Warn.Soft}"/>

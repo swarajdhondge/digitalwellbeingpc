@@ -198,7 +198,7 @@
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <Border x:Name="pb" Background="{TemplateBinding Background}"
-                                                    CornerRadius="999" Padding="11,7">
+                                                    CornerRadius="{StaticResource Radius.SM}" Padding="11,7">
                                                 <ContentPresenter VerticalAlignment="Center"/>
                                             </Border>
                                             <ControlTemplate.Triggers>

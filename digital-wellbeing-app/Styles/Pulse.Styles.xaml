@@ -209,7 +209,7 @@
     <!-- ===================== PILLS / BADGES ===================== -->
     <!-- Rounded status pill (Border). Put a TextBlock/StackPanel inside. -->
     <Style x:Key="Pulse.Pill" TargetType="Border">
-        <Setter Property="CornerRadius" Value="{StaticResource Radius.Pill}"/>
+        <Setter Property="CornerRadius" Value="{StaticResource Radius.SM}"/>
         <Setter Property="Padding" Value="10,4"/>
         <Setter Property="Background" Value="{DynamicResource Card2}"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
