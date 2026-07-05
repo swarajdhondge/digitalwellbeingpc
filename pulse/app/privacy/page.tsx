@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 const REPO_URL = "https://github.com/swarajdhondge/digitalwellbeingpc";
 const UPDATED = "July 5, 2026";
@@ -23,13 +24,13 @@ export default function Privacy() {
     <div className="min-h-screen">
       <header className="sticky top-0 z-50 border-b border-line/60 bg-base/70 backdrop-blur-xl">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-6 py-4">
-          <a href="/" className="flex items-center gap-2.5">
+          <Link href="/" className="flex items-center gap-2.5">
             <img src="/pulse-logo.png" alt="Pulse logo" width={32} height={32} className="h-8 w-8 rounded-xl" />
             <span className="font-semibold text-ink">Pulse</span>
-          </a>
-          <a href="/" className="text-sm text-muted transition-colors hover:text-ink">
+          </Link>
+          <Link href="/" className="text-sm text-muted transition-colors hover:text-ink">
             ← Back to home
-          </a>
+          </Link>
         </div>
       </header>
 
@@ -105,7 +106,7 @@ export default function Privacy() {
         </Section>
 
         <div className="mt-16 border-t border-line/60 pt-6">
-          <a href="/" className="text-sm text-muted transition-colors hover:text-ink">← Back to Pulse</a>
+          <Link href="/" className="text-sm text-muted transition-colors hover:text-ink">← Back to Pulse</Link>
         </div>
       </main>
     </div>
