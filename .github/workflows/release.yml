@@ -252,7 +252,7 @@ jobs:
           fail_on_unmatched_files: false
           files: |
             ./releases/*
-            ./msix/**/*.msix
+            ./msix/*.msix
             SHA256SUMS.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
