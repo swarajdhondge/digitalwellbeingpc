@@ -977,32 +977,9 @@ namespace digital_wellbeing_app.MainWindow
                 var state = settings.LoadWindowState();
                 if (state == null) return;
 
-                var (left, top, width, height, isMaximized) = state.Value;
-
-                // Validate that the saved position is on a connected monitor
-                var savedRect = new System.Drawing.Rectangle(
-                    (int)left, (int)top, (int)width, (int)height);
-
-                bool isOnScreen = false;
-                foreach (var screen in System.Windows.Forms.Screen.AllScreens)
-                {
-                    if (screen.WorkingArea.IntersectsWith(savedRect))
-                    {
-                        isOnScreen = true;
-                        break;
-                    }
-                }
-
-                if (isOnScreen)
-                {
-                    Left = left;
-                    Top = top;
-                    Width = width;
-                    Height = height;
-                    WindowStartupLocation = WindowStartupLocation.Manual;
-                }
-                // else: keep CenterScreen default
-
+                // Always open centered at the default size (WindowStartupLocation=CenterScreen
+                // in XAML); only the maximized flag carries over from the last session.
+                var (_, _, _, _, isMaximized) = state.Value;
                 if (isMaximized)
                 {
                     WindowState = WindowState.Maximized;

@@ -33,10 +33,10 @@ namespace DigitalWellbeing.UITests;
 /// </summary>
 public sealed class ScreenshotCapture
 {
-    // Fixed capture window size — large enough that the content area (which caps
-    // + centers itself around ~1080px) renders at its intended wide layout.
-    private const int WinWidth = 1600;
-    private const int WinHeight = 1000;
+    // Fixed capture window size — tight to the content's ~1080px cap (plus the
+    // 70px nav rail + margins) so shots aren't padded with empty window space.
+    private const int WinWidth = 1220;
+    private const int WinHeight = 870;
 
     /// <summary>
     /// Rail automation ID -> canonical screenshot base name. The base name is the
