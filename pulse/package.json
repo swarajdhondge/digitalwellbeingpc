@@ -22,5 +22,10 @@
     "eslint-config-next": "16.2.6",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "//overrides": "Force patched transitive versions (Dependabot GHSA fixes) that Next.js/eslint-config-next otherwise pin below the patch. Both are build-time-only and within the same major, so this is safe.",
+  "overrides": {
+    "postcss": ">=8.5.10",
+    "js-yaml": ">=4.2.0"
   }
 }
