@@ -301,7 +301,9 @@ namespace digital_wellbeing_app.ViewModels
             }
             else
             {
-                RingFraction = 0;
+                // No goal set: still show a gauge so the ring isn't empty — today's
+                // screen time as a fraction of a soft 8-hour "full day" reference.
+                RingFraction = Math.Clamp(tsScreen.TotalHours / 8.0, 0, 1);
                 IsOverGoal = false;
                 GoalText = "No goal set";
             }

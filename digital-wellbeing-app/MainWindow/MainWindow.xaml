@@ -52,7 +52,7 @@
                             Margin="0,16,0,10" HorizontalAlignment="Center"
                             Background="{DynamicResource Card2}" ClipToBounds="True"
                             ToolTip="Pulse - DigitalWellbeingPC">
-                        <Image Source="/Resources/Icons/digital-balance-icon-32.png"
+                        <Image Source="/Resources/Icons/digital-balance-icon-256.png"
                                Width="38" Height="38"
                                RenderOptions.BitmapScalingMode="HighQuality"/>
                     </Border>

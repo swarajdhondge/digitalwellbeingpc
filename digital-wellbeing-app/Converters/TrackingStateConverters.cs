@@ -144,7 +144,13 @@ namespace digital_wellbeing_app.Converters
                 values[0] is double percentage &&
                 values[1] is double containerWidth)
             {
-                return (percentage / 100.0) * containerWidth;
+                // Optional gap (ConverterParameter): shrink each segment by this many px so
+                // that N segments plus their inter-segment margins fit the container instead
+                // of overflowing and clipping the last one. Default 0 = no gap.
+                double gap = 0;
+                if (parameter != null)
+                    double.TryParse(parameter.ToString(), out gap);
+                return Math.Max(0.0, (percentage / 100.0) * containerWidth - gap);
             }
             return 0.0;
         }

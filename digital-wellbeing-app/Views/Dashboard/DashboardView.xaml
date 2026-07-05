@@ -73,17 +73,20 @@
                             </StackPanel>
 
                             <TextBlock Text="Split across your top apps" Style="{StaticResource Pulse.Body2}" Margin="0,18,0,9"/>
-                            <Border CornerRadius="8" ClipToBounds="True" Height="16">
+                            <Border Height="16">
                                 <ItemsControl ItemsSource="{Binding TopApps}">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate><StackPanel Orientation="Horizontal"/></ItemsPanelTemplate>
                                     </ItemsControl.ItemsPanel>
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <Border Height="16" Margin="0,0,3,0" CornerRadius="7"
+                                            <!-- Separated rounded pills with a 4px gap. The converter subtracts the
+                                                 same 4px from each segment so N pills + their margins fit exactly and
+                                                 the last one's rounded end shows instead of being clipped. -->
+                                            <Border Height="16" Margin="0,0,4,0" CornerRadius="8"
                                                     Background="{Binding ColorIndex, Converter={StaticResource ColorIndexToTint}}">
                                                 <Border.Width>
-                                                    <MultiBinding Converter="{StaticResource PercentageToWidthConverter}">
+                                                    <MultiBinding Converter="{StaticResource PercentageToWidthConverter}" ConverterParameter="4">
                                                         <Binding Path="Percentage"/>
                                                         <Binding RelativeSource="{RelativeSource AncestorType=ItemsControl}" Path="ActualWidth"/>
                                                     </MultiBinding>

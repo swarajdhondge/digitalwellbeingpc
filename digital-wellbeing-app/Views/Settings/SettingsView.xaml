@@ -20,7 +20,7 @@
                     </Grid.ColumnDefinitions>
                     <Border Grid.Column="0" Width="54" Height="54" CornerRadius="14" Background="{DynamicResource Accent.Soft}"
                             ClipToBounds="True" Margin="0,0,16,0">
-                        <Image Source="/Resources/Icons/digital-balance-icon-32.png" Width="54" Height="54"
+                        <Image Source="/Resources/Icons/digital-balance-icon-256.png" Width="54" Height="54"
                                RenderOptions.BitmapScalingMode="HighQuality"/>
                     </Border>
                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
@@ -370,7 +370,7 @@
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
                         <Border Width="48" Height="48" CornerRadius="12" Background="{DynamicResource Accent.Soft}" ClipToBounds="True">
-                            <Image Source="/Resources/Icons/digital-balance-icon-32.png" Width="48" Height="48" RenderOptions.BitmapScalingMode="HighQuality"/>
+                            <Image Source="/Resources/Icons/digital-balance-icon-256.png" Width="48" Height="48" RenderOptions.BitmapScalingMode="HighQuality"/>
                         </Border>
                         <StackPanel VerticalAlignment="Center" Margin="14,0,0,0">
                             <TextBlock Text="Pulse - DigitalWellbeingPC" Style="{StaticResource Pulse.CardTitle}" FontSize="15"/>
