@@ -27,9 +27,11 @@
             <!-- Today / Week segmented toggle -->
             <Border Style="{StaticResource Pulse.SegmentBar}" Margin="0,0,0,16">
                 <StackPanel Orientation="Horizontal">
-                    <RadioButton Content="Today" Style="{StaticResource Pulse.Segment}" GroupName="AppRange" IsChecked="True"
+                    <RadioButton Content="Today" AutomationProperties.AutomationId="AppRangeToday"
+                                 Style="{StaticResource Pulse.Segment}" GroupName="AppRange" IsChecked="True"
                                  Checked="TodayRange_Checked"/>
-                    <RadioButton Content="Week" Style="{StaticResource Pulse.Segment}" GroupName="AppRange"
+                    <RadioButton Content="Week" AutomationProperties.AutomationId="AppRangeWeek"
+                                 Style="{StaticResource Pulse.Segment}" GroupName="AppRange"
                                  Checked="WeekRange_Checked"/>
                 </StackPanel>
             </Border>

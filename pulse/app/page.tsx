@@ -115,12 +115,21 @@ export default function Home() {
 
           <div className="mx-auto mt-16 max-w-5xl rise">
             <div className="overflow-hidden rounded-3xl border border-line bg-surface shadow-2xl shadow-black/40">
-              <img
-                src="/screenshots/dashboard.png"
-                alt="Pulse dashboard showing screen time, top apps, and weekly trends"
+              {/* Demo video auto-updates on every published release: the src points at the
+                  newest release's demo.mp4 asset (attached by the release workflow). The
+                  dashboard screenshot is the poster, so the hero looks right before the
+                  first release attaches a video and while the video loads. */}
+              <video
+                src="https://github.com/swarajdhondge/digitalwellbeingpc/releases/latest/download/demo.mp4"
+                poster="/screenshots/dashboard.png"
+                autoPlay
+                muted
+                loop
+                playsInline
                 width={1600}
                 height={1000}
                 className="w-full"
+                aria-label="Pulse demo — a quick tour of the dashboard, screen time, app usage, hearing, focus, and insights"
               />
             </div>
           </div>
