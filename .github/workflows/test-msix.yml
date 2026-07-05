@@ -1,0 +1,40 @@
+name: TEST MSIX build (throwaway)
+
+# Temporary workflow to validate the wapproj MSIX build on a runner image before
+# trusting it in release.yml. Delete after confirming.
+on:
+  workflow_dispatch:
+
+jobs:
+  msix:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - uses: microsoft/setup-msbuild@v2
+
+      - name: Stamp version
+        shell: pwsh
+        run: ./.github/scripts/stamp-version.ps1 -Version "2.2.0"
+
+      - name: Build MSIX (StoreUpload bundle)
+        run: >
+          msbuild "digital-wellbeing-app.Package/digital-wellbeing-app.Package.wapproj"
+          /restore
+          /p:Configuration=Release
+          /p:AppxBundle=Always
+          /p:UapAppxPackageBuildMode=StoreUpload
+          /p:AppxBundlePlatforms="x64|arm64"
+          /p:AppxManifestVersion=2.2.0.0
+          /p:AppxPackageDir="${{ github.workspace }}\AppPackages\\"
+
+      - name: List MSIX outputs
+        shell: pwsh
+        run: |
+          $u = Get-ChildItem -Recurse -Filter *.msixupload -ErrorAction SilentlyContinue
+          if (-not $u) { Write-Error "No .msixupload produced"; exit 1 }
+          $u | Select-Object FullName, @{n='MB';e={[math]::Round($_.Length/1MB,1)}} | Format-Table -Auto

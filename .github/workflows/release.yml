@@ -104,7 +104,10 @@ jobs:
   # --------------------------------------------------------------------------
   msix-build:
     needs: [version, test]
-    runs-on: windows-latest
+    # windows-2022 (VS 2022) ships the UWP/UAP SDK that the .wapproj needs.
+    # windows-latest moved to VS 18 and dropped it, causing APPX3217
+    # ("UAP.props for UAP 10.0.19041.0 cannot be located").
+    runs-on: windows-2022
     # Non-blocking: until the >=512px master icon + tile assets exist (see
     # digital-wellbeing-app.Package/README.md), the packaging build will fail on
     # missing logos. That must NOT block the Velopack GitHub release below.
