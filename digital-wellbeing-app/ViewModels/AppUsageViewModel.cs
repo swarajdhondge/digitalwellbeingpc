@@ -109,14 +109,30 @@ namespace digital_wellbeing_app.ViewModels
             // Subscribe to app switch events
             _tracker.OnAppSwitched += OnAppSwitched;
 
-            // Timer for live updates (1 second interval)
+            // Timer for live updates (1 second interval). Started only while the page is
+            // visible (see StartRefreshing) — it used to run from construction forever, doing
+            // DB queries every second even when App Usage wasn't on screen.
             _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
             _timer.Tick += (s, e) => UpdateAll();
-            _timer.Start();
 
             // Initial load
             LoadTodaysUsage();
             UpdateAll();
+        }
+
+        /// <summary>Start live refresh — call from the view's Loaded/IsVisibleChanged. Idempotent.</summary>
+        public void StartRefreshing()
+        {
+            if (_disposed || _timer.IsEnabled) return;
+            LoadList();
+            UpdateAll();
+            _timer.Start();
+        }
+
+        /// <summary>Stop live refresh — call from the view's Unloaded/IsVisibleChanged. Idempotent.</summary>
+        public void StopRefreshing()
+        {
+            _timer.Stop();
         }
 
         private void OnAppSwitched()

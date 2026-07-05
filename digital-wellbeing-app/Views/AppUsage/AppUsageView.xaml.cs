@@ -10,16 +10,17 @@ namespace digital_wellbeing_app.Views.AppUsage
         {
             InitializeComponent();
             digital_wellbeing_app.Helpers.PulseLayout.CapCenter(PageScroll, PageRoot);
-            Unloaded += OnUnloaded;
-        }
 
-        private void OnUnloaded(object sender, RoutedEventArgs e)
-        {
-            // Dispose ViewModel to stop timer and unsubscribe events
-            if (DataContext is AppUsageViewModel vm)
+            // Refresh only while visible (the view is reused across navigation, so don't dispose
+            // the VM here — just stop its timer; disposing broke live updates on re-navigation).
+            Loaded += (s, e) => (DataContext as AppUsageViewModel)?.StartRefreshing();
+            Unloaded += (s, e) => (DataContext as AppUsageViewModel)?.StopRefreshing();
+            IsVisibleChanged += (s, e) =>
             {
-                vm.Dispose();
-            }
+                if (DataContext is not AppUsageViewModel vm) return;
+                if ((bool)e.NewValue) vm.StartRefreshing();
+                else vm.StopRefreshing();
+            };
         }
 
         // Today/Week segmented toggle. (Today's Checked can fire during InitializeComponent,

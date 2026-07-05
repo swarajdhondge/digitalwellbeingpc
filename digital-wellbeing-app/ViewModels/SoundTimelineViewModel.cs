@@ -100,9 +100,11 @@ namespace digital_wellbeing_app.ViewModels
             _exposureMgr = (System.Windows.Application.Current as App)?.SoundExposureMgr
                            ?? new SoundExposureManager();
 
+            // NOTE: the SoundTimelineView drives a 1s refresh via its own timer gated to
+            // Loaded/Unloaded. This VM timer used to also start here and run forever (even when
+            // the page was hidden), duplicating that work on the UI thread — left stopped now.
             _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
             _timer.Tick += (_, __) => RefreshData();
-            _timer.Start();
 
             RefreshData();
         }
