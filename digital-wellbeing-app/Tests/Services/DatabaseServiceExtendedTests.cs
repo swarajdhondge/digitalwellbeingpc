@@ -9,7 +9,7 @@ using digital_wellbeing_app.Models;
 
 namespace digital_wellbeing_app.Tests.Services
 {
-    public class DatabaseServiceExtendedTests
+    public class DatabaseServiceExtendedTests : TestBase
     {
         [Fact]
         public void GetConnection_ReturnsSameInstance()

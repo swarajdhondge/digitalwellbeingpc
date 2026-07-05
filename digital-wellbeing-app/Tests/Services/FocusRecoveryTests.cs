@@ -12,7 +12,7 @@ namespace digital_wellbeing_app.Tests.Services
     /// Times are anchored to DateTime.Today so recovery (which queries today's sessions) always
     /// sees them regardless of the wall-clock time the test runs.
     /// </summary>
-    public class FocusRecoveryTests
+    public class FocusRecoveryTests : TestBase
     {
         [Fact]
         public void RecoverOrphanedSessions_EndsAtLastHeartbeat_NotPlannedDuration()

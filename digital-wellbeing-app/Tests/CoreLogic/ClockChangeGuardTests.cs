@@ -9,7 +9,7 @@ namespace digital_wellbeing_app.Tests.CoreLogic
     /// Tests for the v2.2 Phase 1.4 clock-change guard: on a system time change the trackers
     /// restart their current segment without losing the running day total.
     /// </summary>
-    public class ClockChangeGuardTests
+    public class ClockChangeGuardTests : TestBase
     {
         [Fact]
         public void ScreenTracker_HandleTimeChanged_PreservesDayTotal_AndRestartsSegment()

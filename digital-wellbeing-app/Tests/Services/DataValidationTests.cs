@@ -15,7 +15,7 @@ namespace digital_wellbeing_app.Tests.Services
     /// anchor crosses into the previous day when the suite runs shortly after local midnight
     /// (CI runners are UTC), which drops the row from day-bucketed queries and flakes the gate.
     /// </summary>
-    public class DataValidationTests
+    public class DataValidationTests : TestBase
     {
         [Fact]
         public void SaveAppUsageSession_RejectsReversedInterval()

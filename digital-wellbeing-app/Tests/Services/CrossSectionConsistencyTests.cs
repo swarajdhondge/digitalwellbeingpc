@@ -11,7 +11,7 @@ namespace digital_wellbeing_app.Tests.Services
     /// source of truth, so the Dashboard's App Time equals the App Usage page total, and the
     /// Report's "today" screen bucket equals the Dashboard's live screen time.
     /// </summary>
-    public class CrossSectionConsistencyTests
+    public class CrossSectionConsistencyTests : TestBase
     {
         [Fact]
         public void DashboardAppTime_EqualsAppUsagePageTotal()

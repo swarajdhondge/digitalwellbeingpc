@@ -7,7 +7,7 @@ using digital_wellbeing_app.Services;
 
 namespace digital_wellbeing_app.Tests.Services
 {
-    public class DataExportServiceTests : IDisposable
+    public class DataExportServiceTests : TestBase, IDisposable
     {
         private readonly string _testDir;
 

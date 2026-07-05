@@ -10,7 +10,7 @@ namespace digital_wellbeing_app.Tests.Services
     /// Tests for v2.2 Phase 1.7 retention and housekeeping: usage tables must not grow forever,
     /// and users must be able to delete a specific date range.
     /// </summary>
-    public class RetentionTests
+    public class RetentionTests : TestBase
     {
         [Fact]
         public void PurgeDataOlderThan_RemovesOldRows_KeepsRecent()

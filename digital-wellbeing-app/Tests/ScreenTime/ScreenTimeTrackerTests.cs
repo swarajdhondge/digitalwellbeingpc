@@ -5,7 +5,7 @@ using digital_wellbeing_app.CoreLogic;
 
 namespace digital_wellbeing_app.Tests.ScreenTime
 {
-    public class ScreenTimeTrackerTests
+    public class ScreenTimeTrackerTests : TestBase
     {
         [Fact]
         public void Start_Accumulates_Time()

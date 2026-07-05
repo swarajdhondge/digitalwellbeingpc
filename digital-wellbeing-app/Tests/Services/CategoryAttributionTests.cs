@@ -12,7 +12,7 @@ namespace digital_wellbeing_app.Tests.Services
     /// executable path, so every app fell through to Uncategorized regardless of the user's choice.
     /// Sessions here deliberately carry the full path while categories carry the process name.
     /// </summary>
-    public class CategoryAttributionTests
+    public class CategoryAttributionTests : TestBase
     {
         private static void SeedSession(string appName, string execPath, DateTime start, int minutes)
         {

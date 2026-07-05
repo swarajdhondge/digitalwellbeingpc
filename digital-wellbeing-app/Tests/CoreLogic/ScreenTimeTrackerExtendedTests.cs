@@ -5,7 +5,7 @@ using digital_wellbeing_app.CoreLogic;
 
 namespace digital_wellbeing_app.Tests.CoreLogic
 {
-    public class ScreenTimeTrackerExtendedTests
+    public class ScreenTimeTrackerExtendedTests : TestBase
     {
         [Fact]
         public void Constructor_InitializesState()

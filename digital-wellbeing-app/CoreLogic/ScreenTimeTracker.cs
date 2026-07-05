@@ -328,6 +328,10 @@ namespace digital_wellbeing_app.CoreLogic
             {
                 var bootTime = DateTime.Now
                              - TimeSpan.FromMilliseconds(Environment.TickCount64);
+                // Today's period can't have started before today began — a machine with multi-day
+                // uptime would otherwise stamp today's session with a prior date. Clamp to midnight.
+                if (bootTime < DateTime.Today)
+                    bootTime = DateTime.Today;
 
                 entry = new ScreenTimePeriod
                 {
@@ -341,7 +345,10 @@ namespace digital_wellbeing_app.CoreLogic
             }
             else
             {
-                var start = DateTime.Parse(entry.SessionStartTime);
+                // Tolerate a missing/corrupt SessionStartTime (e.g. a legacy or partially-written
+                // row) instead of throwing on startup — fall back to "now".
+                if (!DateTime.TryParse(entry.SessionStartTime, out var start))
+                    start = DateTime.Now;
                 var active = TimeSpan.FromSeconds(entry.AccumulatedActiveSeconds);
                 return (active, start, sessions > 0 ? sessions : 1);
             }

@@ -3,7 +3,7 @@ using digital_wellbeing_app.ViewModels;
 
 namespace digital_wellbeing_app.Tests.ScreenTime
 {
-    public class ScreenViewModelTests
+    public class ScreenViewModelTests : TestBase
     {
         // Quarantined: this constructs a full WPF ViewModel in a headless test. It depends on
         // process-wide WPF statics (Application.Current / the shared ScreenTracker), so it is

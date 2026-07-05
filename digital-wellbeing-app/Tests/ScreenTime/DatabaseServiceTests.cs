@@ -7,7 +7,7 @@ using digital_wellbeing_app.Models;
 
 namespace digital_wellbeing_app.Tests.ScreenTime
 {
-    public class DatabaseServiceTests
+    public class DatabaseServiceTests : TestBase
     {
         [Fact]
         public void GetConnection_Should_NotBeNull()

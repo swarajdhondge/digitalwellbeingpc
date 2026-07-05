@@ -11,7 +11,7 @@ namespace digital_wellbeing_app.Tests.Services
     /// today's totals through one code path that folds the live in-memory session into persisted
     /// rows, so the Dashboard, App Usage page and reports can no longer disagree.
     /// </summary>
-    public class LiveUsageProviderTests
+    public class LiveUsageProviderTests : TestBase
     {
         [Fact]
         public void CombineTodayAppEntries_FoldsLiveSessionIntoMatchingApp()
