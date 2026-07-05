@@ -116,7 +116,7 @@ export default function DownloadButtons() {
               <span className="flex flex-col items-start leading-tight">
                 <span>Download for Windows</span>
                 <span className="text-xs font-normal text-white/70">
-                  {a.name} · {formatSize(a.size)}
+                  {release.tag_name} · {formatSize(a.size)}
                 </span>
               </span>
             </a>

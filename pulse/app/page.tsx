@@ -59,16 +59,16 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-50 border-b border-line/60 bg-base/70 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <a href="#top" className="flex items-center gap-2.5">
+        <div className="mx-auto grid max-w-6xl grid-cols-[1fr_auto_1fr] items-center gap-4 px-6 py-4">
+          <a href="#top" className="flex items-center gap-2.5 justify-self-start">
             <img src="/pulse-logo.png" alt="Pulse logo" width={32} height={32} className="h-8 w-8 rounded-xl" />
-            <span className="text-lg font-bold tracking-tight">Pulse <span className="font-medium text-muted">- Digital Wellbeing PC</span></span>
-            <span className="hidden items-center gap-1 rounded-full border border-line bg-surface2 px-2 py-0.5 text-xs font-medium text-muted sm:inline-flex">
+            <span className="whitespace-nowrap text-lg font-bold tracking-tight">Pulse<span className="hidden font-medium text-muted sm:inline"> - Digital Wellbeing PC</span></span>
+            <span className="hidden items-center gap-1 whitespace-nowrap rounded-full border border-line bg-surface2 px-2 py-0.5 text-xs font-medium text-muted lg:inline-flex">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.5 10.5 4.4v7.1H3zM10.5 12.5v7.1L3 18.5v-6zM11.6 4.2 21 3v8.5h-9.4zM21 12.5V21l-9.4-1.3v-7.2z"/></svg>
               for Windows
             </span>
           </a>
-          <nav className="hidden items-center gap-8 text-sm text-muted sm:flex">
+          <nav className="hidden items-center gap-8 text-sm text-muted md:flex">
             <a href="#features" className="transition hover:text-ink">Features</a>
             <a href="#screens" className="transition hover:text-ink">Screenshots</a>
             <a href="#download" className="transition hover:text-ink">Download</a>
@@ -77,7 +77,7 @@ export default function Home() {
             href={REPO_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-xl border border-line bg-surface px-4 py-2 text-sm font-medium transition hover:border-accent/60 hover:text-accent"
+            className="justify-self-end rounded-xl border border-line bg-surface px-4 py-2 text-sm font-medium transition hover:border-accent/60 hover:text-accent"
           >
             GitHub
           </a>

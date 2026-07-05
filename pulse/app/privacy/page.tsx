@@ -26,7 +26,7 @@ export default function Privacy() {
         <div className="mx-auto flex max-w-3xl items-center justify-between px-6 py-4">
           <Link href="/" className="flex items-center gap-2.5">
             <img src="/pulse-logo.png" alt="Pulse logo" width={32} height={32} className="h-8 w-8 rounded-xl" />
-            <span className="font-semibold text-ink">Pulse</span>
+            <span className="whitespace-nowrap font-semibold text-ink">Pulse<span className="hidden font-medium text-muted sm:inline"> - Digital Wellbeing PC</span></span>
           </Link>
           <Link href="/" className="text-sm text-muted transition-colors hover:text-ink">
             ← Back to home
@@ -39,7 +39,7 @@ export default function Privacy() {
         <p className="mt-2 text-sm text-faint">Last updated: {UPDATED}</p>
 
         <p className="mt-8 text-[15px] leading-relaxed text-muted">
-          <span className="text-ink">Pulse — DigitalWellbeingPC</span> (&ldquo;Pulse&rdquo;, &ldquo;the app&rdquo;)
+          <span className="text-ink">Pulse - Digital Wellbeing PC</span> (&ldquo;Pulse&rdquo;, &ldquo;the app&rdquo;)
           is a privacy-first Windows application. This policy explains exactly what data the app
           handles. The short version:{" "}
           <span className="font-semibold text-ink">everything stays on your computer.</span>
