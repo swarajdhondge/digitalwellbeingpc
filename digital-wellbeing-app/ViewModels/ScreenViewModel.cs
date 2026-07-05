@@ -169,6 +169,16 @@ namespace digital_wellbeing_app.ViewModels
             set { if (_canGoForward == value) return; _canGoForward = value; OnPropertyChanged(nameof(CanGoForward)); }
         }
 
+        private bool _canGoBackward;
+        public bool CanGoBackward
+        {
+            get => _canGoBackward;
+            set { if (_canGoBackward == value) return; _canGoBackward = value; OnPropertyChanged(nameof(CanGoBackward)); }
+        }
+
+        // Monday of the earliest tracked week; null until computed (or if there's no data).
+        private DateTime? _earliestWeekStart;
+
         private bool _isCurrentWeek = true;
         public bool IsCurrentWeek
         {
@@ -206,6 +216,8 @@ namespace digital_wellbeing_app.ViewModels
 
         public void GoToPreviousWeek()
         {
+            // Don't page back past the first week that has tracked data.
+            if (!CanGoBackward) return;
             _currentWeekStart = _currentWeekStart.AddDays(-7);
             UpdateWeekNavState();
             LoadWeeklyUsage();
@@ -233,6 +245,19 @@ namespace digital_wellbeing_app.ViewModels
 
             IsCurrentWeek = _currentWeekStart == currentMonday;
             CanGoForward = _currentWeekStart < currentMonday;
+
+            // Resolve the earliest tracked week once, then disable "previous" at that floor.
+            if (_earliestWeekStart == null)
+            {
+                var earliest = DatabaseService.GetEarliestScreenTimeDate();
+                if (earliest != null)
+                {
+                    var m = earliest.Value.Date;
+                    while (m.DayOfWeek != DayOfWeek.Monday) m = m.AddDays(-1);
+                    _earliestWeekStart = m;
+                }
+            }
+            CanGoBackward = _earliestWeekStart != null && _currentWeekStart > _earliestWeekStart.Value;
 
             // Format: "W5 · Jan 27 – Feb 2"
             var weekEnd = _currentWeekStart.AddDays(6);

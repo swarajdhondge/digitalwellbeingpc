@@ -140,7 +140,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="PrevWeekBtn" Grid.Column="0" Click="PrevWeek_Click"
+                    <Button x:Name="PrevWeekBtn" Grid.Column="0" Click="PrevWeek_Click" IsEnabled="{Binding CanGoBackward}"
                             Style="{StaticResource Pulse.Button.Icon}" Width="34" Height="34">
                         <md:PackIcon Kind="ChevronLeft" Width="20" Height="20"/>
                     </Button>

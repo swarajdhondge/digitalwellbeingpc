@@ -21,5 +21,17 @@ namespace digital_wellbeing_app.Views.AppUsage
                 vm.Dispose();
             }
         }
+
+        // Today/Week segmented toggle. (Today's Checked can fire during InitializeComponent,
+        // before the DataContext is assigned — the null-guard makes that a no-op.)
+        private void TodayRange_Checked(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is AppUsageViewModel vm) vm.SetWeekView(false);
+        }
+
+        private void WeekRange_Checked(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is AppUsageViewModel vm) vm.SetWeekView(true);
+        }
     }
 }

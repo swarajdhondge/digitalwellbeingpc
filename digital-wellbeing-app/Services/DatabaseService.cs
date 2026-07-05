@@ -417,6 +417,23 @@ namespace digital_wellbeing_app.Services
         }
 
         /// <summary>
+        /// Earliest date screen-time was ever recorded, or null if there's no data yet.
+        /// Used to bound the weekly navigation so it can't page into empty pre-tracking weeks.
+        /// </summary>
+        public static DateTime? GetEarliestScreenTimeDate()
+        {
+            lock (_dbLock)
+            {
+                var row = GetConnection().Query<ScreenTimePeriod>(
+                    "SELECT * FROM ScreenTimePeriod ORDER BY SessionDate ASC LIMIT 1")
+                    .FirstOrDefault();
+                if (row != null && DateTime.TryParse(row.SessionDate, out var d))
+                    return d.Date;
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Get all AppUsageSessions for a date range (inclusive)
         /// </summary>
         public static List<AppUsageSession> GetAppUsageSessionsForRange(DateTime startDate, DateTime endDate)

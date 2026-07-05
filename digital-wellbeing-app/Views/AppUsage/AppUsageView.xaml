@@ -27,8 +27,10 @@
             <!-- Today / Week segmented toggle -->
             <Border Style="{StaticResource Pulse.SegmentBar}" Margin="0,0,0,16">
                 <StackPanel Orientation="Horizontal">
-                    <RadioButton Content="Today" Style="{StaticResource Pulse.Segment}" GroupName="AppRange" IsChecked="True"/>
-                    <RadioButton Content="Week" Style="{StaticResource Pulse.Segment}" GroupName="AppRange"/>
+                    <RadioButton Content="Today" Style="{StaticResource Pulse.Segment}" GroupName="AppRange" IsChecked="True"
+                                 Checked="TodayRange_Checked"/>
+                    <RadioButton Content="Week" Style="{StaticResource Pulse.Segment}" GroupName="AppRange"
+                                 Checked="WeekRange_Checked"/>
                 </StackPanel>
             </Border>
 
@@ -105,7 +107,7 @@
             <Border Style="{StaticResource Pulse.Card}"
                     Visibility="{Binding HasApps, Converter={StaticResource BoolToVisibilityConverter}}">
                 <StackPanel>
-                    <TextBlock Text="TODAY'S APPS" Style="{StaticResource Pulse.Eyebrow}" Margin="0,0,0,16"/>
+                    <TextBlock Text="{Binding RangeHeader}" Style="{StaticResource Pulse.Eyebrow}" Margin="0,0,0,16"/>
                     <ItemsControl ItemsSource="{Binding TodaysUsage}" AlternationCount="6">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>

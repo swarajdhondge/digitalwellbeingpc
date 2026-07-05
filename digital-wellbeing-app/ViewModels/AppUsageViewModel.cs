@@ -125,7 +125,7 @@ namespace digital_wellbeing_app.ViewModels
             var dispatcher = System.Windows.Application.Current?.Dispatcher;
             if (dispatcher?.CheckAccess() == true)
             {
-                LoadTodaysUsage();
+                LoadList();
                 UpdateCurrentApp();
                 UpdateFocusStats();
             }
@@ -133,7 +133,7 @@ namespace digital_wellbeing_app.ViewModels
             {
                 dispatcher?.Invoke(() =>
                 {
-                    LoadTodaysUsage();
+                    LoadList();
                     UpdateCurrentApp();
                     UpdateFocusStats();
                 });
@@ -184,10 +184,12 @@ namespace digital_wellbeing_app.ViewModels
 
         private void UpdateFocusStats()
         {
-            var sessions = DatabaseService.GetAppUsageSessionsForDate(DateTime.Now);
+            var sessions = _isWeekView
+                ? DatabaseService.GetAppUsageSessionsForRange(CurrentWeekStart(), DateTime.Today)
+                : DatabaseService.GetAppUsageSessionsForDate(DateTime.Now);
 
-            // Include current session in calculations
-            var currentSession = _tracker.CurrentSession;
+            // Fold in the live session only for "today"; it isn't part of a week aggregate.
+            var currentSession = _isWeekView ? null : _tracker.CurrentSession;
             var allSessions = sessions.ToList();
 
             // Switch count = number of distinct sessions today
@@ -216,6 +218,66 @@ namespace digital_wellbeing_app.ViewModels
             // Average focus time
             var avgSeconds = durations.Average(d => d.TotalSeconds);
             AverageFocusTime = TimeFormatHelper.FormatCompact(TimeSpan.FromSeconds(avgSeconds));
+        }
+
+        private bool _isWeekView;
+        /// <summary>True when the Today/Week toggle is on "Week".</summary>
+        public bool IsWeekView
+        {
+            get => _isWeekView;
+            private set
+            {
+                if (_isWeekView == value) return;
+                _isWeekView = value;
+                OnPropertyChanged(nameof(IsWeekView));
+                OnPropertyChanged(nameof(RangeHeader));
+            }
+        }
+
+        /// <summary>Header for the app list, reflecting the selected range.</summary>
+        public string RangeHeader => _isWeekView ? "THIS WEEK'S APPS" : "TODAY'S APPS";
+
+        /// <summary>Called by the view when the Today/Week segmented toggle changes.</summary>
+        public void SetWeekView(bool week)
+        {
+            if (_isWeekView == week) return;
+            IsWeekView = week;
+            LoadList();
+            UpdateFocusStats();
+        }
+
+        private void LoadList()
+        {
+            if (_isWeekView) LoadWeekUsage();
+            else LoadTodaysUsage();
+        }
+
+        private static DateTime CurrentWeekStart()
+        {
+            var d = DateTime.Today;
+            while (d.DayOfWeek != DayOfWeek.Monday) d = d.AddDays(-1);
+            return d;
+        }
+
+        private void LoadWeekUsage()
+        {
+            // Aggregate this week's persisted app sessions (Mon..today) per app.
+            var sessions = DatabaseService.GetAppUsageSessionsForRange(CurrentWeekStart(), DateTime.Today);
+            var grouped = sessions
+                .GroupBy(s => (s.AppName, s.ExecutablePath))
+                .Select(g => new AppUsageSummary
+                {
+                    AppName = AppNameService.GetDisplayName(g.Key.AppName, g.Key.ExecutablePath),
+                    ExecutablePath = g.Key.ExecutablePath,
+                    TotalDuration = TimeSpan.FromSeconds(g.Sum(s => s.Duration.TotalSeconds))
+                })
+                .OrderByDescending(x => x.TotalDuration)
+                .ToList();
+
+            TodaysUsage.Clear();
+            foreach (var item in grouped)
+                TodaysUsage.Add(item);
+            HasApps = TodaysUsage.Count > 0;
         }
 
         private void LoadTodaysUsage()
