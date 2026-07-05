@@ -63,6 +63,10 @@ export default function Home() {
           <a href="#top" className="flex items-center gap-2.5">
             <img src="/pulse-logo.png" alt="Pulse logo" width={32} height={32} className="h-8 w-8 rounded-xl" />
             <span className="text-lg font-bold tracking-tight">Pulse <span className="font-medium text-muted">- Digital Wellbeing PC</span></span>
+            <span className="hidden items-center gap-1 rounded-full border border-line bg-surface2 px-2 py-0.5 text-xs font-medium text-muted sm:inline-flex">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.5 10.5 4.4v7.1H3zM10.5 12.5v7.1L3 18.5v-6zM11.6 4.2 21 3v8.5h-9.4zM21 12.5V21l-9.4-1.3v-7.2z"/></svg>
+              for Windows
+            </span>
           </a>
           <nav className="hidden items-center gap-8 text-sm text-muted sm:flex">
             <a href="#features" className="transition hover:text-ink">Features</a>
