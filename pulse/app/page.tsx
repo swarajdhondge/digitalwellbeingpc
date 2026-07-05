@@ -67,9 +67,7 @@ export default function Home() {
       <header className="sticky top-0 z-50 border-b border-line/60 bg-base/70 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <a href="#top" className="flex items-center gap-2.5">
-            <span className="grid h-8 w-8 place-items-center rounded-xl bg-accent/15 text-accent">
-              <Logo />
-            </span>
+            <img src="/pulse-logo.png" alt="Pulse logo" width={32} height={32} className="h-8 w-8 rounded-xl" />
             <span className="text-lg font-bold tracking-tight">Pulse</span>
           </a>
           <nav className="hidden items-center gap-8 text-sm text-muted sm:flex">
@@ -91,6 +89,13 @@ export default function Home() {
       <main id="top">
         <section className="pulse-glow relative overflow-hidden px-6 pt-20 pb-16 sm:pt-28">
           <div className="mx-auto max-w-3xl text-center rise">
+            <img
+              src="/pulse-logo.png"
+              alt="Pulse"
+              width={88}
+              height={88}
+              className="mx-auto mb-7 h-[88px] w-[88px] rounded-[24px] shadow-xl shadow-black/40 ring-1 ring-line/60"
+            />
             <span className="inline-flex items-center gap-2 rounded-full border border-line bg-surface/60 px-4 py-1.5 text-xs font-semibold text-muted">
               <span className="h-2 w-2 rounded-full bg-[#30a46c]" /> Private · on-device · free
             </span>

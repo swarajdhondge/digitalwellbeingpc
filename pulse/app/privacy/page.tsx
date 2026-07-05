@@ -9,12 +9,6 @@ export const metadata: Metadata = {
     "Pulse is privacy-first: everything stays on your computer. No accounts, no cloud, no telemetry.",
 };
 
-const Logo = ({ size = 18 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M3 12h4l3 8 4-16 3 8h4" />
-  </svg>
-);
-
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="mt-10">
@@ -30,9 +24,7 @@ export default function Privacy() {
       <header className="sticky top-0 z-50 border-b border-line/60 bg-base/70 backdrop-blur-xl">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-6 py-4">
           <a href="/" className="flex items-center gap-2.5">
-            <span className="grid h-8 w-8 place-items-center rounded-xl bg-accent/15 text-accent">
-              <Logo />
-            </span>
+            <img src="/pulse-logo.png" alt="Pulse logo" width={32} height={32} className="h-8 w-8 rounded-xl" />
             <span className="font-semibold text-ink">Pulse</span>
           </a>
           <a href="/" className="text-sm text-muted transition-colors hover:text-ink">
