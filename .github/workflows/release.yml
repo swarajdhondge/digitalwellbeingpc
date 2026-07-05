@@ -194,3 +194,33 @@ jobs:
             .github/demo/demo.gif
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # --------------------------------------------------------------------------
+  # WINGET SUBMISSION
+  # Opens a PR to microsoft/winget-pkgs for the just-published release, pointing
+  # at the Velopack Setup.exe attached above.
+  #
+  # This runs as a job HERE (needs: release) rather than as a separate workflow
+  # listening for `release: published`. A release created by the default
+  # GITHUB_TOKEN does NOT emit events that trigger other workflows, so the old
+  # standalone winget.yml never fired. Running in this same tag-triggered run
+  # sidesteps that entirely; `release-tag` tells the action which release to read.
+  #
+  # Requires the WINGET_TOKEN secret: a classic PAT with `public_repo` scope owned
+  # by the account that forked microsoft/winget-pkgs. continue-on-error keeps a
+  # missing token or a winget-validation hiccup from marking the release run failed.
+  # --------------------------------------------------------------------------
+  winget:
+    needs: [version, release]
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Submit to WinGet
+        uses: vedantmgoyal9/winget-releaser@v2
+        with:
+          identifier: SwarajDhondge.DigitalWellbeingPC
+          version: ${{ needs.version.outputs.version }}
+          installers-regex: '.*Setup\.exe$'
+          release-tag: ${{ github.ref_name }}
+          token: ${{ secrets.WINGET_TOKEN }}
+          fork-user: ${{ github.repository_owner }}
