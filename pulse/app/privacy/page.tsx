@@ -5,9 +5,19 @@ const REPO_URL = "https://github.com/swarajdhondge/digitalwellbeingpc";
 const UPDATED = "July 5, 2026";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — Pulse",
+  // Root layout applies the "%s · Pulse - Digital Wellbeing PC" title template,
+  // so this renders as "Privacy Policy · Pulse - Digital Wellbeing PC".
+  title: "Privacy Policy",
   description:
     "Pulse is privacy-first: everything stays on your computer. No accounts, no cloud, no telemetry.",
+  alternates: { canonical: "/privacy" },
+  openGraph: {
+    title: "Privacy Policy · Pulse - Digital Wellbeing PC",
+    description:
+      "Everything Pulse tracks stays on your computer. No accounts, no cloud, no telemetry.",
+    url: "/privacy",
+    type: "article",
+  },
 };
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {

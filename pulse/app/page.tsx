@@ -55,9 +55,46 @@ const shots = [
   { src: "/screenshots/weeklyreport.png", label: "Insights" },
 ];
 
+const SITE_URL = "https://digitalwellbeingpc.vercel.app";
+
+// Structured data for rich results — a free Windows SoftwareApplication.
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "Pulse - Digital Wellbeing PC",
+  alternateName: "Pulse",
+  applicationCategory: "UtilitiesApplication",
+  operatingSystem: "Windows 10, Windows 11",
+  description:
+    "A free, private, open-source Digital Wellbeing app for Windows. Track screen time, app usage, and focus sessions, and protect your hearing — all on-device.",
+  url: SITE_URL,
+  downloadUrl: `${REPO_URL}/releases`,
+  softwareHelp: REPO_URL,
+  license: `${REPO_URL}/blob/main/LICENSE`,
+  isAccessibleForFree: true,
+  author: {
+    "@type": "Person",
+    name: "Swaraj Dhondge",
+    url: "https://github.com/swarajdhondge",
+  },
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  featureList: [
+    "Screen time tracking",
+    "App usage monitoring",
+    "Focus sessions with app blocking",
+    "Hearing protection",
+    "Break reminders",
+    "Weekly reports",
+  ],
+};
+
 export default function Home() {
   return (
     <div className="min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <header className="sticky top-0 z-50 border-b border-line/60 bg-base/70 backdrop-blur-xl">
         <div className="mx-auto grid max-w-6xl grid-cols-[1fr_auto_1fr] items-center gap-4 px-6 py-4">
           <a href="#top" className="flex items-center gap-2.5 justify-self-start">
