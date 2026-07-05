@@ -1,5 +1,19 @@
 # Changelog
 
+## [v2.2.1] - 2026-07-05
+
+Reliability and release-pipeline fixes.
+
+### Fixes
+- **Screen-time tracker won't crash on a bad row.** A `ScreenTimePeriod` with a missing or unparseable start time no longer throws on startup — it falls back gracefully. Today's session start is also clamped to midnight so a PC with multi-day uptime can't stamp today's usage with a prior date.
+
+### Under the hood
+- **Deterministic test suite.** Each test now runs against a fresh isolated database, removing the order-dependent flakiness that intermittently failed the release gate (including a UTC-midnight boundary case in the "today" tests).
+- **Store MSIX builds in CI again.** The Store package is now built with the Windows SDK (`makeappx`) instead of the `.wapproj`, which the hosted runners can no longer package (APPX3217). Every tagged release produces an x64 `.msix`.
+- Tighter README/site screenshots (cropped to content) and a `/privacy` page + app logo on the marketing site.
+
+---
+
 ## [v2.2.0] - 2026-07-05
 
 Release-hardening: real data-consistency fixes, a Microsoft Store channel, an open-source relicense, and a repeatable screenshot pipeline.
