@@ -21,10 +21,8 @@ Pulse tracks, entirely on your local machine:
 ## Where your data is stored
 
 All of the above is written to a **local SQLite database** on your own device,
-under your user profile:
-
-- GitHub build: `%LocalAppData%\Pulse\`
-- Microsoft Store build: `%LocalAppData%\Packages\SwarajDhondge.DigitalWellbeingPC_h295br46hdej4\LocalCache\Local\Pulse\`
+under your user profile, at `%LocalAppData%\Pulse\` — the same location for both
+the GitHub and Microsoft Store builds.
 
 There are **no accounts, no cloud sync, no analytics, and no telemetry.** Your
 data is never transmitted to us or to any third party. We (the developer) never
