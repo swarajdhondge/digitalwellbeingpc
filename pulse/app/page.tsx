@@ -55,12 +55,6 @@ const shots = [
   { src: "/screenshots/weeklyreport.png", label: "Insights" },
 ];
 
-const Logo = ({ size = 18 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M3 12h4l3 8 4-16 3 8h4" />
-  </svg>
-);
-
 export default function Home() {
   return (
     <div className="min-h-screen">
@@ -195,10 +189,8 @@ export default function Home() {
       <footer className="border-t border-line/60">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-10 text-sm text-muted sm:flex-row">
           <div className="flex items-center gap-2.5">
-            <span className="grid h-7 w-7 place-items-center rounded-lg bg-accent/15 text-accent">
-              <Logo size={15} />
-            </span>
-            <span className="font-semibold text-ink">Pulse — DigitalWellbeingPC</span>
+            <img src="/pulse-logo.png" alt="Pulse logo" width={28} height={28} className="h-7 w-7 rounded-lg" />
+            <span className="font-semibold text-ink">Pulse</span>
           </div>
           <div className="flex items-center gap-6">
             <a href={REPO_URL} target="_blank" rel="noopener noreferrer" className="transition hover:text-ink">GitHub</a>
@@ -208,7 +200,7 @@ export default function Home() {
           </div>
         </div>
         <p className="px-6 pb-8 text-center text-xs text-faint">
-          A privacy-first companion inspired by Android&apos;s Digital Wellbeing. Not affiliated with Google or Samsung.
+          Pulse is an independent, open-source project — not affiliated with Google or Samsung.
         </p>
       </footer>
     </div>
