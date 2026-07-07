@@ -9,7 +9,7 @@ namespace digital_wellbeing_app.Tests.ScreenTime
         // process-wide WPF statics (Application.Current / the shared ScreenTracker), so it is
         // order-dependent — it passes in isolation and on re-run but intermittently fails the CI
         // gate. Tracked for a proper rewrite behind a testable seam; skipped so it can't flake
-        // the release. See docs/release-v2.2-checklist.md.
+        // the release.
         [Fact(Skip = "Flaky WPF ViewModel in headless test (order-dependent on Application.Current); pending a testable seam.")]
         public void LoadWeeklyUsage_ShouldPopulateSevenDays()
         {

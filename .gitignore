@@ -67,10 +67,8 @@ Desktop.ini
 # Swap files, temp
 *.swp
 
-# Documentation: ignore generated/planning artifacts but keep committed reference docs (*.md)
-docs/*
-!docs/*.md
-!docs/**/*.md
+# Internal planning / release / store-listing docs — kept LOCAL only, never committed.
+docs/
 
 # AI tooling
 .claude/
