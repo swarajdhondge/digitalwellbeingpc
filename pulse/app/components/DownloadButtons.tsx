@@ -4,6 +4,23 @@ import { useEffect, useState } from "react";
 
 const REPO = "swarajdhondge/digitalwellbeingpc";
 const RELEASES_URL = `https://github.com/${REPO}/releases`;
+const STORE_URL = "https://apps.microsoft.com/detail/9ND5GNMBQVQ7";
+
+function StoreLink() {
+  return (
+    <a
+      href={STORE_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center gap-2 rounded-2xl border border-line bg-surface2 px-5 py-3 font-semibold text-ink transition hover:bg-surface"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M3 5.5 10.5 4.4v7.1H3zM10.5 12.5v7.1L3 18.5v-6zM11.6 4.2 21 3v8.5h-9.4zM21 12.5V21l-9.4-1.3v-7.2z" />
+      </svg>
+      Also on the Microsoft Store →
+    </a>
+  );
+}
 
 type Asset = { name: string; browser_download_url: string; size: number; download_count: number };
 type Release = {
@@ -77,6 +94,7 @@ export default function DownloadButtons() {
             ? "First release coming soon."
             : "Couldn’t reach GitHub — open the releases page."}
         </span>
+        <StoreLink />
       </div>
     );
   }
@@ -132,6 +150,8 @@ export default function DownloadButtons() {
           </a>
         )}
       </div>
+
+      <StoreLink />
 
       <a
         href={RELEASES_URL}

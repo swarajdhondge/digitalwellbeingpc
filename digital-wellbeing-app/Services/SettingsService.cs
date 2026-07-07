@@ -118,6 +118,32 @@ namespace digital_wellbeing_app.Services
             SaveToDisk();
         }
 
+        // --- Close-to-tray persistence ---
+        /// <summary>
+        /// Whether closing the window keeps Pulse running in the tray (so tracking continues)
+        /// instead of quitting. Default true — like Discord/Teams/Telegram, and so screen-time
+        /// tracking never silently stops when the window is closed. Quit via the tray's Exit item.
+        /// </summary>
+        public bool LoadCloseToTray() => LoadBoolSetting("CloseToTray", true);
+
+        public void SaveCloseToTray(bool enabled)
+        {
+            _values["CloseToTray"] = enabled;
+            SaveToDisk();
+        }
+
+        /// <summary>
+        /// Whether the one-time "Pulse is still running in the tray" hint balloon has been shown.
+        /// Ensures the heads-up appears only on the first close-to-tray.
+        /// </summary>
+        public bool LoadCloseToTrayHintShown() => LoadBoolSetting("CloseToTrayHintShown", false);
+
+        public void SaveCloseToTrayHintShown(bool shown)
+        {
+            _values["CloseToTrayHintShown"] = shown;
+            SaveToDisk();
+        }
+
         // --- Harmful threshold persistence ---
         public double LoadHarmfulThreshold()
         {

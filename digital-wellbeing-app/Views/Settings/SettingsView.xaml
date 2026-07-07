@@ -256,12 +256,27 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
                     <StackPanel Grid.Column="0" VerticalAlignment="Center">
                         <TextBlock Text="Launch on Windows startup" Style="{StaticResource Pulse.Body}"/>
                         <TextBlock Text="Start Pulse when you log in" Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
                     </StackPanel>
                     <ToggleButton x:Name="StartupCheckBox" Grid.Column="1" Style="{StaticResource Pulse.Switch}"
                                   Checked="StartupCheckBox_Checked" Unchecked="StartupCheckBox_Checked" VerticalAlignment="Center"/>
+
+                    <Border Grid.Row="1" Grid.ColumnSpan="2" Height="1" Background="{DynamicResource Border.Subtle}" Margin="0,14"/>
+
+                    <StackPanel Grid.Row="2" Grid.Column="0" VerticalAlignment="Center">
+                        <TextBlock Text="Keep running in the tray when closed" Style="{StaticResource Pulse.Body}"/>
+                        <TextBlock Text="Closing the window keeps Pulse tracking in the background. Quit from the tray icon."
+                                   Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <ToggleButton x:Name="CloseToTrayCheckBox" Grid.Row="2" Grid.Column="1" Style="{StaticResource Pulse.Switch}"
+                                  Checked="CloseToTrayCheckBox_Changed" Unchecked="CloseToTrayCheckBox_Changed" VerticalAlignment="Center"/>
                 </Grid>
             </Border>
 

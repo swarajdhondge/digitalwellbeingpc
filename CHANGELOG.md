@@ -1,5 +1,17 @@
 # Changelog
 
+## [v2.2.3] - 2026-07-07
+
+Pulse now stays out of your way while it keeps tracking — and it's on the Microsoft Store.
+
+### Background & tray
+- **Closing keeps Pulse running.** Clicking the window's X now tucks Pulse into the system tray and keeps tracking your screen time in the background, instead of quitting outright — the same behavior as Discord, Teams, and Telegram. The first time it happens you get a one-time heads-up; quit for real anytime from the tray icon's **Exit**. A **Settings → Startup** toggle turns it off if you'd rather X quit the app. A Windows sign-out or shutdown always exits cleanly.
+
+### Distribution
+- **Now on the Microsoft Store.** [Install from the Store](https://apps.microsoft.com/detail/9ND5GNMBQVQ7) for a Microsoft-signed build that updates itself and never triggers a SmartScreen prompt. The direct `Setup.exe` download remains available.
+
+---
+
 ## [v2.2.2] - 2026-07-05
 
 Interface polish and a more trustworthy installer.

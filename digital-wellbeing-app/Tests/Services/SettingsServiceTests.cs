@@ -108,6 +108,52 @@ namespace digital_wellbeing_app.Tests.Services
         }
 
         [Fact]
+        public void LoadCloseToTray_DefaultsToTrue()
+        {
+            // Fresh settings should keep Pulse running in the tray so tracking never
+            // silently stops when the window is closed.
+            SettingsService.FolderOverride = Path.Combine(Path.GetTempPath(), "PulseTest_" + Guid.NewGuid().ToString("N"));
+            try
+            {
+                var svc = new SettingsService();
+                Assert.True(svc.LoadCloseToTray());
+            }
+            finally
+            {
+                SettingsService.FolderOverride = null;
+            }
+        }
+
+        [Fact]
+        public void SaveAndLoadCloseToTray_RoundTrips()
+        {
+            var svc = new SettingsService();
+            var original = svc.LoadCloseToTray();
+
+            svc.SaveCloseToTray(false);
+            Assert.False(svc.LoadCloseToTray());
+
+            svc.SaveCloseToTray(true);
+            Assert.True(svc.LoadCloseToTray());
+
+            // Restore original
+            svc.SaveCloseToTray(original);
+        }
+
+        [Fact]
+        public void SaveAndLoadCloseToTrayHintShown_RoundTrips()
+        {
+            var svc = new SettingsService();
+            var original = svc.LoadCloseToTrayHintShown();
+
+            svc.SaveCloseToTrayHintShown(true);
+            Assert.True(svc.LoadCloseToTrayHintShown());
+
+            // Restore original
+            svc.SaveCloseToTrayHintShown(original);
+        }
+
+        [Fact]
         public void PersistenceSurvivesNewInstance()
         {
             // This test verifies that data persists to disk.

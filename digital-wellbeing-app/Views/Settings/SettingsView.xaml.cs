@@ -17,6 +17,7 @@ namespace digital_wellbeing_app.Views.Settings
         private bool _isLoadingWindDown;
         private bool _isLoadingRetention;
         private bool _isLoadingStartup;
+        private bool _isLoadingCloseToTray;
 
         public SettingsView()
         {
@@ -55,6 +56,9 @@ namespace digital_wellbeing_app.Views.Settings
             
             // Load startup preference (async: routes to Run key or MSIX StartupTask by build).
             _ = LoadStartupSettingAsync();
+
+            // Load close-to-tray preference
+            LoadCloseToTraySetting();
 
             // Load goal settings
             LoadGoalSettings();
@@ -758,6 +762,19 @@ namespace digital_wellbeing_app.Views.Settings
             if (_isLoadingStartup) return;
             bool enable = (StartupCheckBox.IsChecked == true);
             await StartupService.SetEnabledAsync(enable);
+        }
+
+        private void LoadCloseToTraySetting()
+        {
+            _isLoadingCloseToTray = true;
+            try { CloseToTrayCheckBox.IsChecked = _settingsService.LoadCloseToTray(); }
+            finally { _isLoadingCloseToTray = false; }
+        }
+
+        private void CloseToTrayCheckBox_Changed(object sender, RoutedEventArgs e)
+        {
+            if (_isLoadingCloseToTray) return;
+            _settingsService.SaveCloseToTray(CloseToTrayCheckBox.IsChecked == true);
         }
 
         #endregion

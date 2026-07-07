@@ -39,6 +39,8 @@ _Android-style Digital Wellbeing for Windows — calm, private, and 100% on-devi
 
 **Private by design** — everything lives in a local SQLite database. No accounts, no cloud, no telemetry. Tracking pauses automatically when your PC is locked or asleep. The app updates itself seamlessly.
 
+**Stays out of your way** — closing the window keeps Pulse tracking in the system tray (quit anytime from the tray icon; toggle it off in Settings → Startup).
+
 <details>
 <summary>More screenshots</summary>
 
@@ -56,10 +58,16 @@ _Android-style Digital Wellbeing for Windows — calm, private, and 100% on-devi
 
 ## Install
 
-Download `Setup.exe` from the [latest release](https://github.com/swarajdhondge/digitalwellbeingpc/releases). It installs without admin rights and updates itself automatically.
+<a href="https://apps.microsoft.com/detail/9ND5GNMBQVQ7">
+  <img src="https://get.microsoft.com/images/en-us%20dark.svg" alt="Get Pulse from the Microsoft Store" height="52"/>
+</a>
+
+The [**Microsoft Store**](https://apps.microsoft.com/detail/9ND5GNMBQVQ7) build is signed by Microsoft, updates itself, and never triggers a SmartScreen prompt — the easiest way to install.
+
+Prefer the direct download? Grab `Setup.exe` from the [latest release](https://github.com/swarajdhondge/digitalwellbeingpc/releases). It installs without admin rights and updates itself automatically.
 
 > [!NOTE]
-> **"Windows protected your PC"?** That's SmartScreen — expected the first time you run `Setup.exe`, because Pulse isn't code-signed *yet* (not because anything's wrong). Click **More info → Run anyway**. Prefer no prompt? The **Microsoft Store** build (coming soon) is signed by Microsoft and never triggers it. Every release also ships `SHA256SUMS.txt` to verify your download.
+> **"Windows protected your PC"?** That's SmartScreen — expected the first time you run `Setup.exe`, because the GitHub build isn't code-signed *yet* (not because anything's wrong). Click **More info → Run anyway**, or use the [Microsoft Store](https://apps.microsoft.com/detail/9ND5GNMBQVQ7) build to avoid the prompt entirely. Every release also ships `SHA256SUMS.txt` to verify your download.
 
 **Build from source:**
 

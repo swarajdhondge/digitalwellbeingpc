@@ -51,6 +51,11 @@ namespace digital_wellbeing_app.MainWindow
         private string _goalNotificationDate = string.Empty;
         private System.Windows.Threading.DispatcherTimer? _goalCheckTimer;
 
+        // True once the user has chosen a real exit (tray "Exit", Windows logoff/shutdown).
+        // Distinguishes a genuine quit from clicking the window's X, which — when close-to-tray
+        // is enabled — hides to the tray and keeps tracking instead of terminating.
+        private bool _isExiting;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -124,6 +129,10 @@ namespace digital_wellbeing_app.MainWindow
             SystemEvents.SessionSwitch += OnSystemSessionSwitch;
             SystemEvents.PowerModeChanged += OnSystemPowerModeChanged;
             SystemEvents.TimeChanged += OnSystemTimeChanged;
+
+            // A Windows logoff/shutdown is a real exit — never let close-to-tray cancel it.
+            if (System.Windows.Application.Current != null)
+                System.Windows.Application.Current.SessionEnding += (_, _) => _isExiting = true;
         }
 
         private void InitFocusSession()
@@ -806,7 +815,7 @@ namespace digital_wellbeing_app.MainWindow
                 }
             });
             _trayIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
-            _trayIcon.ContextMenuStrip.Items.Add("Exit", null, (s, e) => Close());
+            _trayIcon.ContextMenuStrip.Items.Add("Exit", null, (s, e) => ExitApplication());
 
             // Update focus item text dynamically when menu opens
             _trayIcon.ContextMenuStrip.Opening += (s, e) =>
@@ -951,7 +960,19 @@ namespace digital_wellbeing_app.MainWindow
 
         private void Window_Closing(object? sender, CancelEventArgs e)
         {
-            // Save window position/size before closing
+            // Close-to-tray: unless this is a real exit (tray "Exit" / Windows shutdown), clicking
+            // the window's X hides Pulse to the tray and keeps tracking in the background — like
+            // Discord/Teams. Quit from the tray icon's Exit item.
+            if (!_isExiting && new Services.SettingsService().LoadCloseToTray())
+            {
+                e.Cancel = true;
+                SaveWindowState();
+                Hide();
+                ShowCloseToTrayHintOnce();
+                return;
+            }
+
+            // Real exit — persist state and tear everything down.
             SaveWindowState();
 
             // Unsubscribe from system events
@@ -964,6 +985,37 @@ namespace digital_wellbeing_app.MainWindow
             _focusSessionService?.Dispose();
             _windDownService?.Dispose();
             _trayIcon?.Dispose();
+        }
+
+        /// <summary>
+        /// Fully quit Pulse (bypasses close-to-tray). Used by the tray "Exit" item and the
+        /// in-app Exit action.
+        /// </summary>
+        private void ExitApplication()
+        {
+            _isExiting = true;
+            Close();
+        }
+
+        /// <summary>
+        /// On the very first close-to-tray, show a one-time tray balloon so the user isn't left
+        /// wondering why the window vanished but the app didn't quit. Shown once, then never again.
+        /// </summary>
+        private void ShowCloseToTrayHintOnce()
+        {
+            try
+            {
+                var settings = new Services.SettingsService();
+                if (settings.LoadCloseToTrayHintShown() || _trayIcon == null) return;
+
+                _trayIcon.BalloonTipTitle = "Pulse is still running";
+                _trayIcon.BalloonTipText = "Tracking continues in the background. Right-click the tray icon to quit, or turn this off in Settings → Startup.";
+                _trayIcon.BalloonTipIcon = ToolTipIcon.Info;
+                _trayIcon.ShowBalloonTip(5000);
+
+                settings.SaveCloseToTrayHintShown(true);
+            }
+            catch { /* a missing hint must never block hiding the window */ }
         }
 
         /// <summary>
@@ -1183,7 +1235,7 @@ namespace digital_wellbeing_app.MainWindow
 
         private void Exit_Click(object? sender, RoutedEventArgs e)
         {
-            Close();
+            ExitApplication();
         }
 
         // Public navigation entry points used by in-view links/cards.
