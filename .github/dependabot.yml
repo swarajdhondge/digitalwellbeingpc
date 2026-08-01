@@ -37,6 +37,9 @@ updates:
         versions: [">= 10"]
       - dependency-name: "typescript"
         versions: [">= 7"]
+      - dependency-name: "@types/node"
+        # Keep type definitions aligned with the Node 24 runtime used by CI/Vercel.
+        versions: [">= 25"]
 
   # Actions used by ci.yml / release.yml / soak-test.yml.
   - package-ecosystem: "github-actions"

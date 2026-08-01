@@ -17,10 +17,60 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Decide which product surface changed so site-only PRs do not spend a Windows
+  # runner rebuilding the desktop app (and vice versa). Workflow edits run both.
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      app: ${{ steps.filter.outputs.app }}
+      site: ${{ steps.filter.outputs.site }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Classify changed files
+        id: filter
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BEFORE_SHA: ${{ github.event.before }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          if [[ "$EVENT_NAME" == "pull_request" ]]; then
+            files="$(git diff --name-only "$BASE_SHA" "$HEAD_SHA")"
+          elif git cat-file -e "${BEFORE_SHA}^{commit}" 2>/dev/null; then
+            files="$(git diff --name-only "$BEFORE_SHA" "$GITHUB_SHA")"
+          else
+            files=".github/workflows/ci.yml"
+          fi
+
+          app=false
+          site=false
+          while IFS= read -r file; do
+            case "$file" in
+              DigitalWellbeing.sln|digital-wellbeing-app/*|UITests/*|FixtureSeeder/*|.github/workflows/ci.yml)
+                app=true
+                ;;
+            esac
+            case "$file" in
+              pulse/*|.github/workflows/ci.yml)
+                site=true
+                ;;
+            esac
+          done <<< "$files"
+
+          echo "app=$app" >> "$GITHUB_OUTPUT"
+          echo "site=$site" >> "$GITHUB_OUTPUT"
+
   # --------------------------------------------------------------------------
   # WPF app: build + unit tests (Windows-only, WPF / net9.0-windows).
   # --------------------------------------------------------------------------
   app:
+    needs: changes
+    if: needs.changes.outputs.app == 'true'
     runs-on: windows-latest
     steps:
       - name: Checkout code
@@ -44,6 +94,8 @@ jobs:
   # Marketing site (pulse/, Next.js). Cross-platform, so Ubuntu is fine.
   # --------------------------------------------------------------------------
   site:
+    needs: changes
+    if: needs.changes.outputs.site == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:

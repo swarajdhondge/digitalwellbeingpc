@@ -12,31 +12,71 @@ permissions:
   contents: read
 
 jobs:
-  analyze:
-    name: Analyze (${{ matrix.language }})
-    # C# needs the .NET SDK + a real build (manual build-mode); JS/TS is scanned directly from
-    # source (build-mode: none) and doesn't need a Windows runner.
-    runs-on: ${{ matrix.language == 'csharp' && 'windows-latest' || 'ubuntu-latest' }}
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      csharp: ${{ steps.filter.outputs.csharp }}
+      javascript: ${{ steps.filter.outputs.javascript }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Classify changed files
+        id: filter
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BEFORE_SHA: ${{ github.event.before }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          if [[ "$EVENT_NAME" == "schedule" ]]; then
+            csharp=true
+            javascript=true
+          else
+            if [[ "$EVENT_NAME" == "pull_request" ]]; then
+              files="$(git diff --name-only "$BASE_SHA" "$HEAD_SHA")"
+            elif git cat-file -e "${BEFORE_SHA}^{commit}" 2>/dev/null; then
+              files="$(git diff --name-only "$BEFORE_SHA" "$GITHUB_SHA")"
+            else
+              files=".github/workflows/codeql.yml"
+            fi
+
+            csharp=false
+            javascript=false
+            while IFS= read -r file; do
+              case "$file" in
+                DigitalWellbeing.sln|digital-wellbeing-app/*|UITests/*|FixtureSeeder/*|.github/workflows/codeql.yml)
+                  csharp=true
+                  ;;
+              esac
+              case "$file" in
+                pulse/*|.github/workflows/codeql.yml)
+                  javascript=true
+                  ;;
+              esac
+            done <<< "$files"
+          fi
+
+          echo "csharp=$csharp" >> "$GITHUB_OUTPUT"
+          echo "javascript=$javascript" >> "$GITHUB_OUTPUT"
+
+  analyze-csharp:
+    name: Analyze (csharp)
+    needs: changes
+    if: needs.changes.outputs.csharp == 'true'
+    runs-on: windows-latest
     permissions:
       actions: read
       contents: read
       security-events: write
-
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - language: csharp
-            build-mode: manual
-          - language: javascript-typescript
-            build-mode: none
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
 
       - name: Setup .NET 9.0
-        if: matrix.language == 'csharp'
         uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '9.0.x'
@@ -44,11 +84,10 @@ jobs:
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
         with:
-          languages: ${{ matrix.language }}
-          build-mode: ${{ matrix.build-mode }}
+          languages: csharp
+          build-mode: manual
 
-      - name: Build (C# only - manual build mode)
-        if: matrix.build-mode == 'manual'
+      - name: Build
         run: |
           dotnet restore DigitalWellbeing.sln
           dotnet build DigitalWellbeing.sln -c Release --no-restore
@@ -56,4 +95,28 @@ jobs:
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4
         with:
-          category: "/language:${{ matrix.language }}"
+          category: /language:csharp
+
+  analyze-javascript:
+    name: Analyze (javascript-typescript)
+    needs: changes
+    if: needs.changes.outputs.javascript == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: javascript-typescript
+          build-mode: none
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: /language:javascript-typescript
