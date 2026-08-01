@@ -176,7 +176,7 @@ jobs:
       # the README and marketing site reference the repo-committed copies instead
       # (.github/demo/demo.gif and pulse/public/demo/demo.mp4). So no repo checkout needed.
       - name: Download Velopack artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: velopack-releases
           path: ./releases
