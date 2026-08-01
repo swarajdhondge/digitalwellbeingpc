@@ -1,4 +1,5 @@
 using FlaUI.Core.AutomationElements;
+using FlaUI.Core.Tools;
 using Xunit;
 
 namespace DigitalWellbeing.UITests;
@@ -27,7 +28,7 @@ public class ShellTests
         foreach (var id in new[]
         {
             "NavDashboard", "NavScreen", "NavApps", "NavSound", "NavFocus",
-            "NavReports", "NavSettings", "NavHelp",
+            "NavLimits", "NavReports", "NavSettings", "NavHelp",
         })
         {
             Assert.NotNull(_app.TryFind(id));
@@ -69,9 +70,22 @@ public class ShellTests
     public void Privacy_pill_navigates_to_settings()
     {
         _app.Nav("NavDashboard");
-        _app.Find("PrivatePill").Click();
-        Thread.Sleep(500);
+        _app.Find("PrivatePill").AsButton().Invoke();
+        Retry.WhileFalse(
+            () => _app.PageTitle() == "Settings",
+            TimeSpan.FromSeconds(3),
+            TimeSpan.FromMilliseconds(150));
         Assert.Equal("Settings", _app.PageTitle());
+    }
+
+    [Fact]
+    public void Help_explains_v2_3_features()
+    {
+        _app.Nav("NavHelp");
+        foreach (var heading in new[] { "App limits", "Startup & data safety" })
+        {
+            Assert.NotNull(_app.Window.FindFirstDescendant(cf => cf.ByName(heading)));
+        }
     }
 
     [Fact]

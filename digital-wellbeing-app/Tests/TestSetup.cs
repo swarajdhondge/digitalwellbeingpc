@@ -11,9 +11,12 @@ using digital_wellbeing_app.Services;
 namespace digital_wellbeing_app.Tests
 {
     /// <summary>
-    /// Redirects DatabaseService and SettingsService to a throwaway temp directory before any
-    /// test runs, so the suite never reads or writes the user's real Pulse data. Runs once when
-    /// the test assembly is loaded.
+    /// Redirects DatabaseService, SettingsService, and LogService to a throwaway temp directory
+    /// before any test runs, so the suite never reads or writes the user's real Pulse data. Runs
+    /// once when the test assembly is loaded. LogService redirection added 2026-07-17: it was the
+    /// only one of the three without isolation, so every test run - including ones that
+    /// deliberately trigger a Warning/Error path, e.g. DatabaseService's write-side validation
+    /// rejections - wrote into the user's real log file.
     /// </summary>
     internal static class TestSetup
     {
@@ -26,6 +29,10 @@ namespace digital_wellbeing_app.Tests
 
             DatabaseService.SetDatabasePathForTesting(Path.Combine(root, "test_wellbeing.db"));
             SettingsService.FolderOverride = root;
+
+            LogService.FolderOverride = root;
+            LogService.ResetForTesting();
+            LogService.Initialize();
         }
     }
 }

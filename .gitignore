@@ -16,8 +16,19 @@
 
 # Certificates and signing keys
 *.pfx
+*.p12
 *.cer
+*.crt
+*.key
+*.pem
+*.snk
 Add-AppDevPackage.ps1
+
+# Local secrets and environment overrides
+.env
+.env.*
+!.env.example
+secrets.json
 
 # Visual Studio workspace & user files
 *.suo
@@ -46,6 +57,22 @@ project.lock.json
 project.fragment.lock.json
 artifacts/
 
+# Store/package outputs (regenerated for each release)
+*.msix
+*.msixupload
+*.msixbundle
+*.appx
+*.appxupload
+*.appxbundle
+
+# Local app data and backups
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+pulse-backup-*.zip
+
 # Test results / coverage
 TestResults/
 *.trx
@@ -66,11 +93,14 @@ Desktop.ini
 
 # Swap files, temp
 *.swp
+*.tmp
+*.bak
 
 # Internal planning / release / store-listing docs — kept LOCAL only, never committed.
 docs/
 
 # AI tooling
 .claude/
+.codex/
 .cursor/
 .playwright-mcp/

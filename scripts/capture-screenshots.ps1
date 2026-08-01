@@ -64,11 +64,12 @@ if (-not $exe) { throw "Could not find DigitalWellbeing.exe under $binDir (build
 Write-Host "Using app: $exe" -ForegroundColor DarkGray
 
 # --- 2. Seed the fixture database ----------------------------------------------
-# Writes to %LocalAppData%\Pulse\digital_wellbeing.db (the path the app reads) and
-# also marks FirstRunCompleted=true so the Welcome overlay won't block capture.
+$captureDataDir = Join-Path ([System.IO.Path]::GetTempPath()) ("pulse-capture-" + [Guid]::NewGuid().ToString('N'))
+New-Item -ItemType Directory -Force -Path $captureDataDir | Out-Null
+# Seed an isolated throwaway database. Never replace or restore the user's real Pulse history.
 if (-not $SkipSeed) {
     Write-Host 'Seeding fixture database...' -ForegroundColor Cyan
-    dotnet run --project $seederProject -c $Configuration --nologo
+    dotnet run --project $seederProject -c $Configuration --nologo -- --db (Join-Path $captureDataDir 'digital_wellbeing.db')
     if ($LASTEXITCODE -ne 0) { throw 'Fixture seeding failed.' }
 }
 
@@ -77,6 +78,7 @@ if (-not $SkipSeed) {
 Write-Host 'Capturing screenshots (Light + Dark)...' -ForegroundColor Cyan
 $env:PULSE_APP_EXE  = $exe
 $env:PULSE_SHOTS_DIR = $ShotsDir
+$env:PULSE_DATA_DIR = $captureDataDir
 try {
     dotnet test $uiTestProject -c Debug --nologo `
         --filter 'FullyQualifiedName~ScreenshotCapture'
@@ -87,6 +89,13 @@ try {
 finally {
     Remove-Item Env:\PULSE_APP_EXE  -ErrorAction SilentlyContinue
     Remove-Item Env:\PULSE_SHOTS_DIR -ErrorAction SilentlyContinue
+    Remove-Item Env:\PULSE_DATA_DIR -ErrorAction SilentlyContinue
+    if (Test-Path -LiteralPath $captureDataDir) {
+        $resolvedCaptureDir = (Resolve-Path -LiteralPath $captureDataDir).Path
+        if ($resolvedCaptureDir.StartsWith([System.IO.Path]::GetTempPath(), [System.StringComparison]::OrdinalIgnoreCase)) {
+            Remove-Item -LiteralPath $resolvedCaptureDir -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
 }
 
 # --- 4. Copy the marketing-site subset -----------------------------------------
@@ -100,6 +109,7 @@ $siteSubset = @(
     'appusage.png',
     'sound.png',
     'focusmode.png',
+    'limits.png',
     'weeklyreport.png'
 )
 Write-Host "Copying site subset -> $siteDir" -ForegroundColor Cyan

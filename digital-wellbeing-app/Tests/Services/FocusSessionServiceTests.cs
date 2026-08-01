@@ -135,5 +135,73 @@ namespace digital_wellbeing_app.Tests.Services
             var total = svc.GetTotalFocusTime(DateTime.Today);
             Assert.True(total.TotalSeconds >= 0);
         }
+
+        // --- Windows Focus integration reaction ---
+
+        [Fact]
+        public void OnWindowsFocusActiveChanged_True_StartsASession()
+        {
+            var svc = new FocusSessionService();
+
+            svc.OnWindowsFocusActiveChanged(true);
+
+            Assert.True(svc.IsInFocusMode);
+            svc.EndSession(false);
+        }
+
+        [Fact]
+        public void OnWindowsFocusActiveChanged_False_DoesNothing()
+        {
+            var svc = new FocusSessionService();
+
+            svc.OnWindowsFocusActiveChanged(false);
+
+            Assert.False(svc.IsInFocusMode);
+        }
+
+        [Fact]
+        public void OnWindowsFocusActiveChanged_True_DoesNotClobberAnInProgressSession()
+        {
+            var svc = new FocusSessionService();
+            svc.StartSession(25);
+            var originalStart = svc.CurrentSession!.StartTime;
+
+            svc.OnWindowsFocusActiveChanged(true);
+
+            Assert.True(svc.IsInFocusMode);
+            Assert.Equal(originalStart, svc.CurrentSession!.StartTime);
+            svc.EndSession(false);
+        }
+
+        /// <summary>
+        /// Exercises the same wiring pattern MainWindow uses in production (subscribe an
+        /// IWindowsFocusSource's FocusActiveChanged event to OnWindowsFocusActiveChanged) via a
+        /// fake, rather than a live WinRT call - proves the glue works end-to-end.
+        /// </summary>
+        private class FakeWindowsFocusSource : digital_wellbeing_app.Platform.Windows.IWindowsFocusSource
+        {
+            public bool IsSupported => true;
+            public bool IsFocusActive { get; private set; }
+            public event Action<bool>? FocusActiveChanged;
+
+            public void SetFocusActive(bool active)
+            {
+                IsFocusActive = active;
+                FocusActiveChanged?.Invoke(active);
+            }
+        }
+
+        [Fact]
+        public void FakeWindowsFocusSource_WiredLikeMainWindow_StartsASession()
+        {
+            var svc = new FocusSessionService();
+            var fakeSource = new FakeWindowsFocusSource();
+            fakeSource.FocusActiveChanged += svc.OnWindowsFocusActiveChanged;
+
+            fakeSource.SetFocusActive(true);
+
+            Assert.True(svc.IsInFocusMode);
+            svc.EndSession(false);
+        }
     }
 }

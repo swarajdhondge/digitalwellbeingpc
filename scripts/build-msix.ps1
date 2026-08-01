@@ -1,24 +1,26 @@
 <#
   build-msix.ps1 — build the Microsoft Store MSIX locally (Partner Center upload).
 
-  Mirrors the CI `msix-build` job in .github/workflows/release.yml exactly: publishes a
+  MSIX is built LOCALLY ONLY — there is no corresponding CI job in
+  .github/workflows/release.yml (confirmed directly: that workflow's jobs are version, test,
+  velopack-build, sign, release, winget - none of them touch MSIX). This script: publishes a
   self-contained x64 build, stamps the manifest, and packs a .msix with the Windows SDK
   (makepri + makeappx) — NOT the .wapproj (the VS UWP workload the wapproj needs isn't
   reliably present). Produces an UNSIGNED x64 .msix; that's expected — the Microsoft Store
   RE-SIGNS it on submission, and Store-installed apps are trusted (no SmartScreen prompt).
 
   Usage (run from a normal PowerShell terminal):
-      ./scripts/build-msix.ps1                       # version 2.2.2 -> artifacts/store
-      ./scripts/build-msix.ps1 -Version 2.2.3
+      ./scripts/build-msix.ps1                       # version 2.3.0 -> artifacts/store
+      ./scripts/build-msix.ps1 -Version 2.3.0
       ./scripts/build-msix.ps1 -OutDir "$env:USERPROFILE\OneDrive\Desktop\Pulse-Store-Package"
 
   The resulting Pulse-<version>-x64.msix is what you upload in Partner Center. The Store
-  version must be HIGHER than the currently-published one (v2.2.1 shipped, so use 2.2.2+).
+  version must be HIGHER than the currently-published one (v2.2.3 shipped, so use 2.3.0+).
 #>
 [CmdletBinding()]
 param(
     [ValidatePattern('^\d+\.\d+\.\d+$')]
-    [string]$Version = '2.2.2',
+    [string]$Version = '2.3.0',
     [string]$OutDir
 )
 
@@ -40,6 +42,9 @@ Write-Host "Publishing Pulse $Version (self-contained x64)..." -ForegroundColor 
 dotnet publish $project -c Release -r win-x64 --self-contained true `
     -p:Version=$Version -p:PublishSingleFile=false -o $stage --nologo
 if ($LASTEXITCODE -ne 0) { throw 'Publish failed.' }
+
+# Portable PDBs can contain local source paths and are not needed in the Store payload.
+Get-ChildItem -LiteralPath $stage -Recurse -Filter '*.pdb' | Remove-Item -Force
 
 # --- 2. Stage the manifest + images --------------------------------------------
 Copy-Item (Join-Path $pkgDir 'Package.appxmanifest') (Join-Path $stage 'AppxManifest.xml') -Force
@@ -75,6 +80,10 @@ Remove-Item $priConfig -ErrorAction SilentlyContinue
 $msix = Join-Path $OutDir "Pulse-$Version-x64.msix"
 & "$tool\makeappx.exe" pack /d $stage /p $msix /o
 if ($LASTEXITCODE -ne 0 -or -not (Test-Path $msix)) { throw 'makeappx did not produce a .msix.' }
+
+# The expanded self-contained staging tree is temporary and can be several hundred MB.
+# Keep the repository's artifacts folder limited to the Store package the user needs.
+Remove-Item $stage -Recurse -Force
 
 $mb = [math]::Round((Get-Item $msix).Length / 1MB, 1)
 Write-Host ""

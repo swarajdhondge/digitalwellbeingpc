@@ -1,0 +1,32 @@
+version: 2
+updates:
+  # .NET dependencies (digital-wellbeing-app, Tests, UITests, FixtureSeeder - all referenced
+  # from the root solution, so the root directory covers all of them).
+  - package-ecosystem: "nuget"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - ".net"
+
+  # Marketing site (pulse/, Next.js).
+  - package-ecosystem: "npm"
+    directory: "/pulse"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "site"
+
+  # Actions used by ci.yml / release.yml / soak-test.yml.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "ci"

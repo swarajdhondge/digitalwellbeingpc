@@ -78,6 +78,29 @@ namespace digital_wellbeing_app.Tests.Services
         }
 
         [Fact]
+        public void CombineTodayAppEntries_DoesNotCollapseDifferentAppsWithBlankPaths()
+        {
+            DatabaseService.DeleteAllData();
+            var midday = DateTime.Today.AddHours(9);
+            DatabaseService.SaveAppUsageSession(new AppUsageSession
+            {
+                AppName = "Protected App A", ExecutablePath = string.Empty,
+                StartTime = midday, EndTime = midday.AddMinutes(5)
+            });
+            DatabaseService.SaveAppUsageSession(new AppUsageSession
+            {
+                AppName = "Protected App B", ExecutablePath = string.Empty,
+                StartTime = midday.AddMinutes(5), EndTime = midday.AddMinutes(12)
+            });
+
+            var entries = LiveUsageProvider.CombineTodayAppEntries(null);
+
+            Assert.Equal(2, entries.Count);
+            Assert.Contains(entries, e => e.AppName == "Protected App A");
+            Assert.Contains(entries, e => e.AppName == "Protected App B");
+        }
+
+        [Fact]
         public void CombineTodayActiveTime_PrefersLive_FallsBackToPersisted()
         {
             Assert.Equal(TimeSpan.FromMinutes(42),

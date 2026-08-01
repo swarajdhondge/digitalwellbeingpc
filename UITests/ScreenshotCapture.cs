@@ -56,6 +56,7 @@ public sealed class ScreenshotCapture
         ("NavApps",      "appusage"),
         ("NavSound",     "sound"),
         ("NavFocus",     "focusmode"),
+        ("NavLimits",    "limits"),
         ("NavReports",   "weeklyreport"),
         ("NavSettings",  "settings"),
         ("NavHelp",      "helpsection"),
@@ -77,22 +78,21 @@ public sealed class ScreenshotCapture
                       ?? Path.Combine(RepoRoot(), ".github", "screenshots");
         Directory.CreateDirectory(shotDir);
 
-        // Pin the starting theme to Dark. The app reads theme.json from its working
-        // directory (see ThemeService), so write it into the exe folder and launch
-        // there. We flip to Light later via the ThemeToggle button.
-        try { File.WriteAllText(Path.Combine(exeDir, "theme.json"), "{\"Mode\":\"Dark\"}"); }
+        // Pin the starting theme to Dark inside the isolated capture data directory.
+        var isolatedDataDir = Environment.GetEnvironmentVariable("PULSE_DATA_DIR");
+        try
+        {
+            if (!string.IsNullOrWhiteSpace(isolatedDataDir))
+                File.WriteAllText(Path.Combine(isolatedDataDir, "theme.json"), "{\"Mode\":\"Dark\"}");
+        }
         catch { /* best effort */ }
 
-        // Drop a flag file under %LocalAppData%\Pulse (the app's known data dir) so it enters
-        // screenshot mode (edge-to-edge opaque window) — captures then have zero desktop bleed and
-        // need no cropping. A fixed absolute path is reliable where env vars / exe-dir are not.
-        var pulseDir = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Pulse");
-        Directory.CreateDirectory(pulseDir);
-        var screenshotFlag = Path.Combine(pulseDir, ".screenshot-mode");
-        try { File.WriteAllText(screenshotFlag, "1"); } catch { /* best effort */ }
+        var startInfo = new ProcessStartInfo(exe) { WorkingDirectory = exeDir };
+        startInfo.Environment["PULSE_SCREENSHOT_MODE"] = "1";
+        if (!string.IsNullOrWhiteSpace(isolatedDataDir))
+            startInfo.Environment["PULSE_DATA_DIR"] = isolatedDataDir;
 
-        var app = Application.Launch(new ProcessStartInfo(exe) { WorkingDirectory = exeDir });
+        var app = Application.Launch(startInfo);
         using var automation = new UIA3Automation();
         try
         {
@@ -119,7 +119,6 @@ public sealed class ScreenshotCapture
             try { app.Close(); } catch { /* ignore */ }
             try { app.Kill(); } catch { /* ignore */ }
             try { app.Dispose(); } catch { /* ignore */ }
-            try { File.Delete(screenshotFlag); } catch { /* ignore */ }
         }
     }
 

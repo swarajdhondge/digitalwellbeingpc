@@ -20,7 +20,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <!-- Must match the app project's TFM so the ProjectReference is compatible. -->
-    <TargetFramework>net9.0-windows10.0.19041.0</TargetFramework>
+    <TargetFramework>net9.0-windows10.0.26100.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Pulse.FixtureSeeder</RootNamespace>
