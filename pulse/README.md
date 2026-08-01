@@ -24,7 +24,8 @@ No environment variables needed: the download data is fetched from the public Gi
 
 `app/components/DownloadButtons.tsx` fetches
 `https://api.github.com/repos/swarajdhondge/digitalwellbeingpc/releases/latest`
-client-side and renders a button per `.exe` installer asset (plus version + date).
+client-side and renders a button per `.exe` installer asset, including the live
+version, publication date, file size, and GitHub download count for that asset.
 If there's no release yet, or the API is unreachable, it links to the GitHub releases page.
 
 ## Screenshots

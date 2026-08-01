@@ -48,10 +48,10 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup .NET 9.0
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '9.0.x'
 
@@ -69,10 +69,10 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup .NET 9.0
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '9.0.x'
 
@@ -109,7 +109,7 @@ jobs:
 
       - name: Upload Velopack artifacts (unsigned)
         id: upload-unsigned
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: velopack-releases
           path: ./releases/*
@@ -154,7 +154,7 @@ jobs:
 
       - name: Upload signed Velopack artifacts
         if: ${{ env.SIGNPATH_CONFIGURED != '' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: velopack-releases-signed
           path: ./releases-signed/*
@@ -176,7 +176,7 @@ jobs:
       # the README and marketing site reference the repo-committed copies instead
       # (.github/demo/demo.gif and pulse/public/demo/demo.mp4). So no repo checkout needed.
       - name: Download Velopack artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: velopack-releases
           path: ./releases
@@ -192,7 +192,7 @@ jobs:
           cat SHA256SUMS.txt
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
@@ -215,12 +215,13 @@ jobs:
   # standalone winget.yml never fired. Running in this same tag-triggered run
   # sidesteps that entirely; `release-tag` tells the action which release to read.
   #
-  # Requires the WINGET_TOKEN secret: a classic PAT with `public_repo` scope owned
-  # by the account that forked microsoft/winget-pkgs. continue-on-error keeps a
-  # missing token or a winget-validation hiccup from marking the release run failed.
+  # Disabled by default because winget-releaser can only update a package that already
+  # exists in microsoft/winget-pkgs. After the first version is accepted manually, set
+  # the repository variable WINGET_ENABLED=true and configure WINGET_TOKEN.
   # --------------------------------------------------------------------------
   winget:
     needs: [version, release]
+    if: ${{ vars.WINGET_ENABLED == 'true' }}
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:

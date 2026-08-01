@@ -2,7 +2,7 @@ name: Soak Test
 
 # Opt-in only - deliberately NOT on push/pull_request like ci.yml. These tests launch the real
 # built exe as a real OS process and hard-kill it repeatedly (UITests/SoakTests.cs), which is
-# slower and noisier than the fast unit-test suite belongs being on every push. Trigger manually
+# slower and noisier than the fast unit-test suite that belongs on every push. Trigger manually
 # from the Actions tab, or let the weekly schedule below catch regressions between releases.
 on:
   workflow_dispatch:
@@ -19,10 +19,10 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup .NET 9.0
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '9.0.x'
 
