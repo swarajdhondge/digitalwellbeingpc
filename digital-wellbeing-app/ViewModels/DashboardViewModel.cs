@@ -66,6 +66,7 @@ namespace digital_wellbeing_app.ViewModels
         public class WeekBar
         {
             public string Label { get; set; } = string.Empty;
+            public string Duration { get; set; } = string.Empty;
             public double HeightPx { get; set; }      // against a fixed 110px chart
             public double Opacity { get; set; } = 0.32;
             public bool IsToday { get; set; }
@@ -309,18 +310,11 @@ namespace digital_wellbeing_app.ViewModels
             }
 
             // — Sound Sessions —
-            var soundSessions = DatabaseService.GetSoundSessionsForDate(today);
-
-            // total listening (use ActualListeningDuration, not wall-clock time)
-            var tsSound = soundSessions.Aggregate(
-                TimeSpan.Zero,
-                (sum, s) => sum + s.ActualListeningDuration);
+            // Actual listening time (not wall-clock time), including the in-memory segment that
+            // has not reached the periodic-save boundary yet.
+            var (tsSound, tsHarm) = LiveUsageProvider.GetTodaySoundTotals();
             SoundTime = TimeFormatHelper.FormatDuration(tsSound);
 
-            // total harmful
-            var tsHarm = soundSessions.Aggregate(
-                TimeSpan.Zero,
-                (sum, s) => sum + s.HarmfulDuration);
             SoundHarmfulTime = TimeFormatHelper.FormatDuration(tsHarm);
 
             // — Sound Status Badge —
@@ -402,6 +396,7 @@ namespace digital_wellbeing_app.ViewModels
                 bars.Add(new WeekBar
                 {
                     Label = i < dayLabels.Length ? dayLabels[i] : trend[i].Date.ToString("ddd"),
+                    Duration = TimeFormatHelper.FormatCompact(TimeSpan.FromMinutes(min)),
                     HeightPx = Math.Max(6, (min / maxMin) * 110),
                     IsToday = i == todayIdx,
                     Opacity = i == todayIdx ? 1.0 : 0.32,

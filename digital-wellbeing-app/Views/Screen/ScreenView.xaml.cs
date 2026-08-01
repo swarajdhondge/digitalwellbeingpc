@@ -17,6 +17,10 @@
             _vm = new digital_wellbeing_app.ViewModels.ScreenViewModel();
             this.DataContext = _vm;
 
+            WeekNavigator.PreviousRequested += (_, _) => _vm.GoToPreviousWeek();
+            WeekNavigator.NextRequested += (_, _) => _vm.GoToNextWeek();
+            WeekNavigator.WeekSelected += (_, week) => _vm.GoToWeek(week);
+
             this.Loaded += OnLoaded;
             this.Unloaded += OnUnloaded;
             this.IsVisibleChanged += OnIsVisibleChanged;
@@ -106,14 +110,5 @@
             _vm.IsWeeklyView = true;
         }
 
-        private void PrevWeek_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            _vm.GoToPreviousWeek();
-        }
-
-        private void NextWeek_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            _vm.GoToNextWeek();
-        }
     }
 }

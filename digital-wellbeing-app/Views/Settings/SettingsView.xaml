@@ -37,6 +37,64 @@
                 </Grid>
             </Border>
 
+            <!-- Startup: highest-impact behavior first -->
+            <TextBlock Text="STARTUP" Style="{StaticResource Pulse.Eyebrow}" Margin="2,0,0,8"/>
+            <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
+                <Grid>
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/><RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                        <TextBlock Text="Launch on Windows startup" Style="{StaticResource Pulse.Body}"/>
+                        <TextBlock Text="Start Pulse quietly in the notification area when you log in"
+                                   Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
+                    </StackPanel>
+                    <ToggleButton x:Name="StartupCheckBox" Grid.Column="1" Style="{StaticResource Pulse.Switch}"
+                                  Checked="StartupCheckBox_Checked" Unchecked="StartupCheckBox_Checked" VerticalAlignment="Center"/>
+                    <Border Grid.Row="1" Grid.ColumnSpan="2" Height="1" Background="{DynamicResource Border.Subtle}" Margin="0,14"/>
+                    <StackPanel Grid.Row="2" Grid.Column="0" VerticalAlignment="Center">
+                        <TextBlock Text="Keep running in the tray when closed" Style="{StaticResource Pulse.Body}"/>
+                        <TextBlock Text="Closing the window keeps Pulse tracking in the background. Quit from the tray icon."
+                                   Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <ToggleButton x:Name="CloseToTrayCheckBox" Grid.Row="2" Grid.Column="1" Style="{StaticResource Pulse.Switch}"
+                                  Checked="CloseToTrayCheckBox_Changed" Unchecked="CloseToTrayCheckBox_Changed" VerticalAlignment="Center"/>
+                    <Border Grid.Row="3" Grid.ColumnSpan="2" Height="1" Background="{DynamicResource Border.Subtle}" Margin="0,14"/>
+                    <StackPanel Grid.Row="4" Grid.Column="0" VerticalAlignment="Center">
+                        <TextBlock Text="Start focus sessions from Windows Focus" Style="{StaticResource Pulse.Body}"/>
+                        <TextBlock Text="When you turn on Focus in Windows Settings, automatically start a Pulse focus session too."
+                                   Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <ToggleButton x:Name="WindowsFocusIntegrationCheckBox" Grid.Row="4" Grid.Column="1" Style="{StaticResource Pulse.Switch}"
+                                  AutomationProperties.AutomationId="WindowsFocusIntegrationCheckBox"
+                                  Checked="WindowsFocusIntegrationCheckBox_Changed" Unchecked="WindowsFocusIntegrationCheckBox_Changed" VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+
+            <!-- Appearance -->
+            <TextBlock Text="APPEARANCE" Style="{StaticResource Pulse.Eyebrow}" Margin="2,0,0,8"/>
+            <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="Theme" Style="{StaticResource Pulse.Body2}" Margin="0,0,0,12"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Border x:Name="LightThemeOption" Background="{DynamicResource Card2}" CornerRadius="{StaticResource Radius.MD}"
+                                Padding="16,12" Margin="0,0,8,0" Cursor="Hand" MouseLeftButtonDown="LightTheme_Click">
+                            <StackPanel Orientation="Horizontal"><md:PackIcon Kind="WeatherSunny" Width="20" Height="20" Foreground="{DynamicResource Ink2}" VerticalAlignment="Center"/><TextBlock Text="Light" Style="{StaticResource Pulse.Body}" Margin="8,0,0,0" VerticalAlignment="Center"/></StackPanel>
+                        </Border>
+                        <Border x:Name="DarkThemeOption" Background="{DynamicResource Card2}" CornerRadius="{StaticResource Radius.MD}"
+                                Padding="16,12" Margin="0,0,8,0" Cursor="Hand" MouseLeftButtonDown="DarkTheme_Click">
+                            <StackPanel Orientation="Horizontal"><md:PackIcon Kind="WeatherNight" Width="20" Height="20" Foreground="{DynamicResource Ink2}" VerticalAlignment="Center"/><TextBlock Text="Dark" Style="{StaticResource Pulse.Body}" Margin="8,0,0,0" VerticalAlignment="Center"/></StackPanel>
+                        </Border>
+                        <Border x:Name="AutoThemeOption" Background="{DynamicResource Card2}" CornerRadius="{StaticResource Radius.MD}"
+                                Padding="16,12" Cursor="Hand" MouseLeftButtonDown="AutoTheme_Click">
+                            <StackPanel Orientation="Horizontal"><md:PackIcon Kind="ThemeLightDark" Width="20" Height="20" Foreground="{DynamicResource Ink2}" VerticalAlignment="Center"/><TextBlock Text="Auto" Style="{StaticResource Pulse.Body}" Margin="8,0,0,0" VerticalAlignment="Center"/></StackPanel>
+                        </Border>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
             <!-- Screen time goal -->
             <TextBlock Text="SCREEN TIME GOAL" Style="{StaticResource Pulse.Eyebrow}" Margin="2,0,0,8"/>
             <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
@@ -217,67 +275,39 @@
                 </StackPanel>
             </Border>
 
-            <!-- Appearance -->
-            <TextBlock Text="APPEARANCE" Style="{StaticResource Pulse.Eyebrow}" Margin="2,0,0,8"/>
+            <!-- Hearing -->
+            <TextBlock Text="HEARING" Style="{StaticResource Pulse.Eyebrow}" Margin="2,0,0,8"/>
             <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
                 <StackPanel>
-                    <TextBlock Text="Theme" Style="{StaticResource Pulse.Body2}" Margin="0,0,0,12"/>
-                    <StackPanel Orientation="Horizontal">
-                        <Border x:Name="LightThemeOption" Background="{DynamicResource Card2}" CornerRadius="{StaticResource Radius.MD}"
-                                Padding="16,12" Margin="0,0,8,0" Cursor="Hand" MouseLeftButtonDown="LightTheme_Click">
-                            <StackPanel Orientation="Horizontal">
-                                <md:PackIcon Kind="WeatherSunny" Width="20" Height="20" Foreground="{DynamicResource Ink2}" VerticalAlignment="Center"/>
-                                <TextBlock Text="Light" Style="{StaticResource Pulse.Body}" Margin="8,0,0,0" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
-                        <Border x:Name="DarkThemeOption" Background="{DynamicResource Card2}" CornerRadius="{StaticResource Radius.MD}"
-                                Padding="16,12" Margin="0,0,8,0" Cursor="Hand" MouseLeftButtonDown="DarkTheme_Click">
-                            <StackPanel Orientation="Horizontal">
-                                <md:PackIcon Kind="WeatherNight" Width="20" Height="20" Foreground="{DynamicResource Ink2}" VerticalAlignment="Center"/>
-                                <TextBlock Text="Dark" Style="{StaticResource Pulse.Body}" Margin="8,0,0,0" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
-                        <Border x:Name="AutoThemeOption" Background="{DynamicResource Card2}" CornerRadius="{StaticResource Radius.MD}"
-                                Padding="16,12" Cursor="Hand" MouseLeftButtonDown="AutoTheme_Click">
-                            <StackPanel Orientation="Horizontal">
-                                <md:PackIcon Kind="ThemeLightDark" Width="20" Height="20" Foreground="{DynamicResource Ink2}" VerticalAlignment="Center"/>
-                                <TextBlock Text="Auto" Style="{StaticResource Pulse.Body}" Margin="8,0,0,0" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center" Margin="0,0,12,0">
+                            <TextBlock Text="Device type" Style="{StaticResource Pulse.Body}"/>
+                            <TextBlock Text="Pulse guesses this from your audio device's name - override it if the guess is wrong (e.g. it doesn't recognize your headphone model)."
+                                       Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0" TextWrapping="Wrap"/>
+                        </StackPanel>
+                        <ComboBox x:Name="DeviceTypeOverrideCombo" Grid.Column="1" Width="160" VerticalAlignment="Center"
+                                  AutomationProperties.AutomationId="DeviceTypeOverrideCombo"
+                                  SelectionChanged="DeviceTypeOverrideCombo_SelectionChanged">
+                            <ComboBoxItem Content="Auto-detect" Tag=""/>
+                            <ComboBoxItem Content="Headphones" Tag="Headphones"/>
+                            <ComboBoxItem Content="Earphones" Tag="Earphones"/>
+                            <ComboBoxItem Content="Headsets" Tag="Headsets"/>
+                            <ComboBoxItem Content="Speakers" Tag="Speakers"/>
+                        </ComboBox>
+                    </Grid>
+
+                    <Border Background="{DynamicResource Accent.Soft}" CornerRadius="{StaticResource Radius.SM}" Padding="12,10" Margin="0,14,0,0">
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="InformationOutline" Width="16" Height="16" Foreground="{DynamicResource Accent}" VerticalAlignment="Top" Margin="0,2,8,0"/>
+                            <TextBlock Text="Hearing levels shown in Pulse are estimates based on system volume, not a calibrated sound measurement - Windows has no API for that on arbitrary hardware."
+                                       Style="{StaticResource Pulse.Body2}" TextWrapping="Wrap" MaxWidth="700"/>
+                        </StackPanel>
+                    </Border>
                 </StackPanel>
-            </Border>
-
-            <!-- Startup -->
-            <TextBlock Text="STARTUP" Style="{StaticResource Pulse.Eyebrow}" Margin="2,0,0,8"/>
-            <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                        <TextBlock Text="Launch on Windows startup" Style="{StaticResource Pulse.Body}"/>
-                        <TextBlock Text="Start Pulse when you log in" Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
-                    </StackPanel>
-                    <ToggleButton x:Name="StartupCheckBox" Grid.Column="1" Style="{StaticResource Pulse.Switch}"
-                                  Checked="StartupCheckBox_Checked" Unchecked="StartupCheckBox_Checked" VerticalAlignment="Center"/>
-
-                    <Border Grid.Row="1" Grid.ColumnSpan="2" Height="1" Background="{DynamicResource Border.Subtle}" Margin="0,14"/>
-
-                    <StackPanel Grid.Row="2" Grid.Column="0" VerticalAlignment="Center">
-                        <TextBlock Text="Keep running in the tray when closed" Style="{StaticResource Pulse.Body}"/>
-                        <TextBlock Text="Closing the window keeps Pulse tracking in the background. Quit from the tray icon."
-                                   Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0" TextWrapping="Wrap"/>
-                    </StackPanel>
-                    <ToggleButton x:Name="CloseToTrayCheckBox" Grid.Row="2" Grid.Column="1" Style="{StaticResource Pulse.Switch}"
-                                  Checked="CloseToTrayCheckBox_Changed" Unchecked="CloseToTrayCheckBox_Changed" VerticalAlignment="Center"/>
-                </Grid>
             </Border>
 
             <!-- Data & privacy -->
@@ -293,9 +323,11 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel>
                             <TextBlock Text="Storage location" Style="{StaticResource Pulse.Body}"/>
-                            <TextBlock x:Name="StoragePathText" Text="Loading…" Style="{StaticResource Pulse.Muted}" TextTrimming="CharacterEllipsis" Margin="0,2,0,0"/>
+                            <TextBlock x:Name="StoragePathText" Text="Loading…" Style="{StaticResource Pulse.Muted}" TextTrimming="CharacterEllipsis" Margin="0,2,0,0"
+                                       AutomationProperties.AutomationId="StoragePathText"/>
                         </StackPanel>
-                        <Button Content="Open" Grid.Column="1" Click="OpenDataFolder_Click" Style="{StaticResource Pulse.Button.Ghost}" Padding="16,6" VerticalAlignment="Center"/>
+                        <Button Content="Open" Grid.Column="1" Click="OpenDataFolder_Click" Style="{StaticResource Pulse.Button.Ghost}" Padding="16,6" VerticalAlignment="Center"
+                                AutomationProperties.AutomationId="OpenDataFolderButton"/>
                     </Grid>
                     <Grid Margin="0,0,0,16">
                         <Grid.ColumnDefinitions>
@@ -303,7 +335,51 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="Database size" Style="{StaticResource Pulse.Body}" VerticalAlignment="Center"/>
-                        <TextBlock x:Name="DbSizeText" Grid.Column="1" Text="--" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="DbSizeText" Grid.Column="1" Text="--" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"
+                                   AutomationProperties.AutomationId="DbSizeText"/>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Back up your data" Style="{StaticResource Pulse.Body}"/>
+                            <TextBlock Text="Save a .zip snapshot of your database and settings" Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
+                        </StackPanel>
+                        <Button Content="Back up now" Grid.Column="1" Click="BackupNow_Click" Style="{StaticResource Pulse.Button.Ghost}" Padding="16,6" VerticalAlignment="Center"
+                                AutomationProperties.AutomationId="BackupNowButton"/>
+                    </Grid>
+                    <Grid Margin="0,0,0,16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Restore from backup" Style="{StaticResource Pulse.Body}"/>
+                            <TextBlock Text="Replaces your current data - cannot be undone, and closes Pulse afterward" Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0" TextWrapping="Wrap"/>
+                        </StackPanel>
+                        <Button Content="Restore..." Grid.Column="1" Click="RestoreBackup_Click" Style="{StaticResource Pulse.Button.Ghost}"
+                                Foreground="{StaticResource Danger}" Padding="16,6" VerticalAlignment="Center"
+                                AutomationProperties.AutomationId="RestoreBackupButton"/>
+                    </Grid>
+
+                    <Border Height="1" Background="{DynamicResource Border}" Margin="0,0,0,16"/>
+
+                    <Grid Margin="0,0,0,16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Track websites by hostname" Style="{StaticResource Pulse.Body}"/>
+                            <TextBlock Text="Off by default. When on, Pulse reads the address bar of Chrome/Edge/Firefox-family browsers to log which site you're on (e.g. youtube.com) — never the full URL, search terms, or page content."
+                                       Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0" TextWrapping="Wrap"/>
+                        </StackPanel>
+                        <ToggleButton x:Name="WebsiteTrackingCheckBox" Grid.Column="1" Style="{StaticResource Pulse.Switch}"
+                                      AutomationProperties.AutomationId="WebsiteTrackingCheckBox"
+                                      Checked="WebsiteTrackingCheckBox_Changed" Unchecked="WebsiteTrackingCheckBox_Changed" VerticalAlignment="Center"/>
                     </Grid>
 
                     <Border Height="1" Background="{DynamicResource Border}" Margin="0,0,0,16"/>
@@ -318,6 +394,8 @@
                             <TextBlock Text="Automatically delete usage older than this" Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
                         </StackPanel>
                         <ComboBox x:Name="RetentionCombo" Grid.Column="1" Width="150" VerticalAlignment="Center"
+                                  Foreground="{DynamicResource Ink}" Background="{DynamicResource Card2}"
+                                  BorderBrush="{DynamicResource Border}"
                                   SelectionChanged="RetentionCombo_SelectionChanged">
                             <ComboBoxItem Content="3 months" Tag="3"/>
                             <ComboBoxItem Content="6 months" Tag="6"/>
@@ -348,9 +426,15 @@
                             <TextBlock Text="Remove tracked data between two dates" Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
                         </StackPanel>
                         <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                            <DatePicker x:Name="RangeFromPicker" Width="130" VerticalAlignment="Center"/>
+                            <DatePicker x:Name="RangeFromPicker" Width="130" VerticalAlignment="Center"
+                                        Foreground="{DynamicResource Ink}" Background="{DynamicResource Card2}"
+                                        BorderBrush="{DynamicResource Border}"
+                                        md:HintAssist.Hint="Start date"/>
                             <TextBlock Text="to" Style="{StaticResource Pulse.Muted}" VerticalAlignment="Center" Margin="8,0"/>
-                            <DatePicker x:Name="RangeToPicker" Width="130" VerticalAlignment="Center"/>
+                            <DatePicker x:Name="RangeToPicker" Width="130" VerticalAlignment="Center"
+                                        Foreground="{DynamicResource Ink}" Background="{DynamicResource Card2}"
+                                        BorderBrush="{DynamicResource Border}"
+                                        md:HintAssist.Hint="End date"/>
                             <Button Content="Delete" Click="DeleteDateRange_Click" Style="{StaticResource Pulse.Button.Ghost}"
                                     Foreground="{StaticResource Danger}" Padding="16,6" Margin="8,0,0,0" VerticalAlignment="Center"/>
                         </StackPanel>
@@ -389,7 +473,7 @@
                         </Border>
                         <StackPanel VerticalAlignment="Center" Margin="14,0,0,0">
                             <TextBlock Text="Pulse - DigitalWellbeingPC" Style="{StaticResource Pulse.CardTitle}" FontSize="15"/>
-                            <TextBlock x:Name="AboutVersionText" Text="Version 2.1.0" Style="{StaticResource Pulse.Body2}"/>
+                            <TextBlock x:Name="AboutVersionText" Text="Version 2.3.0" Style="{StaticResource Pulse.Body2}"/>
                         </StackPanel>
                     </StackPanel>
                     <TextBlock Text="Track your screen time, app usage, and audio exposure to maintain a healthy digital lifestyle."
@@ -397,6 +481,12 @@
                     <TextBlock Text="Licensed under the GNU General Public License v3.0" Style="{StaticResource Pulse.Muted}" Margin="0,0,0,16"/>
                     <StackPanel Orientation="Horizontal">
                         <Button Content="Check for updates" Click="CheckForUpdates_Click" Style="{StaticResource Pulse.Button.Ghost}" Padding="16,6" Margin="0,0,8,0"/>
+                        <Border Background="{DynamicResource Card2}" CornerRadius="{StaticResource Radius.SM}" Padding="12,6" Cursor="Hand" MouseLeftButtonDown="OpenWebsite_Click" Margin="0,0,8,0">
+                            <StackPanel Orientation="Horizontal">
+                                <md:PackIcon Kind="Web" Width="14" Height="14" Foreground="{DynamicResource Ink2}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <TextBlock Text="Website" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
                         <Border Background="{DynamicResource Card2}" CornerRadius="{StaticResource Radius.SM}" Padding="12,6" Cursor="Hand" MouseLeftButtonDown="OpenGitHub_Click">
                             <StackPanel Orientation="Horizontal">
                                 <md:PackIcon Kind="Github" Width="14" Height="14" Foreground="{DynamicResource Ink2}" VerticalAlignment="Center" Margin="0,0,6,0"/>
@@ -405,6 +495,47 @@
                         </Border>
                     </StackPanel>
                     <TextBlock x:Name="UpdateStatusText" Style="{StaticResource Pulse.Muted}" Visibility="Collapsed" Margin="0,10,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Diagnostics -->
+            <TextBlock Text="DIAGNOSTICS" Style="{StaticResource Pulse.Eyebrow}" Margin="2,16,0,8"/>
+            <Border Style="{StaticResource Pulse.Card}">
+                <StackPanel>
+                    <TextBlock Text="A tracker showing Stale or Down right after your screen was locked or the PC was asleep is normal - trackers pause then and pick back up automatically."
+                               Style="{StaticResource Pulse.Muted}" TextWrapping="Wrap" Margin="0,0,0,14"/>
+
+                    <ItemsControl x:Name="TrackerHealthList" AutomationProperties.AutomationId="TrackerHealthList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,0,0,12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Ellipse Width="10" Height="10" Fill="{Binding StatusColor}" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding TrackerName}" Style="{StaticResource Pulse.Body}" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="2" Text="{Binding StatusText}" Style="{StaticResource Pulse.Muted}" VerticalAlignment="Center"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <Border Height="1" Background="{DynamicResource Border}" Margin="0,4,0,14"/>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Log file" Style="{StaticResource Pulse.Body}"/>
+                            <TextBlock Text="Diagnostic logs kept for the last 7 days" Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
+                        </StackPanel>
+                        <Button Content="Open" Grid.Column="1" Click="OpenLogFolder_Click" Style="{StaticResource Pulse.Button.Ghost}" Padding="16,6" VerticalAlignment="Center"
+                                AutomationProperties.AutomationId="OpenLogFolderButton"/>
+                    </Grid>
                 </StackPanel>
             </Border>
 

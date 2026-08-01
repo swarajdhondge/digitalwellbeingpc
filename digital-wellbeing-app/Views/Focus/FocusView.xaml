@@ -51,7 +51,8 @@
                                 </StackPanel>
 
                                 <Button x:Name="StartFocusButton" Content="Begin session" Style="{StaticResource Pulse.Button.Primary}"
-                                        Padding="28,12" FontSize="15" HorizontalAlignment="Left" Click="StartFocusButton_Click">
+                                        Padding="28,12" FontSize="15" HorizontalAlignment="Left" Click="StartFocusButton_Click"
+                                        AutomationProperties.AutomationId="StartFocusButton">
                                     <Button.ContentTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal">
@@ -251,8 +252,22 @@
                                         <Image Source="{Binding Icon}" Width="24" Height="24" RenderOptions.BitmapScalingMode="HighQuality"
                                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </Border>
-                                    <TextBlock Grid.Column="1" Text="{Binding AppName}" Style="{StaticResource Pulse.Body}" VerticalAlignment="Center"
-                                               TextTrimming="CharacterEllipsis" ToolTip="{Binding AppName}"/>
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,8,0">
+                                        <TextBlock Text="{Binding AppName}" Style="{StaticResource Pulse.Body}"
+                                                   TextTrimming="CharacterEllipsis" ToolTip="{Binding AppName}"/>
+                                        <TextBlock Text="Suggested" Margin="0,2,0,0">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock" BasedOn="{StaticResource Pulse.Muted}">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsSuggested}" Value="True">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </StackPanel>
                                     <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
                                         <Button Content="W" ToolTip="Work" Width="30" Height="30" Padding="0" FontWeight="Bold" Margin="0,0,4,0"
                                                 Tag="{Binding}" Click="SetWorkCategory_Click">

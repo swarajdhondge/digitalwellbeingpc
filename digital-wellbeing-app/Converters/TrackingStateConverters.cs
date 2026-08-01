@@ -82,6 +82,27 @@ namespace digital_wellbeing_app.Converters
     /// </summary>
     public class GoalProgressToColorConverter : IValueConverter
     {
+        private static readonly System.Windows.Media.Brush FallbackAccent =
+            new SolidColorBrush(System.Windows.Media.Color.FromRgb(99, 102, 241));
+
+        private static System.Windows.Media.Brush GetAccentBrush()
+        {
+            try
+            {
+                return System.Windows.Application.Current?.TryFindResource("Accent.Primary") as System.Windows.Media.Brush
+                       ?? FallbackAccent;
+            }
+            catch (NullReferenceException)
+            {
+                // WPF can evaluate bindings while Application resources are being torn down.
+                return FallbackAccent;
+            }
+            catch (InvalidOperationException)
+            {
+                return FallbackAccent;
+            }
+        }
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is double progress)
@@ -90,11 +111,9 @@ namespace digital_wellbeing_app.Converters
                     return new SolidColorBrush(System.Windows.Media.Color.FromRgb(239, 68, 68)); // Red - over goal
                 if (progress > 0.8)
                     return new SolidColorBrush(System.Windows.Media.Color.FromRgb(234, 179, 8)); // Yellow - approaching goal
-                return System.Windows.Application.Current.FindResource("Accent.Primary") as System.Windows.Media.Brush 
-                       ?? new SolidColorBrush(System.Windows.Media.Color.FromRgb(99, 102, 241)); // Primary accent
+                return GetAccentBrush(); // Primary accent
             }
-            return System.Windows.Application.Current.FindResource("Accent.Primary") as System.Windows.Media.Brush 
-                   ?? new SolidColorBrush(System.Windows.Media.Color.FromRgb(99, 102, 241));
+            return GetAccentBrush();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

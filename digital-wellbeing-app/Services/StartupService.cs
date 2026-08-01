@@ -15,6 +15,48 @@ namespace digital_wellbeing_app.Services
         private const string AppName = "Pulse";
         private const string StartupTaskId = "PulseStartupId"; // matches Package.appxmanifest
 
+        /// <summary>Set during App.OnStartup so the window can start directly in the tray.</summary>
+        public static bool IsStartupLaunch { get; private set; }
+
+        public static void DetectStartupLaunch(string[] args)
+        {
+            IsStartupLaunch = args.Any(arg =>
+                arg.Equals("--startup", System.StringComparison.OrdinalIgnoreCase) ||
+                arg.Equals("-startup", System.StringComparison.OrdinalIgnoreCase) ||
+                arg.Contains("StartupTask", System.StringComparison.OrdinalIgnoreCase));
+
+            if (!IsStartupLaunch && PackagedAppInfo.IsPackaged)
+            {
+                try
+                {
+                    var activation = Windows.ApplicationModel.AppInstance.GetActivatedEventArgs();
+                    IsStartupLaunch = activation?.Kind == Windows.ApplicationModel.Activation.ActivationKind.StartupTask;
+                }
+                catch (System.Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Could not inspect startup activation: {ex.Message}");
+                }
+            }
+        }
+
+        /// <summary>Migrates an existing classic Run entry to include the silent-start marker.</summary>
+        public static void EnsureStartupArguments()
+        {
+            if (PackagedAppInfo.IsPackaged) return;
+            using var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(RunKey, writable: true);
+            if (key?.GetValue(AppName) is not string value)
+                return;
+
+            var exe = System.Environment.ProcessPath
+                      ?? System.Reflection.Assembly.GetExecutingAssembly().Location;
+            var desired = $"\"{exe}\" --startup";
+
+            // Keep enabled entries pointed at the currently running installation. This matters
+            // after switching from a development build to Velopack, or after an install moves.
+            if (!value.Equals(desired, System.StringComparison.OrdinalIgnoreCase))
+                key.SetValue(AppName, desired);
+        }
+
         /// <summary>Whether launch-at-startup is currently enabled (routes by build type).</summary>
         public static async Task<bool> IsEnabledAsync()
         {
@@ -73,7 +115,7 @@ namespace digital_wellbeing_app.Services
             {
                 var exe = System.Environment.ProcessPath
                           ?? System.Reflection.Assembly.GetExecutingAssembly().Location;
-                key.SetValue(AppName, $"\"{exe}\"");
+                key.SetValue(AppName, $"\"{exe}\" --startup");
             }
             else
             {

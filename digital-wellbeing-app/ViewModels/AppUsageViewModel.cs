@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Media.Imaging;
@@ -18,6 +19,8 @@ namespace digital_wellbeing_app.ViewModels
         private readonly AppUsageTracker _tracker;
         private readonly DispatcherTimer _timer;
         private bool _disposed;
+        private int _listRefreshTicks;
+        private const int ListRefreshIntervalSeconds = 5;
 
         #region Properties - Current App (Live)
 
@@ -99,6 +102,25 @@ namespace digital_wellbeing_app.ViewModels
             set { if (_hasApps == value) return; _hasApps = value; OnPropertyChanged(nameof(HasApps)); }
         }
 
+        private DateTime _selectedWeekStart = WeekNavigationHelper.StartOfWeek(DateTime.Today);
+        public DateTime SelectedWeekStart
+        {
+            get => _selectedWeekStart;
+            private set { if (_selectedWeekStart == value) return; _selectedWeekStart = value; OnPropertyChanged(nameof(SelectedWeekStart)); }
+        }
+
+        private DateTime? _earliestWeekStart;
+        public DateTime? EarliestWeekStart
+        {
+            get => _earliestWeekStart;
+            private set { if (_earliestWeekStart == value) return; _earliestWeekStart = value; OnPropertyChanged(nameof(EarliestWeekStart)); }
+        }
+
+        public string WeekLabel => WeekNavigationHelper.FormatWeek(SelectedWeekStart);
+        public bool CanGoPrevious => EarliestWeekStart.HasValue && SelectedWeekStart > EarliestWeekStart.Value;
+        public bool CanGoNext => SelectedWeekStart < WeekNavigationHelper.StartOfWeek(DateTime.Today);
+        public string WeekTotalText => TimeFormatHelper.FormatCompact(TimeSpan.FromSeconds(TodaysUsage.Sum(x => x.TotalDuration.TotalSeconds)));
+
         #endregion
 
         public AppUsageViewModel()
@@ -109,15 +131,18 @@ namespace digital_wellbeing_app.ViewModels
             // Subscribe to app switch events
             _tracker.OnAppSwitched += OnAppSwitched;
 
-            // Timer for live updates (1 second interval). Started only while the page is
-            // visible (see StartRefreshing) — it used to run from construction forever, doing
-            // DB queries every second even when App Usage wasn't on screen.
+            // The small "now using" clock updates every second. Database-backed rows and
+            // aggregate metrics are refreshed separately at a much lower cadence below.
             _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
             _timer.Tick += (s, e) => UpdateAll();
 
+            var earliest = DatabaseService.GetEarliestAppUsageDate();
+            EarliestWeekStart = earliest.HasValue ? WeekNavigationHelper.StartOfWeek(earliest.Value) : null;
+
             // Initial load
             LoadTodaysUsage();
-            UpdateAll();
+            UpdateCurrentApp();
+            UpdateFocusStats();
         }
 
         /// <summary>Start live refresh — call from the view's Loaded/IsVisibleChanged. Idempotent.</summary>
@@ -125,7 +150,9 @@ namespace digital_wellbeing_app.ViewModels
         {
             if (_disposed || _timer.IsEnabled) return;
             LoadList();
-            UpdateAll();
+            UpdateCurrentApp();
+            UpdateFocusStats();
+            _listRefreshTicks = 0;
             _timer.Start();
         }
 
@@ -161,7 +188,16 @@ namespace digital_wellbeing_app.ViewModels
             if (_disposed) return;
 
             UpdateCurrentApp();
-            UpdateFocusStats();
+
+            // Keep the per-app rows and their total current without querying SQLite every
+            // second. The live card already ticks each second; five seconds is sufficient for
+            // list accuracy while keeping navigation and idle CPU usage light.
+            if (++_listRefreshTicks >= ListRefreshIntervalSeconds)
+            {
+                _listRefreshTicks = 0;
+                LoadList();
+                UpdateFocusStats();
+            }
         }
 
         private void UpdateCurrentApp()
@@ -201,39 +237,27 @@ namespace digital_wellbeing_app.ViewModels
         private void UpdateFocusStats()
         {
             var sessions = _isWeekView
-                ? DatabaseService.GetAppUsageSessionsForRange(CurrentWeekStart(), DateTime.Today)
+                ? GetSelectedWeekSessions(includeLive: false)
                 : DatabaseService.GetAppUsageSessionsForDate(DateTime.Now);
 
-            // Fold in the live session only for "today"; it isn't part of a week aggregate.
-            var currentSession = _isWeekView ? null : _tracker.CurrentSession;
+            // Fold in the live session whenever the selected range contains today.
+            var currentSession = !_isWeekView || SelectedWeekStart == WeekNavigationHelper.StartOfWeek(DateTime.Today)
+                ? _tracker.CurrentSession
+                : null;
             var allSessions = sessions.ToList();
-
-            // Switch count = number of distinct sessions today
-            SwitchCount = allSessions.Count + (currentSession != null ? 1 : 0);
+            var metrics = AppUsageMetrics.Calculate(allSessions, currentSession, DateTime.Now);
 
             if (allSessions.Count == 0 && currentSession == null)
             {
+                SwitchCount = 0;
                 AverageFocusTime = "0m";
                 LongestSessionTime = "0m";
                 return;
             }
 
-            // Calculate durations
-            var durations = allSessions.Select(s => s.Duration).ToList();
-            
-            // Add current session duration
-            if (currentSession != null)
-            {
-                durations.Add(DateTime.Now - currentSession.StartTime);
-            }
-
-            // Longest session
-            var longest = durations.Max();
-            LongestSessionTime = TimeFormatHelper.FormatCompact(longest);
-
-            // Average focus time
-            var avgSeconds = durations.Average(d => d.TotalSeconds);
-            AverageFocusTime = TimeFormatHelper.FormatCompact(TimeSpan.FromSeconds(avgSeconds));
+            SwitchCount = metrics.SwitchCount;
+            LongestSessionTime = TimeFormatHelper.FormatFocusMetric(metrics.LongestFocusTime);
+            AverageFocusTime = TimeFormatHelper.FormatFocusMetric(metrics.AverageFocusTime);
         }
 
         private bool _isWeekView;
@@ -251,7 +275,7 @@ namespace digital_wellbeing_app.ViewModels
         }
 
         /// <summary>Header for the app list, reflecting the selected range.</summary>
-        public string RangeHeader => _isWeekView ? "THIS WEEK'S APPS" : "TODAY'S APPS";
+        public string RangeHeader => _isWeekView ? "APPS THIS WEEK" : "TODAY'S APPS";
 
         /// <summary>Called by the view when the Today/Week segmented toggle changes.</summary>
         public void SetWeekView(bool week)
@@ -262,29 +286,43 @@ namespace digital_wellbeing_app.ViewModels
             UpdateFocusStats();
         }
 
+        public void GoToPreviousWeek()
+        {
+            if (CanGoPrevious) GoToWeek(SelectedWeekStart.AddDays(-7));
+        }
+
+        public void GoToNextWeek()
+        {
+            if (CanGoNext) GoToWeek(SelectedWeekStart.AddDays(7));
+        }
+
+        public void GoToWeek(DateTime date)
+        {
+            SelectedWeekStart = WeekNavigationHelper.Clamp(date, EarliestWeekStart);
+            OnPropertyChanged(nameof(WeekLabel));
+            OnPropertyChanged(nameof(CanGoPrevious));
+            OnPropertyChanged(nameof(CanGoNext));
+            LoadWeekUsage();
+            UpdateFocusStats();
+        }
+
         private void LoadList()
         {
             if (_isWeekView) LoadWeekUsage();
             else LoadTodaysUsage();
         }
 
-        private static DateTime CurrentWeekStart()
-        {
-            var d = DateTime.Today;
-            while (d.DayOfWeek != DayOfWeek.Monday) d = d.AddDays(-1);
-            return d;
-        }
-
         private void LoadWeekUsage()
         {
-            // Aggregate this week's persisted app sessions (Mon..today) per app.
-            var sessions = DatabaseService.GetAppUsageSessionsForRange(CurrentWeekStart(), DateTime.Today);
+            // Aggregate the selected Monday-to-Sunday week per app.
+            var sessions = GetSelectedWeekSessions(includeLive: true);
             var grouped = sessions
-                .GroupBy(s => (s.AppName, s.ExecutablePath))
+                .GroupBy(s => AppIdentity.NormalizeKey(s.ExecutablePath, s.AppName))
+                .Where(g => g.Key.Length > 0)
                 .Select(g => new AppUsageSummary
                 {
-                    AppName = AppNameService.GetDisplayName(g.Key.AppName, g.Key.ExecutablePath),
-                    ExecutablePath = g.Key.ExecutablePath,
+                    AppName = AppNameService.GetDisplayName(g.First().AppName, g.First().ExecutablePath),
+                    ExecutablePath = g.First().ExecutablePath,
                     TotalDuration = TimeSpan.FromSeconds(g.Sum(s => s.Duration.TotalSeconds))
                 })
                 .OrderByDescending(x => x.TotalDuration)
@@ -294,6 +332,7 @@ namespace digital_wellbeing_app.ViewModels
             foreach (var item in grouped)
                 TodaysUsage.Add(item);
             HasApps = TodaysUsage.Count > 0;
+            OnPropertyChanged(nameof(WeekTotalText));
         }
 
         private void LoadTodaysUsage()
@@ -316,6 +355,32 @@ namespace digital_wellbeing_app.ViewModels
             }
 
             HasApps = TodaysUsage.Count > 0;
+            OnPropertyChanged(nameof(WeekTotalText));
+        }
+
+        private List<AppUsageSession> GetSelectedWeekSessions(bool includeLive)
+        {
+            var sessions = DatabaseService
+                .GetAppUsageSessionsForRange(SelectedWeekStart, SelectedWeekStart.AddDays(6))
+                .ToList();
+
+            if (includeLive && SelectedWeekStart == WeekNavigationHelper.StartOfWeek(DateTime.Today))
+            {
+                var live = _tracker.CurrentSession;
+                var now = DateTime.Now;
+                if (live != null && now > live.StartTime)
+                {
+                    sessions.Add(new AppUsageSession
+                    {
+                        AppName = live.AppName,
+                        ExecutablePath = live.ExecutablePath,
+                        StartTime = live.StartTime,
+                        EndTime = now
+                    });
+                }
+            }
+
+            return sessions;
         }
 
         private static string TruncateWindowTitle(string title)

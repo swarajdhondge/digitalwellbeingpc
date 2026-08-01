@@ -109,9 +109,10 @@
                             <md:PackIcon Kind="VolumeHigh" Width="20" Height="20" Foreground="{DynamicResource Accent}"
                                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
-                        <StackPanel VerticalAlignment="Center">
+                        <StackPanel VerticalAlignment="Center"
+                                    ToolTip="Estimated from system volume and device type, not a calibrated sound-pressure-level measurement - Windows has no API for that on arbitrary hardware.">
                             <TextBlock Text="WHO guidance" Style="{StaticResource Pulse.CardTitle}" FontSize="15"/>
-                            <TextBlock Text="Keep under 85 dB · take breaks" Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
+                            <TextBlock Text="Keep estimated levels under 85 dB" Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
                         </StackPanel>
                     </StackPanel>
                 </Border>

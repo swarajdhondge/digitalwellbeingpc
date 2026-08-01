@@ -149,11 +149,23 @@ namespace digital_wellbeing_app.ViewModels
             set { if (_weeklyAverageMinutes == value) return; _weeklyAverageMinutes = value; OnPropertyChanged(nameof(WeeklyAverageMinutes)); }
         }
 
+        private string _weeklyTotalText = "0 m";
+        public string WeeklyTotalText
+        {
+            get => _weeklyTotalText;
+            set { if (_weeklyTotalText == value) return; _weeklyTotalText = value; OnPropertyChanged(nameof(WeeklyTotalText)); }
+        }
+
         #endregion
 
         #region Properties - Week Navigation
 
         private DateTime _currentWeekStart;
+        public DateTime CurrentWeekStart
+        {
+            get => _currentWeekStart;
+            private set { if (_currentWeekStart == value) return; _currentWeekStart = value; OnPropertyChanged(nameof(CurrentWeekStart)); }
+        }
 
         private string _weekLabel = string.Empty;
         public string WeekLabel
@@ -178,6 +190,11 @@ namespace digital_wellbeing_app.ViewModels
 
         // Monday of the earliest tracked week; null until computed (or if there's no data).
         private DateTime? _earliestWeekStart;
+        public DateTime? EarliestWeekStart
+        {
+            get => _earliestWeekStart;
+            private set { if (_earliestWeekStart == value) return; _earliestWeekStart = value; OnPropertyChanged(nameof(EarliestWeekStart)); }
+        }
 
         private bool _isCurrentWeek = true;
         public bool IsCurrentWeek
@@ -195,9 +212,7 @@ namespace digital_wellbeing_app.ViewModels
             _goalService = new GoalService();
 
             // Initialize week navigation to current week's Monday
-            _currentWeekStart = DateTime.Today;
-            while (_currentWeekStart.DayOfWeek != DayOfWeek.Monday)
-                _currentWeekStart = _currentWeekStart.AddDays(-1);
+            CurrentWeekStart = WeekNavigationHelper.StartOfWeek(DateTime.Today);
 
             // Subscribe to state changes (named method for proper unsubscription)
             _tracker.StateChanged += OnTrackerStateChanged;
@@ -218,7 +233,7 @@ namespace digital_wellbeing_app.ViewModels
         {
             // Don't page back past the first week that has tracked data.
             if (!CanGoBackward) return;
-            _currentWeekStart = _currentWeekStart.AddDays(-7);
+            CurrentWeekStart = _currentWeekStart.AddDays(-7);
             UpdateWeekNavState();
             LoadWeeklyUsage();
         }
@@ -232,7 +247,14 @@ namespace digital_wellbeing_app.ViewModels
                 currentMonday = currentMonday.AddDays(-1);
             if (nextWeek > currentMonday) return;
 
-            _currentWeekStart = nextWeek;
+            CurrentWeekStart = nextWeek;
+            UpdateWeekNavState();
+            LoadWeeklyUsage();
+        }
+
+        public void GoToWeek(DateTime date)
+        {
+            CurrentWeekStart = WeekNavigationHelper.Clamp(date, EarliestWeekStart);
             UpdateWeekNavState();
             LoadWeeklyUsage();
         }
@@ -254,20 +276,12 @@ namespace digital_wellbeing_app.ViewModels
                 {
                     var m = earliest.Value.Date;
                     while (m.DayOfWeek != DayOfWeek.Monday) m = m.AddDays(-1);
-                    _earliestWeekStart = m;
+                    EarliestWeekStart = m;
                 }
             }
             CanGoBackward = _earliestWeekStart != null && _currentWeekStart > _earliestWeekStart.Value;
 
-            // Format: "W5 · Jan 27 – Feb 2"
-            var weekEnd = _currentWeekStart.AddDays(6);
-            var cal = System.Globalization.CultureInfo.CurrentCulture.Calendar;
-            var weekNum = cal.GetWeekOfYear(_currentWeekStart, System.Globalization.CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
-
-            if (_currentWeekStart.Month == weekEnd.Month)
-                WeekLabel = $"W{weekNum} \u00B7 {_currentWeekStart:MMM d}\u2013{weekEnd:d}";
-            else
-                WeekLabel = $"W{weekNum} \u00B7 {_currentWeekStart:MMM d}\u2013{weekEnd:MMM d}";
+            WeekLabel = WeekNavigationHelper.FormatWeek(_currentWeekStart);
         }
 
         private void OnTrackerStateChanged(object? sender, TrackingState state)
@@ -536,18 +550,16 @@ namespace digital_wellbeing_app.ViewModels
             {
                 todayItem.Usage = newUsage;
                 todayItem.Minutes = newMinutes;
+                todayItem.Seconds = (int)ts.TotalSeconds;
 
                 // Recalculate bar percentages (today's value may now be the new max)
                 RecalculateBarPercentages();
 
                 // Recalculate weekly average
-                var totalMinutes = WeeklyUsage.Sum(x => x.Minutes);
-                var daysWithData = WeeklyUsage.Count(x => x.Minutes > 0);
-                if (daysWithData > 0)
-                {
-                    WeeklyAverageMinutes = totalMinutes / daysWithData;
-                    WeeklyAverageText = TimeFormatHelper.FormatDuration(TimeSpan.FromMinutes(WeeklyAverageMinutes));
-                }
+                var totalSeconds = WeeklyUsage.Sum(x => x.Seconds);
+                WeeklyTotalText = TimeFormatHelper.FormatDuration(TimeSpan.FromSeconds(totalSeconds));
+                WeeklyAverageMinutes = (int)(totalSeconds / 60L / 7L);
+                WeeklyAverageText = TimeFormatHelper.FormatDuration(TimeSpan.FromMinutes(WeeklyAverageMinutes));
 
                 OnPropertyChanged(nameof(WeeklyUsage));
             }
@@ -562,8 +574,7 @@ namespace digital_wellbeing_app.ViewModels
             // Update week nav label
             UpdateWeekNavState();
 
-            int totalMinutes = 0;
-            int daysWithData = 0;
+            long totalSeconds = 0;
 
             for (int i = 0; i < 7; i++)
             {
@@ -583,8 +594,7 @@ namespace digital_wellbeing_app.ViewModels
 
                 if (sec > 0)
                 {
-                    totalMinutes += (int)ts.TotalMinutes;
-                    daysWithData++;
+                    totalSeconds += sec;
                 }
 
                 WeeklyUsage.Add(new WeeklyUsageItem
@@ -592,17 +602,19 @@ namespace digital_wellbeing_app.ViewModels
                     Day = day.DayOfWeek.ToString(),
                     Usage = TimeFormatHelper.FormatDuration(ts),
                     Minutes = (int)ts.TotalMinutes,
+                    Seconds = sec,
                     IsToday = isToday
                 });
             }
 
             // Calculate proportional bar percentages (relative to max day)
             RecalculateBarPercentages();
+            WeeklyTotalText = TimeFormatHelper.FormatDuration(TimeSpan.FromSeconds(totalSeconds));
 
             // Calculate weekly average
-            if (daysWithData > 0)
+            if (totalSeconds > 0)
             {
-                WeeklyAverageMinutes = totalMinutes / daysWithData;
+                WeeklyAverageMinutes = (int)(totalSeconds / 60L / 7L);
                 WeeklyAverageText = TimeFormatHelper.FormatDuration(TimeSpan.FromMinutes(WeeklyAverageMinutes));
             }
             else
@@ -633,18 +645,16 @@ namespace digital_wellbeing_app.ViewModels
                              .Where(x => x.SessionDate == todayKey)
                              .ToList();
 
-            const double daySecs = 24 * 60 * 60;
-            foreach (var s in sessions)
-            {
-                double start = s.StartTime.TimeOfDay.TotalSeconds;
-                double dur = s.DurationSeconds;
-                if (dur <= 0) continue;
-                TimelineSegments.Add(new ScreenTimelineSegment
-                {
-                    StartPercent = start / daySecs,
-                    WidthPercent = Math.Min(1.0, dur / daySecs)
-                });
-            }
+            var dayStart = DateTime.Today;
+            var dayEnd = dayStart.AddDays(1);
+            var intervals = sessions
+                .Where(s => s.DurationSeconds > 0)
+                .Select(s => (Start: s.StartTime < dayStart ? dayStart : s.StartTime,
+                              End: s.StartTime.AddSeconds(s.DurationSeconds) > dayEnd
+                                  ? dayEnd
+                                  : s.StartTime.AddSeconds(s.DurationSeconds)))
+                .Where(i => i.End > i.Start)
+                .ToList();
 
             // 2) Live session segment – use actual session start time
             var sessionStart = _tracker.CurrentSessionStart;
@@ -654,15 +664,40 @@ namespace digital_wellbeing_app.ViewModels
                 // Only show if session started today
                 if (sessionStart.Value.Date == DateTime.Today)
                 {
-                    var startSecs = sessionStart.Value.TimeOfDay.TotalSeconds;
-                    var widthSecs = sessionSeconds;
-
-                    TimelineSegments.Add(new ScreenTimelineSegment
-                    {
-                        StartPercent = startSecs / daySecs,
-                        WidthPercent = Math.Min(1.0, widthSecs / daySecs)
-                    });
+                    intervals.Add((sessionStart.Value,
+                        sessionStart.Value.AddSeconds(sessionSeconds) > dayEnd
+                            ? dayEnd
+                            : sessionStart.Value.AddSeconds(sessionSeconds)));
                 }
+            }
+
+            // Five-minute persistence chunks are implementation details, not separate visual
+            // sessions. Merge touching/overlapping chunks so a continuous stretch renders as one
+            // clean bar without seams, and clamp every bar inside the local-day bounds.
+            var merged = new System.Collections.Generic.List<(DateTime Start, DateTime End)>();
+            foreach (var interval in intervals.OrderBy(i => i.Start))
+            {
+                if (merged.Count > 0 && interval.Start <= merged[^1].End.AddSeconds(2))
+                {
+                    var previous = merged[^1];
+                    merged[^1] = (previous.Start, interval.End > previous.End ? interval.End : previous.End);
+                }
+                else
+                {
+                    merged.Add(interval);
+                }
+            }
+
+            var daySeconds = TimeSpan.FromDays(1).TotalSeconds;
+            foreach (var interval in merged)
+            {
+                var startSeconds = (interval.Start - dayStart).TotalSeconds;
+                var durationSeconds = (interval.End - interval.Start).TotalSeconds;
+                TimelineSegments.Add(new ScreenTimelineSegment
+                {
+                    StartPercent = Math.Clamp(startSeconds / daySeconds, 0, 1),
+                    WidthPercent = Math.Clamp(durationSeconds / daySeconds, 0, 1 - startSeconds / daySeconds)
+                });
             }
 
             OnPropertyChanged(nameof(TimelineSegments));
@@ -724,6 +759,8 @@ namespace digital_wellbeing_app.ViewModels
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Minutes)));
             }
         }
+
+        public int Seconds { get; set; }
 
         private double _percentage;
         public double Percentage

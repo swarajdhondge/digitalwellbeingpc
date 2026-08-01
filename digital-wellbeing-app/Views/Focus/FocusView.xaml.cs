@@ -45,6 +45,21 @@ namespace digital_wellbeing_app.Views.Focus
             }
         }
 
+        private bool _isSuggested;
+        /// <summary>True when Category came from CategoryRuleService, not a user click yet.</summary>
+        public bool IsSuggested
+        {
+            get => _isSuggested;
+            set
+            {
+                if (_isSuggested != value)
+                {
+                    _isSuggested = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSuggested)));
+                }
+            }
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
     }
 
@@ -345,15 +360,40 @@ namespace digital_wellbeing_app.Views.Focus
 
                 foreach (var app in recentApps)
                 {
-                    var category = _focusService?.GetAppCategory(app.AppName) ?? AppCategoryType.Uncategorized;
-                    
+                    var key = AppIdentity.NormalizeKey(app.ExecutablePath, app.AppName);
+
+                    // Read the row directly (rather than through FocusSessionService's cache) so
+                    // we can see Source and tell "no row yet" apart from "explicitly Neutral".
+                    var existingRow = DatabaseService.GetAppCategory(key);
+                    AppCategoryType category;
+                    bool isSuggested;
+
+                    if (existingRow != null)
+                    {
+                        category = existingRow.Category;
+                        isSuggested = existingRow.Source == CategorySource.AutoSuggested;
+                    }
+                    else if (CategoryRuleService.TryGetSuggestedCategory(key, out var ruleCategory))
+                    {
+                        // No row yet (e.g. app used for the first time since the last startup
+                        // backfill) - show the suggestion live without writing anything.
+                        category = ruleCategory;
+                        isSuggested = true;
+                    }
+                    else
+                    {
+                        category = AppCategoryType.Uncategorized;
+                        isSuggested = false;
+                    }
+
                     var display = new AppCategoryDisplay
                     {
                         // Canonical identity so category writes/reads reconcile with reports.
-                        AppIdentifier = AppIdentity.NormalizeKey(app.ExecutablePath, app.AppName),
+                        AppIdentifier = key,
                         AppName = AppNameService.GetDisplayName(app.AppName, app.ExecutablePath),
                         ExecutablePath = app.ExecutablePath,
                         Category = CategoryToDisplayName(category),
+                        IsSuggested = isSuggested,
                         Icon = iconService.GetIconForApp(app.ExecutablePath)
                     };
 
@@ -399,8 +439,9 @@ namespace digital_wellbeing_app.Views.Focus
                 app.AppName,
                 app.ExecutablePath,
                 category);
-            
+
             app.Category = CategoryToDisplayName(category);
+            app.IsSuggested = false; // an explicit click always confirms/overrides a suggestion
         }
 
         /// <summary>

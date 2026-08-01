@@ -28,9 +28,9 @@
     <Color x:Key="Border.SubtleColor">#1C1F26</Color>     <!-- faint divider -->
 
     <!-- Text Colors -->
-    <Color x:Key="Text.PrimaryColor">#EDEFF3</Color>      <!-- primary ink -->
-    <Color x:Key="Text.SecondaryColor">#99A1AE</Color>    <!-- secondary labels -->
-    <Color x:Key="Text.MutedColor">#636A77</Color>        <!-- muted hints -->
+    <Color x:Key="Text.PrimaryColor">#F4F6F9</Color>      <!-- primary ink -->
+    <Color x:Key="Text.SecondaryColor">#C2C8D2</Color>    <!-- secondary labels -->
+    <Color x:Key="Text.MutedColor">#949CAA</Color>        <!-- muted hints -->
 
     <!-- Accent Colors (Pulse Dashboard indigo) -->
     <Color x:Key="Accent.PrimaryColor">#6C6FE8</Color>    <!-- active toggle / primary action -->

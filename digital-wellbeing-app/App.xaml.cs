@@ -11,6 +11,19 @@ namespace digital_wellbeing_app
 {
     public partial class App : System.Windows.Application
     {
+        [STAThread]
+        private static void Main(string[] args)
+        {
+            // Velopack can fast-exit for install/update hooks, so it must run before WPF
+            // initializes. Store/MSIX installations are updated by Microsoft Store instead.
+            if (!Services.PackagedAppInfo.IsPackaged)
+                VelopackApp.Build().Run();
+
+            var app = new App();
+            app.InitializeComponent();
+            app.Run();
+        }
+
         /// <summary>
         /// Configures LiveCharts2 global theme settings
         /// </summary>
@@ -38,6 +51,7 @@ namespace digital_wellbeing_app
         // User-scoped mutex: allows multiple Windows users to each run their own instance
         private static readonly string MutexName = $"DigitalWellbeingPC_SingleInstance_{GetCurrentUserSid()}";
         private static Mutex? _mutex;
+        private static bool _ownsMutex;
 
         private static string GetCurrentUserSid()
         {
@@ -53,16 +67,15 @@ namespace digital_wellbeing_app
 
         public CoreLogic.ScreenTimeTracker ScreenTracker { get; private set; } = null!;
         public CoreLogic.AppUsageTracker AppTracker { get; private set; } = null!;
+        public Services.AppLimitService AppLimitSvc { get; private set; } = null!;
+        public Services.WebsiteUsageService WebsiteUsageSvc { get; private set; } = null!;
         private Services.SoundMonitoringService? _soundService;
 
         public CoreLogic.SoundExposureManager SoundExposureMgr { get; } = new();
 
         protected override void OnStartup(System.Windows.StartupEventArgs e)
         {
-            // Velopack update hooks - must be first. Skipped for the Store (packaged) build,
-            // which must not self-update (the Microsoft Store delivers updates instead).
-            if (!Services.PackagedAppInfo.IsPackaged)
-                VelopackApp.Build().Run();
+            Services.StartupService.DetectStartupLaunch(e.Args);
 
             // Global exception handlers - catch unhandled crashes
             DispatcherUnhandledException += OnDispatcherUnhandledException;
@@ -72,6 +85,7 @@ namespace digital_wellbeing_app
             // Migrate legacy "Digital Wellbeing" data/registry to the "Pulse" identity.
             // Must run before any service touches the data folder (e.g. LogService below).
             Services.DataMigrationService.RunMigrations();
+            Services.StartupService.EnsureStartupArguments();
 
             // Initialize logging
             Services.LogService.Initialize();
@@ -79,13 +93,17 @@ namespace digital_wellbeing_app
 
             // Single instance check
             _mutex = new Mutex(true, MutexName, out bool isNewInstance);
+            _ownsMutex = isNewInstance;
             if (!isNewInstance)
             {
-                System.Windows.MessageBox.Show(
-                    "Pulse is already running.\nCheck the system tray.",
-                    "Already Running",
-                    System.Windows.MessageBoxButton.OK,
-                    System.Windows.MessageBoxImage.Information);
+                Services.LogService.Info(Services.StartupService.IsStartupLaunch
+                    ? "Silent startup activation ignored because Pulse is already running"
+                    : "Interactive launch ignored because Pulse is already running");
+
+                // Duplicate activations must never put UI on the desktop. Windows can invoke
+                // both a legacy Run entry and a packaged StartupTask during sign-in, and older
+                // registrations do not always carry the --startup marker. Silently exiting here
+                // keeps system startup quiet regardless of which activation wins the race.
                 Shutdown();
                 return;
             }
@@ -106,17 +124,39 @@ namespace digital_wellbeing_app
             };
             ConfigureLiveChartsTheme(isDark);
 
+            // Construct the shell explicitly instead of using StartupUri. A Windows-startup
+            // activation therefore creates the tray icon and background services without ever
+            // showing, loading, or briefly flashing a window on the desktop/taskbar.
+            var shellWindow = new MainWindow.MainWindow();
+            MainWindow = shellWindow;
+            if (!Services.StartupService.IsStartupLaunch)
+                shellWindow.Show();
+
             // Initialize database & trackers
             Services.DatabaseService.GetConnection();
             // One-time (idempotent) migration: canonicalize app-category keys so Focus Mode
             // categories reconcile with the Dashboard/Report category attribution.
             try { Services.DatabaseService.NormalizeAppCategoryKeys(); }
             catch (Exception ex) { Services.LogService.Warning($"AppCategory normalization skipped: {ex.Message}"); }
+            // Idempotent: suggests categories for known apps seen recently that have no
+            // AppCategory row yet. Never touches a row that already exists.
+            Services.CategoryRuleService.ApplyRulesToUncategorized();
             RunDailyRetentionPurge();
             ScreenTracker = new CoreLogic.ScreenTimeTracker();
             ScreenTracker.Start();
             AppTracker = new CoreLogic.AppUsageTracker();
             AppTracker.Start();
+            AppLimitSvc = new Services.AppLimitService(AppTracker);
+            AppLimitSvc.Start();
+            // StartupUri (handled inside base.OnStartup above) constructs MainWindow before this
+            // point, so it's already available to wire the notification callback into.
+            if (Current.MainWindow is MainWindow.MainWindow mainWindow)
+                AppLimitSvc.LimitReached += mainWindow.OnAppLimitReached;
+
+            WebsiteUsageSvc = new Services.WebsiteUsageService();
+            if (new Services.SettingsService().LoadWebsiteTrackingEnabled())
+                WebsiteUsageSvc.Start();
+
             _soundService = new Services.SoundMonitoringService(SoundExposureMgr);
 
             Services.LogService.Info("Trackers started successfully");
@@ -126,7 +166,9 @@ namespace digital_wellbeing_app
             SystemEvents.PowerModeChanged += OnPowerModeChanged;
 
             // Auto-check for updates (non-blocking, fire-and-forget). Not for the Store build.
-            if (!Services.PackagedAppInfo.IsPackaged)
+            if (!Services.StartupService.IsStartupLaunch
+                && !Services.PackagedAppInfo.IsPackaged
+                && Velopack.Locators.VelopackLocator.IsCurrentSet)
             _ = System.Threading.Tasks.Task.Run(async () =>
             {
                 try
@@ -185,13 +227,20 @@ namespace digital_wellbeing_app
 
             try
             {
-                System.Windows.MessageBox.Show(
-                    $"An unexpected error occurred:\n\n{e.Exception.Message}\n\n" +
-                    "The error has been logged. The application will try to continue.\n" +
-                    "If the problem persists, please restart the application.",
-                    "Pulse - Error",
-                    System.Windows.MessageBoxButton.OK,
-                    System.Windows.MessageBoxImage.Error);
+                // Background startup and teardown are intentionally silent. If the main window
+                // is visible, retain the useful user-facing error; otherwise the log is enough.
+                if (!Services.StartupService.IsStartupLaunch
+                    && !Dispatcher.HasShutdownStarted
+                    && Current?.MainWindow?.IsVisible == true)
+                {
+                    System.Windows.MessageBox.Show(
+                        $"An unexpected error occurred:\n\n{e.Exception.Message}\n\n" +
+                        "The error has been logged. The application will try to continue.\n" +
+                        "If the problem persists, please restart the application.",
+                        "Pulse - Error",
+                        System.Windows.MessageBoxButton.OK,
+                        System.Windows.MessageBoxImage.Error);
+                }
             }
             catch
             {
@@ -235,6 +284,7 @@ namespace digital_wellbeing_app
                     // Screen locked or user logged off - pause tracking
                     ScreenTracker?.Pause();
                     AppTracker?.Stop();
+                    WebsiteUsageSvc?.Stop();
                     break;
 
                 case SessionSwitchReason.SessionUnlock:
@@ -244,6 +294,7 @@ namespace digital_wellbeing_app
                     // Screen unlocked or user logged on - resume tracking
                     ScreenTracker?.Resume();
                     AppTracker?.Start();
+                    ResumeWebsiteTrackingIfEnabled();
                     break;
             }
         }
@@ -259,14 +310,26 @@ namespace digital_wellbeing_app
                     // PC going to sleep/hibernate - pause tracking
                     ScreenTracker?.Pause();
                     AppTracker?.Stop();
+                    WebsiteUsageSvc?.Stop();
                     break;
 
                 case PowerModes.Resume:
                     // PC waking up - resume tracking
                     ScreenTracker?.Resume();
                     AppTracker?.Start();
+                    ResumeWebsiteTrackingIfEnabled();
                     break;
             }
+        }
+
+        /// <summary>
+        /// Website tracking is opt-in, so unlike ScreenTracker/AppTracker it must not
+        /// unconditionally restart on lock/sleep resume - only if the user actually turned it on.
+        /// </summary>
+        private void ResumeWebsiteTrackingIfEnabled()
+        {
+            if (WebsiteUsageSvc != null && new Services.SettingsService().LoadWebsiteTrackingEnabled())
+                WebsiteUsageSvc.Start();
         }
 
         protected override void OnExit(System.Windows.ExitEventArgs e)
@@ -279,8 +342,10 @@ namespace digital_wellbeing_app
 
             ScreenTracker?.Stop();
             ScreenTracker?.Dispose();
+            AppLimitSvc?.Dispose();
             AppTracker?.Stop();
             AppTracker?.Dispose();
+            WebsiteUsageSvc?.Dispose();
             SoundExposureMgr?.Dispose();
             _soundService?.Dispose();
 
@@ -289,8 +354,21 @@ namespace digital_wellbeing_app
 
             Services.LogService.Info("App shutdown complete");
 
-            _mutex?.ReleaseMutex();
-            _mutex?.Dispose();
+            // Clear ownership before releasing so a teardown exception cannot make WPF attempt
+            // to release the same mutex again during a re-entrant shutdown.
+            var mutex = _mutex;
+            var ownedMutex = _ownsMutex;
+            _mutex = null;
+            _ownsMutex = false;
+            if (ownedMutex && mutex != null)
+            {
+                try { mutex.ReleaseMutex(); }
+                catch (ApplicationException ex)
+                {
+                    Services.LogService.Warning($"Single-instance mutex was not owned during shutdown: {ex.Message}");
+                }
+            }
+            mutex?.Dispose();
             base.OnExit(e);
         }
     }

@@ -37,8 +37,13 @@ namespace digital_wellbeing_app.Models
         [Ignore]
         public string SessionLabel => $"{StartTime:HH:mm}–{EndTime:HH:mm}";
 
+        /// <summary>
+        /// "~" signals this is an estimate derived from system volume and device-type category,
+        /// not a calibrated sound-pressure-level measurement - Windows has no API to produce one
+        /// for arbitrary hardware (no mic access, no manufacturer sensitivity data).
+        /// </summary>
         [Ignore]
-        public string PeakSPLText => $"{EstimatedMaxSPL:F0} dB";
+        public string PeakSPLText => $"~{EstimatedMaxSPL:F0} dB";
 
         [Ignore]
         public string DeviceTypeIcon => DeviceType switch

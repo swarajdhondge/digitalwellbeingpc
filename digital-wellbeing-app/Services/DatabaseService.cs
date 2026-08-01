@@ -31,6 +31,13 @@ namespace digital_wellbeing_app.Services
                 if (_dbPathOverride != null)
                     return _dbPathOverride;
 
+                var isolatedDataDir = Environment.GetEnvironmentVariable("PULSE_DATA_DIR");
+                if (!string.IsNullOrWhiteSpace(isolatedDataDir))
+                {
+                    Directory.CreateDirectory(isolatedDataDir);
+                    return Path.Combine(isolatedDataDir, DbFileName);
+                }
+
                 var localAppData = Environment.GetFolderPath(
                     Environment.SpecialFolder.LocalApplicationData);
                 var folder = Path.Combine(localAppData, AppFolderName);
@@ -149,6 +156,9 @@ namespace digital_wellbeing_app.Services
             _database?.CreateTable<UserSettings>();
             _database?.CreateTable<FocusSession>();
             _database?.CreateTable<AppCategory>();
+            _database?.CreateTable<AppLimit>();
+            _database?.CreateTable<WebsiteUsageSession>();
+            _database?.CreateTable<TrackerHeartbeat>();
 
             // Create indexes for faster date-based queries on large tables
             try
@@ -159,6 +169,7 @@ namespace digital_wellbeing_app.Services
                 _database?.Execute("CREATE INDEX IF NOT EXISTS idx_sound_start ON SoundUsageSession(StartTime)");
                 _database?.Execute("CREATE INDEX IF NOT EXISTS idx_focus_start ON FocusSession(StartTime)");
                 _database?.Execute("CREATE INDEX IF NOT EXISTS idx_focus_date ON FocusSession(SessionDate)");
+                _database?.Execute("CREATE INDEX IF NOT EXISTS idx_website_hostname_start ON WebsiteUsageSession(Hostname, StartTime)");
             }
             catch (Exception ex)
             {
@@ -321,6 +332,7 @@ namespace digital_wellbeing_app.Services
                     existing.Category = category.Category;
                     existing.AppName = category.AppName;
                     existing.ExecutablePath = category.ExecutablePath;
+                    existing.Source = category.Source;
                     existing.LastUpdated = DateTime.Now;
                     conn.Update(existing);
                 }
@@ -348,6 +360,131 @@ namespace digital_wellbeing_app.Services
                 return GetConnection()
                        .Table<AppCategory>()
                        .FirstOrDefault(x => x.AppIdentifier == appIdentifier);
+            }
+        }
+
+        // --- App Limits ---
+        // A preference table (like AppCategory), not usage history - intentionally excluded from
+        // DeleteAllData()/PurgeDataOlderThan()/DeleteDataInRange() below.
+        public static void SaveAppLimit(AppLimit limit)
+        {
+            lock (_dbLock)
+            {
+                var conn = GetConnection();
+
+                var existing = conn.Table<AppLimit>()
+                                  .FirstOrDefault(x => x.AppIdentifier == limit.AppIdentifier);
+
+                if (existing != null)
+                {
+                    existing.AppName = limit.AppName;
+                    existing.ExecutablePath = limit.ExecutablePath;
+                    existing.IsEnabled = limit.IsEnabled;
+                    existing.DailyLimitMinutes = limit.DailyLimitMinutes;
+                    existing.ScheduleEnabled = limit.ScheduleEnabled;
+                    existing.ScheduleStartHour = limit.ScheduleStartHour;
+                    existing.ScheduleStartMinute = limit.ScheduleStartMinute;
+                    existing.ScheduleEndHour = limit.ScheduleEndHour;
+                    existing.ScheduleEndMinute = limit.ScheduleEndMinute;
+                    existing.EnforcementLevel = limit.EnforcementLevel;
+                    existing.LastUpdated = DateTime.Now;
+                    conn.Update(existing);
+                }
+                else
+                {
+                    conn.Insert(limit);
+                }
+            }
+        }
+
+        public static List<AppLimit> GetAllAppLimits()
+        {
+            lock (_dbLock)
+            {
+                return GetConnection()
+                       .Table<AppLimit>()
+                       .ToList();
+            }
+        }
+
+        public static AppLimit? GetAppLimit(string appIdentifier)
+        {
+            lock (_dbLock)
+            {
+                return GetConnection()
+                       .Table<AppLimit>()
+                       .FirstOrDefault(x => x.AppIdentifier == appIdentifier);
+            }
+        }
+
+        public static void DeleteAppLimit(string appIdentifier)
+        {
+            lock (_dbLock)
+            {
+                GetConnection().Execute("DELETE FROM AppLimit WHERE AppIdentifier = ?", appIdentifier);
+            }
+        }
+
+        /// <summary>
+        /// Total seconds of usage for a single app on a given local day. Same normalize-then-sum
+        /// approach as <c>ReportService.BuildCategoryLookup</c>/<c>GetTopAppsForPeriod</c>, scoped to
+        /// one app instead of building a lookup for all of them.
+        /// </summary>
+        public static int GetAppUsageSecondsForDate(string appIdentifier, DateTime date)
+        {
+            var key = AppIdentity.NormalizeKey(appIdentifier);
+            if (key.Length == 0) return 0;
+
+            var seconds = GetAppUsageSessionsForDate(date)
+                .Where(s => AppIdentity.NormalizeKey(s.ExecutablePath, s.AppName) == key)
+                .Sum(s => (s.EndTime - s.StartTime).TotalSeconds);
+
+            return (int)seconds;
+        }
+
+        // --- Tracker Heartbeats ---
+        // Diagnostic metadata, not usage history or a preference - excluded from
+        // DeleteAllData()/PurgeDataOlderThan()/DeleteDataInRange(), same rule AppCategory/AppLimit
+        // already follow.
+        public static void SaveTrackerHeartbeat(TrackerHeartbeat heartbeat)
+        {
+            lock (_dbLock) { GetConnection().InsertOrReplace(heartbeat); }
+        }
+
+        public static TrackerHeartbeat? GetTrackerHeartbeat(string trackerName)
+        {
+            lock (_dbLock)
+            {
+                return GetConnection()
+                       .Table<TrackerHeartbeat>()
+                       .FirstOrDefault(x => x.TrackerName == trackerName);
+            }
+        }
+
+        public static List<TrackerHeartbeat> GetAllTrackerHeartbeats()
+        {
+            lock (_dbLock) { return GetConnection().Table<TrackerHeartbeat>().ToList(); }
+        }
+
+        // --- Website Usage ---
+        public static void SaveWebsiteUsageSession(WebsiteUsageSession session)
+        {
+            if (!IsValidInterval(session.StartTime, session.EndTime, nameof(WebsiteUsageSession))) return;
+            lock (_dbLock) { GetConnection().Insert(session); }
+        }
+
+        public static List<WebsiteUsageSession> GetWebsiteUsageSessionsForDate(DateTime date)
+        {
+            lock (_dbLock)
+            {
+                var conn = GetConnection();
+                var dayStart = date.Date;
+                var dayEnd = dayStart.AddDays(1);
+
+                return conn.Table<WebsiteUsageSession>()
+                           .Where(s => s.StartTime >= dayStart && s.StartTime < dayEnd
+                                       && s.EndTime >= s.StartTime)
+                           .ToList();
             }
         }
 
@@ -451,6 +588,19 @@ namespace digital_wellbeing_app.Services
             }
         }
 
+        /// <summary>Earliest valid app-usage session, used to bound App Usage history navigation.</summary>
+        public static DateTime? GetEarliestAppUsageDate()
+        {
+            lock (_dbLock)
+            {
+                var row = GetConnection().Table<AppUsageSession>()
+                    .Where(s => s.EndTime >= s.StartTime)
+                    .OrderBy(s => s.StartTime)
+                    .FirstOrDefault();
+                return row?.StartTime.Date;
+            }
+        }
+
         /// <summary>
         /// Get all FocusSessions for a date range (inclusive)
         /// </summary>
@@ -465,6 +615,18 @@ namespace digital_wellbeing_app.Services
                 return conn.Table<FocusSession>()
                            .Where(x => x.StartTime >= rangeStart && x.StartTime < rangeEnd)
                            .ToList();
+            }
+        }
+
+        /// <summary>Earliest focus session, used when determining the first Insights week.</summary>
+        public static DateTime? GetEarliestFocusSessionDate()
+        {
+            lock (_dbLock)
+            {
+                var row = GetConnection().Table<FocusSession>()
+                    .OrderBy(s => s.StartTime)
+                    .FirstOrDefault();
+                return row?.StartTime.Date;
             }
         }
 
@@ -503,6 +665,7 @@ namespace digital_wellbeing_app.Services
                 conn.DeleteAll<ScreenTimeSession>();
                 conn.DeleteAll<SoundUsageSession>();
                 conn.DeleteAll<FocusSession>();
+                conn.DeleteAll<WebsiteUsageSession>();
                 conn.Execute("VACUUM");
             }
         }
@@ -520,6 +683,7 @@ namespace digital_wellbeing_app.Services
                 conn.Execute("DELETE FROM AppUsageSession WHERE StartTime < ?", cutoff);
                 conn.Execute("DELETE FROM SoundUsageSession WHERE StartTime < ?", cutoff);
                 conn.Execute("DELETE FROM FocusSession WHERE StartTime < ?", cutoff);
+                conn.Execute("DELETE FROM WebsiteUsageSession WHERE StartTime < ?", cutoff);
                 conn.Execute("DELETE FROM ScreenTimeSession WHERE SessionDate < ?", cutoffKey);
                 conn.Execute("DELETE FROM ScreenTimePeriod WHERE SessionDate < ?", cutoffKey);
                 conn.Execute("VACUUM");
@@ -542,6 +706,7 @@ namespace digital_wellbeing_app.Services
                 conn.Execute("DELETE FROM AppUsageSession WHERE StartTime >= ? AND StartTime < ?", rangeStart, rangeEndExclusive);
                 conn.Execute("DELETE FROM SoundUsageSession WHERE StartTime >= ? AND StartTime < ?", rangeStart, rangeEndExclusive);
                 conn.Execute("DELETE FROM FocusSession WHERE StartTime >= ? AND StartTime < ?", rangeStart, rangeEndExclusive);
+                conn.Execute("DELETE FROM WebsiteUsageSession WHERE StartTime >= ? AND StartTime < ?", rangeStart, rangeEndExclusive);
                 conn.Execute("DELETE FROM ScreenTimeSession WHERE SessionDate >= ? AND SessionDate <= ?", startKey, endKey);
                 conn.Execute("DELETE FROM ScreenTimePeriod WHERE SessionDate >= ? AND SessionDate <= ?", startKey, endKey);
                 conn.Execute("VACUUM");
@@ -552,6 +717,19 @@ namespace digital_wellbeing_app.Services
         /// Get the full path to the database file.
         /// </summary>
         public static string GetDatabaseFilePath() => DbPath;
+
+        /// <summary>
+        /// Snapshot the live database to <paramref name="destinationPath"/> via SQLite's native
+        /// online backup API - safe against a live, open connection (unlike a raw file copy, which
+        /// could read a half-written page while a writer is mid-transaction).
+        /// </summary>
+        public static void BackupTo(string destinationPath)
+        {
+            lock (_dbLock)
+            {
+                GetConnection().Backup(destinationPath);
+            }
+        }
 
         /// <summary>
         /// Get the size of the database file in bytes, or 0 if it doesn't exist.

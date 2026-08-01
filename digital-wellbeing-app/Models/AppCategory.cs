@@ -14,6 +14,16 @@ namespace digital_wellbeing_app.Models
     }
 
     /// <summary>
+    /// Where an AppCategory row's Category value came from. Manual always wins - an
+    /// AutoSuggested row is a starting point the user hasn't confirmed or overridden yet.
+    /// </summary>
+    public enum CategorySource
+    {
+        Manual = 0,
+        AutoSuggested = 1
+    }
+
+    /// <summary>
     /// Model for storing per-app category assignments
     /// </summary>
     [Table("AppCategory")]
@@ -42,6 +52,11 @@ namespace digital_wellbeing_app.Models
         /// The category assigned to this app
         /// </summary>
         public AppCategoryType Category { get; set; } = AppCategoryType.Uncategorized;
+
+        /// <summary>
+        /// Whether Category was picked by the user or auto-suggested from a known-app rule.
+        /// </summary>
+        public CategorySource Source { get; set; } = CategorySource.Manual;
 
         /// <summary>
         /// When the category was last updated

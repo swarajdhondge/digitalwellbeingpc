@@ -89,6 +89,12 @@
                                      AutomationProperties.Name="Focus">
                             <md:PackIcon Kind="Target" Width="22" Height="22"/>
                         </RadioButton>
+                        <RadioButton x:Name="NavLimits" Style="{StaticResource Pulse.RailItem}"
+                                     GroupName="Rail" Click="Limits_Click"
+                                     ToolTip="Limits" AutomationProperties.AutomationId="NavLimits"
+                                     AutomationProperties.Name="Limits">
+                            <md:PackIcon Kind="TimerLockOutline" Width="22" Height="22"/>
+                        </RadioButton>
                         <RadioButton x:Name="NavReports" Style="{StaticResource Pulse.RailItem}"
                                      GroupName="Rail" Click="Reports_Click"
                                      ToolTip="Insights" AutomationProperties.AutomationId="NavReports"
@@ -120,7 +126,7 @@
                         </Button>
 
                         <TextBlock x:Name="SidebarVersionText"
-                                   Text="v2.1.0"
+                                   Text="v2.3.0"
                                    FontSize="9"
                                    Foreground="{DynamicResource Ink3}"
                                    HorizontalAlignment="Center"

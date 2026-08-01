@@ -24,6 +24,11 @@ namespace digital_wellbeing_app.CoreLogic
         private DateTime _sessionStartTime;
         private DateTime _lastSaved;
 
+        // Throttles the tracking-health heartbeat write - _timer ticks every 1s, far too often to
+        // write on every tick.
+        private static readonly TimeSpan HeartbeatInterval = TimeSpan.FromSeconds(30);
+        private DateTime _lastHeartbeatUtc = DateTime.MinValue;
+
         // Session segment tracking (for DB saves every 5 min)
         private DateTime? _currentSegmentStart = null;
         private int _currentSegmentAccumulated = 0;
@@ -73,6 +78,18 @@ namespace digital_wellbeing_app.CoreLogic
         /// </summary>
         public Func<TimeSpan> IdleTimeProvider { get; set; } = WindowsIdleTimeHelper.GetIdleTime;
 
+        /// <summary>
+        /// Source of "now" for every day-boundary/segment/save decision after construction.
+        /// Defaults to the real clock; overridable so long-running simulation tests can drive
+        /// multi-day scenarios in seconds. Mirrors IdleTimeProvider's pattern: an instance
+        /// property set after construction (e.g. between `new ScreenTimeTracker()` and
+        /// `Start()`), not a constructor parameter. The constructor's own initial field values
+        /// intentionally still use the real DateTime.Now - they run before any caller has a
+        /// chance to override this property, so they anchor to "the real moment this tracker was
+        /// created"; simulations advance forward from there via Start()/CheckDayRollover()/etc.
+        /// </summary>
+        public Func<DateTime> Clock { get; set; } = () => DateTime.Now;
+
         public ScreenTimeTracker()
         {
             var (initialActive, start, sessions) = LoadSessionData();
@@ -98,9 +115,9 @@ namespace digital_wellbeing_app.CoreLogic
         {
             lock (_stateLock)
             {
-                _currentSegmentStart = DateTime.Now;
+                _currentSegmentStart = Clock();
                 _currentSegmentAccumulated = 0;
-                _continuousSessionStart = DateTime.Now;
+                _continuousSessionStart = Clock();
                 _continuousSessionSeconds = 0;
                 _state = TrackingState.Active;
                 _timer.Start();
@@ -148,9 +165,9 @@ namespace digital_wellbeing_app.CoreLogic
 
                 CheckDayRollover();
 
-                _currentSegmentStart = DateTime.Now;
+                _currentSegmentStart = Clock();
                 _currentSegmentAccumulated = 0;
-                _continuousSessionStart = DateTime.Now;
+                _continuousSessionStart = Clock();
                 _continuousSessionSeconds = 0;
                 _sessionCount++;
                 _state = TrackingState.Active;
@@ -173,13 +190,17 @@ namespace digital_wellbeing_app.CoreLogic
             {
                 if (_state == TrackingState.Active)
                 {
-                    SaveSessionData();
-                    SaveCurrentScreenSession();
+                    // Persist the counters into the day that just ended. Using Clock() here
+                    // would address the new day and drop the final unsaved interval from the
+                    // previous day.
+                    var activeDateKey = _sessionStartTime.ToString("yyyy-MM-dd");
+                    SaveSessionData(activeDateKey);
+                    SaveCurrentScreenSession(activeDateKey);
                 }
 
                 CheckDayRollover();
 
-                var now = DateTime.Now;
+                var now = Clock();
                 _currentSegmentStart = now;
                 _currentSegmentAccumulated = 0;
                 _continuousSessionStart = now;
@@ -204,6 +225,13 @@ namespace digital_wellbeing_app.CoreLogic
                 // Check for day rollover at midnight
                 CheckDayRollover();
 
+                var utcNow = DateTime.UtcNow;
+                if (utcNow - _lastHeartbeatUtc >= HeartbeatInterval)
+                {
+                    _lastHeartbeatUtc = utcNow;
+                    TrackingHealthService.RecordHeartbeat(nameof(ScreenTimeTracker));
+                }
+
                 // Get current idle state
                 var idleTime = IdleTimeProvider();
                 bool isUserIdle = idleTime.TotalSeconds > IdleThresholdSeconds;
@@ -215,7 +243,7 @@ namespace digital_wellbeing_app.CoreLogic
                 {
                     if (_state != TrackingState.Idle)
                     {
-                        _idleStartTime ??= DateTime.Now;
+                        _idleStartTime ??= Clock();
 
                         if (_state == TrackingState.Active)
                         {
@@ -231,9 +259,9 @@ namespace digital_wellbeing_app.CoreLogic
                 {
                     if (_state == TrackingState.Idle)
                     {
-                        _currentSegmentStart = DateTime.Now;
+                        _currentSegmentStart = Clock();
                         _currentSegmentAccumulated = 0;
-                        _continuousSessionStart = DateTime.Now;
+                        _continuousSessionStart = Clock();
                         _continuousSessionSeconds = 0;
                         _sessionCount++;
                         _idleStartTime = null;
@@ -247,7 +275,7 @@ namespace digital_wellbeing_app.CoreLogic
                 }
 
                 // Periodic save
-                var now = DateTime.Now;
+                var now = Clock();
                 if ((now - _lastSaved).TotalMinutes >= SaveIntervalMinutes)
                 {
                     SaveSessionData();
@@ -255,7 +283,7 @@ namespace digital_wellbeing_app.CoreLogic
                     if (_currentSegmentAccumulated >= 30)
                     {
                         SaveCurrentScreenSession();
-                        _currentSegmentStart = DateTime.Now;
+                        _currentSegmentStart = Clock();
                         _currentSegmentAccumulated = 0;
                     }
 
@@ -274,34 +302,58 @@ namespace digital_wellbeing_app.CoreLogic
         {
             try
             {
-                var todayKey = DateTime.Now.ToString("yyyy-MM-dd");
+                var todayKey = Clock().ToString("yyyy-MM-dd");
                 var sessionDateKey = _sessionStartTime.ToString("yyyy-MM-dd");
 
                 if (todayKey != sessionDateKey)
                 {
-                    // Day changed - save current session and reset
-                    SaveSessionData();
-                    SaveCurrentScreenSession();
+                    // Persist the counters into the day that just ended. Using Clock() here
+                    // would address the new day and drop the final unsaved interval from the
+                    // previous day.
+                    SaveSessionData(sessionDateKey);
+                    SaveCurrentScreenSession(sessionDateKey);
 
                     // Reset for new day
                     _activeTime = TimeSpan.Zero;
-                    _sessionStartTime = DateTime.Now;
-                    _currentSegmentStart = DateTime.Now;
+                    _sessionStartTime = Clock();
+                    _currentSegmentStart = Clock();
                     _currentSegmentAccumulated = 0;
-                    _continuousSessionStart = DateTime.Now;
+                    _continuousSessionStart = Clock();
                     _continuousSessionSeconds = 0;
                     _sessionCount = 1;
 
-                    // Create new day entry (InsertOrReplace handles race condition)
+                    // Create new day entry - find-then-update-or-insert rather than a bare
+                    // InsertOrReplace(entry) on a freshly-constructed object. ScreenTimePeriod's
+                    // PK is an AutoIncrement Id, defaulted to 0 on every new instance here;
+                    // InsertOrReplace includes that explicit Id=0 in its SQL, so every rollover
+                    // after the first one *replaced* the same Id=0 row instead of inserting a new
+                    // one - only the most recent day's summary ever survived on a machine that
+                    // stayed running across multiple real midnights without restarting. Found via
+                    // Item 10's long-running simulation test, not previously covered by any
+                    // existing (short-lived, single-process-run) test.
                     var db = DatabaseService.GetConnection();
-                    var entry = new ScreenTimePeriod
+                    var existingEntry = db.Table<ScreenTimePeriod>().FirstOrDefault(x => x.SessionDate == todayKey);
+                    if (existingEntry != null)
                     {
-                        SessionDate = todayKey,
-                        SessionStartTime = _sessionStartTime.ToString("o"),
-                        LastRecordedTime = DateTime.Now.ToString("o"),
-                        AccumulatedActiveSeconds = 0
-                    };
-                    db.InsertOrReplace(entry);
+                        // Race guard: another path (e.g. LoadSessionData at a near-simultaneous
+                        // startup) already created today's row - update it in place instead of
+                        // inserting a duplicate.
+                        existingEntry.SessionStartTime = _sessionStartTime.ToString("o");
+                        existingEntry.LastRecordedTime = Clock().ToString("o");
+                        existingEntry.AccumulatedActiveSeconds = 0;
+                        db.Update(existingEntry);
+                    }
+                    else
+                    {
+                        var entry = new ScreenTimePeriod
+                        {
+                            SessionDate = todayKey,
+                            SessionStartTime = _sessionStartTime.ToString("o"),
+                            LastRecordedTime = Clock().ToString("o"),
+                            AccumulatedActiveSeconds = 0
+                        };
+                        db.Insert(entry);
+                    }
 
                     System.Diagnostics.Debug.WriteLine($"[ScreenTimeTracker] Day rollover: {sessionDateKey} -> {todayKey}");
                 }
@@ -354,23 +406,23 @@ namespace digital_wellbeing_app.CoreLogic
             }
         }
 
-        private void SaveSessionData()
+        private void SaveSessionData(string? dateKey = null)
         {
             var db = DatabaseService.GetConnection();
-            var todayKey = DateTime.Now.ToString("yyyy-MM-dd");
+            var todayKey = dateKey ?? Clock().ToString("yyyy-MM-dd");
             var entry = db.Table<ScreenTimePeriod>()
                           .FirstOrDefault(x => x.SessionDate == todayKey);
             if (entry == null) return;
 
             entry.AccumulatedActiveSeconds = (int)_activeTime.TotalSeconds;
-            entry.LastRecordedTime = DateTime.Now.ToString("o");
+            entry.LastRecordedTime = Clock().ToString("o");
             db.Update(entry);
         }
 
         /// <summary>
         /// Save a session segment for timeline visualization
         /// </summary>
-        private void SaveCurrentScreenSession()
+        private void SaveCurrentScreenSession(string? dateKey = null)
         {
             if (_currentSegmentStart == null || _currentSegmentAccumulated < 1)
                 return;
@@ -381,7 +433,7 @@ namespace digital_wellbeing_app.CoreLogic
 
             var session = new ScreenTimeSession
             {
-                SessionDate = DateTime.Now.ToString("yyyy-MM-dd"),
+                SessionDate = dateKey ?? Clock().ToString("yyyy-MM-dd"),
                 StartTime = _currentSegmentStart.Value,
                 DurationSeconds = _currentSegmentAccumulated
             };
@@ -389,7 +441,7 @@ namespace digital_wellbeing_app.CoreLogic
             DatabaseService.SaveScreenTimeSession(session);
 
             // Reset segment for next save (continuous session keeps running)
-            _currentSegmentStart = DateTime.Now;
+            _currentSegmentStart = Clock();
             _currentSegmentAccumulated = 0;
         }
     }

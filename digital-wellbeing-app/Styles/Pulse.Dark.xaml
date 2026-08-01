@@ -21,9 +21,9 @@
     <Color x:Key="Track.Color">#20242B</Color>
 
     <!-- text -->
-    <Color x:Key="Ink.Color">#EDEFF3</Color>
-    <Color x:Key="Ink2.Color">#99A1AE</Color>
-    <Color x:Key="Ink3.Color">#636A77</Color>
+    <Color x:Key="Ink.Color">#F4F6F9</Color>
+    <Color x:Key="Ink2.Color">#C2C8D2</Color>
+    <Color x:Key="Ink3.Color">#949CAA</Color>
 
     <!-- brushes -->
     <SolidColorBrush x:Key="Bg"      Color="{StaticResource Bg.Color}"/>

@@ -219,6 +219,25 @@ namespace digital_wellbeing_app.Services
         }
 
         /// <summary>
+        /// React to the OS-level Windows Focus session (Settings > Focus) starting. Wired from
+        /// MainWindow to a WindowsFocusIntegration/IWindowsFocusSource instance - kept as a plain
+        /// bool method (rather than taking the interface as a constructor dependency) so this
+        /// service stays decoupled from a WinRT wrapper it doesn't otherwise need, and the
+        /// reaction is trivially testable without a live WinRT call.
+        ///
+        /// Read/react only: does nothing on the "focus ended" transition (Pulse doesn't force-end
+        /// a session just because the OS one did), and never clobbers a session already in
+        /// progress - StartSession would otherwise end it as incomplete and start a fresh one.
+        /// </summary>
+        public void OnWindowsFocusActiveChanged(bool isFocusActive)
+        {
+            if (!isFocusActive) return;
+            if (IsInFocusMode) return;
+
+            StartSession(DefaultDurationMinutes);
+        }
+
+        /// <summary>
         /// End the current focus session
         /// </summary>
         /// <param name="completed">Whether the session completed normally</param>
@@ -295,13 +314,17 @@ namespace digital_wellbeing_app.Services
 
             _appCategories[key] = category;
 
-            // Save to database
+            // Save to database. This method is only ever called from an explicit user click
+            // (see FocusView's SetWorkCategory_Click/SetEntertainmentCategory_Click/
+            // SetNeutralCategory_Click), so it always marks the row Manual - a user click
+            // overrides an auto-suggestion or a prior manual pick alike.
             DatabaseService.SaveAppCategory(new AppCategory
             {
                 AppIdentifier = key,
                 AppName = appName,
                 ExecutablePath = executablePath,
                 Category = category,
+                Source = CategorySource.Manual,
                 LastUpdated = DateTime.Now
             });
         }
@@ -561,29 +584,12 @@ namespace digital_wellbeing_app.Services
                     return false;
                 }
 
-                // Try regular minimize first
-                NativeMethods.ShowWindow(windowHandle, NativeMethods.SW_MINIMIZE);
-                
-                // Brief delay to let Windows process the minimize command
-                System.Threading.Thread.Sleep(200);
-                
-                // Verify it actually minimized by checking if it's still foreground
-                var currentForeground = NativeMethods.GetForegroundWindow();
-                if (currentForeground == windowHandle)
+                bool minimized = Platform.Windows.WindowEnforcement.TryMinimizeWindow(windowHandle);
+                if (!minimized)
                 {
-                    // Try force minimize
-                    System.Diagnostics.Debug.WriteLine($"[Focus] Regular minimize failed, trying force minimize: {appIdentifier}");
-                    NativeMethods.ShowWindow(windowHandle, NativeMethods.SW_FORCEMINIMIZE);
-                    System.Threading.Thread.Sleep(200);
-                    
-                    currentForeground = NativeMethods.GetForegroundWindow();
-                    if (currentForeground == windowHandle)
-                    {
-                        // Still in foreground - minimize didn't work (admin app, full-screen game, etc.)
-                        System.Diagnostics.Debug.WriteLine($"[Focus] Force minimize also failed: {appIdentifier}");
-                        _appsFailedToBlock.Add(appIdentifier);
-                        return false;
-                    }
+                    System.Diagnostics.Debug.WriteLine($"[Focus] Minimize failed (app resisted): {appIdentifier}");
+                    _appsFailedToBlock.Add(appIdentifier);
+                    return false;
                 }
 
                 System.Diagnostics.Debug.WriteLine($"[Focus] Successfully minimized: {appIdentifier}");

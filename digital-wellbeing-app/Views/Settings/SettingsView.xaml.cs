@@ -18,6 +18,9 @@ namespace digital_wellbeing_app.Views.Settings
         private bool _isLoadingRetention;
         private bool _isLoadingStartup;
         private bool _isLoadingCloseToTray;
+        private bool _isLoadingWindowsFocusIntegration;
+        private bool _isLoadingWebsiteTracking;
+        private bool _isLoadingDeviceTypeOverride;
 
         public SettingsView()
         {
@@ -31,7 +34,7 @@ namespace digital_wellbeing_app.Views.Settings
                 if (!string.IsNullOrEmpty(location))
                 {
                     var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(location);
-                    AboutVersionText.Text = $"Version {fvi.ProductVersion ?? "2.2.0"}";
+                    AboutVersionText.Text = $"Version {fvi.ProductVersion ?? "2.3.0"}";
                 }
             }
             catch { /* Keep default text from XAML */ }
@@ -60,6 +63,9 @@ namespace digital_wellbeing_app.Views.Settings
             // Load close-to-tray preference
             LoadCloseToTraySetting();
 
+            // Load Windows Focus integration preference
+            LoadWindowsFocusIntegrationSetting();
+
             // Load goal settings
             LoadGoalSettings();
 
@@ -69,11 +75,17 @@ namespace digital_wellbeing_app.Views.Settings
             // Load Wind Down settings
             LoadWindDownSettings();
 
+            // Load Hearing settings (device-type override)
+            LoadHearingSettings();
+
             // Note: Hearing Protection threshold is disabled (Coming Soon)
             // Default is 75 dB, set in SettingsService.LoadHarmfulThreshold()
 
             // Load Data & Privacy info
             LoadDataPrivacyInfo();
+
+            // Load tracker health for the Diagnostics card
+            LoadTrackerHealth();
         }
 
         #region Data & Privacy
@@ -91,6 +103,25 @@ namespace digital_wellbeing_app.Views.Settings
 
             RefreshDbSize();
             LoadRetentionSetting();
+            LoadWebsiteTrackingSetting();
+        }
+
+        private void LoadWebsiteTrackingSetting()
+        {
+            _isLoadingWebsiteTracking = true;
+            try { WebsiteTrackingCheckBox.IsChecked = _settingsService.LoadWebsiteTrackingEnabled(); }
+            finally { _isLoadingWebsiteTracking = false; }
+        }
+
+        private void WebsiteTrackingCheckBox_Changed(object sender, RoutedEventArgs e)
+        {
+            if (_isLoadingWebsiteTracking) return;
+
+            bool enabled = WebsiteTrackingCheckBox.IsChecked == true;
+            _settingsService.SaveWebsiteTrackingEnabled(enabled);
+
+            // Apply immediately to the live service, no restart needed.
+            (System.Windows.Application.Current as App)?.WebsiteUsageSvc?.SetEnabled(enabled);
         }
 
         private void LoadRetentionSetting()
@@ -190,6 +221,80 @@ namespace digital_wellbeing_app.Views.Settings
                 System.Windows.MessageBox.Show(
                     $"Could not open folder: {ex.Message}",
                     "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+
+        private void BackupNow_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new System.Windows.Forms.FolderBrowserDialog
+            {
+                Description = "Choose where to save your Pulse backup",
+                ShowNewFolderButton = true
+            };
+
+            if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
+
+            try
+            {
+                var backupPath = BackupService.CreateBackup(dialog.SelectedPath);
+
+                System.Windows.MessageBox.Show(
+                    $"Backup saved to:\n{backupPath}",
+                    "Backup Complete",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            }
+            catch (System.Exception ex)
+            {
+                System.Windows.MessageBox.Show(
+                    $"Backup failed: {ex.Message}",
+                    "Backup Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+
+        private void RestoreBackup_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new Microsoft.Win32.OpenFileDialog
+            {
+                Title = "Choose a Pulse backup to restore",
+                Filter = "Pulse backup (*.zip)|*.zip"
+            };
+
+            if (dialog.ShowDialog() != true) return;
+
+            var manifest = BackupService.ReadManifest(dialog.FileName);
+            var fromText = manifest != null ? $" from {manifest.CreatedUtc.ToLocalTime():g}" : "";
+
+            var confirm = System.Windows.MessageBox.Show(
+                $"This will replace ALL of your current Pulse data with the backup{fromText}.\n\n" +
+                "This cannot be undone. Pulse will close afterward - reopen it to continue.",
+                "Restore From Backup",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (confirm != MessageBoxResult.Yes) return;
+
+            try
+            {
+                BackupService.RestoreBackup(dialog.FileName);
+
+                System.Windows.MessageBox.Show(
+                    "Restore complete. Pulse will now close - please reopen it.",
+                    "Restore Complete",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+
+                System.Windows.Application.Current.Shutdown();
+            }
+            catch (System.Exception ex)
+            {
+                System.Windows.MessageBox.Show(
+                    $"Restore failed: {ex.Message}",
+                    "Restore Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
@@ -777,6 +882,49 @@ namespace digital_wellbeing_app.Views.Settings
             _settingsService.SaveCloseToTray(CloseToTrayCheckBox.IsChecked == true);
         }
 
+        private void LoadWindowsFocusIntegrationSetting()
+        {
+            _isLoadingWindowsFocusIntegration = true;
+            try { WindowsFocusIntegrationCheckBox.IsChecked = _settingsService.LoadWindowsFocusIntegrationEnabled(); }
+            finally { _isLoadingWindowsFocusIntegration = false; }
+        }
+
+        private void WindowsFocusIntegrationCheckBox_Changed(object sender, RoutedEventArgs e)
+        {
+            if (_isLoadingWindowsFocusIntegration) return;
+            _settingsService.SaveWindowsFocusIntegrationEnabled(WindowsFocusIntegrationCheckBox.IsChecked == true);
+        }
+
+        #endregion
+
+        #region Hearing
+
+        private void LoadHearingSettings()
+        {
+            _isLoadingDeviceTypeOverride = true;
+            try
+            {
+                var current = _settingsService.LoadDeviceTypeOverride() ?? "";
+                foreach (ComboBoxItem item in DeviceTypeOverrideCombo.Items)
+                {
+                    if (item.Tag as string == current)
+                    {
+                        DeviceTypeOverrideCombo.SelectedItem = item;
+                        return;
+                    }
+                }
+                DeviceTypeOverrideCombo.SelectedIndex = 0; // "Auto-detect"
+            }
+            finally { _isLoadingDeviceTypeOverride = false; }
+        }
+
+        private void DeviceTypeOverrideCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_isLoadingDeviceTypeOverride) return;
+            if (DeviceTypeOverrideCombo.SelectedItem is ComboBoxItem item)
+                _settingsService.SaveDeviceTypeOverride(item.Tag as string);
+        }
+
         #endregion
 
         #region About
@@ -788,7 +936,19 @@ namespace digital_wellbeing_app.Views.Settings
 
             try
             {
+                if (PackagedAppInfo.IsPackaged)
+                {
+                    UpdateStatusText.Text = "Updates are managed by Microsoft Store. Opening the Store page...";
+                    OpenExternalLink(PackagedAppInfo.GetStoreDeepLink());
+                    return;
+                }
+
                 var updateService = new UpdateService();
+                if (!updateService.IsAvailable)
+                {
+                    UpdateStatusText.Text = updateService.UnavailableReason ?? "Updates are unavailable for this build.";
+                    return;
+                }
                 var update = await updateService.CheckForUpdatesAsync();
 
                 if (update != null)
@@ -809,7 +969,9 @@ namespace digital_wellbeing_app.Views.Settings
                 }
                 else
                 {
-                    UpdateStatusText.Text = "You're up to date!";
+                    UpdateStatusText.Text = updateService.LastError == null
+                        ? "You're up to date!"
+                        : "Couldn't reach the update service. Check your connection and try again.";
                 }
             }
             catch (System.Exception ex)
@@ -818,19 +980,101 @@ namespace digital_wellbeing_app.Views.Settings
             }
         }
 
-        private void OpenGitHub_Click(object sender, MouseButtonEventArgs e)
+        private void OpenWebsite_Click(object sender, MouseButtonEventArgs e)
+            => OpenExternalLink("https://digitalwellbeingpc.vercel.app");
+
+        private static void OpenExternalLink(string url)
         {
             try
             {
                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
                 {
-                    FileName = "https://github.com/swarajdhondge/digitalwellbeingpc",
+                    FileName = url,
                     UseShellExecute = true
                 });
             }
             catch { }
         }
 
+        private void OpenGitHub_Click(object sender, MouseButtonEventArgs e)
+        {
+            OpenExternalLink("https://github.com/swarajdhondge/digitalwellbeingpc");
+        }
+
         #endregion
+
+        #region Diagnostics
+
+        private void LoadTrackerHealth()
+        {
+            var displays = TrackingHealthService.GetHealthStatuses()
+                .Select(TrackerHealthDisplay.From)
+                .ToList();
+            TrackerHealthList.ItemsSource = displays;
+        }
+
+        private void OpenLogFolder_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var folder = LogService.GetLogDirectory();
+                if (System.IO.Directory.Exists(folder))
+                {
+                    System.Diagnostics.Process.Start("explorer.exe", folder);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Could not open log folder: {ex.Message}", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        #endregion
+    }
+
+    /// <summary>Display wrapper for TrackingHealthService.TrackerHealthInfo.</summary>
+    internal class TrackerHealthDisplay
+    {
+        public string TrackerName { get; set; } = string.Empty;
+        public string StatusText { get; set; } = string.Empty;
+        public System.Windows.Media.Brush StatusColor { get; set; } = System.Windows.Media.Brushes.Gray;
+
+        public static TrackerHealthDisplay From(TrackingHealthService.TrackerHealthInfo info)
+        {
+            var (statusWord, brush) = info.Status switch
+            {
+                TrackingHealthService.HealthStatus.Healthy => ("Healthy", System.Windows.Media.Brushes.LimeGreen),
+                TrackingHealthService.HealthStatus.Stale => ("Stale", System.Windows.Media.Brushes.Orange),
+                TrackingHealthService.HealthStatus.Down => ("Down", System.Windows.Media.Brushes.Red),
+                _ => ("Not started", System.Windows.Media.Brushes.Gray)
+            };
+
+            var lastSeenText = info.LastSeenUtc.HasValue
+                ? $"{statusWord} · last seen {FormatAgo(DateTime.UtcNow - info.LastSeenUtc.Value)} ago"
+                : statusWord;
+
+            return new TrackerHealthDisplay
+            {
+                TrackerName = FriendlyTrackerName(info.TrackerName),
+                StatusText = lastSeenText,
+                StatusColor = brush
+            };
+        }
+
+        private static string FriendlyTrackerName(string trackerName) => trackerName switch
+        {
+            "ScreenTimeTracker" => "Screen time",
+            "AppUsageTracker" => "App usage",
+            "SoundExposureManager" => "Hearing",
+            _ => trackerName
+        };
+
+        private static string FormatAgo(TimeSpan age)
+        {
+            if (age.TotalSeconds < 90) return $"{(int)age.TotalSeconds}s";
+            if (age.TotalMinutes < 90) return $"{(int)age.TotalMinutes}m";
+            return $"{(int)age.TotalHours}h";
+        }
     }
 }
