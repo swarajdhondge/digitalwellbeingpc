@@ -41,6 +41,10 @@ function formatSize(bytes: number) {
   return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
 }
 
+function formatDownloads(count: number) {
+  return `${count.toLocaleString()} ${count === 1 ? "download" : "downloads"}`;
+}
+
 export default function DownloadButtons() {
   const [state, setState] = useState<State>({ status: "loading" });
 
@@ -138,7 +142,7 @@ export default function DownloadButtons() {
               <span className="flex flex-col items-start leading-tight">
                 <span>Download for Windows</span>
                 <span className="text-xs font-normal text-white/70">
-                  {release.tag_name} · {formatSize(a.size)}
+                  {release.tag_name} · {formatSize(a.size)} · {formatDownloads(a.download_count)}
                 </span>
               </span>
             </a>

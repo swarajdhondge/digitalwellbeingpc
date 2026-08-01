@@ -20,6 +20,23 @@ updates:
     labels:
       - "dependencies"
       - "site"
+    groups:
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+      tailwind:
+        patterns:
+          - "tailwindcss"
+          - "@tailwindcss/*"
+    ignore:
+      # Current Next.js tooling is not compatible with these majors yet.
+      - dependency-name: "eslint"
+        versions: [">= 10"]
+      - dependency-name: "typescript"
+        versions: [">= 7"]
 
   # Actions used by ci.yml / release.yml / soak-test.yml.
   - package-ecosystem: "github-actions"
