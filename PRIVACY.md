@@ -1,6 +1,6 @@
 # Privacy Policy
 
-_Last updated: 2026-07-05_
+_Last updated: 2026-07-17_
 
 **Pulse — DigitalWellbeingPC** ("Pulse", "the app") is a privacy-first Windows
 application. This policy explains exactly what data the app handles. The short
@@ -16,6 +16,13 @@ Pulse tracks, entirely on your local machine:
 - **Audio exposure** — the system's audio **output** peak level, used only to
   warn you about prolonged loud listening. Pulse does **not** record, capture, or
   listen to any audio; it never accesses your microphone.
+- **Website usage (opt-in, off by default)** — if you turn on "Track websites by
+  hostname" in Settings, Pulse reads the address bar of Chrome/Edge/Brave/Opera/
+  Vivaldi/Firefox windows via Windows UI Automation to log which site was in the
+  foreground and for how long. Only the bare hostname is ever stored (e.g.
+  `youtube.com`) — the full URL, path, query string, page title, and page content
+  are read only in memory for that instant and are **never** written to disk.
+  This feature is off until you explicitly enable it.
 - **Focus sessions, goals, break history, and settings** you configure.
 
 ## Where your data is stored

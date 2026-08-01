@@ -51,6 +51,7 @@ const shots = [
   { src: "/screenshots/screentime.png", label: "Screen time" },
   { src: "/screenshots/appusage.png", label: "App usage" },
   { src: "/screenshots/focusmode.png", label: "Focus" },
+  { src: "/screenshots/limits.png", label: "Limits" },
   { src: "/screenshots/sound.png", label: "Hearing" },
   { src: "/screenshots/weeklyreport.png", label: "Insights" },
 ];

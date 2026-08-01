@@ -48,6 +48,7 @@ _Android-style Digital Wellbeing for Windows — calm, private, and 100% on-devi
   <img src=".github/screenshots/screentime.png" alt="Screen Time" width="800"/>
   <img src=".github/screenshots/appusage.png" alt="App Usage" width="800"/>
   <img src=".github/screenshots/focusmode.png" alt="Focus sessions" width="800"/>
+  <img src=".github/screenshots/limits.png" alt="App limits" width="800"/>
   <img src=".github/screenshots/sound.png" alt="Hearing protection" width="800"/>
   <img src=".github/screenshots/weeklyreport.png" alt="Weekly report" width="800"/>
   <img src=".github/screenshots/settings.png" alt="Settings" width="800"/>

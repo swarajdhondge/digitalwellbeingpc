@@ -1,5 +1,39 @@
 # Changelog
 
+## [v2.3.0] - 2026-08-01
+
+Per-app time limits, Windows Focus integration, opt-in website tracking, and more honest hearing guidance.
+
+### Features
+- **Per-app time limits.** New **Limits** page with a simple guided flow: choose an app, pick a daily allowance, optionally set unavailable hours, then choose whether Pulse should remind you or minimize the app. Existing limits are listed first with plain-language summaries, pause switches, and direct Edit actions.
+- **Windows Focus integration.** Turning on Windows' own Focus (Settings → System → Focus, or the Clock app) now auto-starts a matching Pulse focus session. A **Settings → Startup** toggle turns this off if you'd rather they stay independent.
+- **Opt-in website tracking.** Settings → Data & Privacy can now log which site you're on by hostname only (e.g. `youtube.com`) across Chrome, Edge, and Firefox-family browsers — never the full URL, search terms, or page content. Off by default.
+- **Manual backup & restore.** Settings → Data & Privacy can export your database and settings to a timestamped `.zip`, and restore from one.
+- **Common apps start pre-categorized.** VS Code, Slack, Spotify, Steam, Discord, and other well-known apps now get an automatic Work/Entertainment tag the first time they're seen, instead of starting Uncategorized on the Dashboard's Categories tile and the Focus vs Leisure report. Always overridable by hand; browsers are deliberately left uncategorized since their usage isn't app-level.
+- **Better history navigation.** Screen Time, App Usage, and Insights now share proper previous/next week paging plus a calendar jump, quick four-week jump, and oldest-record shortcut. Weekly app totals and per-day Dashboard durations make it clear where the week went.
+- **Quieter Windows startup.** When launch-at-login is enabled, Pulse now starts directly in the notification area instead of opening its main window. Startup and appearance controls are also placed first in Settings.
+- **Truly silent startup.** Login activation now constructs the tray/background process without loading or flashing the main window, suppresses duplicate-instance and updater prompts, and logs background startup errors without showing desktop dialogs.
+- **Website and update links.** The About card now links to the Pulse website, and update checks correctly route Store installations to Microsoft Store while development/portable builds show a useful status instead of a Velopack locator error.
+- **Readable dark mode.** Secondary labels, hints, chart captions, settings descriptions, and Help content now use high-contrast text colors throughout the app. Form controls on the Limits page also remain visible against dark surfaces.
+
+### Accuracy & reliability
+- **Hearing guidance is now upfront about being an estimate.** Sound page copy and peak-level badges (`~72 dB`) make clear these are estimates from system volume, not a calibrated measurement — Windows has no API for that on arbitrary hardware. A new **Settings → Hearing** card lets you override the auto-detected device type if it's wrong.
+- **Fixed a ~10x undercount** in continuous listening-duration tracking.
+- **Fixed a day-rollover bug** that could collapse multiple days' screen-time summaries onto a single row on a PC that stays running across real midnights without restarting.
+- **Consistent weekly totals.** Dashboard, Screen Time, App Usage, and Insights now use the same seven-day boundaries, include the active in-memory session, and avoid rounding away partial minutes before totals are calculated.
+- **More accurate activity metrics.** Five-minute crash-safety checkpoints are merged into continuous sessions before calculating app switches, averages, longest sessions, and timeline blocks. Sub-minute focus averages retain seconds instead of appearing as `0m`. App, website, and sound sessions are also split exactly at midnight.
+- **Reliable long-listening alerts.** Harmful-listening duration now continues across persistence checkpoints, and average volume is weighted by actual listening time.
+- **Tracking-health diagnostics.** A new Settings card shows a live Healthy/Stale/Down status for each tracker, plus a shortcut to the log folder.
+- **Lower App Usage overhead.** The live duration still ticks every second, while database-backed lists and focus aggregates refresh every five seconds instead of re-reading full history on every tick; the always-running status-dot animation is now static.
+- **Safer shutdown.** Fixed a re-entrant single-instance mutex release and a late WPF resource lookup that could display an unexpected null-reference error while Pulse was closing.
+
+### Under the hood
+- Bumped the target Windows SDK to build 26100 (needed for the Windows Focus API).
+- Updated the Velopack bootstrap and patched desktop/website dependencies; enabled startup entries are also refreshed to the currently installed executable instead of retaining an old development path.
+- Groundwork for signed builds (SignPath) and automated dependency updates (Dependabot) — signing isn't active yet, so SmartScreen may still warn until real credentials are configured.
+
+---
+
 ## [v2.2.3] - 2026-07-07
 
 Pulse now stays out of your way while it keeps tracking — and it's on the Microsoft Store.
