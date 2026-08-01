@@ -112,24 +112,26 @@ namespace digital_wellbeing_app.Services
         /// <param name="topCount">Number of top apps to return (default 5)</param>
         public List<AppUsageSummary> GetTopAppsForPeriod(DateTime startDate, DateTime endDate, int topCount = 5)
         {
-            var sessions = DatabaseService.GetAppUsageSessionsForRange(startDate, endDate);
+            var sessions = LiveUsageProvider.GetAppSessionsForRange(startDate, endDate);
             var categories = BuildCategoryLookup();
 
-            // Group by executable path and sum durations
+            // Group by canonical identity. Some protected/UWP processes do not expose a path;
+            // grouping by raw path would collapse every such app into one blank-path row.
             var appUsage = sessions
-                .GroupBy(s => s.ExecutablePath)
+                .GroupBy(s => AppIdentity.NormalizeKey(s.ExecutablePath, s.AppName))
+                .Where(g => g.Key.Length > 0)
                 .Select(g =>
                 {
                     var totalSeconds = (int)g.Sum(s => (s.EndTime - s.StartTime).TotalSeconds);
                     // Category keys are the canonical app identity (process name), so look up by
                     // the normalized executable path (falling back to the app name) rather than
                     // the raw full path — which never matched the stored process-name keys.
-                    var categoryKey = AppIdentity.NormalizeKey(g.Key, g.First().AppName);
+                    var categoryKey = g.Key;
 
                     return new AppUsageSummary
                     {
                         AppName = g.First().AppName,
-                        ExecutablePath = g.Key,
+                        ExecutablePath = g.First().ExecutablePath,
                         TotalSeconds = totalSeconds,
                         Category = categories.TryGetValue(categoryKey, out var cat)
                             ? cat
@@ -168,7 +170,7 @@ namespace digital_wellbeing_app.Services
         /// </summary>
         public FocusLeisureComparison GetFocusVsLeisureTime(DateTime startDate, DateTime endDate)
         {
-            var sessions = DatabaseService.GetAppUsageSessionsForRange(startDate, endDate);
+            var sessions = LiveUsageProvider.GetAppSessionsForRange(startDate, endDate);
             var categories = BuildCategoryLookup();
 
             var focusSeconds = 0.0;
@@ -221,10 +223,12 @@ namespace digital_wellbeing_app.Services
             var lastWeekEnd = thisWeekStart.AddDays(-1);
 
             // Get screen time for both weeks
-            var thisWeekPeriods = DatabaseService.GetScreenTimePeriodsForRange(thisWeekStart, thisWeekEnd);
             var lastWeekPeriods = DatabaseService.GetScreenTimePeriodsForRange(lastWeekStart, lastWeekEnd);
 
-            var thisWeekSeconds = thisWeekPeriods.Sum(p => p.AccumulatedActiveSeconds);
+            // Use the same daily source as the chart so a current-week comparison includes the
+            // live, not-yet-flushed part of today and cannot disagree with the report headline.
+            var thisWeekSeconds = GetDailyScreenTimeTrend(thisWeekStart, thisWeekEnd)
+                .Sum(p => p.TotalSeconds);
             var lastWeekSeconds = lastWeekPeriods.Sum(p => p.AccumulatedActiveSeconds);
 
             // Get focus sessions for both weeks

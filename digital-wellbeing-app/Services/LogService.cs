@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace digital_wellbeing_app.Services
 {
@@ -17,11 +19,42 @@ namespace digital_wellbeing_app.Services
         private const string LogFolderName = "logs";
         private const int MaxLogAgeDays = 7;
 
+        // In-memory tail of recent lines, so the Settings Diagnostics card can show recent
+        // activity without re-reading the log file from disk on every open.
+        private const int RingBufferSize = 200;
+        private static readonly object _ringLock = new();
+        private static readonly Queue<string> _recentLines = new();
+
+        /// <summary>
+        /// Optional override for the Pulse app-data folder. Used by the test suite to isolate
+        /// tests from the user's real log file; null in normal operation. Mirrors
+        /// SettingsService.FolderOverride/DatabaseService.SetDatabasePathForTesting - before this,
+        /// LogService was the only one of the three persistence mechanisms without test isolation,
+        /// so every test run (including ones that deliberately trigger Warning/Error paths, e.g.
+        /// DatabaseService's write-side validation rejections) wrote into the user's real log file.
+        /// </summary>
+        public static string? FolderOverride;
+
         public enum LogLevel
         {
             Info,
             Warning,
             Error
+        }
+
+        /// <summary>
+        /// Reset initialization so the next Initialize() call picks up a new FolderOverride. Call
+        /// from test setup before Initialize() (or before any Info/Warning/Error call, which
+        /// no-ops silently if never initialized in production but would otherwise keep pointing at
+        /// a previous test run's now-stale folder here).
+        /// </summary>
+        public static void ResetForTesting()
+        {
+            lock (_logLock)
+            {
+                _initialized = false;
+                _logFilePath = null;
+            }
         }
 
         /// <summary>
@@ -33,7 +66,7 @@ namespace digital_wellbeing_app.Services
 
             try
             {
-                var appDataFolder = Path.Combine(
+                var appDataFolder = FolderOverride ?? Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                     "Pulse");
                 var logFolder = Path.Combine(appDataFolder, LogFolderName);
@@ -76,10 +109,10 @@ namespace digital_wellbeing_app.Services
         {
             if (!_initialized || _logFilePath == null) return;
 
+            var line = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] [{level}] {message}";
+
             try
             {
-                var line = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] [{level}] {message}";
-
                 lock (_logLock)
                 {
                     File.AppendAllText(_logFilePath, line + Environment.NewLine);
@@ -89,6 +122,20 @@ namespace digital_wellbeing_app.Services
             {
                 // Logging should never crash the app
             }
+
+            lock (_ringLock)
+            {
+                _recentLines.Enqueue(line);
+                while (_recentLines.Count > RingBufferSize)
+                    _recentLines.Dequeue();
+            }
+        }
+
+        /// <summary>Most recent log lines (oldest first), up to RingBufferSize - for the Settings
+        /// Diagnostics card. In-memory only; resets on app restart, unlike the log file itself.</summary>
+        public static IReadOnlyList<string> GetRecentLines()
+        {
+            lock (_ringLock) { return _recentLines.ToArray(); }
         }
 
         /// <summary>
@@ -124,10 +171,10 @@ namespace digital_wellbeing_app.Services
         /// </summary>
         public static string GetLogDirectory()
         {
-            return Path.Combine(
+            var appDataFolder = FolderOverride ?? Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                "Pulse",
-                LogFolderName);
+                "Pulse");
+            return Path.Combine(appDataFolder, LogFolderName);
         }
     }
 }

@@ -11,6 +11,7 @@ using System.Windows.Media.Animation;
 using digital_wellbeing_app.Views.AppUsage;
 using digital_wellbeing_app.Views.Dashboard;
 using digital_wellbeing_app.Views.Focus;
+using digital_wellbeing_app.Views.Limits;
 using digital_wellbeing_app.Views.Reports;
 using digital_wellbeing_app.Views.Screen;
 using digital_wellbeing_app.Views.Help;
@@ -32,6 +33,7 @@ namespace digital_wellbeing_app.MainWindow
         private readonly SoundTimelineView _soundView = new();
         private readonly AppUsageView _appUsageView = new();
         private readonly FocusView _focusView = new();
+        private readonly AppLimitsView _limitsView = new();
         private readonly WeeklyReportView _reportsView = new();
         private readonly HelpView _helpView = new();
         private readonly SettingsView _settingsView = new();
@@ -45,6 +47,9 @@ namespace digital_wellbeing_app.MainWindow
 
         // Wind Down service
         private Services.WindDownService? _windDownService;
+
+        // OS-level Windows Focus session integration
+        private Platform.Windows.WindowsFocusIntegration? _windowsFocusIntegration;
 
         // Goal notification tracking
         private bool _goalNotificationShownToday;
@@ -71,7 +76,8 @@ namespace digital_wellbeing_app.MainWindow
                 var flag = System.IO.Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                     "Pulse", ".screenshot-mode");
-                if (System.IO.File.Exists(flag))
+                if (Environment.GetEnvironmentVariable("PULSE_SCREENSHOT_MODE") == "1"
+                    || System.IO.File.Exists(flag))
                 {
                     Background = System.Windows.Media.Brushes.Black;
                     WindowBorder.Margin = new Thickness(0);
@@ -88,7 +94,7 @@ namespace digital_wellbeing_app.MainWindow
                 if (!string.IsNullOrEmpty(location))
                 {
                     var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(location);
-                    SidebarVersionText.Text = $"v{fvi.ProductVersion ?? "2.2.0"}";
+                    SidebarVersionText.Text = $"v{fvi.ProductVersion ?? "2.3.0"}";
                 }
             }
             catch { /* Keep default text from XAML */ }
@@ -97,6 +103,8 @@ namespace digital_wellbeing_app.MainWindow
             InitBreakReminder();
             InitFocusSession();
             InitWindDown();
+            InitWindowsFocusIntegration();
+            InitHearingAlert();
             InitGoalNotification();
 
             // Show welcome screen on first run, otherwise show dashboard
@@ -148,6 +156,66 @@ namespace digital_wellbeing_app.MainWindow
         public Services.FocusSessionService? GetFocusSessionService()
         {
             return _focusSessionService;
+        }
+
+        /// <summary>
+        /// Wired from App.xaml.cs to AppLimitService.LimitReached once both the service and this
+        /// window exist (the service is constructed after MainWindow, since StartupUri creates the
+        /// window before App.OnStartup gets to its tracker/service setup).
+        /// </summary>
+        public void OnAppLimitReached(string appName, string executablePath, Models.FocusEnforcementLevel level)
+        {
+            Dispatcher.Invoke(() => ShowAppLimitNotification(appName, level));
+        }
+
+        /// <summary>
+        /// Wires the OS-level Windows Focus session (Settings > Focus) to auto-start a Pulse focus
+        /// session. Always subscribed - the opt-out setting is checked per-event in the handler
+        /// (not by conditionally subscribing) so toggling it in Settings takes effect immediately
+        /// without needing to tear down and rebuild the subscription.
+        /// </summary>
+        private void InitWindowsFocusIntegration()
+        {
+            _windowsFocusIntegration = new Platform.Windows.WindowsFocusIntegration();
+            Services.LogService.Info(
+                $"WindowsFocusIntegration: IsSupported={_windowsFocusIntegration.IsSupported}, " +
+                $"Packaged={Services.PackagedAppInfo.IsPackaged}");
+            _windowsFocusIntegration.FocusActiveChanged += OnWindowsFocusActiveChanged;
+            _windowsFocusIntegration.Start();
+        }
+
+        private void OnWindowsFocusActiveChanged(bool isFocusActive)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                if (!new Services.SettingsService().LoadWindowsFocusIntegrationEnabled()) return;
+                _focusSessionService?.OnWindowsFocusActiveChanged(isFocusActive);
+            });
+        }
+
+        /// <summary>
+        /// Wires the hearing-threshold alert to the same tray-balloon pattern Goal/WindDown/Break
+        /// already use. SoundExposureMgr is a property initializer on App (runs during App's own
+        /// construction, before OnStartup), so - unlike AppLimitSvc/WebsiteUsageSvc - it's already
+        /// available here in MainWindow's constructor, no ordering workaround needed.
+        /// </summary>
+        private void InitHearingAlert()
+        {
+            var mgr = (System.Windows.Application.Current as App)?.SoundExposureMgr;
+            if (mgr != null)
+                mgr.OnThresholdExceeded += OnHearingThresholdExceeded;
+        }
+
+        private void OnHearingThresholdExceeded(object? sender, EventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                if (_trayIcon == null) return;
+                _trayIcon.BalloonTipTitle = "Hearing alert";
+                _trayIcon.BalloonTipText = "You've been listening above your threshold for a while. Consider lowering the volume.";
+                _trayIcon.BalloonTipIcon = ToolTipIcon.Warning;
+                _trayIcon.ShowBalloonTip(10000);
+            });
         }
 
         private void OnDistractingAppDetected(string appName, string executablePath)
@@ -610,6 +678,61 @@ namespace digital_wellbeing_app.MainWindow
             }
         }
 
+        /// <summary>
+        /// Toast (falling back to a tray balloon) for App Limits - independent of the break-reminder
+        /// toast above so it can't disturb that feature's snooze/dismiss state. Self-contained: its
+        /// own activation handler just brings the app forward onto the Limits page.
+        /// </summary>
+        private void ShowAppLimitNotification(string appName, Models.FocusEnforcementLevel level)
+        {
+            var title = "App limit reached";
+            var body = level == Models.FocusEnforcementLevel.Warn
+                ? $"{appName} has hit its limit for today."
+                : $"{appName} has hit its limit and was minimized.";
+
+            try
+            {
+                string toastXml = $@"
+                    <toast activationType='foreground' launch='action=open-limits'>
+                        <visual>
+                            <binding template='ToastGeneric'>
+                                <text>{System.Security.SecurityElement.Escape(title)}</text>
+                                <text>{System.Security.SecurityElement.Escape(body)}</text>
+                            </binding>
+                        </visual>
+                        <audio src='ms-winsoundevent:Notification.Default'/>
+                    </toast>";
+
+                var xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(toastXml);
+
+                var toast = new ToastNotification(xmlDoc);
+                toast.Activated += (s, args) => Dispatcher.Invoke(() =>
+                {
+                    Show();
+                    WindowState = WindowState.Normal;
+                    Activate();
+                    Topmost = true;
+                    Topmost = false;
+                    NavigateToLimits();
+                });
+
+                ToastNotificationManager.CreateToastNotifier(APP_ID).Show(toast);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[Limits] Toast error: {ex.Message}");
+
+                if (_trayIcon != null)
+                {
+                    _trayIcon.BalloonTipTitle = title;
+                    _trayIcon.BalloonTipText = body;
+                    _trayIcon.BalloonTipIcon = ToolTipIcon.Info;
+                    _trayIcon.ShowBalloonTip(8000);
+                }
+            }
+        }
+
         private void TrayIcon_BalloonTipClicked(object? sender, EventArgs e)
         {
             // Fallback balloon clicked
@@ -833,6 +956,7 @@ namespace digital_wellbeing_app.MainWindow
 
         private void ShowWindow()
         {
+            ShowInTaskbar = true;
             Show();
             WindowState = WindowState.Normal;
             Activate();
@@ -984,6 +1108,7 @@ namespace digital_wellbeing_app.MainWindow
             _breakReminderService?.Dispose();
             _focusSessionService?.Dispose();
             _windDownService?.Dispose();
+            _windowsFocusIntegration?.Dispose();
             _trayIcon?.Dispose();
         }
 
@@ -1105,6 +1230,7 @@ namespace digital_wellbeing_app.MainWindow
                 var app = System.Windows.Application.Current as App;
                 app?.ScreenTracker?.HandleTimeChanged();
                 app?.AppTracker?.FlushCurrentSession();
+                app?.SoundExposureMgr?.FlushCurrentSession();
                 Services.LogService.Info("System time changed - tracker segments flushed");
             }
             catch (Exception ex)
@@ -1224,6 +1350,9 @@ namespace digital_wellbeing_app.MainWindow
         private void Focus_Click(object? sender, RoutedEventArgs e)
             => NavigateTo(_focusView, NavFocus, "Focus", "Focus", "Carve out distraction-free deep work.");
 
+        private void Limits_Click(object? sender, RoutedEventArgs e)
+            => NavigateTo(_limitsView, NavLimits, "Limits", "Limits", "Cap or schedule how long individual apps can run.");
+
         private void Reports_Click(object? sender, RoutedEventArgs e)
             => NavigateTo(_reportsView, NavReports, "Weekly", "Insights", "Your rhythm across the week.");
 
@@ -1244,6 +1373,7 @@ namespace digital_wellbeing_app.MainWindow
         public void NavigateToSound() => Sound_Click(null, new RoutedEventArgs());
         public void NavigateToAppUsage() => AppUsage_Click(null, new RoutedEventArgs());
         public void NavigateToFocus() => Focus_Click(null, new RoutedEventArgs());
+        public void NavigateToLimits() => Limits_Click(null, new RoutedEventArgs());
         public void NavigateToReports() => Reports_Click(null, new RoutedEventArgs());
         public void NavigateToSettings() => Settings_Click(null, new RoutedEventArgs());
         public void NavigateToHelp() => Help_Click(null, new RoutedEventArgs());

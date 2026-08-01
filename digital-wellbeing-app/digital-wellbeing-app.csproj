@@ -2,7 +2,8 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net9.0-windows10.0.19041.0</TargetFramework>
+    <StartupObject>digital_wellbeing_app.App</StartupObject>
+    <TargetFramework>net9.0-windows10.0.26100.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <Nullable>enable</Nullable>
@@ -17,7 +18,7 @@
     <ApplicationIcon>Resources\Icons\digital-balance-icon.ico</ApplicationIcon>
     <Win32Icon>Resources\Icons\digital-balance-icon.ico</Win32Icon>
 
-    <Version>2.1.0</Version>
+    <Version>2.3.0</Version>
     
     <!-- Disable assembly info generation to fix WPF temp project duplicate attribute issue -->
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -35,13 +36,18 @@
 
   <ItemGroup>
     <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
-    <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.11.285" />
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
     <PackageReference Include="NAudio" Version="2.1.0" />
     <PackageReference Include="MaterialDesignThemes" Version="5.2.1" />
     <PackageReference Include="MaterialDesignColors" Version="5.2.1" />
     <PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.0.0-rc3.3" />
-    <PackageReference Include="Velopack" Version="0.0.1298" />
+    <PackageReference Include="Velopack" Version="1.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ApplicationDefinition Remove="App.xaml" />
+    <Page Include="App.xaml" />
   </ItemGroup>
 
   <ItemGroup>

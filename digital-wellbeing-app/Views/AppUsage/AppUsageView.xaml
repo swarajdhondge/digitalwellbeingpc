@@ -5,6 +5,7 @@
     xmlns:vm="clr-namespace:digital_wellbeing_app.ViewModels"
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:conv="clr-namespace:digital_wellbeing_app.Converters"
+    xmlns:controls="clr-namespace:digital_wellbeing_app.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -36,6 +37,14 @@
                 </StackPanel>
             </Border>
 
+            <controls:WeekNavigator x:Name="WeekNavigator" Margin="0,0,0,16"
+                                    Visibility="{Binding IsWeekView, Converter={StaticResource BoolToVisibilityConverter}}"
+                                    WeekLabel="{Binding WeekLabel}"
+                                    SelectedWeekStart="{Binding SelectedWeekStart}"
+                                    EarliestWeekStart="{Binding EarliestWeekStart}"
+                                    CanGoPrevious="{Binding CanGoPrevious}"
+                                    CanGoNext="{Binding CanGoNext}"/>
+
             <!-- Now using -->
             <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
                 <Grid>
@@ -62,18 +71,7 @@
                         <TextBlock Text="{Binding CurrentAppDuration}" Style="{StaticResource Pulse.Stat}" FontSize="22"
                                    VerticalAlignment="Center"/>
                         <Ellipse Width="8" Height="8" Fill="{DynamicResource Accent}" Margin="10,0,0,0" VerticalAlignment="Center"
-                                 Visibility="{Binding HasCurrentApp, Converter={StaticResource BoolToVisibilityConverter}}">
-                            <Ellipse.Triggers>
-                                <EventTrigger RoutedEvent="Loaded">
-                                    <BeginStoryboard>
-                                        <Storyboard RepeatBehavior="Forever">
-                                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                             From="1" To="0.3" Duration="0:0:1" AutoReverse="True"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                            </Ellipse.Triggers>
-                        </Ellipse>
+                                 Visibility="{Binding HasCurrentApp, Converter={StaticResource BoolToVisibilityConverter}}"/>
                     </StackPanel>
                 </Grid>
             </Border>
@@ -109,7 +107,15 @@
             <Border Style="{StaticResource Pulse.Card}"
                     Visibility="{Binding HasApps, Converter={StaticResource BoolToVisibilityConverter}}">
                 <StackPanel>
-                    <TextBlock Text="{Binding RangeHeader}" Style="{StaticResource Pulse.Eyebrow}" Margin="0,0,0,16"/>
+                    <Grid Margin="0,0,0,16">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding RangeHeader}" Style="{StaticResource Pulse.Eyebrow}" VerticalAlignment="Center"/>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal"
+                                    Visibility="{Binding IsWeekView, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <TextBlock Text="Total " Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding WeekTotalText}" Style="{StaticResource Pulse.CardTitle}" FontSize="14"/>
+                        </StackPanel>
+                    </Grid>
                     <ItemsControl ItemsSource="{Binding TodaysUsage}" AlternationCount="6">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>

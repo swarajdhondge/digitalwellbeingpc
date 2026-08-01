@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:controls="clr-namespace:digital_wellbeing_app.Controls"
     xmlns:conv="clr-namespace:digital_wellbeing_app.Converters"
     mc:Ignorable="d"
     d:DesignHeight="800" d:DesignWidth="900"
@@ -44,8 +45,8 @@
                         <TextBlock Text="{Binding ContextLine}" Style="{StaticResource Pulse.Body2}" Margin="0,2,0,0"/>
 
                         <Border x:Name="TimelineBorder" Margin="0,22,0,0" Height="100">
-                            <Border Background="{DynamicResource Track}" CornerRadius="14" Padding="0,8">
-                                <Canvas x:Name="RealTimeCanvas" Background="Transparent"/>
+                            <Border Background="{DynamicResource Track}" CornerRadius="14" Padding="8">
+                                <Canvas x:Name="RealTimeCanvas" Background="Transparent" ClipToBounds="True"/>
                             </Border>
                         </Border>
 
@@ -134,23 +135,12 @@
             <StackPanel Visibility="{Binding IsWeeklyView, Converter={StaticResource BoolToVisibilityConverter}}">
 
                 <!-- Week nav -->
-                <Grid Margin="0,0,0,12">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <Button x:Name="PrevWeekBtn" Grid.Column="0" Click="PrevWeek_Click" IsEnabled="{Binding CanGoBackward}"
-                            Style="{StaticResource Pulse.Button.Icon}" Width="34" Height="34">
-                        <md:PackIcon Kind="ChevronLeft" Width="20" Height="20"/>
-                    </Button>
-                    <TextBlock Grid.Column="1" Text="{Binding WeekLabel}" Style="{StaticResource Pulse.CardTitle}"
-                               FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <Button x:Name="NextWeekBtn" Grid.Column="2" Click="NextWeek_Click" IsEnabled="{Binding CanGoForward}"
-                            Style="{StaticResource Pulse.Button.Icon}" Width="34" Height="34">
-                        <md:PackIcon Kind="ChevronRight" Width="20" Height="20"/>
-                    </Button>
-                </Grid>
+                <controls:WeekNavigator x:Name="WeekNavigator" Margin="0,0,0,12"
+                                        WeekLabel="{Binding WeekLabel}"
+                                        SelectedWeekStart="{Binding CurrentWeekStart}"
+                                        EarliestWeekStart="{Binding EarliestWeekStart}"
+                                        CanGoPrevious="{Binding CanGoBackward}"
+                                        CanGoNext="{Binding CanGoForward}"/>
 
                 <Border Style="{StaticResource Pulse.Card}">
                     <StackPanel>
@@ -159,8 +149,14 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Daily average" Style="{StaticResource Pulse.Body2}"/>
-                            <TextBlock Grid.Column="1" Text="{Binding WeeklyAverageText}" Style="{StaticResource Pulse.CardTitle}" FontSize="16"/>
+                            <StackPanel>
+                                <TextBlock Text="Total screen time" Style="{StaticResource Pulse.Body2}"/>
+                                <TextBlock Text="{Binding WeeklyTotalText}" Style="{StaticResource Pulse.CardTitle}" FontSize="16" Margin="0,3,0,0"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+                                <TextBlock Text="Daily average" Style="{StaticResource Pulse.Body2}" HorizontalAlignment="Right"/>
+                                <TextBlock Text="{Binding WeeklyAverageText}" Style="{StaticResource Pulse.CardTitle}" FontSize="16" Margin="0,3,0,0"/>
+                            </StackPanel>
                         </Grid>
 
                         <ItemsControl ItemsSource="{Binding WeeklyUsage}">

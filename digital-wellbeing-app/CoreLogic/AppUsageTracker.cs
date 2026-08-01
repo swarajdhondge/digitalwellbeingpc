@@ -27,6 +27,14 @@ namespace digital_wellbeing_app.CoreLogic
         /// </summary>
         public event Action? OnAppSwitched;
 
+        /// <summary>
+        /// Source of "now" for every day-boundary/session decision after construction. Defaults
+        /// to the real clock; overridable for long-running simulation tests. Mirrors
+        /// ScreenTimeTracker.Clock: the _lastSaved field initializer above intentionally still
+        /// uses the real DateTime.Now (it runs before a caller can override this property).
+        /// </summary>
+        public Func<DateTime> Clock { get; set; } = () => DateTime.Now;
+
         public AppUsageTracker()
         {
             _focusListener = new FocusChangeListener(OnAppChanged);
@@ -43,6 +51,34 @@ namespace digital_wellbeing_app.CoreLogic
         {
             _focusListener.Start();
             _periodicSaveTimer.Start();
+            SynthesizeInitialFocus();
+        }
+
+        /// <summary>
+        /// SetWinEventHook (behind _focusListener) only fires on *future* foreground changes - the
+        /// app already in the foreground when Pulse launches would otherwise get zero
+        /// AppUsageSession credit until the user switches away and back. Synthesizes one initial
+        /// resolution using the same foreground-process lookup FocusSessionService.OnFocusCheck
+        /// already performs. OnAppChanged takes ownership of disposing the Process, same as it
+        /// does for every real hook callback.
+        /// </summary>
+        private void SynthesizeInitialFocus()
+        {
+            try
+            {
+                var foregroundHandle = NativeMethods.GetForegroundWindow();
+                if (foregroundHandle == IntPtr.Zero) return;
+
+                NativeMethods.GetWindowThreadProcessId(foregroundHandle, out uint processId);
+                if (processId == 0) return;
+
+                var process = Process.GetProcessById((int)processId);
+                OnAppChanged(process);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[AppUsageTracker] Initial focus synthesis failed: {ex.Message}");
+            }
         }
 
         public void Stop()
@@ -53,7 +89,7 @@ namespace digital_wellbeing_app.CoreLogic
 
                 if (_currentSession != null)
                 {
-                    _currentSession.EndTime = DateTime.Now;
+                    _currentSession.EndTime = Clock();
                     SaveSessionToDb(_currentSession);
                     _currentSession = null;
                 }
@@ -70,7 +106,13 @@ namespace digital_wellbeing_app.CoreLogic
         {
             lock (_sessionLock)
             {
-                var now = DateTime.Now;
+                CheckDayRollover();
+
+                // This timer already ticks at a reasonable ~60s cadence, so no extra throttling
+                // is needed here (unlike ScreenTimeTracker's 1s tick).
+                TrackingHealthService.RecordHeartbeat(nameof(AppUsageTracker));
+
+                var now = Clock();
 
                 if ((now - _lastSaved).TotalMinutes < SaveIntervalMinutes)
                     return;
@@ -112,6 +154,43 @@ namespace digital_wellbeing_app.CoreLogic
         }
 
         /// <summary>
+        /// Routine-path day-boundary guard - unlike FlushCurrentSession (only ever called from the
+        /// explicit SystemEvents.TimeChanged handler), this runs on every periodic save and app
+        /// switch, so a session left open overnight (same app, no clock change, no switch) still
+        /// gets split at the day boundary the next time either fires. Matches
+        /// ScreenTimeTracker.CheckDayRollover's granularity: detected within one save/switch tick
+        /// of actual midnight, not sliced to the second - consistent with the existing template.
+        /// </summary>
+        private void CheckDayRollover()
+        {
+            if (_currentSession == null) return;
+
+            var now = Clock();
+            if (_currentSession.StartTime.Date == now.Date) return;
+
+            // Normal forward rollover: cut at exact local midnight so neither day's totals gain
+            // minutes from the other. Loop defensively for a machine that resumes after >1 day.
+            while (_currentSession.StartTime.Date < now.Date)
+            {
+                var boundary = _currentSession.StartTime.Date.AddDays(1);
+                _currentSession.EndTime = boundary;
+                SaveSessionToDb(_currentSession);
+                _currentSession = new AppUsageSession
+                {
+                    AppName = _currentSession.AppName,
+                    ExecutablePath = _currentSession.ExecutablePath,
+                    WindowTitle = _currentSession.WindowTitle,
+                    StartTime = boundary
+                };
+            }
+
+            // Backward clock/time-zone jumps cannot be split forward; restart at the new clock
+            // and let the central interval validator reject the reversed prior interval.
+            if (_currentSession.StartTime.Date > now.Date)
+                FlushCurrentSession();
+        }
+
+        /// <summary>
         /// Force-close the current app segment and restart a fresh one for the same app at the new
         /// wall-clock time. Called on a system clock/timezone change so a single session cannot
         /// straddle two local-date buckets. Reversed/oversized intervals from a backward jump are
@@ -123,7 +202,7 @@ namespace digital_wellbeing_app.CoreLogic
             {
                 if (_currentSession == null) return;
 
-                var now = DateTime.Now;
+                var now = Clock();
                 _currentSession.EndTime = now;
                 SaveSessionToDb(_currentSession);
 
@@ -144,13 +223,15 @@ namespace digital_wellbeing_app.CoreLogic
 
             lock (_sessionLock)
             {
+                CheckDayRollover();
+
                 if (WindowsIdleTimeHelper.IsUserIdle(300))
                 {
                     process?.Dispose();
                     return;
                 }
 
-                var now = DateTime.Now;
+                var now = Clock();
 
                 if (_currentSession != null)
                 {

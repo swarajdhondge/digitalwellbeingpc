@@ -16,6 +16,14 @@ namespace digital_wellbeing_app.Helpers
     /// and everything showed as Uncategorized. <see cref="NormalizeKey"/> collapses all three
     /// shapes to a single lowercase, extension-less, directory-less key so writers and readers
     /// agree. It is idempotent: <c>NormalizeKey(NormalizeKey(x)) == NormalizeKey(x)</c>.
+    ///
+    /// Reserved for future use: a <c>"site:youtube.com"</c>-shaped identifier namespace, so
+    /// website-level rules/limits (see <c>WebsiteUsageSession</c>) could reuse <c>AppCategory</c>/
+    /// <c>AppLimit</c>'s existing tables instead of forking parallel ones. Not implemented yet -
+    /// no code constructs or reads a <c>"site:"</c>-prefixed identifier today. Whoever builds it:
+    /// <see cref="NormalizeKey(string?)"/> would silently corrupt such a value (it strips
+    /// everything from the last '.', so <c>"site:youtube.com"</c> becomes <c>"site:youtube"</c>) -
+    /// route <c>"site:"</c>-prefixed identifiers around this method entirely, don't extend it.
     /// </summary>
     public static class AppIdentity
     {

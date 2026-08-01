@@ -142,7 +142,7 @@
                             </Border>
                         </Grid>
                         <!-- Bar chart -->
-                        <ItemsControl ItemsSource="{Binding WeekBars}" Height="138">
+                        <ItemsControl ItemsSource="{Binding WeekBars}" Height="158">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate><UniformGrid Rows="1"/></ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
@@ -150,12 +150,15 @@
                                 <DataTemplate>
                                     <Grid Margin="5,0">
                                         <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="*"/>
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
-                                        <Border Grid.Row="0" VerticalAlignment="Bottom" Height="{Binding HeightPx}"
-                                                CornerRadius="7,7,3,3" Background="{StaticResource Accent.Weekly}" Opacity="{Binding Opacity}"/>
-                                        <TextBlock Grid.Row="1" Text="{Binding Label}" HorizontalAlignment="Center" Margin="0,8,0,0"
+                                        <TextBlock Grid.Row="0" Text="{Binding Duration}" HorizontalAlignment="Center" Margin="0,0,0,5"
+                                                   FontSize="10.5" Foreground="{DynamicResource Ink2}"/>
+                                        <Border Grid.Row="1" VerticalAlignment="Bottom" Height="{Binding HeightPx}"
+                                                 CornerRadius="7,7,3,3" Background="{StaticResource Accent.Weekly}" Opacity="{Binding Opacity}"/>
+                                        <TextBlock Grid.Row="2" Text="{Binding Label}" HorizontalAlignment="Center" Margin="0,8,0,0"
                                                    FontSize="11" Foreground="{DynamicResource Ink3}"/>
                                     </Grid>
                                 </DataTemplate>

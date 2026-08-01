@@ -164,5 +164,33 @@ namespace digital_wellbeing_app.Tests.Services
             var svc2 = new SettingsService();
             Assert.True(svc2.LoadFirstRunCompleted(), "FirstRunCompleted should persist across instances");
         }
+
+        [Fact]
+        public void LoadDeviceTypeOverride_DefaultsToNull()
+        {
+            var svc = new SettingsService();
+            svc.SaveDeviceTypeOverride(null);
+            Assert.Null(svc.LoadDeviceTypeOverride());
+        }
+
+        [Fact]
+        public void SaveAndLoadDeviceTypeOverride_RoundTrips()
+        {
+            var svc = new SettingsService();
+            svc.SaveDeviceTypeOverride("Headphones");
+            Assert.Equal("Headphones", svc.LoadDeviceTypeOverride());
+
+            // Restore to auto-detect
+            svc.SaveDeviceTypeOverride(null);
+            Assert.Null(svc.LoadDeviceTypeOverride());
+        }
+
+        [Fact]
+        public void SaveDeviceTypeOverride_EmptyString_LoadsAsNull()
+        {
+            var svc = new SettingsService();
+            svc.SaveDeviceTypeOverride("");
+            Assert.Null(svc.LoadDeviceTypeOverride());
+        }
     }
 }

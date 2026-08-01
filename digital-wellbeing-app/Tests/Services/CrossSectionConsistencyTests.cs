@@ -60,5 +60,27 @@ namespace digital_wellbeing_app.Tests.Services
             // ReportService's today bucket is wired to the same live source as the Dashboard.
             Assert.Equal((int)live.TotalSeconds, todayBucket.TotalSeconds);
         }
+
+        [Fact]
+        public void CurrentWeekComparison_EqualsWeeklyTrendTotal()
+        {
+            DatabaseService.DeleteAllData();
+            var today = DateTime.Today;
+            DatabaseService.SaveScreenTimePeriod(new ScreenTimePeriod
+            {
+                SessionDate = today.ToString("yyyy-MM-dd"),
+                SessionStartTime = today.ToString("o"),
+                LastRecordedTime = today.ToString("o"),
+                AccumulatedActiveSeconds = 5432
+            });
+
+            var reports = new ReportService();
+            var weekStart = ReportService.GetWeekStart(today);
+            var trendTotal = reports.GetDailyScreenTimeTrend(weekStart, weekStart.AddDays(6))
+                .Sum(d => d.TotalSeconds);
+            var comparison = reports.GetWeekOverWeekComparison(weekStart);
+
+            Assert.Equal(trendTotal, (int)comparison.ThisWeekScreenTime.TotalSeconds);
+        }
     }
 }

@@ -87,7 +87,7 @@
     <Color x:Key="Accent.Focus.Color">#E0892C</Color>       <!-- Focus · amber -->
     <Color x:Key="Accent.Weekly.Color">#CE6A8E</Color>      <!-- Insights · rose -->
     <Color x:Key="Accent.Settings.Color">#6E84A6</Color>    <!-- Settings · steel -->
-    <Color x:Key="Accent.Help.Color">#7C8696</Color>        <!-- Help · slate -->
+    <Color x:Key="Accent.Help.Color">#A5AFC0</Color>        <!-- Help · slate -->
 
     <!-- Section accents — LIGHT variants (deeper, for legibility on white;
          from reference/section-accents.md). Promoted by ThemeService.SetSection

@@ -81,7 +81,21 @@
                                 <TextBlock Text="Focus &amp; Wind Down" Style="{StaticResource FaqTitle}"/>
                             </StackPanel>
                             <TextBlock Style="{StaticResource FaqBody}"
-                                       Text="Focus sessions watch for Entertainment apps. Warn shows a popup; Block minimizes them. Wind Down adds a gentle glowing border on your schedule (Amber, Purple or Dim) to signal it's time to wrap up."/>
+                                       Text="Focus sessions watch for Entertainment apps. Warn shows a notification; Block minimizes them. Pulse can also follow Windows Focus sessions when enabled in Settings. Wind Down adds a gentle scheduled border when it's time to wrap up."/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- App limits (rose) -->
+                    <Border Style="{StaticResource FaqCard}" Background="{StaticResource Accent.Weekly.Soft}">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Border Style="{StaticResource FaqIcon}" Background="{StaticResource Accent.Weekly.Soft}">
+                                    <md:PackIcon Kind="TimerLockOutline" Width="18" Height="18" Foreground="{StaticResource Accent.Weekly}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <TextBlock Text="App limits" Style="{StaticResource FaqTitle}"/>
+                            </StackPanel>
+                            <TextBlock Style="{StaticResource FaqBody}"
+                                       Text="Set a daily allowance, unavailable hours, or both for an app. Remind sends a notification when the limit is reached; Block also minimizes the app. Pause or edit a limit anytime from the Limits page."/>
                         </StackPanel>
                     </Border>
 
@@ -154,7 +168,20 @@
                                 <TextBlock Text="Privacy" Style="{StaticResource FaqTitle}"/>
                             </StackPanel>
                             <TextBlock Style="{StaticResource FaqBody}"
-                                       Text="Everything stays on this device — no account, no cloud, no telemetry. Export your data as CSV or delete it all from Settings at any time."/>
+                                       Text="Everything stays on this device — no account, no cloud, no telemetry. Website tracking is off by default — if you turn it on, only the hostname (e.g. youtube.com) is stored, never full URLs or page content. Export your data as CSV or delete it all from Settings at any time."/>
+                        </StackPanel>
+                    </Border>
+                    <!-- Startup &amp; data safety (steel) -->
+                    <Border Style="{StaticResource FaqCard}" Background="{StaticResource Accent.Settings.Soft}">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Border Style="{StaticResource FaqIcon}" Background="{StaticResource Accent.Settings.Soft}">
+                                    <md:PackIcon Kind="ContentSaveCheckOutline" Width="18" Height="18" Foreground="{StaticResource Accent.Settings}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <TextBlock Text="Startup &amp; data safety" Style="{StaticResource FaqTitle}"/>
+                            </StackPanel>
+                            <TextBlock Style="{StaticResource FaqBody}"
+                                       Text="Launch on Windows startup runs quietly in the notification area. Back up now creates a local ZIP containing your database and settings. Restore replaces current local data, so make a fresh backup first and review the confirmation carefully."/>
                         </StackPanel>
                     </Border>
                 </StackPanel>

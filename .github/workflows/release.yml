@@ -108,12 +108,15 @@ jobs:
           --icon digital-wellbeing-app/Resources/Icons/digital-balance-icon.ico
 
       - name: Upload Velopack artifacts (unsigned)
+        id: upload-unsigned
         uses: actions/upload-artifact@v4
         with:
           name: velopack-releases
           path: ./releases/*
           if-no-files-found: error
           retention-days: 7
+    outputs:
+      artifact-id: ${{ steps.upload-unsigned.outputs.artifact-id }}
 
   # ==========================================================================
   # >>> UNSIGNED-ARTIFACT BOUNDARY <<<
@@ -122,27 +125,41 @@ jobs:
   # `velopack-releases` artifact). Everything BELOW consumes already-built
   # artifacts and attaches them to the GitHub Release.
   #
-  # A future code-signing step slots in HERE without restructuring: add a
-  # `sign` job that `needs: [velopack-build]`, downloads the unsigned artifact,
-  # submits it to SignPath, and re-uploads the SIGNED artifact under the SAME
-  # name. The `release` job then only needs to depend on `sign` instead.
-  #
-  #  sign:
-  #    needs: [velopack-build]
-  #    runs-on: ubuntu-latest
-  #    steps:
-  #      - uses: actions/download-artifact@v4
-  #      - name: Submit signing request to SignPath
-  #        uses: signpath/github-action-submit-signing-request@v2
-  #        with:
-  #          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
-  #          organization-id: ${{ secrets.SIGNPATH_ORGANIZATION_ID }}
-  #          project-slug: DigitalWellbeingPC
-  #          signing-policy-slug: release-signing
-  #          github-artifact-id: ${{ ... }}
-  #          wait-for-completion: true
-  #      - uses: actions/upload-artifact@v4   # re-upload SIGNED under same names
+  # The `sign` job below is real (not a comment) but deliberately does NOT gate
+  # `release` - it only runs `if` SIGNPATH_API_TOKEN is configured, and
+  # continue-on-error keeps a failed/unconfigured signing attempt from ever
+  # blocking the GitHub Release or winget submission. Real blocker on actually
+  # using it end-to-end is external (a SignPath account/cert), not engineering.
+  # Once that's set up and validated, repoint `release`'s `needs` below from
+  # `velopack-build` to `sign` to make the signed artifact the one that ships.
   # ==========================================================================
+  sign:
+    needs: [velopack-build]
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    env:
+      SIGNPATH_CONFIGURED: ${{ secrets.SIGNPATH_API_TOKEN }}
+    steps:
+      - name: Submit signing request to SignPath
+        if: ${{ env.SIGNPATH_CONFIGURED != '' }}
+        uses: signpath/github-action-submit-signing-request@v2
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ secrets.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: DigitalWellbeingPC
+          signing-policy-slug: release-signing
+          github-artifact-id: ${{ needs.velopack-build.outputs.artifact-id }}
+          wait-for-completion: true
+          output-artifact-directory: ./releases-signed
+
+      - name: Upload signed Velopack artifacts
+        if: ${{ env.SIGNPATH_CONFIGURED != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: velopack-releases-signed
+          path: ./releases-signed/*
+          if-no-files-found: error
+          retention-days: 7
 
   # --------------------------------------------------------------------------
   # RELEASE ATTACH

@@ -102,7 +102,11 @@ export default function DownloadButtons() {
   const { release } = state;
   const installers = release.assets
     .filter((a) => a.name.toLowerCase().endsWith(".exe"))
-    .sort((a, b) => (a.name.toLowerCase().includes("setup") ? -1 : 1));
+    .sort(
+      (a, b) =>
+        Number(b.name.toLowerCase().includes("setup")) -
+        Number(a.name.toLowerCase().includes("setup")),
+    );
   const published = new Date(release.published_at).toLocaleDateString(undefined, {
     year: "numeric",
     month: "short",

@@ -74,5 +74,39 @@ namespace digital_wellbeing_app.Tests.Services
             Assert.Contains("Pulse", dir);
             Assert.Contains("logs", dir);
         }
+
+        // --- Ring buffer (2026-07-17, backs the Settings Diagnostics card) ---
+        // LogService is static and shared across the whole (serialized) test assembly, so the
+        // buffer accumulates lines from other tests too - these assert containment/eviction
+        // rather than an exact snapshot.
+
+        [Fact]
+        public void GetRecentLines_ContainsARecentlyWrittenLine()
+        {
+            LogService.Initialize();
+            var marker = $"ring-buffer-marker-{Guid.NewGuid():N}";
+            LogService.Info(marker);
+
+            Assert.Contains(LogService.GetRecentLines(), line => line.Contains(marker));
+        }
+
+        [Fact]
+        public void GetRecentLines_CapsAndEvictsOldestFirst()
+        {
+            LogService.Initialize();
+            var prefix = Guid.NewGuid().ToString("N");
+            var first = $"{prefix}-first";
+            var last = $"{prefix}-last-000";
+
+            LogService.Info(first);
+            for (int i = 0; i < 249; i++)
+                LogService.Info($"{prefix}-filler-{i}");
+            LogService.Info(last);
+
+            var recent = LogService.GetRecentLines();
+            Assert.True(recent.Count <= 200, $"Ring buffer should cap at 200, had {recent.Count}");
+            Assert.DoesNotContain(recent, line => line.Contains(first));
+            Assert.Contains(recent, line => line.Contains(last));
+        }
     }
 }

@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using digital_wellbeing_app.Models;
 using digital_wellbeing_app.Services;
+using digital_wellbeing_app.Helpers;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
@@ -21,6 +22,7 @@ namespace digital_wellbeing_app.ViewModels
         private readonly ReportService _reportService = new();
         private DateTime _currentWeekStart;
         private WeeklyReportData _reportData = new();
+        private DateTime? _earliestWeekStart;
 
         // Chart color palette (matches theme tokens)
         private static readonly SKColor ChartPrimary = SKColor.Parse("#3B82F6");    // Blue 500 - Main chart bars (Samsung style)
@@ -34,6 +36,16 @@ namespace digital_wellbeing_app.ViewModels
         public WeeklyReportViewModel()
         {
             _currentWeekStart = ReportService.GetWeekStart(DateTime.Now);
+
+            var earliestDates = new[]
+            {
+                DatabaseService.GetEarliestScreenTimeDate(),
+                DatabaseService.GetEarliestAppUsageDate(),
+                DatabaseService.GetEarliestFocusSessionDate()
+            }.Where(d => d.HasValue).Select(d => d!.Value).ToList();
+            _earliestWeekStart = earliestDates.Count > 0
+                ? WeekNavigationHelper.StartOfWeek(earliestDates.Min())
+                : null;
             
             // Initialize commands
             PreviousWeekCommand = new RelayCommand(_ => NavigateWeek(-1));
@@ -45,6 +57,8 @@ namespace digital_wellbeing_app.ViewModels
         #region Properties
 
         public string WeekLabel => _reportData.WeekLabel;
+        public DateTime SelectedWeekStart => _currentWeekStart;
+        public DateTime? EarliestWeekStart => _earliestWeekStart;
         public string TotalScreenTime => _reportData.TotalFormatted;
         public string AverageDailyTime => _reportData.AverageFormatted;
         public int FocusSessionCount => _reportData.FocusSessionCount;
@@ -68,6 +82,7 @@ namespace digital_wellbeing_app.ViewModels
 
         // Navigation
         public bool CanNavigateNext => _currentWeekStart.AddDays(7) <= ReportService.GetWeekStart(DateTime.Now);
+        public bool CanNavigatePrevious => _earliestWeekStart.HasValue && _currentWeekStart > _earliestWeekStart.Value;
 
         // Top Apps for display
         public ObservableCollection<Models.AppUsageSummary> TopApps { get; } = new();
@@ -134,9 +149,25 @@ namespace digital_wellbeing_app.ViewModels
 
         private void NavigateWeek(int direction)
         {
+            if (direction < 0 && !CanNavigatePrevious) return;
+            if (direction > 0 && !CanNavigateNext) return;
             _currentWeekStart = _currentWeekStart.AddDays(direction * 7);
             LoadReportData();
             OnPropertyChanged(nameof(CanNavigateNext));
+            OnPropertyChanged(nameof(CanNavigatePrevious));
+            OnPropertyChanged(nameof(SelectedWeekStart));
+        }
+
+        public void GoToPreviousWeek() => NavigateWeek(-1);
+        public void GoToNextWeek() => NavigateWeek(1);
+
+        public void GoToWeek(DateTime date)
+        {
+            _currentWeekStart = WeekNavigationHelper.Clamp(date, _earliestWeekStart);
+            LoadReportData();
+            OnPropertyChanged(nameof(CanNavigateNext));
+            OnPropertyChanged(nameof(CanNavigatePrevious));
+            OnPropertyChanged(nameof(SelectedWeekStart));
         }
 
         #endregion

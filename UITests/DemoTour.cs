@@ -82,9 +82,8 @@ public sealed class DemoTour
         var exe = ResolveExe();
         var exeDir = Path.GetDirectoryName(exe)!;
 
-        var pulseDir = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Pulse");
-        var screenshotFlag = Path.Combine(pulseDir, ".screenshot-mode");
+        var pulseDir = Environment.GetEnvironmentVariable("PULSE_DATA_DIR")
+                       ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Pulse");
         try
         {
             Directory.CreateDirectory(pulseDir);
@@ -99,11 +98,15 @@ public sealed class DemoTour
             // no drop shadow, no transparent margin) while keeping its title-bar chrome. This is
             // what kills the desktop bleed — otherwise the transparent rounded corners composite
             // whatever is behind the window (e.g. the codebase) into the recorded frame.
-            File.WriteAllText(screenshotFlag, "1");
         }
         catch { /* best effort */ }
 
-        var app = Application.Launch(new ProcessStartInfo(exe) { WorkingDirectory = exeDir });
+        var startInfo = new ProcessStartInfo(exe) { WorkingDirectory = exeDir };
+        startInfo.Environment["PULSE_SCREENSHOT_MODE"] = "1";
+        var isolatedDataDir = Environment.GetEnvironmentVariable("PULSE_DATA_DIR");
+        if (!string.IsNullOrWhiteSpace(isolatedDataDir))
+            startInfo.Environment["PULSE_DATA_DIR"] = isolatedDataDir;
+        var app = Application.Launch(startInfo);
         using var automation = new UIA3Automation();
         Process? rec = null;
         try
@@ -172,7 +175,6 @@ public sealed class DemoTour
             try { app.Close(); } catch { /* ignore */ }
             try { app.Kill(); } catch { /* ignore */ }
             try { app.Dispose(); } catch { /* ignore */ }
-            try { File.Delete(screenshotFlag); } catch { /* ignore */ }
         }
 
         Assert.True(File.Exists(outPath) && new FileInfo(outPath).Length > 0,

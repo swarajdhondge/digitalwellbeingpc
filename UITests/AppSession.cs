@@ -103,8 +103,12 @@ public sealed class AppSession : IDisposable
         var dir = new DirectoryInfo(AppContext.BaseDirectory);
         while (dir != null)
         {
+            // TFM suffix matches digital-wellbeing-app.csproj's TargetFramework - bumped from
+            // 10.0.19041.0 to 10.0.26100.0 during the roadmap sweep's Item 3 (UniversalApiContract
+            // v15 for Windows.UI.Shell.FocusSessionManager). This fallback path silently pointed
+            // at a build output folder that stopped existing until fixed here.
             var candidate = Path.Combine(dir.FullName, "digital-wellbeing-app", "bin", "Debug",
-                "net9.0-windows10.0.19041.0", "DigitalWellbeing.exe");
+                "net9.0-windows10.0.26100.0", "DigitalWellbeing.exe");
             if (File.Exists(candidate)) return candidate;
             dir = dir.Parent;
         }

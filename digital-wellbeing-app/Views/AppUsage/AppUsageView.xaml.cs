@@ -11,6 +11,10 @@ namespace digital_wellbeing_app.Views.AppUsage
             InitializeComponent();
             digital_wellbeing_app.Helpers.PulseLayout.CapCenter(PageScroll, PageRoot);
 
+            WeekNavigator.PreviousRequested += (_, _) => (DataContext as AppUsageViewModel)?.GoToPreviousWeek();
+            WeekNavigator.NextRequested += (_, _) => (DataContext as AppUsageViewModel)?.GoToNextWeek();
+            WeekNavigator.WeekSelected += (_, week) => (DataContext as AppUsageViewModel)?.GoToWeek(week);
+
             // Refresh only while visible (the view is reused across navigation, so don't dispose
             // the VM here — just stop its timer; disposing broke live updates on re-navigation).
             Loaded += (s, e) => (DataContext as AppUsageViewModel)?.StartRefreshing();

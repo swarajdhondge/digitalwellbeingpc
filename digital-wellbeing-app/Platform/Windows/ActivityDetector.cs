@@ -9,89 +9,6 @@ namespace digital_wellbeing_app.Platform.Windows
     /// </summary>
     public static class ActivityDetector
     {
-        #region Audio Detection
-
-        // Windows Core Audio API interfaces
-        [ComImport]
-        [Guid("BCDE0395-E52F-467C-8E3D-C4579291692E")]
-        private class MMDeviceEnumerator { }
-
-        [ComImport]
-        [Guid("A95664D2-9614-4F35-A746-DE8DB63617E6")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        private interface IMMDeviceEnumerator
-        {
-            int NotImpl1();
-            [PreserveSig]
-            int GetDefaultAudioEndpoint(int dataFlow, int role, out IMMDevice ppDevice);
-        }
-
-        [ComImport]
-        [Guid("D666063F-1587-4E43-81F1-B948E807363F")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        private interface IMMDevice
-        {
-            [PreserveSig]
-            int Activate(ref Guid iid, int dwClsCtx, IntPtr pActivationParams, out IAudioMeterInformation ppInterface);
-        }
-
-        [ComImport]
-        [Guid("C02216F6-8C67-4B5B-9D00-D008E73E0064")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        private interface IAudioMeterInformation
-        {
-            [PreserveSig]
-            int GetPeakValue(out float pfPeak);
-        }
-
-        private static readonly Guid IID_IAudioMeterInformation = new("C02216F6-8C67-4B5B-9D00-D008E73E0064");
-
-        /// <summary>
-        /// Checks if system audio is currently playing (peak level > threshold).
-        /// Execution time: ~0.2ms
-        /// </summary>
-        /// <param name="threshold">Audio level threshold (0.0 to 1.0). Default 0.01 (1%)</param>
-        /// <returns>True if audio is playing above threshold</returns>
-        public static bool IsSystemAudioPlaying(float threshold = 0.01f)
-        {
-            object? enumeratorObj = null;
-            IMMDevice? device = null;
-            IAudioMeterInformation? meter = null;
-
-            try
-            {
-                enumeratorObj = new MMDeviceEnumerator();
-                var enumerator = (IMMDeviceEnumerator)enumeratorObj;
-
-                // eRender = 0, eMultimedia = 1
-                int hr = enumerator.GetDefaultAudioEndpoint(0, 1, out device);
-                if (hr != 0 || device == null)
-                    return false;
-
-                Guid iid = IID_IAudioMeterInformation;
-                hr = device.Activate(ref iid, 1, IntPtr.Zero, out meter);
-                if (hr != 0 || meter == null)
-                    return false;
-
-                hr = meter.GetPeakValue(out float peak);
-                return hr == 0 && peak > threshold;
-            }
-            catch
-            {
-                // Fail gracefully - assume no audio if detection fails
-                return false;
-            }
-            finally
-            {
-                // Always release COM objects in reverse order, even if an exception occurred
-                if (meter != null) try { Marshal.ReleaseComObject(meter); } catch { }
-                if (device != null) try { Marshal.ReleaseComObject(device); } catch { }
-                if (enumeratorObj != null) try { Marshal.ReleaseComObject(enumeratorObj); } catch { }
-            }
-        }
-
-        #endregion
-
         #region Fullscreen Detection
 
         [DllImport("user32.dll")]
@@ -185,7 +102,21 @@ namespace digital_wellbeing_app.Platform.Windows
         /// <returns>True if user is likely watching/listening to content</returns>
         public static bool IsPassivelyConsuming()
         {
-            return IsSystemAudioPlaying() || IsFullscreenAppActive();
+            return IsAudioCurrentlyPlaying() || IsFullscreenAppActive();
+        }
+
+        /// <summary>
+        /// Consults SoundExposureManager - the app's single source of truth for "is audio
+        /// playing" - instead of a second, independent Core Audio COM query. The two previously
+        /// disagreed: this class checked only the default render device via its own raw interop,
+        /// while SoundExposureManager (via SoundMonitoringService) already tracks device changes
+        /// properly. CurrentSession is refreshed at least every 10s by SoundMonitoringService's
+        /// poll, which is fresh enough for idle detection. Falls back to false (never throws) when
+        /// no App/SoundExposureMgr is available, e.g. unit tests or design-time.
+        /// </summary>
+        private static bool IsAudioCurrentlyPlaying()
+        {
+            return (System.Windows.Application.Current as App)?.SoundExposureMgr?.CurrentSession != null;
         }
 
         #endregion

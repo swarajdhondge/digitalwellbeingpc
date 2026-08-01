@@ -20,9 +20,11 @@ namespace digital_wellbeing_app.Services
 
         public SettingsService()
         {
-            var folder = FolderOverride ?? System.IO.Path.Combine(
-                System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData),
-                FolderName);
+            var folder = FolderOverride
+                         ?? System.Environment.GetEnvironmentVariable("PULSE_DATA_DIR")
+                         ?? System.IO.Path.Combine(
+                             System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData),
+                             FolderName);
 
             bool created = !System.IO.Directory.Exists(folder);
             System.IO.Directory.CreateDirectory(folder);
@@ -141,6 +143,57 @@ namespace digital_wellbeing_app.Services
         public void SaveCloseToTrayHintShown(bool shown)
         {
             _values["CloseToTrayHintShown"] = shown;
+            SaveToDisk();
+        }
+
+        // --- Windows Focus integration persistence ---
+        /// <summary>
+        /// Whether an OS-level Windows Focus session (Settings > Focus) automatically starts a
+        /// Pulse focus session. Default true (opt-out, not opt-in) - a natural companion to a
+        /// feature the user already turned on at the OS level.
+        /// </summary>
+        public bool LoadWindowsFocusIntegrationEnabled() => LoadBoolSetting("WindowsFocusIntegrationEnabled", true);
+
+        public void SaveWindowsFocusIntegrationEnabled(bool enabled)
+        {
+            _values["WindowsFocusIntegrationEnabled"] = enabled;
+            SaveToDisk();
+        }
+
+        // --- Hearing: device-type override persistence ---
+        /// <summary>
+        /// Manual override for SoundMonitoringService.IdentifyDeviceType's friendly-name guess.
+        /// Null/empty means auto-detect (the default). One of "Headphones"/"Earphones"/
+        /// "Headsets"/"Speakers" when the user has explicitly picked one in Settings.
+        /// </summary>
+        public string? LoadDeviceTypeOverride()
+        {
+            if (_values.TryGetValue("HearingDeviceTypeOverride", out var val))
+            {
+                var str = val is System.Text.Json.JsonElement je ? je.GetString() : val as string;
+                return string.IsNullOrEmpty(str) ? null : str;
+            }
+            return null;
+        }
+
+        public void SaveDeviceTypeOverride(string? deviceType)
+        {
+            _values["HearingDeviceTypeOverride"] = deviceType ?? string.Empty;
+            SaveToDisk();
+        }
+
+        // --- Website tracking persistence ---
+        /// <summary>
+        /// Whether Pulse reads browser address bars to log hostname-level website usage. Default
+        /// **false** (opt-in, not opt-out) - unlike app tracking this reads what sites the user
+        /// visits, a materially more sensitive category of data, so it stays off until explicitly
+        /// turned on in Settings.
+        /// </summary>
+        public bool LoadWebsiteTrackingEnabled() => LoadBoolSetting("WebsiteTrackingEnabled", false);
+
+        public void SaveWebsiteTrackingEnabled(bool enabled)
+        {
+            _values["WebsiteTrackingEnabled"] = enabled;
             SaveToDisk();
         }
 

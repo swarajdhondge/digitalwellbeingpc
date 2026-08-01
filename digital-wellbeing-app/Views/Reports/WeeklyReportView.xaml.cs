@@ -9,6 +9,10 @@ namespace digital_wellbeing_app.Views.Reports
         {
             InitializeComponent();
             digital_wellbeing_app.Helpers.PulseLayout.CapCenter(PageScroll, PageRoot);
+
+            WeekNavigator.PreviousRequested += (_, _) => (DataContext as digital_wellbeing_app.ViewModels.WeeklyReportViewModel)?.GoToPreviousWeek();
+            WeekNavigator.NextRequested += (_, _) => (DataContext as digital_wellbeing_app.ViewModels.WeeklyReportViewModel)?.GoToNextWeek();
+            WeekNavigator.WeekSelected += (_, week) => (DataContext as digital_wellbeing_app.ViewModels.WeeklyReportViewModel)?.GoToWeek(week);
         }
     }
 }

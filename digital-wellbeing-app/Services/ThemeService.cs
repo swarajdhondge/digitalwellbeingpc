@@ -14,9 +14,10 @@ namespace digital_wellbeing_app.Services
         // Absolute path under the app's data folder. A relative "theme.json" landed in the
         // process CWD (unpredictable, and different between launch methods), so the saved
         // theme didn't reliably persist across restarts.
-        private static readonly string FileName = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "Pulse", "theme.json");
+        private static string FileName => Path.Combine(
+            Environment.GetEnvironmentVariable("PULSE_DATA_DIR")
+                ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Pulse"),
+            "theme.json");
         private const string DarkThemeUri = "Styles/ThemeDark.xaml";
         private const string LightThemeUri = "Styles/ThemeLight.xaml";
         private const string PulseDarkUri = "Styles/Pulse.Dark.xaml";

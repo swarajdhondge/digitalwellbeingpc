@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Velopack;
+using Velopack.Locators;
 using Velopack.Sources;
 
 namespace digital_wellbeing_app.Services
@@ -10,18 +11,47 @@ namespace digital_wellbeing_app.Services
     public class UpdateService
     {
         private const string GitHubRepoUrl = "https://github.com/swarajdhondge/digitalwellbeingpc";
-        private readonly UpdateManager _updateManager;
+        private readonly UpdateManager? _updateManager;
 
         public UpdateService()
         {
-            _updateManager = new UpdateManager(
-                new GithubSource(GitHubRepoUrl, null, false));
+            if (PackagedAppInfo.IsPackaged)
+            {
+                UnavailableReason = "Updates are managed automatically by Microsoft Store.";
+                return;
+            }
+
+            if (!VelopackLocator.IsCurrentSet)
+            {
+                UnavailableReason = "Update checks are available in the installed Pulse app, not this development build.";
+                return;
+            }
+
+            try
+            {
+                _updateManager = new UpdateManager(new GithubSource(GitHubRepoUrl, null, false));
+                if (!_updateManager.IsInstalled)
+                {
+                    _updateManager = null;
+                    UnavailableReason = "Update checks are available in the installed Pulse app, not this portable build.";
+                }
+            }
+            catch (System.Exception ex)
+            {
+                UnavailableReason = "Pulse could not initialize the updater for this installation.";
+                LastError = ex.Message;
+                LogService.Warning($"Updater initialization failed: {ex.Message}");
+            }
         }
+
+        public bool IsAvailable => _updateManager != null;
+        public string? UnavailableReason { get; }
+        public string? LastError { get; private set; }
 
         /// <summary>
         /// Gets the current application version.
         /// </summary>
-        public string? CurrentVersion => _updateManager.CurrentVersion?.ToString();
+        public string? CurrentVersion => _updateManager?.CurrentVersion?.ToString();
 
         /// <summary>
         /// Checks for updates and returns info if available.
@@ -30,10 +60,14 @@ namespace digital_wellbeing_app.Services
         {
             try
             {
+                if (_updateManager == null) return null;
+                LastError = null;
                 return await _updateManager.CheckForUpdatesAsync();
             }
-            catch
+            catch (System.Exception ex)
             {
+                LastError = ex.Message;
+                LogService.Warning($"Update check failed: {ex.Message}");
                 return null;
             }
         }
@@ -45,6 +79,7 @@ namespace digital_wellbeing_app.Services
         {
             try
             {
+                if (_updateManager == null) return false;
                 await _updateManager.DownloadUpdatesAsync(update);
                 _updateManager.ApplyUpdatesAndRestart(update);
                 return true;
