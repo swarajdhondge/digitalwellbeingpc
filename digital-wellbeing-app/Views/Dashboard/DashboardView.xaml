@@ -56,7 +56,50 @@
 
                         <!-- Right of ring -->
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock Text="TODAY · SCREEN TIME" Style="{StaticResource Pulse.Eyebrow}"/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="TODAY · SCREEN TIME" Style="{StaticResource Pulse.Eyebrow}" VerticalAlignment="Center"/>
+                                <Border Style="{StaticResource Pulse.Pill}" Margin="14,0,0,0" VerticalAlignment="Center">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Ellipse Width="8" Height="8" VerticalAlignment="Center">
+                                            <Ellipse.Style>
+                                                <Style TargetType="Ellipse">
+                                                    <Setter Property="Fill" Value="{Binding TrackingState, Converter={StaticResource TrackingStateToColorConverter}}"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding TrackerHealth}" Value="Stale">
+                                                            <Setter Property="Fill" Value="{StaticResource Warn}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding TrackerHealth}" Value="Down">
+                                                            <Setter Property="Fill" Value="{StaticResource Danger}"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Ellipse.Style>
+                                        </Ellipse>
+                                        <TextBlock FontSize="11.5" FontWeight="SemiBold" VerticalAlignment="Center" Margin="6,0,0,0">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <!-- TrackingStateToTextConverter already handles Active/Idle/Paused -->
+                                                    <Setter Property="Text" Value="{Binding TrackingState, Converter={StaticResource TrackingStateToTextConverter}, StringFormat='Tracking {0}'}"/>
+                                                    <Setter Property="Foreground" Value="{Binding TrackingState, Converter={StaticResource TrackingStateToColorConverter}}"/>
+                                                    
+                                                    <!-- Health overrides -->
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding TrackerHealth}" Value="Stale">
+                                                            <Setter Property="Text" Value="Tracker Stale"/>
+                                                            <Setter Property="Foreground" Value="{StaticResource Warn}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding TrackerHealth}" Value="Down">
+                                                            <Setter Property="Text" Value="Tracker Down"/>
+                                                            <Setter Property="Foreground" Value="{StaticResource Danger}"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+
                             <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
                                 <Border Style="{StaticResource Pulse.Pill}" Background="{DynamicResource Card2}"
                                         BorderBrush="{DynamicResource Border}" BorderThickness="1"
