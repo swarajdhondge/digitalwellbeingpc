@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using System.Windows.Controls;
 using digital_wellbeing_app.ViewModels;
 
@@ -38,5 +38,16 @@ namespace digital_wellbeing_app.Views.AppUsage
         {
             if (DataContext is AppUsageViewModel vm) vm.SetWeekView(true);
         }
+
+        private void HistoryRange_Checked(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is AppUsageViewModel vm) vm.SetDayView();
+        }
+
+        private void PreviousDay_Click(object sender, RoutedEventArgs e)
+            => (DataContext as AppUsageViewModel)?.GoToPreviousDay();
+
+        private void NextDay_Click(object sender, RoutedEventArgs e)
+            => (DataContext as AppUsageViewModel)?.GoToNextDay();
     }
 }
