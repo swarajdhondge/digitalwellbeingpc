@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace digital_wellbeing_app.Platform.Windows
 {
@@ -36,6 +37,12 @@ namespace digital_wellbeing_app.Platform.Windows
             IntPtr hWnd,
             out uint lpdwProcessId
         );
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+        private static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
+
+        [DllImport("user32.dll")]
+        private static extern int GetWindowTextLength(IntPtr hWnd);
 
         private readonly WinEventDelegate _proc;
         private IntPtr _hookID = IntPtr.Zero;
@@ -95,6 +102,21 @@ namespace digital_wellbeing_app.Platform.Windows
             try
             {
                 var proc = Process.GetProcessById((int)pid);
+
+                // explorer.exe hosts both File Explorer folder windows AND the Windows Shell
+                // (Desktop, Taskbar, Start Menu, notification area, etc.).
+                // EVENT_SYSTEM_FOREGROUND fires for both. Shell windows have no window title;
+                // real File Explorer folder windows always have a non-empty title (e.g. "Documents").
+                // Treat a titled-less explorer foreground event as a shell/system transition — not
+                // genuine user interaction — so it doesn't pollute app-usage statistics.
+                if (string.Equals(proc.ProcessName, "explorer", StringComparison.OrdinalIgnoreCase)
+                    && GetWindowTextLength(hwnd) == 0)
+                {
+                    proc.Dispose();
+                    _onAppChanged(null);
+                    return;
+                }
+
                 _onAppChanged(proc);
             }
             catch
