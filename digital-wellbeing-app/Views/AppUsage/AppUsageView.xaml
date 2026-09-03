@@ -8,6 +8,7 @@
     xmlns:controls="clr-namespace:digital_wellbeing_app.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
     mc:Ignorable="d"
     d:DesignHeight="800" d:DesignWidth="900"
     FontFamily="{DynamicResource Font.Primary}"
@@ -64,9 +65,21 @@
                         AutomationProperties.AutomationId="PreviousDay">
                     <md:PackIcon Kind="ChevronLeft" Width="20" Height="20"/>
                 </Button>
-                <TextBlock Grid.Column="1" Text="{Binding DailyDateLabel}"
-                           Style="{StaticResource Pulse.CardTitle}" FontSize="14"
-                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <!-- Clickable date label + hidden DatePicker for calendar popup -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding DailyDateLabel}"
+                               Style="{StaticResource Pulse.CardTitle}" FontSize="14"
+                               VerticalAlignment="Center" Cursor="Hand"
+                               MouseLeftButtonUp="DateLabel_Click"
+                               ToolTip="Click to pick a date"/>
+                    <md:PackIcon Kind="CalendarMonth" Width="16" Height="16"
+                                 Foreground="{DynamicResource Ink3}" VerticalAlignment="Center"
+                                 Margin="6,0,0,0" Cursor="Hand"
+                                 MouseLeftButtonUp="DateLabel_Click"/>
+                    <DatePicker x:Name="HistoryDatePicker" Width="0" Height="0" Opacity="0"
+                                SelectedDateChanged="HistoryDatePicker_SelectedDateChanged"
+                                DisplayDateEnd="{x:Static sys:DateTime.Today}"/>
+                </StackPanel>
                 <Button x:Name="NextDayButton" Grid.Column="2"
                         Style="{StaticResource Pulse.Button.Icon}" Width="34" Height="34"
                         IsEnabled="{Binding CanGoToNextDay}"
@@ -97,36 +110,7 @@
                 </Grid>
             </Border>
 
-            <!-- Now using -->
-            <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-
-                    <Border Grid.Column="0" Width="54" Height="54" CornerRadius="13"
-                            Background="{DynamicResource Accent.Soft}" Margin="0,0,16,0">
-                        <Image Source="{Binding CurrentAppIcon}" Width="30" Height="30" Stretch="Uniform"
-                               RenderOptions.BitmapScalingMode="HighQuality"
-                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Border>
-
-                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                        <TextBlock Text="NOW USING" Style="{StaticResource Pulse.Eyebrow}"/>
-                        <TextBlock Text="{Binding CurrentAppName}" FontSize="17" FontWeight="SemiBold"
-                                   Foreground="{DynamicResource Ink}" Margin="0,3,0,0" TextTrimming="CharacterEllipsis"/>
-                    </StackPanel>
-
-                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="{Binding CurrentAppDuration}" Style="{StaticResource Pulse.Stat}" FontSize="22"
-                                   VerticalAlignment="Center"/>
-                        <Ellipse Width="8" Height="8" Fill="{DynamicResource Accent}" Margin="10,0,0,0" VerticalAlignment="Center"
-                                 Visibility="{Binding HasCurrentApp, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                    </StackPanel>
-                </Grid>
-            </Border>
+            <!-- Now using card removed as requested -->
 
             <!-- 3 stat tiles (separate cards) -->
             <Grid Margin="0,0,0,16">
@@ -171,29 +155,34 @@
                     <ItemsControl ItemsSource="{Binding TodaysUsage}" AlternationCount="6">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Grid Margin="0,0,0,12">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Border Grid.Column="0" Width="40" Height="40" CornerRadius="11"
-                                            Background="{DynamicResource Card2}" Margin="0,0,14,0">
-                                        <Image Source="{Binding Icon}" Width="24" Height="24" Stretch="Uniform"
-                                               RenderOptions.BitmapScalingMode="HighQuality"
-                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </Border>
-                                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,16,0">
-                                        <TextBlock Text="{Binding AppName}" Style="{StaticResource Pulse.Body}" Margin="0,0,0,7"/>
-                                        <Border Height="5" CornerRadius="3" Background="{DynamicResource Track}">
-                                            <Border Height="5" CornerRadius="3" HorizontalAlignment="Left"
-                                                    Background="{Binding (ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource ColorIndexToTint}}"
-                                                    Width="{Binding TotalDuration, Converter={StaticResource DurationToWidthConverter}}"/>
+                                <!-- P1-1: Click to navigate to App Details for this app -->
+                                <Border Style="{StaticResource CardListItem}" Cursor="Hand"
+                                        MouseLeftButtonUp="AppRow_Click"
+                                        ToolTip="View details for this app">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Border Grid.Column="0" Width="40" Height="40" CornerRadius="11"
+                                                Background="{DynamicResource Card2}" Margin="0,0,14,0">
+                                            <Image Source="{Binding Icon}" Width="24" Height="24" Stretch="Uniform"
+                                                   RenderOptions.BitmapScalingMode="HighQuality"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                         </Border>
-                                    </StackPanel>
-                                    <TextBlock Grid.Column="2" Text="{Binding DurationFormatted}" FontSize="13.5"
-                                               Foreground="{DynamicResource Ink}" VerticalAlignment="Center" MinWidth="56" TextAlignment="Right"/>
-                                </Grid>
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,16,0">
+                                            <TextBlock Text="{Binding AppName}" Style="{StaticResource Pulse.Body}" Margin="0,0,0,7"/>
+                                            <Border Height="5" CornerRadius="3" Background="{DynamicResource Track}">
+                                                <Border Height="5" CornerRadius="3" HorizontalAlignment="Left"
+                                                        Background="{Binding (ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource ColorIndexToTint}}"
+                                                        Width="{Binding TotalDuration, Converter={StaticResource DurationToWidthConverter}}"/>
+                                            </Border>
+                                        </StackPanel>
+                                        <TextBlock Grid.Column="2" Text="{Binding DurationFormatted}" FontSize="13.5"
+                                                   Foreground="{DynamicResource Ink}" VerticalAlignment="Center" MinWidth="56" TextAlignment="Right"/>
+                                    </Grid>
+                                </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
@@ -235,6 +224,12 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
+                    <Button Content="Go to Dashboard"
+                            Style="{StaticResource Pulse.Button.Ghost}"
+                            Margin="0,20,0,0" Padding="20,10"
+                            Click="EmptyStateDashboard_Click"
+                            HorizontalAlignment="Center"
+                            Visibility="{Binding IsDayView, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Invert}"/>
                 </StackPanel>
             </Border>
         </StackPanel>

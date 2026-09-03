@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -37,6 +37,7 @@ namespace digital_wellbeing_app.MainWindow
         private readonly WeeklyReportView _reportsView = new();
         private readonly HelpView _helpView = new();
         private readonly SettingsView _settingsView = new();
+        private readonly AppDetailsView _appDetailsView = new();
 
         // Break reminder service
         private Services.BreakReminderService? _breakReminderService;
@@ -1377,6 +1378,36 @@ namespace digital_wellbeing_app.MainWindow
         public void NavigateToReports() => Reports_Click(null, new RoutedEventArgs());
         public void NavigateToSettings() => Settings_Click(null, new RoutedEventArgs());
         public void NavigateToHelp() => Help_Click(null, new RoutedEventArgs());
+
+        /// <summary>
+        /// Navigate to App Usage and immediately switch to History mode on the given date.
+        /// Used by Dashboard week-bar clicks and Screen Time day-row clicks.
+        /// </summary>
+        public void NavigateToAppUsageHistory(DateTime date)
+        {
+            AppUsage_Click(null, new RoutedEventArgs());
+            (_appUsageView.DataContext as ViewModels.AppUsageViewModel)?.GoToHistoryDate(date);
+        }
+
+        /// <summary>
+        /// Navigate to App Limits and pre-select the given app in the limit editor.
+        /// Used by clicking an app row in App Usage or Weekly Report.
+        /// </summary>
+        public void NavigateToAppLimitsForApp(string executablePath)
+        {
+            Limits_Click(null, new RoutedEventArgs());
+            _limitsView.SelectAppForLimit(executablePath);
+        }
+
+        /// <summary>
+        /// Navigate to App Details for a specific app.
+        /// </summary>
+        public void NavigateToAppDetails(string executablePath)
+        {
+            (_appDetailsView.DataContext as ViewModels.AppDetailsViewModel)?.LoadApp(executablePath);
+            NavigateTo(_appDetailsView, NavApps, "Appusage", "App Details", "Specific application usage");
+        }
+
 
         /// <summary>
         /// Toggle between the light and dark Pulse palettes from the top bar.

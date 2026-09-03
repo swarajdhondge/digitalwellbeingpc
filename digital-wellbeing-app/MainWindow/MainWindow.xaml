@@ -16,6 +16,14 @@
     StateChanged="Window_StateChanged"
     Closing="Window_Closing">
 
+    <WindowChrome.WindowChrome>
+        <WindowChrome
+            CaptionHeight="0"
+            ResizeBorderThickness="6"
+            GlassFrameThickness="-1"
+            CornerRadius="0"/>
+    </WindowChrome.WindowChrome>
+
     <!-- Window container with soft shadow -->
     <Border x:Name="WindowBorder"
             AutomationProperties.AutomationId="WindowBorder"

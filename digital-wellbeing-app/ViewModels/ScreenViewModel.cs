@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -603,7 +603,8 @@ namespace digital_wellbeing_app.ViewModels
                     Usage = TimeFormatHelper.FormatDuration(ts),
                     Minutes = (int)ts.TotalMinutes,
                     Seconds = sec,
-                    IsToday = isToday
+                    IsToday = isToday,
+                    Date = day.Date
                 });
             }
 
@@ -775,6 +776,8 @@ namespace digital_wellbeing_app.ViewModels
         }
 
         public bool IsToday { get; set; }
+
+        public DateTime Date { get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
     }

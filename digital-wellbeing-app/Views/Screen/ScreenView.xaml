@@ -162,7 +162,9 @@
                         <ItemsControl ItemsSource="{Binding WeeklyUsage}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid Margin="0,0,0,12">
+                                    <Grid Margin="0,0,0,12"
+                                          Cursor="Hand" MouseLeftButtonUp="DayRow_Click"
+                                          ToolTip="View app breakdown for this day">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="44"/>
                                             <ColumnDefinition Width="*"/>

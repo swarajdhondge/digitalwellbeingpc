@@ -1,0 +1,73 @@
+<UserControl
+    x:Class="digital_wellbeing_app.Views.AppUsage.AppDetailsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="clr-namespace:digital_wellbeing_app.ViewModels"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="600" d:DesignWidth="900"
+    FontFamily="{DynamicResource Font.Primary}"
+    Background="Transparent">
+
+    <UserControl.DataContext>
+        <vm:AppDetailsViewModel/>
+    </UserControl.DataContext>
+
+    <ScrollViewer x:Name="PageScroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                  Padding="26,4,26,26">
+        <StackPanel x:Name="PageRoot" HorizontalAlignment="Center" MaxWidth="800">
+
+            <!-- Header -->
+            <Grid Margin="0,0,0,24">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <Border Width="64" Height="64" CornerRadius="16" Background="{DynamicResource Card2}" Margin="0,0,20,0">
+                    <Image Source="{Binding AppIcon}" Width="36" Height="36" Stretch="Uniform"
+                           RenderOptions.BitmapScalingMode="HighQuality"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+                
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock Text="APP DETAILS" Style="{StaticResource Pulse.Eyebrow}" Margin="0,0,0,4"/>
+                    <TextBlock Text="{Binding AppName}" FontSize="24" FontWeight="SemiBold"
+                               Foreground="{DynamicResource Ink}" TextTrimming="CharacterEllipsis"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- Stat Cards -->
+            <Grid Margin="0,0,0,24">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <Border Grid.Column="0" Style="{StaticResource Pulse.Card}" Padding="24" Margin="0,0,8,0">
+                    <StackPanel>
+                        <TextBlock Text="{Binding TimeUsedToday}" Style="{StaticResource Pulse.Stat}" FontSize="32"/>
+                        <TextBlock Text="Time used today" Style="{StaticResource Pulse.Body2}" Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Border>
+                
+                <Border Grid.Column="1" Style="{StaticResource Pulse.Card}" Padding="24" Margin="8,0,0,0">
+                    <StackPanel>
+                        <TextBlock Text="{Binding LongestSessionToday}" Style="{StaticResource Pulse.Stat}" FontSize="32"/>
+                        <TextBlock Text="Longest session today" Style="{StaticResource Pulse.Body2}" Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- Edit Limit Button -->
+            <Button Content="Edit App Limit" 
+                    Style="{StaticResource Pulse.Button.Primary}"
+                    Click="EditLimit_Click"
+                    HorizontalAlignment="Left"
+                    Height="42" Padding="24,0"/>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

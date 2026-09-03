@@ -189,14 +189,14 @@ namespace digital_wellbeing_app.ViewModels
 
         private void BuildDailyTrendChart()
         {
-            var values = _reportData.DailyTrend.Select(d => d.Hours).ToArray();
             var labels = _reportData.DailyTrend.Select(d => d.DayLabel).ToArray();
 
             DailyTrendSeries = new ISeries[]
             {
-                new ColumnSeries<double>
+                new ColumnSeries<digital_wellbeing_app.Models.DailyScreenTime>
                 {
-                    Values = values,
+                    Values = _reportData.DailyTrend.ToArray(),
+                    Mapping = (item, index) => new LiveChartsCore.Kernel.Coordinate(index, item.Hours),
                     Fill = new SolidColorPaint(ChartPrimary),  // Samsung Blue for chart bars
                     Stroke = null,
                     MaxBarWidth = 40,

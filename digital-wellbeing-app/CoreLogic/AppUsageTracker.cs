@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using digital_wellbeing_app.Models;
 using digital_wellbeing_app.Platform.Windows;
@@ -73,6 +73,14 @@ namespace digital_wellbeing_app.CoreLogic
                 if (processId == 0) return;
 
                 var process = Process.GetProcessById((int)processId);
+                
+                if (!digital_wellbeing_app.Platform.Windows.FocusChangeListener.IsGenuineAppWindow(foregroundHandle, process))
+                {
+                    process.Dispose();
+                    OnAppChanged(null);
+                    return;
+                }
+                
                 OnAppChanged(process);
             }
             catch (Exception ex)

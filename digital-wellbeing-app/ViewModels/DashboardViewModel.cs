@@ -71,6 +71,8 @@ namespace digital_wellbeing_app.ViewModels
             public double HeightPx { get; set; }      // against a fixed 110px chart
             public double Opacity { get; set; } = 0.32;
             public bool IsToday { get; set; }
+            /// <summary>The calendar date this bar represents — used by click navigation.</summary>
+            public DateTime Date { get; set; }
         }
 
         /// <summary>A category row (tile + bar + duration) on the dashboard.</summary>
@@ -146,14 +148,49 @@ namespace digital_wellbeing_app.ViewModels
         public TrackingState TrackingState
         {
             get => _trackingState;
-            set { if (_trackingState != value) { _trackingState = value; OnPropertyChanged(); } }
+            set 
+            { 
+                if (_trackingState != value) 
+                { 
+                    _trackingState = value; 
+                    OnPropertyChanged(); 
+                    OnPropertyChanged(nameof(TrackingTooltip));
+                } 
+            }
         }
 
         private TrackingHealthService.HealthStatus _trackerHealth = TrackingHealthService.HealthStatus.Healthy;
         public TrackingHealthService.HealthStatus TrackerHealth
         {
             get => _trackerHealth;
-            set { if (_trackerHealth != value) { _trackerHealth = value; OnPropertyChanged(); } }
+            set
+            {
+                if (_trackerHealth != value)
+                {
+                    _trackerHealth = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(TrackingTooltip));
+                }
+            }
+        }
+
+        public string TrackingTooltip
+        {
+            get
+            {
+                if (TrackerHealth == TrackingHealthService.HealthStatus.Down)
+                    return "Tracker is currently offline or crashed. Try restarting the application.";
+                if (TrackerHealth == TrackingHealthService.HealthStatus.Stale)
+                    return "Tracker hasn't reported data recently. It might be stuck or the PC was asleep.";
+                
+                return TrackingState switch
+                {
+                    CoreLogic.TrackingState.Active => "Tracking active — currently logging foreground usage.",
+                    CoreLogic.TrackingState.Idle => "Tracking idle — user is away or consuming media passively.",
+                    CoreLogic.TrackingState.Paused => "Tracking paused — PC is locked or asleep.",
+                    _ => "Tracking status unknown."
+                };
+            }
         }
 
         #endregion
@@ -438,6 +475,7 @@ namespace digital_wellbeing_app.ViewModels
                     HeightPx = Math.Max(6, (min / maxMin) * 110),
                     IsToday = i == todayIdx,
                     Opacity = i == todayIdx ? 1.0 : 0.32,
+                    Date = trend[i].Date.Date,
                 });
             }
             WeekBars = bars;

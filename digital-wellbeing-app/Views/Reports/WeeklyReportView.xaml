@@ -76,7 +76,9 @@
                             <lvc:CartesianChart Series="{Binding DailyTrendSeries}"
                                                 XAxes="{Binding DailyTrendXAxes}"
                                                 YAxes="{Binding DailyTrendYAxes}"
-                                                TooltipPosition="Top"/>
+                                                TooltipPosition="Top"
+                                                Cursor="Hand"
+                                                DataPointerDown="Chart_DataPointerDown"/>
                         </Border>
                     </StackPanel>
                 </Border>
@@ -140,30 +142,45 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Grid Margin="0,0,16,14">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding AppName}" Style="{StaticResource Pulse.Body}" TextTrimming="CharacterEllipsis"/>
-                                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding FormattedTime}" Style="{StaticResource Pulse.Muted}"/>
-                                    <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="0,6,0,0" Height="5">
-                                        <Border Style="{StaticResource Pulse.ProgressTrack}" Height="5"/>
-                                        <Border CornerRadius="3" Height="5" HorizontalAlignment="Left"
-                                                Background="{Binding (ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource ColorIndexToTint}}">
-                                            <Border.Width>
-                                                <MultiBinding Converter="{StaticResource PercentageToWidthConverter}">
-                                                    <Binding Path="PercentOfMax"/>
-                                                    <Binding RelativeSource="{RelativeSource AncestorType=Grid}" Path="ActualWidth"/>
-                                                </MultiBinding>
-                                            </Border.Width>
-                                        </Border>
+                                <!-- P1-4: Click a top app to view its details -->
+                                <Border CornerRadius="8" Padding="8,6" Margin="0,0,8,8"
+                                        Background="Transparent" Cursor="Hand"
+                                        MouseLeftButtonUp="TopApp_Click"
+                                        ToolTip="View details for this app">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="{DynamicResource Bg.Elevated}"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding AppName}" Style="{StaticResource Pulse.Body}" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding FormattedTime}" Style="{StaticResource Pulse.Muted}"/>
+                                        <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="0,6,0,0" Height="5">
+                                            <Border Style="{StaticResource Pulse.ProgressTrack}" Height="5"/>
+                                            <Border CornerRadius="3" Height="5" HorizontalAlignment="Left"
+                                                    Background="{Binding (ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource ColorIndexToTint}}">
+                                                <Border.Width>
+                                                    <MultiBinding Converter="{StaticResource PercentageToWidthConverter}">
+                                                        <Binding Path="PercentOfMax"/>
+                                                        <Binding RelativeSource="{RelativeSource AncestorType=Grid}" Path="ActualWidth"/>
+                                                    </MultiBinding>
+                                                </Border.Width>
+                                            </Border>
+                                        </Grid>
                                     </Grid>
-                                </Grid>
+                                </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>

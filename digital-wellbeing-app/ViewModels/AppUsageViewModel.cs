@@ -65,6 +65,13 @@ namespace digital_wellbeing_app.ViewModels
             set { if (_hasCurrentApp == value) return; _hasCurrentApp = value; OnPropertyChanged(nameof(HasCurrentApp)); }
         }
 
+        private string _currentAppExecutablePath = string.Empty;
+        public string CurrentAppExecutablePath
+        {
+            get => _currentAppExecutablePath;
+            set { if (_currentAppExecutablePath == value) return; _currentAppExecutablePath = value; OnPropertyChanged(nameof(CurrentAppExecutablePath)); }
+        }
+
         #endregion
 
         #region Properties - Focus Stats
@@ -138,6 +145,7 @@ namespace digital_wellbeing_app.ViewModels
                 _isDayView = value;
                 OnPropertyChanged(nameof(IsDayView));
                 OnPropertyChanged(nameof(RangeHeader));
+                OnPropertyChanged(nameof(IsShowingToday));
             }
         }
 
@@ -152,6 +160,7 @@ namespace digital_wellbeing_app.ViewModels
                 OnPropertyChanged(nameof(DailyDateLabel));
                 OnPropertyChanged(nameof(CanGoToPreviousDay));
                 OnPropertyChanged(nameof(CanGoToNextDay));
+                OnPropertyChanged(nameof(IsShowingToday));
             }
         }
 
@@ -161,10 +170,26 @@ namespace digital_wellbeing_app.ViewModels
             private set { if (_dailyScreenTime == value) return; _dailyScreenTime = value; OnPropertyChanged(nameof(DailyScreenTime)); }
         }
 
-        public string DailyDateLabel => _selectedDate.ToString("MMMM d, yyyy");
+        public string DailyDateLabel
+        {
+            get
+            {
+                var daysDiff = (DateTime.Today - _selectedDate.Date).Days;
+                var rawDate = _selectedDate.ToString("MMMM d, yyyy");
+                
+                return daysDiff switch
+                {
+                    0 => $"Today • {rawDate}",
+                    1 => $"Yesterday • {rawDate}",
+                    _ when daysDiff <= 7 => $"{daysDiff} days ago • {rawDate}",
+                    _ => rawDate
+                };
+            }
+        }
         // Allow browsing back up to 365 days regardless of whether data exists for every day.
         public bool CanGoToPreviousDay => _selectedDate.Date > DateTime.Today.AddDays(-365);
         public bool CanGoToNextDay => _selectedDate.Date < DateTime.Today;
+        public bool IsShowingToday => !_isDayView || _selectedDate.Date == DateTime.Today;
 
         #endregion
 
@@ -264,6 +289,7 @@ namespace digital_wellbeing_app.ViewModels
                 if (CurrentAppIcon == null || !string.Equals(_currentIconPath, session.ExecutablePath))
                 {
                     _currentIconPath = session.ExecutablePath;
+                    CurrentAppExecutablePath = session.ExecutablePath;
                     CurrentAppIcon = AppIconService.GetIconForExe(session.ExecutablePath);
                 }
 
@@ -274,6 +300,7 @@ namespace digital_wellbeing_app.ViewModels
                 CurrentAppName = "No app active";
                 CurrentWindowTitle = string.Empty;
                 CurrentAppDuration = "—";
+                CurrentAppExecutablePath = string.Empty;
                 IsTracking = false;
             }
         }
@@ -384,6 +411,22 @@ namespace digital_wellbeing_app.ViewModels
             OnPropertyChanged(nameof(CanGoPrevious));
             OnPropertyChanged(nameof(CanGoNext));
             LoadWeekUsage();
+            UpdateFocusStats();
+        }
+
+        /// <summary>
+        /// Navigate to History mode for a specific calendar date.
+        /// Called from outside (e.g. Dashboard week-bar clicks, Screen Time day-row clicks)
+        /// to deep-link into the History tab at the requested date.
+        /// The date is clamped so it can never exceed today or go beyond the 365-day boundary.
+        /// </summary>
+        public void GoToHistoryDate(DateTime date)
+        {
+            var clamped = date.Date <= DateTime.Today ? date.Date : DateTime.Today;
+            if (_isWeekView) IsWeekView = false;
+            IsDayView = true;
+            SelectedDate = clamped;
+            LoadDayUsage();
             UpdateFocusStats();
         }
 

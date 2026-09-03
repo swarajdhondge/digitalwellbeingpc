@@ -76,6 +76,45 @@ namespace digital_wellbeing_app.Platform.Windows
             }
         }
 
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+        private static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
+
+        /// <summary>
+        /// Filters out background system processes, desktop clicks, and shell UI
+        /// that technically take foreground focus but aren't genuine user apps.
+        /// </summary>
+        public static bool IsGenuineAppWindow(IntPtr hwnd, Process proc)
+        {
+            if (proc == null) return false;
+
+            try
+            {
+                // explorer.exe hosts both File Explorer folder windows AND the Windows Shell
+                // (Desktop, Taskbar, Start Menu, notification area, etc.).
+                // Genuine File Explorer folder windows use the CabinetWClass or ExploreWClass.
+                // The Desktop uses Progman or WorkerW (which has a title "Program Manager").
+                // The taskbar uses Shell_TrayWnd, etc.
+                if (string.Equals(proc.ProcessName, "explorer", StringComparison.OrdinalIgnoreCase))
+                {
+                    var sb = new StringBuilder(256);
+                    GetClassName(hwnd, sb, sb.Capacity);
+                    string className = sb.ToString();
+
+                    // Only track actual File Explorer windows
+                    if (className != "CabinetWClass" && className != "ExploreWClass")
+                    {
+                        return false;
+                    }
+                }
+            }
+            catch
+            {
+                // Ignore exceptions trying to read window properties
+            }
+
+            return true;
+        }
+
         private void Callback(
             IntPtr hWinEventHook,
             uint eventType,
@@ -103,14 +142,7 @@ namespace digital_wellbeing_app.Platform.Windows
             {
                 var proc = Process.GetProcessById((int)pid);
 
-                // explorer.exe hosts both File Explorer folder windows AND the Windows Shell
-                // (Desktop, Taskbar, Start Menu, notification area, etc.).
-                // EVENT_SYSTEM_FOREGROUND fires for both. Shell windows have no window title;
-                // real File Explorer folder windows always have a non-empty title (e.g. "Documents").
-                // Treat a titled-less explorer foreground event as a shell/system transition — not
-                // genuine user interaction — so it doesn't pollute app-usage statistics.
-                if (string.Equals(proc.ProcessName, "explorer", StringComparison.OrdinalIgnoreCase)
-                    && GetWindowTextLength(hwnd) == 0)
+                if (!IsGenuineAppWindow(hwnd, proc))
                 {
                     proc.Dispose();
                     _onAppChanged(null);
