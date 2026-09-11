@@ -1,7 +1,8 @@
-﻿// File: Views/Dashboard/DashboardView.xaml.cs
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using digital_wellbeing_app.ViewModels;
 
 namespace digital_wellbeing_app.Views.Dashboard
 {
@@ -48,10 +49,30 @@ namespace digital_wellbeing_app.Views.Dashboard
 
         private MainWindow.MainWindow? Shell => Window.GetWindow(this) as MainWindow.MainWindow;
 
-        private void WeeklySummary_Click(object sender, MouseButtonEventArgs e) => Shell?.NavigateToReports();
+        private void WeeklySummary_Click(object sender, RoutedEventArgs e) => Shell?.NavigateToReports();
         private void Hearing_Click(object sender, MouseButtonEventArgs e) => Shell?.NavigateToSound();
         private void MostUsed_Click(object sender, MouseButtonEventArgs e) => Shell?.NavigateToAppUsage();
         private void EnterFocus_Click(object sender, RoutedEventArgs e) => Shell?.NavigateToFocus();
         private void SetGoal_Click(object sender, RoutedEventArgs e) => Shell?.NavigateToSettings();
+
+        // P0-2: Clicking an app in the top-app legend navigates to App Details.
+        private void TopAppLegend_Click(object sender, MouseButtonEventArgs e)
+        {
+            if ((sender as FrameworkElement)?.DataContext is ViewModels.DashboardViewModel.TopAppInfo app)
+                Shell?.NavigateToAppDetails(app.ExecutablePath);
+        }
+
+        // P0-3: Clicking the Categories card navigates to the Weekly Report where
+        // the Focus vs Leisure category breakdown is displayed.
+        private void Categories_Click(object sender, MouseButtonEventArgs e)
+            => Shell?.NavigateToReports();
+
+        // P1-2: Clicking a day bar in the "This week" chart navigates to App Usage
+        // History for that specific date.
+        private void WeekBar_Click(object sender, MouseButtonEventArgs e)
+        {
+            if ((sender as FrameworkElement)?.DataContext is DashboardViewModel.WeekBar bar)
+                Shell?.NavigateToAppUsageHistory(bar.Date);
+        }
     }
 }

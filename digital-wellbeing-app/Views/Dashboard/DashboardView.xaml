@@ -56,7 +56,52 @@
 
                         <!-- Right of ring -->
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock Text="TODAY · SCREEN TIME" Style="{StaticResource Pulse.Eyebrow}"/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="TODAY · SCREEN TIME" Style="{StaticResource Pulse.Eyebrow}" VerticalAlignment="Center"/>
+                                <!-- P1-6: Tracking state/health tooltip -->
+                                <Border Style="{StaticResource Pulse.Pill}" Margin="14,0,0,0" VerticalAlignment="Center"
+                                        ToolTip="{Binding TrackingTooltip}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Ellipse Width="8" Height="8" VerticalAlignment="Center">
+                                            <Ellipse.Style>
+                                                <Style TargetType="Ellipse">
+                                                    <Setter Property="Fill" Value="{Binding TrackingState, Converter={StaticResource TrackingStateToColorConverter}}"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding TrackerHealth}" Value="Stale">
+                                                            <Setter Property="Fill" Value="{StaticResource Warn}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding TrackerHealth}" Value="Down">
+                                                            <Setter Property="Fill" Value="{StaticResource Danger}"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Ellipse.Style>
+                                        </Ellipse>
+                                        <TextBlock FontSize="11.5" FontWeight="SemiBold" VerticalAlignment="Center" Margin="6,0,0,0">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <!-- TrackingStateToTextConverter already handles Active/Idle/Paused -->
+                                                    <Setter Property="Text" Value="{Binding TrackingState, Converter={StaticResource TrackingStateToTextConverter}, StringFormat='Tracking {0}'}"/>
+                                                    <Setter Property="Foreground" Value="{Binding TrackingState, Converter={StaticResource TrackingStateToColorConverter}}"/>
+                                                    
+                                                    <!-- Health overrides -->
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding TrackerHealth}" Value="Stale">
+                                                            <Setter Property="Text" Value="Tracker Stale"/>
+                                                            <Setter Property="Foreground" Value="{StaticResource Warn}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding TrackerHealth}" Value="Down">
+                                                            <Setter Property="Text" Value="Tracker Down"/>
+                                                            <Setter Property="Foreground" Value="{StaticResource Danger}"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+
                             <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
                                 <Border Style="{StaticResource Pulse.Pill}" Background="{DynamicResource Card2}"
                                         BorderBrush="{DynamicResource Border}" BorderThickness="1"
@@ -97,18 +142,33 @@
                                 </ItemsControl>
                             </Border>
 
+                            <!-- P0-2: App legend items are now clickable — navigate to App Usage for today's breakdown -->
                             <ItemsControl ItemsSource="{Binding TopApps}" Margin="0,16,0,0">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate><WrapPanel Orientation="Horizontal"/></ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <StackPanel Orientation="Horizontal" Margin="0,0,18,9">
-                                            <Border Width="9" Height="9" CornerRadius="3" VerticalAlignment="Center" Margin="0,0,8,0"
-                                                    Background="{Binding ColorIndex, Converter={StaticResource ColorIndexToTint}}"/>
-                                            <TextBlock Text="{Binding Name}" FontSize="13" Foreground="{DynamicResource Ink}" VerticalAlignment="Center"/>
-                                            <TextBlock Text="{Binding Duration}" FontSize="12.5" Foreground="{DynamicResource Ink3}" VerticalAlignment="Center" Margin="8,0,0,0"/>
-                                        </StackPanel>
+                                        <Border CornerRadius="6" Padding="6,4" Margin="0,0,8,6"
+                                                Background="Transparent" Cursor="Hand"
+                                                MouseLeftButtonUp="TopAppLegend_Click"
+                                                ToolTip="View full usage details for today">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background" Value="{DynamicResource Bg.Elevated}"/>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Border Width="9" Height="9" CornerRadius="3" VerticalAlignment="Center" Margin="0,0,8,0"
+                                                        Background="{Binding ColorIndex, Converter={StaticResource ColorIndexToTint}}"/>
+                                                <TextBlock Text="{Binding Name}" FontSize="13" Foreground="{DynamicResource Ink}" VerticalAlignment="Center"/>
+                                                <TextBlock Text="{Binding Duration}" FontSize="12.5" Foreground="{DynamicResource Ink3}" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                                            </StackPanel>
+                                        </Border>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
@@ -133,22 +193,23 @@
                                     <TextBlock Text="{Binding WeekAvgText, StringFormat=' · {0}/day avg'}" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Bottom" Margin="0,0,0,3"/>
                                 </StackPanel>
                             </StackPanel>
-                            <Border Grid.Column="1" Background="{DynamicResource Card2}" BorderBrush="{DynamicResource Border}" BorderThickness="1"
-                                    CornerRadius="{StaticResource Radius.MD}" Padding="13,8" VerticalAlignment="Center">
+                            <Button Grid.Column="1" Style="{StaticResource Pulse.Button.Ghost}" 
+                                    Padding="13,8" VerticalAlignment="Center" Click="WeeklySummary_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="Insights" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource Accent.Weekly}" VerticalAlignment="Center"/>
                                     <md:PackIcon Kind="ArrowTopRight" Width="15" Height="15" Foreground="{StaticResource Accent.Weekly}" VerticalAlignment="Center" Margin="5,0,0,0"/>
                                 </StackPanel>
-                            </Border>
+                            </Button>
                         </Grid>
-                        <!-- Bar chart -->
+                        <!-- Bar chart — P1-2: each day bar is clickable, navigates to History for that date -->
                         <ItemsControl ItemsSource="{Binding WeekBars}" Height="158">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate><UniformGrid Rows="1"/></ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid Margin="5,0">
+                                    <Grid Margin="5,0" Cursor="Hand" MouseLeftButtonUp="WeekBar_Click"
+                                          ToolTip="View app breakdown for this day">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="*"/>
@@ -208,9 +269,11 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- Categories (orchid) -->
+                    <!-- Categories (orchid) — P0-3: clicking navigates to the Weekly Report which shows category breakdown -->
                     <Border Grid.Column="1" Background="{StaticResource Accent.Appusage.Soft}" BorderBrush="{DynamicResource Border}" BorderThickness="1"
-                            CornerRadius="{StaticResource Radius.XL}" Padding="22" Effect="{DynamicResource Shadow.Card}" Margin="8,0,0,0">
+                            CornerRadius="{StaticResource Radius.XL}" Padding="22" Effect="{DynamicResource Shadow.Card}" Margin="8,0,0,0"
+                            Cursor="Hand" MouseLeftButtonUp="Categories_Click"
+                            ToolTip="View focus vs leisure category breakdown in Weekly Report">
                         <StackPanel>
                             <TextBlock Text="CATEGORIES" Style="{StaticResource Pulse.Eyebrow}" Margin="0,0,0,14"/>
                             <ItemsControl ItemsSource="{Binding Categories}">
@@ -296,7 +359,9 @@
 
                 <!-- Daily goal (cyan) -->
                 <Border Background="{StaticResource Accent.Screentime.Soft}" BorderBrush="{DynamicResource Border}" BorderThickness="1"
-                        CornerRadius="{StaticResource Radius.XL}" Padding="22" Effect="{DynamicResource Shadow.Card}">
+                        CornerRadius="{StaticResource Radius.XL}" Padding="22" Effect="{DynamicResource Shadow.Card}"
+                        Cursor="Hand" MouseLeftButtonUp="SetGoal_Click"
+                        ToolTip="Click to set or adjust your daily screen-time goal in Settings">
                     <StackPanel>
                         <Grid Margin="0,0,0,14">
                             <Grid.ColumnDefinitions>
@@ -304,9 +369,13 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="DAILY GOAL" Style="{StaticResource Pulse.Eyebrow}"/>
-                            <TextBlock Grid.Column="1" Text="{Binding GoalText}" Style="{StaticResource Pulse.Muted}" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="{Binding GoalText}" Style="{StaticResource Pulse.Muted}" VerticalAlignment="Center"
+                                       Visibility="{Binding HasGoal, Converter={StaticResource BoolToVisibilityConverter}}"/>
                         </Grid>
-                        <Grid Height="9" Margin="0,0,0,14">
+
+                        <!-- Progress bar: only visible when a goal exists -->
+                        <Grid Height="9" Margin="0,0,0,14"
+                              Visibility="{Binding HasGoal, Converter={StaticResource BoolToVisibilityConverter}}">
                             <Border x:Name="GoalTrack" Height="9" CornerRadius="3" Background="{DynamicResource Track}"/>
                             <Border Height="9" CornerRadius="3" HorizontalAlignment="Left">
                                 <Border.Style>
@@ -327,11 +396,28 @@
                                 </Border.Width>
                             </Border>
                         </Grid>
-                        <StackPanel Orientation="Horizontal">
+
+                        <!-- Footer when goal IS set -->
+                        <StackPanel Orientation="Horizontal"
+                                    Visibility="{Binding HasGoal, Converter={StaticResource BoolToVisibilityConverter}}">
                             <md:PackIcon Kind="MoonWaningCrescent" Width="16" Height="16" Foreground="{DynamicResource Ink3}" VerticalAlignment="Center"/>
                             <TextBlock Style="{StaticResource Pulse.Body2}" FontSize="12.5" VerticalAlignment="Center" Margin="8,0,0,0">
-                                <Run Text="Set a goal in "/><Run Text="Settings" FontWeight="SemiBold" Foreground="{DynamicResource Ink}"/>
+                                <Run Text="Adjust goal in "/><Run Text="Settings" FontWeight="SemiBold" Foreground="{DynamicResource Ink}"/>
                             </TextBlock>
+                        </StackPanel>
+
+                        <!-- CTA when NO goal is set -->
+                        <StackPanel Visibility="{Binding HasGoal, Converter={StaticResource InverseBoolToVisibility}}">
+                            <TextBlock Text="No daily goal configured yet."
+                                       Style="{StaticResource Pulse.Body2}" FontSize="12.5"
+                                       Foreground="{DynamicResource Ink3}" Margin="0,0,0,12"/>
+                            <StackPanel Orientation="Horizontal">
+                                <md:PackIcon Kind="TargetAccount" Width="18" Height="18"
+                                             Foreground="{DynamicResource Accent}" VerticalAlignment="Center"/>
+                                <TextBlock Text="Set a daily goal →" FontSize="14" FontWeight="SemiBold"
+                                           Foreground="{DynamicResource Accent}" VerticalAlignment="Center"
+                                           Margin="8,0,0,0"/>
+                            </StackPanel>
                         </StackPanel>
                     </StackPanel>
                 </Border>

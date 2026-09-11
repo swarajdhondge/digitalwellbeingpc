@@ -1,4 +1,4 @@
-﻿namespace digital_wellbeing_app.Views.Screen
+namespace digital_wellbeing_app.Views.Screen
 {
     public partial class ScreenView : System.Windows.Controls.UserControl
     {
@@ -110,5 +110,15 @@
             _vm.IsWeeklyView = true;
         }
 
+        // P1-3: Clicking a day row in the Week view navigates to App Usage
+        // History for that specific date.
+        private void DayRow_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if ((sender as System.Windows.FrameworkElement)?.DataContext is ViewModels.WeeklyUsageItem item)
+            {
+                var shell = System.Windows.Window.GetWindow(this) as MainWindow.MainWindow;
+                shell?.NavigateToAppUsageHistory(item.Date);
+            }
+        }
     }
 }

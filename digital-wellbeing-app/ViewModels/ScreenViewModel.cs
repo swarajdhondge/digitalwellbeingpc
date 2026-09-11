@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -366,7 +366,9 @@ namespace digital_wellbeing_app.ViewModels
 
         private void UpdateTodayUsage()
         {
-            var ts = _tracker.CurrentActiveTime;
+            // Use app-usage-based total (single source of truth) instead of the
+            // ScreenTimeTracker counter which independently counts passive consumption.
+            var ts = LiveUsageProvider.GetTodayActiveTime();
             TodayTimeText = TimeFormatHelper.FormatDuration(ts);
 
             UpdateTimelineSegments();
@@ -380,13 +382,13 @@ namespace digital_wellbeing_app.ViewModels
 
         private void UpdateContextLine()
         {
-            var db = DatabaseService.GetConnection();
-            var yesterdayKey = DateTime.Today.AddDays(-1).ToString("yyyy-MM-dd");
-            var yesterdayEntry = db.Table<ScreenTimePeriod>()
-                                   .FirstOrDefault(x => x.SessionDate == yesterdayKey);
+            // Use app-usage sums for both today and yesterday so the comparison
+            // is consistent with the per-app breakdown everywhere.
+            var todayMinutes = (int)LiveUsageProvider.GetTodayActiveTime().TotalMinutes;
 
-            var todayMinutes = (int)_tracker.CurrentActiveTime.TotalMinutes;
-            var yesterdayMinutes = (yesterdayEntry?.AccumulatedActiveSeconds ?? 0) / 60;
+            var yesterday = DateTime.Today.AddDays(-1);
+            var yesterdaySessions = DatabaseService.GetAppUsageSessionsForDate(yesterday);
+            var yesterdayMinutes = (int)(yesterdaySessions.Sum(s => (s.EndTime - s.StartTime).TotalSeconds) / 60);
 
             if (yesterdayMinutes == 0)
             {
@@ -516,7 +518,7 @@ namespace digital_wellbeing_app.ViewModels
 
             if (HasGoal)
             {
-                var currentTime = _tracker.CurrentActiveTime;
+                var currentTime = LiveUsageProvider.GetTodayActiveTime();
                 GoalProgress = _goalService.GetGoalProgress(currentTime);
                 GoalProgressText = _goalService.FormatProgressText(currentTime);
                 IsOverGoal = _goalService.IsOverGoal(currentTime);
@@ -542,7 +544,7 @@ namespace digital_wellbeing_app.ViewModels
             var todayItem = WeeklyUsage.FirstOrDefault(x => x.IsToday);
             if (todayItem == null) return;
 
-            var ts = _tracker.CurrentActiveTime;
+            var ts = LiveUsageProvider.GetTodayActiveTime();
             var newUsage = TimeFormatHelper.FormatDuration(ts);
             var newMinutes = (int)ts.TotalMinutes;
 
@@ -569,28 +571,37 @@ namespace digital_wellbeing_app.ViewModels
         {
             if (_disposed) return;
             WeeklyUsage.Clear();
-            var db = DatabaseService.GetConnection();
 
             // Update week nav label
             UpdateWeekNavState();
+
+            // Load all app-usage sessions for the displayed week once, then bucket by day.
+            // This replaces the old ScreenTimePeriod lookup so the weekly bars are consistent
+            // with the per-app breakdown everywhere.
+            var weekEnd = _currentWeekStart.AddDays(6);
+            var allSessions = DatabaseService.GetAppUsageSessionsForRange(_currentWeekStart, weekEnd);
+            var buckets = allSessions
+                .GroupBy(s => s.StartTime.Date)
+                .ToDictionary(g => g.Key, g => (int)g.Sum(s => (s.EndTime - s.StartTime).TotalSeconds));
 
             long totalSeconds = 0;
 
             for (int i = 0; i < 7; i++)
             {
                 var day = _currentWeekStart.AddDays(i);
-                var key = day.ToString("yyyy-MM-dd");
-                var entry = db.Table<ScreenTimePeriod>()
-                              .FirstOrDefault(x => x.SessionDate == key);
+                bool isToday = day.Date == DateTime.Today;
 
-                int sec = entry?.AccumulatedActiveSeconds ?? 0;
-
-                // For today, use live data (only if viewing current week)
-                if (day.Date == DateTime.Today)
-                    sec = (int)_tracker.CurrentActiveTime.TotalSeconds;
+                int sec;
+                if (isToday)
+                {
+                    sec = (int)LiveUsageProvider.GetTodayActiveTime().TotalSeconds;
+                }
+                else
+                {
+                    buckets.TryGetValue(day.Date, out sec);
+                }
 
                 var ts = TimeSpan.FromSeconds(sec);
-                bool isToday = day.Date == DateTime.Today;
 
                 if (sec > 0)
                 {
@@ -603,7 +614,8 @@ namespace digital_wellbeing_app.ViewModels
                     Usage = TimeFormatHelper.FormatDuration(ts),
                     Minutes = (int)ts.TotalMinutes,
                     Seconds = sec,
-                    IsToday = isToday
+                    IsToday = isToday,
+                    Date = day.Date
                 });
             }
 
@@ -775,6 +787,8 @@ namespace digital_wellbeing_app.ViewModels
         }
 
         public bool IsToday { get; set; }
+
+        public DateTime Date { get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
     }

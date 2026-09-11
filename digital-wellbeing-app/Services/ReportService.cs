@@ -62,21 +62,28 @@ namespace digital_wellbeing_app.Services
         /// </summary>
         public List<DailyScreenTime> GetDailyScreenTimeTrend(DateTime startDate, DateTime endDate)
         {
-            var periods = DatabaseService.GetScreenTimePeriodsForRange(startDate, endDate);
+            // Load all app-usage sessions for the range once, then bucket by local day.
+            // This replaces the old ScreenTimePeriod lookup so the weekly chart and report
+            // totals are consistent with the per-app breakdown everywhere.
+            var allSessions = LiveUsageProvider.GetAppSessionsForRange(startDate, endDate);
+            var buckets = allSessions
+                .GroupBy(s => s.StartTime.Date)
+                .ToDictionary(g => g.Key, g => (int)g.Sum(s => (s.EndTime - s.StartTime).TotalSeconds));
+
             var result = new List<DailyScreenTime>();
 
-            // Create entries for each day in range (even if no data)
             for (var date = startDate.Date; date <= endDate.Date; date = date.AddDays(1))
             {
-                var dateKey = date.ToString("yyyy-MM-dd");
-                var period = periods.FirstOrDefault(p => p.SessionDate == dateKey);
-
-                var totalSeconds = period?.AccumulatedActiveSeconds ?? 0;
-
-                // Today's bucket must include the live session so the weekly chart's "today" bar
-                // matches the Dashboard's live headline instead of lagging by the flush interval.
+                int totalSeconds;
                 if (date == DateTime.Today)
+                {
+                    // Today's bucket uses the live provider so the chart matches the headline.
                     totalSeconds = (int)LiveUsageProvider.GetTodayActiveTime().TotalSeconds;
+                }
+                else
+                {
+                    buckets.TryGetValue(date, out totalSeconds);
+                }
 
                 result.Add(new DailyScreenTime
                 {
@@ -88,6 +95,7 @@ namespace digital_wellbeing_app.Services
 
             return result;
         }
+
 
         /// <summary>
         /// Build a category lookup keyed by the canonical app identity (normalized process name).
@@ -222,14 +230,12 @@ namespace digital_wellbeing_app.Services
             var lastWeekStart = thisWeekStart.AddDays(-7);
             var lastWeekEnd = thisWeekStart.AddDays(-1);
 
-            // Get screen time for both weeks
-            var lastWeekPeriods = DatabaseService.GetScreenTimePeriodsForRange(lastWeekStart, lastWeekEnd);
-
-            // Use the same daily source as the chart so a current-week comparison includes the
-            // live, not-yet-flushed part of today and cannot disagree with the report headline.
+            // Both weeks now use the same app-usage-based daily trend so neither
+            // week silently includes passive-consumption time from ScreenTimePeriod.
             var thisWeekSeconds = GetDailyScreenTimeTrend(thisWeekStart, thisWeekEnd)
                 .Sum(p => p.TotalSeconds);
-            var lastWeekSeconds = lastWeekPeriods.Sum(p => p.AccumulatedActiveSeconds);
+            var lastWeekSeconds = GetDailyScreenTimeTrend(lastWeekStart, lastWeekEnd)
+                .Sum(p => p.TotalSeconds);
 
             // Get focus sessions for both weeks
             var thisWeekFocus = DatabaseService.GetFocusSessionsForRange(thisWeekStart, thisWeekEnd);

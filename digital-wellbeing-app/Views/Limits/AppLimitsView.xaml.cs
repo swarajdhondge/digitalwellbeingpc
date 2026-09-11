@@ -60,6 +60,8 @@ namespace digital_wellbeing_app.Views.Limits
             Loaded += AppLimitsView_Loaded;
         }
 
+        private string? _pendingSelectPath;
+
         private void AppLimitsView_Loaded(object sender, RoutedEventArgs e)
         {
             LoadAppPicker();
@@ -68,6 +70,13 @@ namespace digital_wellbeing_app.Views.Limits
             {
                 ResetEditor();
                 _loaded = true;
+            }
+            
+            if (!string.IsNullOrEmpty(_pendingSelectPath))
+            {
+                var path = _pendingSelectPath;
+                _pendingSelectPath = null;
+                SelectAppForLimit(path);
             }
         }
 
@@ -210,6 +219,19 @@ namespace digital_wellbeing_app.Views.Limits
 
             row.Limit.IsEnabled = toggle.IsChecked == true;
             row.Limit.LastUpdated = DateTime.Now;
+
+            // P3-4: Visual confirmation
+            ToastText.Text = row.Limit.IsEnabled ? "Limit enabled" : "Limit paused";
+            ToastIcon.Kind = row.Limit.IsEnabled ? MaterialDesignThemes.Wpf.PackIconKind.CheckCircleOutline : MaterialDesignThemes.Wpf.PackIconKind.PauseCircleOutline;
+            
+            var anim = new System.Windows.Media.Animation.DoubleAnimation
+            {
+                From = 1.0,
+                To = 0.0,
+                Duration = TimeSpan.FromSeconds(2.5),
+                BeginTime = TimeSpan.FromSeconds(1) // 1 second solid, 1.5 seconds fade out
+            };
+            ToastNotification.BeginAnimation(OpacityProperty, anim);
             DatabaseService.SaveAppLimit(row.Limit);
             NotifyServiceChanged();
             LoadActiveLimits();
@@ -253,6 +275,26 @@ namespace digital_wellbeing_app.Views.Limits
                 SelectTimeInComboBox(LimitEndTimeComboBox, 17, 0);
                 _editingLimitEnabled = true;
                 RemoveLimitButton.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        public void SelectAppForLimit(string executablePath)
+        {
+            if (!IsLoaded)
+            {
+                _pendingSelectPath = executablePath;
+                return;
+            }
+
+            // Ensure lists are loaded if this is called before the view is fully initialized
+            if (_appPickerList.Count == 0)
+                LoadAppPicker();
+
+            var app = _appPickerList.FirstOrDefault(x => string.Equals(x.ExecutablePath, executablePath, StringComparison.OrdinalIgnoreCase));
+            if (app != null)
+            {
+                AppPickerCombo.SelectedItem = app;
+                SelectApp(app);
             }
         }
 

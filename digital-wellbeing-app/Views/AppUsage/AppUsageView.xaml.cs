@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using System.Windows.Controls;
 using digital_wellbeing_app.ViewModels;
 
@@ -38,5 +38,51 @@ namespace digital_wellbeing_app.Views.AppUsage
         {
             if (DataContext is AppUsageViewModel vm) vm.SetWeekView(true);
         }
+
+        private void HistoryRange_Checked(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is AppUsageViewModel vm) vm.SetDayView();
+        }
+
+        private void PreviousDay_Click(object sender, RoutedEventArgs e)
+            => (DataContext as AppUsageViewModel)?.GoToPreviousDay();
+
+        private void NextDay_Click(object sender, RoutedEventArgs e)
+            => (DataContext as AppUsageViewModel)?.GoToNextDay();
+
+        // P1-1: Clicking an app row navigates to its App Details
+        private void AppRow_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if ((sender as FrameworkElement)?.DataContext is AppUsageSummary app)
+            {
+                var shell = Window.GetWindow(this) as MainWindow.MainWindow;
+                shell?.NavigateToAppDetails(app.ExecutablePath);
+            }
+        }
+
+        // P2-3: Clicking the date label opens the hidden DatePicker's calendar popup
+        private void DateLabel_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (DataContext is AppUsageViewModel vm)
+                HistoryDatePicker.SelectedDate = vm.SelectedDate;
+            HistoryDatePicker.IsDropDownOpen = true;
+        }
+
+        // P2-3: When the user picks a date from the calendar, navigate to that day
+        private void HistoryDatePicker_SelectedDateChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (HistoryDatePicker.SelectedDate is DateTime picked && DataContext is AppUsageViewModel vm)
+            {
+                vm.GoToHistoryDate(picked);
+            }
+        }
+
+        // P3-3: CTA on empty state
+        private void EmptyStateDashboard_Click(object sender, RoutedEventArgs e)
+        {
+            var shell = Window.GetWindow(this) as MainWindow.MainWindow;
+            shell?.NavigateToDashboard();
+        }
+
     }
 }

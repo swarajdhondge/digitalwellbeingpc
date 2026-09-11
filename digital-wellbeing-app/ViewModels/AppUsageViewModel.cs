@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,6 +20,12 @@ namespace digital_wellbeing_app.ViewModels
         private readonly DispatcherTimer _timer;
         private bool _disposed;
         private int _listRefreshTicks;
+
+        // Day-view state
+        private bool _isDayView;
+        private DateTime _selectedDate = DateTime.Today;
+        private string _dailyScreenTime = string.Empty;
+        private DateTime? _earliestDate;
         private const int ListRefreshIntervalSeconds = 5;
 
         #region Properties - Current App (Live)
@@ -57,6 +63,13 @@ namespace digital_wellbeing_app.ViewModels
         {
             get => _hasCurrentApp;
             set { if (_hasCurrentApp == value) return; _hasCurrentApp = value; OnPropertyChanged(nameof(HasCurrentApp)); }
+        }
+
+        private string _currentAppExecutablePath = string.Empty;
+        public string CurrentAppExecutablePath
+        {
+            get => _currentAppExecutablePath;
+            set { if (_currentAppExecutablePath == value) return; _currentAppExecutablePath = value; OnPropertyChanged(nameof(CurrentAppExecutablePath)); }
         }
 
         #endregion
@@ -121,6 +134,63 @@ namespace digital_wellbeing_app.ViewModels
         public bool CanGoNext => SelectedWeekStart < WeekNavigationHelper.StartOfWeek(DateTime.Today);
         public string WeekTotalText => TimeFormatHelper.FormatCompact(TimeSpan.FromSeconds(TodaysUsage.Sum(x => x.TotalDuration.TotalSeconds)));
 
+        // --- Day-view properties ---
+
+        public bool IsDayView
+        {
+            get => _isDayView;
+            private set
+            {
+                if (_isDayView == value) return;
+                _isDayView = value;
+                OnPropertyChanged(nameof(IsDayView));
+                OnPropertyChanged(nameof(RangeHeader));
+                OnPropertyChanged(nameof(IsShowingToday));
+            }
+        }
+
+        public DateTime SelectedDate
+        {
+            get => _selectedDate;
+            private set
+            {
+                if (_selectedDate == value) return;
+                _selectedDate = value;
+                OnPropertyChanged(nameof(SelectedDate));
+                OnPropertyChanged(nameof(DailyDateLabel));
+                OnPropertyChanged(nameof(CanGoToPreviousDay));
+                OnPropertyChanged(nameof(CanGoToNextDay));
+                OnPropertyChanged(nameof(IsShowingToday));
+            }
+        }
+
+        public string DailyScreenTime
+        {
+            get => _dailyScreenTime;
+            private set { if (_dailyScreenTime == value) return; _dailyScreenTime = value; OnPropertyChanged(nameof(DailyScreenTime)); }
+        }
+
+        public string DailyDateLabel
+        {
+            get
+            {
+                var daysDiff = (DateTime.Today - _selectedDate.Date).Days;
+                var rawDate = _selectedDate.ToString("MMMM d, yyyy");
+                
+                return daysDiff switch
+                {
+                    0 => $"Today • {rawDate}",
+                    1 => $"Yesterday • {rawDate}",
+                    _ when daysDiff <= 7 => $"{daysDiff} days ago • {rawDate}",
+                    _ => rawDate
+                };
+            }
+        }
+        // Allow browsing back up to 365 days regardless of whether data exists for every day.
+        public bool CanGoToPreviousDay => _selectedDate.Date > DateTime.Today.AddDays(-365);
+        public bool CanGoToNextDay => _selectedDate.Date < DateTime.Today;
+        public bool IsShowingToday => !_isDayView || _selectedDate.Date == DateTime.Today;
+
         #endregion
 
         public AppUsageViewModel()
@@ -138,6 +208,7 @@ namespace digital_wellbeing_app.ViewModels
 
             var earliest = DatabaseService.GetEarliestAppUsageDate();
             EarliestWeekStart = earliest.HasValue ? WeekNavigationHelper.StartOfWeek(earliest.Value) : null;
+            _earliestDate = earliest;
 
             // Initial load
             LoadTodaysUsage();
@@ -218,6 +289,7 @@ namespace digital_wellbeing_app.ViewModels
                 if (CurrentAppIcon == null || !string.Equals(_currentIconPath, session.ExecutablePath))
                 {
                     _currentIconPath = session.ExecutablePath;
+                    CurrentAppExecutablePath = session.ExecutablePath;
                     CurrentAppIcon = AppIconService.GetIconForExe(session.ExecutablePath);
                 }
 
@@ -228,6 +300,7 @@ namespace digital_wellbeing_app.ViewModels
                 CurrentAppName = "No app active";
                 CurrentWindowTitle = string.Empty;
                 CurrentAppDuration = "—";
+                CurrentAppExecutablePath = string.Empty;
                 IsTracking = false;
             }
         }
@@ -238,12 +311,17 @@ namespace digital_wellbeing_app.ViewModels
         {
             var sessions = _isWeekView
                 ? GetSelectedWeekSessions(includeLive: false)
-                : DatabaseService.GetAppUsageSessionsForDate(DateTime.Now);
+                : _isDayView
+                    ? DatabaseService.GetAppUsageSessionsForDate(_selectedDate)
+                    : DatabaseService.GetAppUsageSessionsForDate(DateTime.Now);
 
-            // Fold in the live session whenever the selected range contains today.
-            var currentSession = !_isWeekView || SelectedWeekStart == WeekNavigationHelper.StartOfWeek(DateTime.Today)
-                ? _tracker.CurrentSession
-                : null;
+            // Fold in the live session only when the selected range contains today.
+            var currentSession =
+                (!_isWeekView && !_isDayView) ||
+                (_isWeekView && SelectedWeekStart == WeekNavigationHelper.StartOfWeek(DateTime.Today)) ||
+                (_isDayView && _selectedDate.Date == DateTime.Today)
+                    ? _tracker.CurrentSession
+                    : null;
             var allSessions = sessions.ToList();
             var metrics = AppUsageMetrics.Calculate(allSessions, currentSession, DateTime.Now);
 
@@ -275,14 +353,44 @@ namespace digital_wellbeing_app.ViewModels
         }
 
         /// <summary>Header for the app list, reflecting the selected range.</summary>
-        public string RangeHeader => _isWeekView ? "APPS THIS WEEK" : "TODAY'S APPS";
+        public string RangeHeader => _isDayView ? "APP USAGE" : _isWeekView ? "APPS THIS WEEK" : "TODAY'S APPS";
 
         /// <summary>Called by the view when the Today/Week segmented toggle changes.</summary>
         public void SetWeekView(bool week)
         {
+            // Leaving day-view when switching to Today or Week
+            if (_isDayView) IsDayView = false;
             if (_isWeekView == week) return;
             IsWeekView = week;
             LoadList();
+            UpdateFocusStats();
+        }
+
+        /// <summary>Switch to the History / day-view mode (called by the "History" radio button).</summary>
+        public void SetDayView()
+        {
+            if (_isDayView) return;
+            if (_isWeekView) IsWeekView = false;
+            IsDayView = true;
+            // Always start day-view on today so the user sees fresh data immediately.
+            SelectedDate = DateTime.Today;
+            LoadDayUsage();
+            UpdateFocusStats();
+        }
+
+        public void GoToPreviousDay()
+        {
+            if (!CanGoToPreviousDay) return;
+            SelectedDate = _selectedDate.AddDays(-1);
+            LoadDayUsage();
+            UpdateFocusStats();
+        }
+
+        public void GoToNextDay()
+        {
+            if (!CanGoToNextDay) return;
+            SelectedDate = _selectedDate.AddDays(1);
+            LoadDayUsage();
             UpdateFocusStats();
         }
 
@@ -306,9 +414,26 @@ namespace digital_wellbeing_app.ViewModels
             UpdateFocusStats();
         }
 
+        /// <summary>
+        /// Navigate to History mode for a specific calendar date.
+        /// Called from outside (e.g. Dashboard week-bar clicks, Screen Time day-row clicks)
+        /// to deep-link into the History tab at the requested date.
+        /// The date is clamped so it can never exceed today or go beyond the 365-day boundary.
+        /// </summary>
+        public void GoToHistoryDate(DateTime date)
+        {
+            var clamped = date.Date <= DateTime.Today ? date.Date : DateTime.Today;
+            if (_isWeekView) IsWeekView = false;
+            IsDayView = true;
+            SelectedDate = clamped;
+            LoadDayUsage();
+            UpdateFocusStats();
+        }
+
         private void LoadList()
         {
-            if (_isWeekView) LoadWeekUsage();
+            if (_isDayView) LoadDayUsage();
+            else if (_isWeekView) LoadWeekUsage();
             else LoadTodaysUsage();
         }
 
@@ -354,6 +479,57 @@ namespace digital_wellbeing_app.ViewModels
                 TodaysUsage.Add(item);
             }
 
+            HasApps = TodaysUsage.Count > 0;
+            OnPropertyChanged(nameof(WeekTotalText));
+        }
+
+        /// <summary>
+        /// Load usage data for <see cref="SelectedDate"/>. Uses <see cref="LiveUsageProvider"/>
+        /// for today (includes the live un-flushed session) and raw DB sessions for past days.
+        /// </summary>
+        private void LoadDayUsage()
+        {
+            // --- Per-app breakdown for the selected day ---
+            List<AppUsageSummary> appList;
+            if (_selectedDate.Date == DateTime.Today)
+            {
+                // Reuse today's live+persisted source so the total matches the Dashboard.
+                appList = LiveUsageProvider.GetTodayAppEntries()
+                    .Select(e => new AppUsageSummary
+                    {
+                        AppName = AppNameService.GetDisplayName(e.AppName, e.ExecutablePath),
+                        ExecutablePath = e.ExecutablePath,
+                        TotalDuration = e.Duration
+                    })
+                    .ToList();
+            }
+            else
+            {
+                // Historical day: group the raw DB sessions for that calendar date.
+                appList = DatabaseService.GetAppUsageSessionsForDate(_selectedDate)
+                    .GroupBy(s => AppIdentity.NormalizeKey(s.ExecutablePath, s.AppName))
+                    .Where(g => g.Key.Length > 0)
+                    .Select(g => new AppUsageSummary
+                    {
+                        AppName = AppNameService.GetDisplayName(g.First().AppName, g.First().ExecutablePath),
+                        ExecutablePath = g.First().ExecutablePath,
+                        TotalDuration = TimeSpan.FromSeconds(g.Sum(s => s.Duration.TotalSeconds))
+                    })
+                    .OrderByDescending(x => x.TotalDuration)
+                    .ToList();
+            }
+
+            // --- Screen-time total: sum of all app durations (single source of truth) ---
+            // Previously this read from the independently-tracked ScreenTimePeriod table,
+            // which counts passive-consumption time (video watching, gaming) that the
+            // AppUsageTracker does not record. Deriving from the same AppUsageSession data
+            // guarantees the headline matches the per-app breakdown.
+            var totalDuration = appList.Aggregate(TimeSpan.Zero, (sum, a) => sum + a.TotalDuration);
+            DailyScreenTime = TimeFormatHelper.FormatDuration(totalDuration);
+
+            TodaysUsage.Clear();
+            foreach (var item in appList)
+                TodaysUsage.Add(item);
             HasApps = TodaysUsage.Count > 0;
             OnPropertyChanged(nameof(WeekTotalText));
         }

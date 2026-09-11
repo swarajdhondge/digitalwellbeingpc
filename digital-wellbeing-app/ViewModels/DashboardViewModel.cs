@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -15,6 +15,7 @@ using Point = System.Windows.Point;
 using digital_wellbeing_app.Helpers;
 using digital_wellbeing_app.Models;
 using digital_wellbeing_app.Services;
+using digital_wellbeing_app.CoreLogic;
 
 namespace digital_wellbeing_app.ViewModels
 {
@@ -70,6 +71,8 @@ namespace digital_wellbeing_app.ViewModels
             public double HeightPx { get; set; }      // against a fixed 110px chart
             public double Opacity { get; set; } = 0.32;
             public bool IsToday { get; set; }
+            /// <summary>The calendar date this bar represents — used by click navigation.</summary>
+            public DateTime Date { get; set; }
         }
 
         /// <summary>A category row (tile + bar + duration) on the dashboard.</summary>
@@ -139,7 +142,61 @@ namespace digital_wellbeing_app.ViewModels
             set { if (_appTime != value) { _appTime = value; OnPropertyChanged(); } }
         }
 
+        #region Properties - Tracking Status (Feature 2)
+
+        private TrackingState _trackingState = TrackingState.Active;
+        public TrackingState TrackingState
+        {
+            get => _trackingState;
+            set 
+            { 
+                if (_trackingState != value) 
+                { 
+                    _trackingState = value; 
+                    OnPropertyChanged(); 
+                    OnPropertyChanged(nameof(TrackingTooltip));
+                } 
+            }
+        }
+
+        private TrackingHealthService.HealthStatus _trackerHealth = TrackingHealthService.HealthStatus.Healthy;
+        public TrackingHealthService.HealthStatus TrackerHealth
+        {
+            get => _trackerHealth;
+            set
+            {
+                if (_trackerHealth != value)
+                {
+                    _trackerHealth = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(TrackingTooltip));
+                }
+            }
+        }
+
+        public string TrackingTooltip
+        {
+            get
+            {
+                if (TrackerHealth == TrackingHealthService.HealthStatus.Down)
+                    return "Tracker is currently offline or crashed. Try restarting the application.";
+                if (TrackerHealth == TrackingHealthService.HealthStatus.Stale)
+                    return "Tracker hasn't reported data recently. It might be stuck or the PC was asleep.";
+                
+                return TrackingState switch
+                {
+                    CoreLogic.TrackingState.Active => "Tracking active — currently logging foreground usage.",
+                    CoreLogic.TrackingState.Idle => "Tracking idle — user is away or consuming media passively.",
+                    CoreLogic.TrackingState.Paused => "Tracking paused — PC is locked or asleep.",
+                    _ => "Tracking status unknown."
+                };
+            }
+        }
+
+        #endregion
+
         public ImageSource TopAppIcon
+
         {
             get => _topAppIcon;
             set { if (_topAppIcon != value) { _topAppIcon = value; OnPropertyChanged(); } }
@@ -238,6 +295,11 @@ namespace digital_wellbeing_app.ViewModels
         public DashboardViewModel()
         {
             _screenTracker = (System.Windows.Application.Current as App)?.ScreenTracker;
+            if (_screenTracker != null)
+            {
+                TrackingState = _screenTracker.State;
+                _screenTracker.StateChanged += OnTrackerStateChanged;
+            }
 
             // Set up timer (don't start yet - wait for StartRefreshing)
             _refreshTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
@@ -245,6 +307,11 @@ namespace digital_wellbeing_app.ViewModels
 
             // Initial data load
             RefreshData();
+        }
+
+        private void OnTrackerStateChanged(object? sender, TrackingState state)
+        {
+            TrackingState = state;
         }
 
         /// <summary>
@@ -283,6 +350,14 @@ namespace digital_wellbeing_app.ViewModels
             // — Load threshold from settings —
             var threshold = _settingsService.LoadHarmfulThreshold();
             ThresholdLabel = $"ABOVE {(int)threshold} dB";
+
+            // — Check tracker health —
+            var healths = TrackingHealthService.GetHealthStatuses();
+            var screenHealth = healths.FirstOrDefault(h => h.TrackerName == "ScreenTimeTracker");
+            if (screenHealth != null)
+            {
+                TrackerHealth = screenHealth.Status;
+            }
 
             // — Screen Time (single source of truth: live session + persisted) —
             var tsScreen = LiveUsageProvider.GetTodayActiveTime();
@@ -400,6 +475,7 @@ namespace digital_wellbeing_app.ViewModels
                     HeightPx = Math.Max(6, (min / maxMin) * 110),
                     IsToday = i == todayIdx,
                     Opacity = i == todayIdx ? 1.0 : 0.32,
+                    Date = trend[i].Date.Date,
                 });
             }
             WeekBars = bars;
@@ -497,7 +573,12 @@ namespace digital_wellbeing_app.ViewModels
         public void Dispose()
         {
             _refreshTimer.Stop();
+            if (_screenTracker != null)
+            {
+                _screenTracker.StateChanged -= OnTrackerStateChanged;
+            }
             GC.SuppressFinalize(this);
         }
     }
+
 }

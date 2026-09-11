@@ -7,8 +7,9 @@
              mc:Ignorable="d" d:DesignHeight="800" d:DesignWidth="900"
              FontFamily="{DynamicResource Font.Primary}" Background="Transparent">
 
-    <ScrollViewer x:Name="PageScroll" HorizontalScrollBarVisibility="Disabled"
-                  VerticalScrollBarVisibility="Auto" Padding="26,4,26,26">
+    <Grid>
+        <ScrollViewer x:Name="PageScroll" HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Auto" Padding="26,4,26,26">
         <StackPanel x:Name="PageRoot" HorizontalAlignment="Center">
 
             <!-- Plain-language introduction -->
@@ -226,4 +227,16 @@
             </Border>
         </StackPanel>
     </ScrollViewer>
+        <!-- Toast Notification (P3-4) -->
+        <Border x:Name="ToastNotification" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,24"
+                Background="{DynamicResource Card2}" BorderBrush="{DynamicResource Border}" BorderThickness="1"
+                CornerRadius="8" Padding="16,10" Opacity="0" IsHitTestVisible="False"
+                Effect="{DynamicResource Shadow.Card}">
+            <StackPanel Orientation="Horizontal">
+                <md:PackIcon x:Name="ToastIcon" Kind="CheckCircleOutline" Width="18" Height="18"
+                             Foreground="{StaticResource Accent.Weekly}" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <TextBlock x:Name="ToastText" Text="Limit enabled" Style="{StaticResource Pulse.Body}" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+    </Grid>
 </UserControl>
