@@ -33,23 +33,10 @@ namespace digital_wellbeing_app.Services
 
         // --- Screen time ---
 
-        /// <summary>Today's active screen time, live session included (persisted fallback).</summary>
+        /// <summary>Today's active screen time based on tracked app usage (single source of truth).</summary>
         public static TimeSpan GetTodayActiveTime()
-            => CombineTodayActiveTime(ScreenTracker?.CurrentActiveTime);
+            => GetTodayAppTime();
 
-        /// <summary>
-        /// Testable core: returns the live active time when supplied, otherwise the persisted
-        /// today total. The tracker's CurrentActiveTime already includes persisted-today time, so
-        /// it is authoritative when present.
-        /// </summary>
-        public static TimeSpan CombineTodayActiveTime(TimeSpan? liveActiveTime)
-        {
-            if (liveActiveTime.HasValue)
-                return liveActiveTime.Value;
-
-            var persisted = DatabaseService.GetScreenTimePeriodForToday()?.AccumulatedActiveSeconds ?? 0;
-            return TimeSpan.FromSeconds(persisted);
-        }
 
         // --- App usage ---
 

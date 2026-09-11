@@ -489,20 +489,6 @@ namespace digital_wellbeing_app.ViewModels
         /// </summary>
         private void LoadDayUsage()
         {
-            // --- Screen-time total for the selected day ---
-            TimeSpan screenTime;
-            if (_selectedDate.Date == DateTime.Today)
-            {
-                screenTime = LiveUsageProvider.GetTodayActiveTime();
-            }
-            else
-            {
-                var period = DatabaseService.GetScreenTimePeriodsForRange(_selectedDate, _selectedDate)
-                                            .FirstOrDefault();
-                screenTime = TimeSpan.FromSeconds(period?.AccumulatedActiveSeconds ?? 0);
-            }
-            DailyScreenTime = TimeFormatHelper.FormatDuration(screenTime);
-
             // --- Per-app breakdown for the selected day ---
             List<AppUsageSummary> appList;
             if (_selectedDate.Date == DateTime.Today)
@@ -532,6 +518,14 @@ namespace digital_wellbeing_app.ViewModels
                     .OrderByDescending(x => x.TotalDuration)
                     .ToList();
             }
+
+            // --- Screen-time total: sum of all app durations (single source of truth) ---
+            // Previously this read from the independently-tracked ScreenTimePeriod table,
+            // which counts passive-consumption time (video watching, gaming) that the
+            // AppUsageTracker does not record. Deriving from the same AppUsageSession data
+            // guarantees the headline matches the per-app breakdown.
+            var totalDuration = appList.Aggregate(TimeSpan.Zero, (sum, a) => sum + a.TotalDuration);
+            DailyScreenTime = TimeFormatHelper.FormatDuration(totalDuration);
 
             TodaysUsage.Clear();
             foreach (var item in appList)

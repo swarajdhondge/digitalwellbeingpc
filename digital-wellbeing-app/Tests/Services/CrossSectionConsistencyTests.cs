@@ -47,10 +47,12 @@ namespace digital_wellbeing_app.Tests.Services
         {
             DatabaseService.DeleteAllData();
             var today = DateTime.Today;
-            DatabaseService.SaveScreenTimePeriod(new ScreenTimePeriod
+            // Insert app-usage data (the single source of truth for screen time now).
+            var midday = today.AddHours(10);
+            DatabaseService.SaveAppUsageSession(new AppUsageSession
             {
-                SessionDate = today.ToString("yyyy-MM-dd"),
-                AccumulatedActiveSeconds = 7200 // 2h persisted
+                AppName = "chrome", ExecutablePath = @"C:\chrome.exe",
+                StartTime = midday, EndTime = midday.AddHours(2) // 7200s
             });
 
             var live = LiveUsageProvider.GetTodayActiveTime();
@@ -66,12 +68,12 @@ namespace digital_wellbeing_app.Tests.Services
         {
             DatabaseService.DeleteAllData();
             var today = DateTime.Today;
-            DatabaseService.SaveScreenTimePeriod(new ScreenTimePeriod
+            // Insert app-usage data (the single source of truth for screen time now).
+            var midday = today.AddHours(10);
+            DatabaseService.SaveAppUsageSession(new AppUsageSession
             {
-                SessionDate = today.ToString("yyyy-MM-dd"),
-                SessionStartTime = today.ToString("o"),
-                LastRecordedTime = today.ToString("o"),
-                AccumulatedActiveSeconds = 5432
+                AppName = "code", ExecutablePath = @"C:\code.exe",
+                StartTime = midday, EndTime = midday.AddSeconds(5432)
             });
 
             var reports = new ReportService();

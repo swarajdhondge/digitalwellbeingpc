@@ -101,13 +101,30 @@ namespace digital_wellbeing_app.Tests.Services
         }
 
         [Fact]
-        public void CombineTodayActiveTime_PrefersLive_FallsBackToPersisted()
+        public void GetTodayActiveTime_EqualsAppDurationSum()
         {
-            Assert.Equal(TimeSpan.FromMinutes(42),
-                LiveUsageProvider.CombineTodayActiveTime(TimeSpan.FromMinutes(42)));
+            // GetTodayActiveTime is now defined as the sum of per-app durations,
+            // ensuring the headline always matches the per-app breakdown.
+            DatabaseService.DeleteAllData();
+            var midday = DateTime.Today.AddHours(9);
+            DatabaseService.SaveAppUsageSession(new AppUsageSession
+            {
+                AppName = "chrome",
+                ExecutablePath = @"C:\chrome.exe",
+                StartTime = midday,
+                EndTime = midday.AddMinutes(10)
+            });
+            DatabaseService.SaveAppUsageSession(new AppUsageSession
+            {
+                AppName = "notepad",
+                ExecutablePath = @"C:\notepad.exe",
+                StartTime = midday.AddMinutes(10),
+                EndTime = midday.AddMinutes(15)
+            });
 
-            var persisted = LiveUsageProvider.CombineTodayActiveTime(null);
-            Assert.True(persisted >= TimeSpan.Zero);
+            var active = LiveUsageProvider.GetTodayActiveTime();
+            var appSum = LiveUsageProvider.GetTodayAppTime();
+            Assert.Equal(appSum.TotalSeconds, active.TotalSeconds, 1);
         }
     }
 }
