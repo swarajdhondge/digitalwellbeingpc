@@ -81,11 +81,17 @@ namespace digital_wellbeing_app.Views.Settings
             // Note: Hearing Protection threshold is disabled (Coming Soon)
             // Default is 75 dB, set in SettingsService.LoadHarmfulThreshold()
 
-            // Load Data & Privacy info
-            LoadDataPrivacyInfo();
-
-            // Load tracker health for the Diagnostics card
-            LoadTrackerHealth();
+            // Storage info and tracker health change while the app runs: reload them whenever
+            // the page is opened, and keep the Diagnostics card current while it stays open.
+            var healthTimer = new System.Windows.Threading.DispatcherTimer { Interval = System.TimeSpan.FromSeconds(30) };
+            healthTimer.Tick += (_, _) => LoadTrackerHealth();
+            Loaded += (_, _) =>
+            {
+                LoadDataPrivacyInfo();
+                LoadTrackerHealth();
+                healthTimer.Start();
+            };
+            Unloaded += (_, _) => healthTimer.Stop();
         }
 
         #region Data & Privacy

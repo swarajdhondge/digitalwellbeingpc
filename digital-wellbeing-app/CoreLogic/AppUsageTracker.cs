@@ -95,6 +95,7 @@ namespace digital_wellbeing_app.CoreLogic
         {
             _isAway = false;
             _lastTick = null;
+            TrackingHealthService.RecordHeartbeat(nameof(AppUsageTracker));
             _focusListener.Start();
             _periodicSaveTimer.Start();
             _tickTimer.Start();

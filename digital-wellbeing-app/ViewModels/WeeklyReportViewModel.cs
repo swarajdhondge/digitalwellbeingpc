@@ -174,6 +174,9 @@ namespace digital_wellbeing_app.ViewModels
 
         #region Data Loading
 
+        /// <summary>Reloads the selected week from the database.</summary>
+        public void Refresh() => LoadReportData();
+
         private void LoadReportData()
         {
             _reportData = _reportService.GetWeeklyReport(_currentWeekStart);
