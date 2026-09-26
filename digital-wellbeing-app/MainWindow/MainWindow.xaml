@@ -126,7 +126,7 @@
                         </Button>
 
                         <TextBlock x:Name="SidebarVersionText"
-                                   Text="v2.3.0"
+                                   Text="v2.3.1"
                                    FontSize="9"
                                    Foreground="{DynamicResource Ink3}"
                                    HorizontalAlignment="Center"
