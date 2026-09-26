@@ -95,7 +95,7 @@ namespace digital_wellbeing_app.MainWindow
                 if (!string.IsNullOrEmpty(location))
                 {
                     var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(location);
-                    SidebarVersionText.Text = $"v{fvi.ProductVersion ?? "2.3.1"}";
+                    SidebarVersionText.Text = $"v{fvi.ProductVersion ?? "2.4.0"}";
                 }
             }
             catch { /* Keep default text from XAML */ }

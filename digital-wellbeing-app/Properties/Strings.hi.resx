@@ -377,7 +377,6 @@
   <data name="Settings_UpdateServiceUnreachable" xml:space="preserve"><value>अपडेट सेवा से कनेक्ट नहीं हो सका। अपना कनेक्शन जाँचें और फिर से कोशिश करें।</value></data>
   <data name="Settings_UpdatesUnavailable" xml:space="preserve"><value>इस बिल्ड के लिए अपडेट उपलब्ध नहीं हैं।</value></data>
   <data name="Settings_UpdatesViaStore" xml:space="preserve"><value>अपडेट Microsoft Store से होते हैं। Store पेज खोला जा रहा है...</value></data>
-  <data name="Settings_Version231" xml:space="preserve"><value>वर्शन 2.3.1</value></data>
   <data name="Settings_VersionFormat" xml:space="preserve"><value>वर्शन {0}</value></data>
   <data name="Settings_ViewPrivacyInformation" xml:space="preserve"><value>प्राइवेसी की जानकारी देखें</value></data>
   <data name="Settings_VisualStyle" xml:space="preserve"><value>विज़ुअल स्टाइल</value></data>
@@ -486,4 +485,6 @@
   <data name="WindDown_NotifyTitle" xml:space="preserve"><value>🌙 वाइंड डाउन का समय</value></data>
   <data name="WindDown_SummaryToday" xml:space="preserve"><value>आज आपने अपना PC {0}घं {1}मि इस्तेमाल किया।</value></data>
   <data name="Dashboard_PerDayAverage" xml:space="preserve"><value> · औसत {0}/दिन</value></data>
+  <data name="Settings_LanguageNote" xml:space="preserve"><value>* AI की मदद से अनुवादित, इसमें गलतियाँ हो सकती हैं। </value></data>
+  <data name="Settings_LanguageReport" xml:space="preserve"><value>अनुवाद की समस्या बताएं</value></data>
 </root>

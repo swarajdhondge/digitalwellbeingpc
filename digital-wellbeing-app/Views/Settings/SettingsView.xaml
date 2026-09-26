@@ -99,6 +99,10 @@
                               HorizontalAlignment="Left" MinWidth="240" AutomationProperties.AutomationId="LanguageComboBox"/>
                     <TextBlock x:Name="LanguageRestartText" Text="{l:Loc Settings_LanguageRestart}" Style="{StaticResource Pulse.Muted}"
                                Margin="0,8,0,0" Visibility="Collapsed"/>
+                    <TextBlock Style="{StaticResource Pulse.Muted}" Margin="0,8,0,0" TextWrapping="Wrap">
+                        <Run Text="{l:Loc Settings_LanguageNote}"/>
+                        <Hyperlink Click="ReportTranslation_Click" AutomationProperties.AutomationId="ReportTranslationLink"><Run Text="{l:Loc Settings_LanguageReport}"/></Hyperlink>
+                    </TextBlock>
                 </StackPanel>
             </Border>
 
@@ -480,7 +484,7 @@
                         </Border>
                         <StackPanel VerticalAlignment="Center" Margin="14,0,0,0">
                             <TextBlock Text="Pulse - DigitalWellbeingPC" Style="{StaticResource Pulse.CardTitle}" FontSize="15"/>
-                            <TextBlock x:Name="AboutVersionText" Text="{l:Loc Settings_Version231}" Style="{StaticResource Pulse.Body2}"/>
+                            <TextBlock x:Name="AboutVersionText" Style="{StaticResource Pulse.Body2}"/>
                         </StackPanel>
                     </StackPanel>
                     <TextBlock Text="{l:Loc Settings_TrackScreenTimeAppUsage}"

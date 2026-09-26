@@ -377,7 +377,6 @@
   <data name="Settings_UpdateServiceUnreachable" xml:space="preserve"><value>更新サービスに接続できませんでした。接続を確認して、もう一度お試しください。</value></data>
   <data name="Settings_UpdatesUnavailable" xml:space="preserve"><value>このビルドでは更新を利用できません。</value></data>
   <data name="Settings_UpdatesViaStore" xml:space="preserve"><value>更新は Microsoft Store で管理されています。Store のページを開いています...</value></data>
-  <data name="Settings_Version231" xml:space="preserve"><value>バージョン 2.3.1</value></data>
   <data name="Settings_VersionFormat" xml:space="preserve"><value>バージョン {0}</value></data>
   <data name="Settings_ViewPrivacyInformation" xml:space="preserve"><value>プライバシー情報を表示</value></data>
   <data name="Settings_VisualStyle" xml:space="preserve"><value>表示スタイル</value></data>
@@ -486,4 +485,6 @@
   <data name="WindDown_NotifyTitle" xml:space="preserve"><value>🌙 おやすみ時間モードの時間です</value></data>
   <data name="WindDown_SummaryToday" xml:space="preserve"><value>今日は PC を {0}時間{1}分 使用しました。</value></data>
   <data name="Dashboard_PerDayAverage" xml:space="preserve"><value> · 1日平均 {0}</value></data>
+  <data name="Settings_LanguageNote" xml:space="preserve"><value>* AI を活用して翻訳しているため、誤りが含まれる場合があります。</value></data>
+  <data name="Settings_LanguageReport" xml:space="preserve"><value>翻訳の問題を報告</value></data>
 </root>

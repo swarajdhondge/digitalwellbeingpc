@@ -377,7 +377,6 @@
   <data name="Settings_UpdateServiceUnreachable" xml:space="preserve"><value>Не удалось подключиться к службе обновлений. Проверьте подключение и повторите попытку.</value></data>
   <data name="Settings_UpdatesUnavailable" xml:space="preserve"><value>Для этой сборки обновления недоступны.</value></data>
   <data name="Settings_UpdatesViaStore" xml:space="preserve"><value>Обновлениями управляет Microsoft Store. Открываем страницу в Store...</value></data>
-  <data name="Settings_Version231" xml:space="preserve"><value>Версия 2.3.1</value></data>
   <data name="Settings_VersionFormat" xml:space="preserve"><value>Версия {0}</value></data>
   <data name="Settings_ViewPrivacyInformation" xml:space="preserve"><value>Сведения о конфиденциальности</value></data>
   <data name="Settings_VisualStyle" xml:space="preserve"><value>Визуальный стиль</value></data>
@@ -486,4 +485,6 @@
   <data name="WindDown_NotifyTitle" xml:space="preserve"><value>🌙 Пора готовиться ко сну</value></data>
   <data name="WindDown_SummaryToday" xml:space="preserve"><value>Сегодня вы пользовались компьютером {0} ч {1} мин.</value></data>
   <data name="Dashboard_PerDayAverage" xml:space="preserve"><value> · в среднем {0}/день</value></data>
+  <data name="Settings_LanguageNote" xml:space="preserve"><value>* Переведено с помощью ИИ и может содержать ошибки. </value></data>
+  <data name="Settings_LanguageReport" xml:space="preserve"><value>Сообщить об ошибке перевода</value></data>
 </root>

@@ -377,7 +377,6 @@ Bu işlem geri alınamaz.</value></data>
   <data name="Settings_UpdateServiceUnreachable" xml:space="preserve"><value>Güncelleme hizmetine ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.</value></data>
   <data name="Settings_UpdatesUnavailable" xml:space="preserve"><value>Bu derleme için güncelleme yok.</value></data>
   <data name="Settings_UpdatesViaStore" xml:space="preserve"><value>Güncellemeler Microsoft Store tarafından yönetilir. Store sayfası açılıyor...</value></data>
-  <data name="Settings_Version231" xml:space="preserve"><value>Sürüm 2.3.1</value></data>
   <data name="Settings_VersionFormat" xml:space="preserve"><value>Sürüm {0}</value></data>
   <data name="Settings_ViewPrivacyInformation" xml:space="preserve"><value>Gizlilik bilgilerini görüntüle</value></data>
   <data name="Settings_VisualStyle" xml:space="preserve"><value>Görsel stil</value></data>
@@ -486,4 +485,6 @@ Bu işlem geri alınamaz.</value></data>
   <data name="WindDown_NotifyTitle" xml:space="preserve"><value>🌙 Dinlenme Zamanı</value></data>
   <data name="WindDown_SummaryToday" xml:space="preserve"><value>Bugün bilgisayarınızı {0} sa {1} dk kullandınız.</value></data>
   <data name="Dashboard_PerDayAverage" xml:space="preserve"><value> · günlük ort. {0}</value></data>
+  <data name="Settings_LanguageNote" xml:space="preserve"><value>* Yapay zekâ yardımıyla çevrildi ve hatalar içerebilir. </value></data>
+  <data name="Settings_LanguageReport" xml:space="preserve"><value>Çeviri sorunu bildir</value></data>
 </root>

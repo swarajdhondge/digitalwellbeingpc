@@ -40,7 +40,8 @@ namespace digital_wellbeing_app.Tests.Services
             var chrome = LiveUsageProvider.CombineTodayAppEntries(live)
                 .Single(e => e.ExecutablePath == @"C:\chrome.exe");
 
-            Assert.InRange(chrome.Duration.TotalMinutes, 14.5, 15.5);
+            var expected = 10 + LiveMinutesToday(live);
+            Assert.InRange(chrome.Duration.TotalMinutes, expected - 0.5, expected + 0.5);
         }
 
         [Fact]
@@ -54,11 +55,16 @@ namespace digital_wellbeing_app.Tests.Services
                 StartTime = DateTime.Now.AddMinutes(-3)
             };
 
+            var expected = LiveMinutesToday(live);
             var entries = LiveUsageProvider.CombineTodayAppEntries(live);
 
             Assert.Contains(entries, e => e.ExecutablePath == @"C:\code.exe"
-                                          && e.Duration.TotalMinutes >= 2.5);
+                                          && e.Duration.TotalMinutes >= expected - 0.1);
         }
+
+        // Live time counted for today: just after midnight only the part since midnight counts.
+        private static double LiveMinutesToday(AppUsageSession live)
+            => (DateTime.Now - (live.StartTime > DateTime.Today ? live.StartTime : DateTime.Today)).TotalMinutes;
 
         [Fact]
         public void CombineTodayAppEntries_PersistedOnly_WhenNoLiveSession()

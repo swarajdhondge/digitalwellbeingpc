@@ -29,7 +29,7 @@ const features = [
   {
     title: "Hearing",
     accent: "#23b39a",
-    desc: "Real-time audio monitoring flags loud listening above 75 dB to protect your ears.",
+    desc: "Estimates your listening level from system volume and flags time above 75 dB. Never records audio.",
     icon: <path d="M11 5 6 9H2v6h4l5 4zM15.5 8.5a5 5 0 0 1 0 7M19 5a9 9 0 0 1 0 14" />,
   },
   {
@@ -37,6 +37,29 @@ const features = [
     accent: "#ce6a8e",
     desc: "A weekly report with daily averages, peak times, top apps, and week-over-week trends.",
     icon: <path d="M3 3v18h18M7 14l3-3 3 3 4-5" />,
+  },
+  {
+    title: "App limits",
+    accent: "#d9822b",
+    desc: "Give an app a daily allowance or unavailable hours, and get a reminder or have it minimized.",
+    icon: (
+      <>
+        <circle cx="12" cy="13" r="8" />
+        <path d="M12 9v4l2 2M9 2h6" />
+      </>
+    ),
+  },
+  {
+    title: "Breaks & Wind Down",
+    accent: "#4f9d69",
+    desc: "20-20-20 eye-break reminders during the day and a gentle screen glow when it's time to stop.",
+    icon: <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />,
+  },
+  {
+    title: "Your language*",
+    accent: "#5b8def",
+    desc: "English plus 13 translations, from 简体中文 to Español and हिन्दी. Follows Windows, or pick one in Settings.",
+    icon: <path d="M3 5h12M9 3v2M5 5c1 4 4 7 8 9M13 5c-1 4-4 7-8 9M13 21l4-9 4 9M14.5 18h5" />,
   },
   {
     title: "Private by design",
@@ -175,7 +198,7 @@ export default function Home() {
           <div className="mb-12 text-center">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Everything you track, calmly</h2>
             <p className="mx-auto mt-3 max-w-lg text-muted">
-              Six tools that help you be mindful of your computer time — without nagging.
+              Tools that help you be mindful of your computer time — without nagging.
             </p>
           </div>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -194,6 +217,15 @@ export default function Home() {
               </div>
             ))}
           </div>
+          <p className="mt-6 text-center text-xs text-muted">
+            * Translated with AI assistance and may contain mistakes.{" "}
+            <a
+              href={`${REPO_URL}/issues/new?template=translation.yml`}
+              className="underline underline-offset-2 transition hover:text-ink"
+            >
+              Report a translation issue
+            </a>
+          </p>
         </section>
 
         <section id="screens" className="mx-auto max-w-6xl scroll-mt-20 px-6 py-20">

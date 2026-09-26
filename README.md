@@ -34,7 +34,8 @@ _Android-style Digital Wellbeing for Windows — calm, private, and 100% on-devi
 - **Weekly Reports** — Daily averages, peak usage times, top apps, and a week-over-week comparison.
 - **Your data** — CSV export, local backup and restore, and delete by date range. Optional website tracking stores hostnames only.
 - **Calm design** — Graphite UI with a signature accent per section; Light, Dark, or Auto.
-- **Your language** — 14 languages; follows Windows or pick one in Settings. Corrections and new languages welcome: see [CONTRIBUTING.md](CONTRIBUTING.md#translations).
+- **Your language** — English plus 13 translations\*: 简体中文, 繁體中文, Español, हिन्दी, Português (Brasil), Русский, 日本語, Deutsch, Français, 한국어, Italiano, Türkçe, Bahasa Indonesia. Follows Windows, or pick one in Settings.
+  <br><sub>\* Translated with AI assistance and may contain mistakes. [Report a translation issue](https://github.com/swarajdhondge/digitalwellbeingpc/issues/new?template=translation.yml) or see [CONTRIBUTING.md](CONTRIBUTING.md#translations).</sub>
 
 <p align="center">
   <img src=".github/screenshots/dashboard-light.png" alt="Pulse — Light theme" width="400"/>

@@ -50,7 +50,7 @@ body:
     attributes:
       label: Pulse version
       description: See Settings → About.
-      placeholder: e.g. 2.3.1
+      placeholder: e.g. 2.4.0
     validations:
       required: true
   - type: input

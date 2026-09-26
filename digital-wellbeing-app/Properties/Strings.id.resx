@@ -377,7 +377,6 @@ Perbarui sekarang?</value></data>
   <data name="Settings_UpdateServiceUnreachable" xml:space="preserve"><value>Tidak dapat menjangkau layanan pembaruan. Periksa koneksi Anda dan coba lagi.</value></data>
   <data name="Settings_UpdatesUnavailable" xml:space="preserve"><value>Pembaruan tidak tersedia untuk build ini.</value></data>
   <data name="Settings_UpdatesViaStore" xml:space="preserve"><value>Pembaruan dikelola oleh Microsoft Store. Membuka halaman Store...</value></data>
-  <data name="Settings_Version231" xml:space="preserve"><value>Versi 2.3.1</value></data>
   <data name="Settings_VersionFormat" xml:space="preserve"><value>Versi {0}</value></data>
   <data name="Settings_ViewPrivacyInformation" xml:space="preserve"><value>Lihat informasi privasi</value></data>
   <data name="Settings_VisualStyle" xml:space="preserve"><value>Gaya visual</value></data>
@@ -486,4 +485,6 @@ Perbarui sekarang?</value></data>
   <data name="WindDown_NotifyTitle" xml:space="preserve"><value>🌙 Waktunya Bersantai</value></data>
   <data name="WindDown_SummaryToday" xml:space="preserve"><value>Anda menggunakan PC selama {0}j {1}m hari ini.</value></data>
   <data name="Dashboard_PerDayAverage" xml:space="preserve"><value> · rata-rata {0}/hari</value></data>
+  <data name="Settings_LanguageNote" xml:space="preserve"><value>* Diterjemahkan dengan bantuan AI dan mungkin mengandung kesalahan. </value></data>
+  <data name="Settings_LanguageReport" xml:space="preserve"><value>Laporkan masalah terjemahan</value></data>
 </root>

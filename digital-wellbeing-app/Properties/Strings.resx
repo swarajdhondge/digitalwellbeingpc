@@ -324,6 +324,8 @@ This cannot be undone.</value></data>
   <data name="Settings_KeepHistory" xml:space="preserve"><value>Keep history</value></data>
   <data name="Settings_KeepRunningTrayWhenClosed" xml:space="preserve"><value>Keep running in the tray when closed</value></data>
   <data name="Settings_Language" xml:space="preserve"><value>Language</value></data>
+  <data name="Settings_LanguageNote" xml:space="preserve"><value>* Translated with AI assistance and may contain mistakes. </value></data>
+  <data name="Settings_LanguageReport" xml:space="preserve"><value>Report a translation issue</value></data>
   <data name="Settings_LanguageRestart" xml:space="preserve"><value>Restart Pulse to use the new language.</value></data>
   <data name="Settings_LanguageSystem" xml:space="preserve"><value>Windows default</value></data>
   <data name="Settings_LaunchWindowsStartup" xml:space="preserve"><value>Launch on Windows startup</value></data>
@@ -384,7 +386,6 @@ Would you like to update now?</value></data>
   <data name="Settings_UpdateServiceUnreachable" xml:space="preserve"><value>Couldn't reach the update service. Check your connection and try again.</value></data>
   <data name="Settings_UpdatesUnavailable" xml:space="preserve"><value>Updates are unavailable for this build.</value></data>
   <data name="Settings_UpdatesViaStore" xml:space="preserve"><value>Updates are managed by Microsoft Store. Opening the Store page...</value></data>
-  <data name="Settings_Version231" xml:space="preserve"><value>Version 2.3.1</value></data>
   <data name="Settings_VersionFormat" xml:space="preserve"><value>Version {0}</value></data>
   <data name="Settings_ViewPrivacyInformation" xml:space="preserve"><value>View privacy information</value></data>
   <data name="Settings_VisualStyle" xml:space="preserve"><value>Visual style</value></data>
