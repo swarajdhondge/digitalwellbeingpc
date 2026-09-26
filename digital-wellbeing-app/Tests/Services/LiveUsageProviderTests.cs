@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using digital_wellbeing_app.CoreLogic;
 using Xunit;
 using digital_wellbeing_app.Models;
 using digital_wellbeing_app.Services;
@@ -108,6 +109,32 @@ namespace digital_wellbeing_app.Tests.Services
 
             var persisted = LiveUsageProvider.CombineTodayActiveTime(null);
             Assert.True(persisted >= TimeSpan.Zero);
+        }
+
+        [Fact]
+        public void SegmentSavedDuringRefresh_IsNotCountedTwice()
+        {
+            var now = DateTime.Today.AddHours(12);
+            var live = new AppUsageSession { AppName = "notepad", ExecutablePath = @"C:\notepad.exe", StartTime = now.AddMinutes(-5) };
+            using var tracker = new AppUsageTracker { Clock = () => now };
+            SetField(tracker, "_currentSession", live);
+            SetField(tracker, "_lastSaved", now.AddMinutes(-5));
+            CallPrivate(tracker, "OnPeriodicSave", null, null);
+            // A refresh can capture the old live object just before the save timer closes it.
+            var entry = Assert.Single(LiveUsageProvider.CombineTodayAppEntries(live));
+            Assert.Equal(TimeSpan.FromMinutes(5), entry.Duration);
+        }
+
+        [Fact]
+        public void LiveSessionFromYesterday_OnlyCountsTimeSinceMidnight()
+        {
+            var before = DateTime.Now;
+            var entries = LiveUsageProvider.CombineTodayAppEntries(new AppUsageSession
+            {
+                AppName = "notepad", ExecutablePath = @"C:\notepad.exe", StartTime = DateTime.Today.AddMinutes(-10)
+            });
+            var duration = Assert.Single(entries).Duration;
+            Assert.InRange(duration, before - before.Date, DateTime.Now - before.Date);
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
 using digital_wellbeing_app.Models;
 using digital_wellbeing_app.Platform.Windows;
 using digital_wellbeing_app.Services;
@@ -9,13 +11,18 @@ namespace digital_wellbeing_app.CoreLogic
     public class AppUsageTracker : IDisposable
     {
         private AppUsageSession? _currentSession;
+        private bool _isAway;
+        private DateTime? _lastTick;
         private readonly FocusChangeListener _focusListener;
         private readonly System.Timers.Timer _periodicSaveTimer;
+        private readonly System.Timers.Timer _tickTimer;
         private readonly object _sessionLock = new();
         private DateTime _lastSaved = DateTime.Now;
 
-        // Save interval matches ScreenTimeTracker (5 minutes)
+        // Save interval and idle threshold match ScreenTimeTracker (5 minutes)
         private const int SaveIntervalMinutes = 5;
+        private const int AwayThresholdSeconds = 300;
+        private static readonly TimeSpan MaxTickGap = TimeSpan.FromSeconds(60);
 
         /// <summary>
         /// The currently active app session (null if no app is focused or user is idle)
@@ -35,6 +42,15 @@ namespace digital_wellbeing_app.CoreLogic
         /// </summary>
         public Func<DateTime> Clock { get; set; } = () => DateTime.Now;
 
+        public Func<TimeSpan> IdleTimeProvider { get; set; } = WindowsIdleTimeHelper.GetIdleTime;
+
+        /// <summary>
+        /// Whether the foreground app is being watched or listened to (fullscreen or playing audio).
+        /// Unlike screen time, audio from a background app must not keep crediting whatever
+        /// window happens to be in front.
+        /// </summary>
+        public Func<bool> ForegroundConsumingProvider { get; set; } = ActivityDetector.IsForegroundConsuming;
+
         public AppUsageTracker()
         {
             _focusListener = new FocusChangeListener(OnAppChanged);
@@ -45,12 +61,43 @@ namespace digital_wellbeing_app.CoreLogic
                 AutoReset = true
             };
             _periodicSaveTimer.Elapsed += OnPeriodicSave;
+
+            _tickTimer = new System.Timers.Timer(1_000) { AutoReset = true };
+            _tickTimer.Elapsed += (_, _) => OnTick();
+        }
+
+        public List<AppUsageSession> GetSessionsForRange(DateTime startDate, DateTime endDate)
+        {
+            // Keep the database read and live segment in the same save/switch lock.
+            lock (_sessionLock)
+            {
+                var sessions = DatabaseService.GetAppUsageSessionsForRange(startDate, endDate).ToList();
+                if (_currentSession != null)
+                {
+                    var start = _currentSession.StartTime < startDate.Date ? startDate.Date : _currentSession.StartTime;
+                    var end = Clock();
+                    var rangeEnd = endDate.Date.AddDays(1);
+                    if (end > rangeEnd) end = rangeEnd;
+                    if (end > start)
+                        sessions.Add(new AppUsageSession
+                        {
+                            AppName = _currentSession.AppName,
+                            ExecutablePath = _currentSession.ExecutablePath,
+                            StartTime = start,
+                            EndTime = end
+                        });
+                }
+                return sessions;
+            }
         }
 
         public void Start()
         {
+            _isAway = false;
+            _lastTick = null;
             _focusListener.Start();
             _periodicSaveTimer.Start();
+            _tickTimer.Start();
             SynthesizeInitialFocus();
         }
 
@@ -73,6 +120,14 @@ namespace digital_wellbeing_app.CoreLogic
                 if (processId == 0) return;
 
                 var process = Process.GetProcessById((int)processId);
+
+                if (!digital_wellbeing_app.Platform.Windows.FocusChangeListener.IsGenuineAppWindow(foregroundHandle, process))
+                {
+                    process.Dispose();
+                    OnAppChanged(null);
+                    return;
+                }
+
                 OnAppChanged(process);
             }
             catch (Exception ex)
@@ -86,6 +141,8 @@ namespace digital_wellbeing_app.CoreLogic
             lock (_sessionLock)
             {
                 _periodicSaveTimer.Stop();
+                _tickTimer.Stop();
+                CheckDayRollover();
 
                 if (_currentSession != null)
                 {
@@ -119,20 +176,6 @@ namespace digital_wellbeing_app.CoreLogic
 
                 if (_currentSession == null)
                     return;
-
-                // End session when user is idle (same 300s threshold as ScreenTimeTracker)
-                if (WindowsIdleTimeHelper.IsUserIdle(300))
-                {
-                    var duration = now - _currentSession.StartTime;
-                    if (duration.TotalSeconds >= 30)
-                    {
-                        _currentSession.EndTime = now;
-                        SaveSessionToDb(_currentSession);
-                    }
-                    _currentSession = null;
-                    _lastSaved = now;
-                    return;
-                }
 
                 var sessionDuration = now - _currentSession.StartTime;
                 if (sessionDuration.TotalSeconds < 30)
@@ -203,7 +246,8 @@ namespace digital_wellbeing_app.CoreLogic
                 if (_currentSession == null) return;
 
                 var now = Clock();
-                _currentSession.EndTime = now;
+                // The clock has already moved; the last tick is the last trustworthy time.
+                _currentSession.EndTime = _lastTick is DateTime last && last > _currentSession.StartTime ? last : now;
                 SaveSessionToDb(_currentSession);
 
                 _currentSession = new AppUsageSession
@@ -217,6 +261,40 @@ namespace digital_wellbeing_app.CoreLogic
             }
         }
 
+        /// <summary>
+        /// Ends the foreground session once the user has been away for the idle threshold, and
+        /// resumes the foreground app when they return. Also keeps a wall-clock jump (DST, time
+        /// zone, manual change) out of the running session.
+        /// </summary>
+        private void OnTick()
+        {
+            var away = IdleTimeProvider().TotalSeconds > AwayThresholdSeconds && !ForegroundConsumingProvider();
+            lock (_sessionLock)
+            {
+                var now = Clock();
+                if (_lastTick is DateTime last && _currentSession != null
+                    && (now - last > MaxTickGap || now < last))
+                {
+                    _currentSession.EndTime = last;
+                    SaveSessionToDb(_currentSession);
+                    _currentSession = new AppUsageSession
+                    {
+                        AppName = _currentSession.AppName,
+                        ExecutablePath = _currentSession.ExecutablePath,
+                        WindowTitle = _currentSession.WindowTitle,
+                        StartTime = now
+                    };
+                    _lastSaved = now;
+                }
+                _lastTick = now;
+
+                if (_isAway == away) return;
+                _isAway = away;
+            }
+            if (away) OnAppChanged(null);
+            else SynthesizeInitialFocus();
+        }
+
         private void OnAppChanged(Process? process)
         {
             bool shouldNotify = false;
@@ -225,12 +303,6 @@ namespace digital_wellbeing_app.CoreLogic
             {
                 CheckDayRollover();
 
-                if (WindowsIdleTimeHelper.IsUserIdle(300))
-                {
-                    process?.Dispose();
-                    return;
-                }
-
                 var now = Clock();
 
                 if (_currentSession != null)
@@ -238,34 +310,40 @@ namespace digital_wellbeing_app.CoreLogic
                     _currentSession.EndTime = now;
                     SaveSessionToDb(_currentSession);
                     _currentSession = null;
-                }
-
-                if (process == null) return;
-
-                try
-                {
-                    var appName = process.ProcessName;
-                    var windowTitle = SafeGetWindowTitle(process);
-
-                    // UWP apps run under ApplicationFrameHost - use window title as app name
-                    if (string.Equals(appName, "ApplicationFrameHost", StringComparison.OrdinalIgnoreCase)
-                        && !string.IsNullOrWhiteSpace(windowTitle))
-                    {
-                        appName = windowTitle;
-                    }
-
-                    _currentSession = new AppUsageSession
-                    {
-                        AppName = appName,
-                        ExecutablePath = SafeGetPath(process),
-                        WindowTitle = windowTitle,
-                        StartTime = now
-                    };
                     shouldNotify = true;
                 }
-                finally
+
+                if (process == null || _isAway)
                 {
-                    process.Dispose();
+                    process?.Dispose();
+                }
+                else
+                {
+                    try
+                    {
+                        var appName = process.ProcessName;
+                        var windowTitle = SafeGetWindowTitle(process);
+
+                        // UWP apps run under ApplicationFrameHost - use window title as app name
+                        if (string.Equals(appName, "ApplicationFrameHost", StringComparison.OrdinalIgnoreCase)
+                            && !string.IsNullOrWhiteSpace(windowTitle))
+                        {
+                            appName = windowTitle;
+                        }
+
+                        _currentSession = new AppUsageSession
+                        {
+                            AppName = appName,
+                            ExecutablePath = SafeGetPath(process),
+                            WindowTitle = windowTitle,
+                            StartTime = now
+                        };
+                        shouldNotify = true;
+                    }
+                    finally
+                    {
+                        process.Dispose();
+                    }
                 }
             }
 
@@ -308,6 +386,8 @@ namespace digital_wellbeing_app.CoreLogic
             _periodicSaveTimer.Stop();
             _periodicSaveTimer.Elapsed -= OnPeriodicSave;
             _periodicSaveTimer.Dispose();
+            _tickTimer.Stop();
+            _tickTimer.Dispose();
             _focusListener.Stop();
         }
     }

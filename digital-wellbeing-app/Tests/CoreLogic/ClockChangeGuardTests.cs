@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using System.Threading;
+using System.Linq;
 using Xunit;
 using digital_wellbeing_app.CoreLogic;
 using digital_wellbeing_app.Models;
@@ -111,6 +112,42 @@ namespace digital_wellbeing_app.Tests.CoreLogic
             Assert.Equal(todayStart, afterSession!.StartTime);
 
             tracker.Dispose();
+        }
+
+        [Fact]
+        public void ScreenTime_ForwardClockJump_CreditsOneTickNotTheJump()
+        {
+            var now = DateTime.Today.AddHours(10);
+            using var tracker = new ScreenTimeTracker
+            {
+                Clock = () => now, IdleTimeProvider = () => TimeSpan.Zero, PassiveConsumptionProvider = () => false
+            };
+            tracker.Start();
+            var before = tracker.CurrentActiveTime;
+            now = now.AddHours(1).AddSeconds(1); // DST spring-forward / time-zone change
+            CallPrivate(tracker, "CheckActivity", null, null);
+            Assert.Equal(TimeSpan.FromSeconds(1), tracker.CurrentActiveTime - before);
+            tracker.Stop();
+        }
+
+        [Fact]
+        public void AppUsage_ForwardClockJump_IsNotCreditedToTheRunningApp()
+        {
+            var now = DateTime.Today.AddHours(10);
+            using var tracker = new AppUsageTracker
+            {
+                Clock = () => now, IdleTimeProvider = () => TimeSpan.Zero, ForegroundConsumingProvider = () => false
+            };
+            SetField(tracker, "_currentSession", new AppUsageSession
+            {
+                AppName = "notepad", ExecutablePath = @"C:\notepad.exe", StartTime = now.AddMinutes(-2)
+            });
+            CallPrivate(tracker, "OnTick");
+            now = now.AddHours(1);
+            CallPrivate(tracker, "OnTick");
+            now = now.AddSeconds(30);
+            var total = tracker.GetSessionsForRange(now.Date, now.Date).Sum(s => s.Duration.TotalSeconds);
+            Assert.Equal(150, total);
         }
     }
 }

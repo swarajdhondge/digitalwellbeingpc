@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Reflection;
 using digital_wellbeing_app.Services;
 
 namespace digital_wellbeing_app.Tests
@@ -25,5 +26,11 @@ namespace digital_wellbeing_app.Tests
             DatabaseService.SetDatabasePathForTesting(Path.Combine(root, "test_wellbeing.db"));
             SettingsService.FolderOverride = root;
         }
+
+        protected static void SetField(object target, string field, object? value)
+            => target.GetType().GetField(field, BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(target, value);
+
+        protected static void CallPrivate(object target, string method, params object?[] args)
+            => target.GetType().GetMethod(method, BindingFlags.Instance | BindingFlags.NonPublic)!.Invoke(target, args);
     }
 }

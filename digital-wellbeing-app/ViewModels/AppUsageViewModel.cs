@@ -236,18 +236,12 @@ namespace digital_wellbeing_app.ViewModels
 
         private void UpdateFocusStats()
         {
-            var sessions = _isWeekView
-                ? GetSelectedWeekSessions(includeLive: false)
-                : DatabaseService.GetAppUsageSessionsForDate(DateTime.Now);
+            var allSessions = _isWeekView
+                ? GetSelectedWeekSessions()
+                : _tracker.GetSessionsForRange(DateTime.Today, DateTime.Today);
+            var metrics = AppUsageMetrics.Calculate(allSessions);
 
-            // Fold in the live session whenever the selected range contains today.
-            var currentSession = !_isWeekView || SelectedWeekStart == WeekNavigationHelper.StartOfWeek(DateTime.Today)
-                ? _tracker.CurrentSession
-                : null;
-            var allSessions = sessions.ToList();
-            var metrics = AppUsageMetrics.Calculate(allSessions, currentSession, DateTime.Now);
-
-            if (allSessions.Count == 0 && currentSession == null)
+            if (allSessions.Count == 0)
             {
                 SwitchCount = 0;
                 AverageFocusTime = "0m";
@@ -315,7 +309,7 @@ namespace digital_wellbeing_app.ViewModels
         private void LoadWeekUsage()
         {
             // Aggregate the selected Monday-to-Sunday week per app.
-            var sessions = GetSelectedWeekSessions(includeLive: true);
+            var sessions = GetSelectedWeekSessions();
             var grouped = sessions
                 .GroupBy(s => AppIdentity.NormalizeKey(s.ExecutablePath, s.AppName))
                 .Where(g => g.Key.Length > 0)
@@ -358,30 +352,10 @@ namespace digital_wellbeing_app.ViewModels
             OnPropertyChanged(nameof(WeekTotalText));
         }
 
-        private List<AppUsageSession> GetSelectedWeekSessions(bool includeLive)
-        {
-            var sessions = DatabaseService
-                .GetAppUsageSessionsForRange(SelectedWeekStart, SelectedWeekStart.AddDays(6))
-                .ToList();
-
-            if (includeLive && SelectedWeekStart == WeekNavigationHelper.StartOfWeek(DateTime.Today))
-            {
-                var live = _tracker.CurrentSession;
-                var now = DateTime.Now;
-                if (live != null && now > live.StartTime)
-                {
-                    sessions.Add(new AppUsageSession
-                    {
-                        AppName = live.AppName,
-                        ExecutablePath = live.ExecutablePath,
-                        StartTime = live.StartTime,
-                        EndTime = now
-                    });
-                }
-            }
-
-            return sessions;
-        }
+        // Persisted rows and the live segment are read under the tracker's lock, so a periodic
+        // save between the two reads can't double-count or drop the current segment.
+        private List<AppUsageSession> GetSelectedWeekSessions()
+            => _tracker.GetSessionsForRange(SelectedWeekStart, SelectedWeekStart.AddDays(6));
 
         private static string TruncateWindowTitle(string title)
         {
