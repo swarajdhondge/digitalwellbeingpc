@@ -41,10 +41,6 @@ namespace digital_wellbeing_app.Tests.Services
             var svc = CreateTestService();
             svc.Start();
 
-            // Manually trigger a break state
-            bool breakFired = false;
-            svc.BreakDue += () => breakFired = true;
-
             // Snooze should work
             svc.Snooze(5);
             Assert.Equal(1, svc.SnoozeCount);

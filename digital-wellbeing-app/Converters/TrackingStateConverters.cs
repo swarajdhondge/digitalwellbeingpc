@@ -8,54 +8,6 @@ using digital_wellbeing_app.CoreLogic;
 namespace digital_wellbeing_app.Converters
 {
     /// <summary>
-    /// Converts TrackingState to a display-friendly status text.
-    /// </summary>
-    public class TrackingStateToTextConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is TrackingState state)
-            {
-                return state switch
-                {
-                    TrackingState.Active => "Tracking",
-                    TrackingState.Idle => "Idle",
-                    TrackingState.Paused => "Paused",
-                    _ => "Unknown"
-                };
-            }
-            return "Unknown";
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-            => throw new NotImplementedException();
-    }
-
-    /// <summary>
-    /// Converts TrackingState to a status indicator color.
-    /// </summary>
-    public class TrackingStateToColorConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is TrackingState state)
-            {
-                return state switch
-                {
-                    TrackingState.Active => new SolidColorBrush(System.Windows.Media.Color.FromRgb(34, 197, 94)),   // Green
-                    TrackingState.Idle => new SolidColorBrush(System.Windows.Media.Color.FromRgb(234, 179, 8)),    // Yellow
-                    TrackingState.Paused => new SolidColorBrush(System.Windows.Media.Color.FromRgb(239, 68, 68)), // Red
-                    _ => new SolidColorBrush(Colors.Gray)
-                };
-            }
-            return new SolidColorBrush(Colors.Gray);
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-            => throw new NotImplementedException();
-    }
-
-    /// <summary>
     /// Converts goal progress (0.0 to 1.0+) to width for progress bar.
     /// </summary>
     public class GoalProgressToWidthConverter : IMultiValueConverter
