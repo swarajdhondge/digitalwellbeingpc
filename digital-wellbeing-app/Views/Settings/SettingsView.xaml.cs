@@ -987,7 +987,7 @@ namespace digital_wellbeing_app.Views.Settings
         }
 
         private void OpenWebsite_Click(object sender, MouseButtonEventArgs e)
-            => OpenExternalLink("https://digitalwellbeingpc.vercel.app");
+            => OpenExternalLink("https://www.digitalwellbeingpc.com");
 
         private static void OpenExternalLink(string url)
         {

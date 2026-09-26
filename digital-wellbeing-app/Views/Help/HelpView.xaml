@@ -53,7 +53,7 @@
                                 <TextBlock Text="Today" Style="{StaticResource FaqTitle}"/>
                             </StackPanel>
                             <TextBlock Style="{StaticResource FaqBody}"
-                                       Text="The summary of your day. The hero stat is total active screen time — time spent actively using your PC. Idle periods aren't counted. Tinted cards preview each section and link straight to it."/>
+                                       Text="The summary of your day. The hero stat is total active screen time — time spent actively using your PC. Time away isn't counted. Tinted cards preview each section and link straight to it."/>
                         </StackPanel>
                     </Border>
 
@@ -67,7 +67,7 @@
                                 <TextBlock Text="App usage" Style="{StaticResource FaqTitle}"/>
                             </StackPanel>
                             <TextBlock Style="{StaticResource FaqBody}"
-                                       Text="Records which app has focus and for how long. App names are stored, but window titles are never saved to the database for privacy. Categorize apps as Work, Entertainment or Neutral for Focus."/>
+                                       Text="Records which app has focus and for how long while you're using the PC. After 5 minutes without input it stops, unless that app is fullscreen or playing audio. Clicking the desktop or taskbar doesn't count as File Explorer. App names are stored, but window titles are never saved to the database for privacy. Categorize apps as Work, Entertainment or Neutral for Focus."/>
                         </StackPanel>
                     </Border>
 
@@ -109,7 +109,7 @@
                                 <TextBlock Text="Break reminders" Style="{StaticResource FaqTitle}"/>
                             </StackPanel>
                             <TextBlock Style="{StaticResource FaqBody}"
-                                       Text="Follows the 20-20-20 rule: every 20 minutes, look 20 feet away for 20 seconds. Snooze up to 3 times; the timer resets after a natural idle break. Reminders appear in the title bar."/>
+                                       Text="Follows the 20-20-20 rule: every 20 minutes, look 20 feet away for 20 seconds. Snooze up to 3 times; the timer resets after 5 minutes away. Reminders appear over Pulse, or as a notification when Pulse is in the notification area."/>
                         </StackPanel>
                     </Border>
                 </StackPanel>
@@ -126,7 +126,7 @@
                                 <TextBlock Text="Screen time" Style="{StaticResource FaqTitle}"/>
                             </StackPanel>
                             <TextBlock Style="{StaticResource FaqBody}"
-                                       Text="Tracks how long your display is on while you're active (mouse/keyboard input within 60s). Step away and it pauses on idle. The timeline shows your day; the weekly view shows daily totals."/>
+                                       Text="Tracks how long you actively use your PC. After 5 minutes without mouse or keyboard input it pauses, unless audio is playing or an app is fullscreen (for example, a video). Locking or sleeping the PC pauses it too. The timeline shows your day; the weekly view shows daily totals."/>
                         </StackPanel>
                     </Border>
 
@@ -154,7 +154,7 @@
                                 <TextBlock Text="Insights" Style="{StaticResource FaqTitle}"/>
                             </StackPanel>
                             <TextBlock Style="{StaticResource FaqBody}"
-                                       Text="Aggregates the past 7 days: screen-time trends, top apps, focus completion and sound levels. Week-over-week comparisons show whether your habits are improving; focus vs. leisure shows how productive your time was."/>
+                                       Text="Shows one week at a time (Monday to Sunday); use the arrows to browse earlier weeks. Includes screen-time trends, top apps, focus completion and sound levels. Week-over-week comparisons show whether your habits are improving; focus vs. leisure shows how productive your time was."/>
                         </StackPanel>
                     </Border>
 

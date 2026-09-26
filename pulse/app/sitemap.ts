@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const SITE_URL = "https://digitalwellbeingpc.vercel.app";
+const SITE_URL = "https://www.digitalwellbeingpc.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
