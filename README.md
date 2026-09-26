@@ -2,6 +2,8 @@
 
 _Android-style Digital Wellbeing for Windows — calm, private, and 100% on-device._
 
+**Website:** [digitalwellbeingpc.com](https://www.digitalwellbeingpc.com)
+
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL%203.0-blue.svg)](LICENSE)
 [![.NET 9](https://img.shields.io/badge/.NET-9.0-purple.svg)](https://dotnet.microsoft.com/)
 [![Platform](https://img.shields.io/badge/Platform-Windows-0078D6.svg)](https://www.microsoft.com/windows)
@@ -21,15 +23,16 @@ _Android-style Digital Wellbeing for Windows — calm, private, and 100% on-devi
 
 ## Features
 
-- **Screen Time** — Today, weekly, and past-week views; daily totals, longest sessions, weekly averages.
+- **Screen Time** — Today, weekly, and past-week views; daily totals, longest sessions, weekly averages. Pauses after 5 minutes away unless you're watching or listening.
 - **App Usage** — Top apps ranked by time with icons, plus focus metrics (app switches, average focus).
+- **App Limits** — Daily allowances and unavailable hours per app; remind or minimize when reached.
 - **Focus Sessions** — 15/25/45/60/90-min or custom; Warn mode nudges you, Block mode auto-minimizes distractions; full session history.
-- **Hearing Protection** — Real-time audio monitoring flags listening above 75 dB, with a color-coded safe/harmful timeline.
+- **Hearing Protection** — Estimates listening level from system volume and flags time above 75 dB. Never records audio.
 - **Break Reminders** — 20-20-20-rule reminders; snooze up to 3×; idle time counts as a break automatically.
 - **Wind Down** — Scheduled quiet hours with a gentle border glow (Amber / Purple / Dim), overnight-aware.
 - **Daily Goals** — Set a screen-time limit and track it with a dashboard progress ring.
 - **Weekly Reports** — Daily averages, peak usage times, top apps, and a week-over-week comparison.
-- **Data Export** — Screen time, app usage, and sound data to CSV for any date range.
+- **Your data** — CSV export, local backup and restore, and delete by date range. Optional website tracking stores hostnames only.
 - **Calm design** — Graphite UI with a signature accent per section; Light, Dark, or Auto.
 
 <p align="center">
@@ -84,11 +87,11 @@ Requires the [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0) and 
 
 ## Tech stack
 
-WPF · .NET 9 · SQLite · NAudio · [Velopack](https://velopack.io) (install + auto-update) · xUnit
+WPF · .NET 9 · SQLite · LiveCharts2 · NAudio · [Velopack](https://velopack.io) (install + auto-update) · xUnit
 
 ## Contributing
 
-Fork → branch → PR. Ideas welcome: multi-monitor support, Pomodoro integration, deeper usage-trend insights. See the [issues](https://github.com/swarajdhondge/digitalwellbeingpc/issues).
+See [CONTRIBUTING.md](CONTRIBUTING.md) and the [issues](https://github.com/swarajdhondge/digitalwellbeingpc/issues). Small, focused PRs are the fastest to review.
 
 ## License
 
