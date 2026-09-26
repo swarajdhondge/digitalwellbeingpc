@@ -1,0 +1,47 @@
+name: Translation issue
+description: Wrong, awkward or missing text in a language
+title: "[Translation]: "
+labels: ["translation"]
+body:
+  - type: dropdown
+    id: language
+    attributes:
+      label: Language
+      options:
+        - 简体中文 (zh-Hans)
+        - 繁體中文 (zh-Hant)
+        - Español (es)
+        - हिन्दी (hi)
+        - Português (Brasil) (pt-BR)
+        - Русский (ru)
+        - 日本語 (ja)
+        - Deutsch (de)
+        - Français (fr)
+        - 한국어 (ko)
+        - Italiano (it)
+        - Türkçe (tr)
+        - Bahasa Indonesia (id)
+        - Other / new language
+    validations:
+      required: true
+  - type: input
+    id: where
+    attributes:
+      label: Where
+      description: Page and section, e.g. "Settings → Appearance".
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: Current text
+      description: What Pulse shows now. A screenshot helps.
+    validations:
+      required: true
+  - type: textarea
+    id: suggested
+    attributes:
+      label: Suggested text
+      description: What it should say.
+    validations:
+      required: true

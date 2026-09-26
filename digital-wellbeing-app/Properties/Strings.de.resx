@@ -377,7 +377,6 @@ Möchten Sie jetzt aktualisieren?</value></data>
   <data name="Settings_UpdateServiceUnreachable" xml:space="preserve"><value>Der Updatedienst ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.</value></data>
   <data name="Settings_UpdatesUnavailable" xml:space="preserve"><value>Für diesen Build sind keine Updates verfügbar.</value></data>
   <data name="Settings_UpdatesViaStore" xml:space="preserve"><value>Updates werden über den Microsoft Store verwaltet. Store-Seite wird geöffnet...</value></data>
-  <data name="Settings_Version231" xml:space="preserve"><value>Version 2.3.1</value></data>
   <data name="Settings_VersionFormat" xml:space="preserve"><value>Version {0}</value></data>
   <data name="Settings_ViewPrivacyInformation" xml:space="preserve"><value>Datenschutzinformationen anzeigen</value></data>
   <data name="Settings_VisualStyle" xml:space="preserve"><value>Stil</value></data>
@@ -486,4 +485,6 @@ Möchten Sie jetzt aktualisieren?</value></data>
   <data name="WindDown_NotifyTitle" xml:space="preserve"><value>🌙 Zeit zum Abschalten</value></data>
   <data name="WindDown_SummaryToday" xml:space="preserve"><value>Sie haben Ihren PC heute {0} Std. {1} Min. genutzt.</value></data>
   <data name="Dashboard_PerDayAverage" xml:space="preserve"><value> · Ø {0}/Tag</value></data>
+  <data name="Settings_LanguageNote" xml:space="preserve"><value>* Mit KI-Unterstützung übersetzt und möglicherweise fehlerhaft. </value></data>
+  <data name="Settings_LanguageReport" xml:space="preserve"><value>Übersetzungsfehler melden</value></data>
 </root>

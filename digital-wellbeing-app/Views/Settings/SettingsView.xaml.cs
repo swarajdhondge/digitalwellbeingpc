@@ -35,7 +35,7 @@ namespace digital_wellbeing_app.Views.Settings
                 if (!string.IsNullOrEmpty(location))
                 {
                     var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(location);
-                    AboutVersionText.Text = Loc.Format("Settings_VersionFormat", fvi.ProductVersion ?? "2.3.1");
+                    AboutVersionText.Text = Loc.Format("Settings_VersionFormat", fvi.ProductVersion ?? "2.4.0");
                 }
             }
             catch { /* Keep default text from XAML */ }
@@ -1012,8 +1012,13 @@ namespace digital_wellbeing_app.Views.Settings
             {
                 var saved = new SettingsService().LoadLanguage();
                 LanguageComboBox.Items.Add(new ComboBoxItem { Content = Loc.Get("Settings_LanguageSystem"), Tag = string.Empty });
+                // "*" marks translations that still need a native speaker's review (see the note below).
                 foreach (var culture in Loc.AvailableLanguages())
-                    LanguageComboBox.Items.Add(new ComboBoxItem { Content = culture.NativeName, Tag = culture.Name });
+                    LanguageComboBox.Items.Add(new ComboBoxItem
+                    {
+                        Content = culture.Name == "en" ? culture.NativeName : culture.NativeName + " *",
+                        Tag = culture.Name
+                    });
                 LanguageComboBox.SelectedItem = LanguageComboBox.Items.Cast<ComboBoxItem>()
                     .FirstOrDefault(i => string.Equals((string)i.Tag, saved, System.StringComparison.OrdinalIgnoreCase))
                     ?? LanguageComboBox.Items[0];
@@ -1023,6 +1028,9 @@ namespace digital_wellbeing_app.Views.Settings
                 _isLoadingLanguage = false;
             }
         }
+
+        private void ReportTranslation_Click(object sender, RoutedEventArgs e)
+            => OpenExternalLink("https://github.com/swarajdhondge/digitalwellbeingpc/issues/new?template=translation.yml");
 
         private void LanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

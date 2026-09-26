@@ -377,7 +377,6 @@ No se puede deshacer.</value></data>
   <data name="Settings_UpdateServiceUnreachable" xml:space="preserve"><value>No se pudo conectar con el servicio de actualizaciones. Comprueba tu conexión e inténtalo de nuevo.</value></data>
   <data name="Settings_UpdatesUnavailable" xml:space="preserve"><value>Las actualizaciones no están disponibles para esta compilación.</value></data>
   <data name="Settings_UpdatesViaStore" xml:space="preserve"><value>Las actualizaciones las gestiona Microsoft Store. Abriendo la página de la Store...</value></data>
-  <data name="Settings_Version231" xml:space="preserve"><value>Versión 2.3.1</value></data>
   <data name="Settings_VersionFormat" xml:space="preserve"><value>Versión {0}</value></data>
   <data name="Settings_ViewPrivacyInformation" xml:space="preserve"><value>Ver información de privacidad</value></data>
   <data name="Settings_VisualStyle" xml:space="preserve"><value>Estilo visual</value></data>
@@ -486,4 +485,6 @@ No se puede deshacer.</value></data>
   <data name="WindDown_NotifyTitle" xml:space="preserve"><value>🌙 Hora de desconectar</value></data>
   <data name="WindDown_SummaryToday" xml:space="preserve"><value>Hoy has usado tu PC durante {0} h {1} min.</value></data>
   <data name="Dashboard_PerDayAverage" xml:space="preserve"><value> · {0}/día de media</value></data>
+  <data name="Settings_LanguageNote" xml:space="preserve"><value>* Traducido con ayuda de IA; puede contener errores. </value></data>
+  <data name="Settings_LanguageReport" xml:space="preserve"><value>Informar de un error de traducción</value></data>
 </root>

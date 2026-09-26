@@ -1,9 +1,11 @@
 # Changelog
 
-## [Unreleased]
+## [v2.4.0] - 2026-09-27
+
+Pulse speaks your language.
 
 ### Features
-- **Translation-ready UI** (#35). All text now comes from standard `.resx` resources, so Pulse can ship in any language. It follows the Windows display language, or you can pick one in **Settings → Appearance → Language**. Dates, times and chart labels follow the chosen language. Ships in 14 languages: English, Chinese (Simplified and Traditional), Spanish, Hindi, Portuguese (Brazil), Russian, Japanese, German, French, Korean, Italian, Turkish and Indonesian. The translations are AI-drafted and need review by native speakers; corrections are welcome (see CONTRIBUTING.md).
+- **Translation-ready UI** (#35). All text now comes from standard `.resx` resources, so Pulse can ship in any language. It follows the Windows display language, or you can pick one in **Settings → Appearance → Language**. Dates, times and chart labels follow the chosen language. Ships in 14 languages: English, Chinese (Simplified and Traditional), Spanish, Hindi, Portuguese (Brazil), Russian, Japanese, German, French, Korean, Italian, Turkish and Indonesian. Languages marked * in Settings were translated with AI assistance; the **Report a translation issue** link under the picker opens a short form for corrections.
 
 ## [v2.3.1] - 2026-09-26
 

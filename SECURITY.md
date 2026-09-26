@@ -16,8 +16,8 @@ newest release before reporting an issue.
 
 | Version | Supported |
 |---|---|
-| 2.3.x (latest) | ✅ |
-| < 2.3 | ❌ |
+| 2.4.x (latest) | ✅ |
+| < 2.4 | ❌ |
 
 ## Reporting a vulnerability
 

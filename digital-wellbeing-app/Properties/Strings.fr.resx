@@ -377,7 +377,6 @@ Voulez-vous mettre à jour maintenant ?</value></data>
   <data name="Settings_UpdateServiceUnreachable" xml:space="preserve"><value>Impossible de joindre le service de mise à jour. Vérifiez votre connexion et réessayez.</value></data>
   <data name="Settings_UpdatesUnavailable" xml:space="preserve"><value>Les mises à jour ne sont pas disponibles pour cette version.</value></data>
   <data name="Settings_UpdatesViaStore" xml:space="preserve"><value>Les mises à jour sont gérées par le Microsoft Store. Ouverture de la page du Store...</value></data>
-  <data name="Settings_Version231" xml:space="preserve"><value>Version 2.3.1</value></data>
   <data name="Settings_VersionFormat" xml:space="preserve"><value>Version {0}</value></data>
   <data name="Settings_ViewPrivacyInformation" xml:space="preserve"><value>Voir les informations de confidentialité</value></data>
   <data name="Settings_VisualStyle" xml:space="preserve"><value>Style visuel</value></data>
@@ -486,4 +485,6 @@ Voulez-vous mettre à jour maintenant ?</value></data>
   <data name="WindDown_NotifyTitle" xml:space="preserve"><value>🌙 C'est l'heure de décompresser</value></data>
   <data name="WindDown_SummaryToday" xml:space="preserve"><value>Vous avez utilisé votre PC {0} h {1} min aujourd'hui.</value></data>
   <data name="Dashboard_PerDayAverage" xml:space="preserve"><value> · {0}/jour en moy.</value></data>
+  <data name="Settings_LanguageNote" xml:space="preserve"><value>* Traduit avec l’aide de l’IA, des erreurs sont possibles. </value></data>
+  <data name="Settings_LanguageReport" xml:space="preserve"><value>Signaler un problème de traduction</value></data>
 </root>

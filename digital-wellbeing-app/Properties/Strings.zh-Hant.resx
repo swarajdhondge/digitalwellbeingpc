@@ -377,7 +377,6 @@
   <data name="Settings_UpdateServiceUnreachable" xml:space="preserve"><value>無法連線至更新服務。請檢查網路連線後再試一次。</value></data>
   <data name="Settings_UpdatesUnavailable" xml:space="preserve"><value>此版本無法使用更新。</value></data>
   <data name="Settings_UpdatesViaStore" xml:space="preserve"><value>更新由 Microsoft Store 管理。正在開啟 Store 頁面...</value></data>
-  <data name="Settings_Version231" xml:space="preserve"><value>版本 2.3.1</value></data>
   <data name="Settings_VersionFormat" xml:space="preserve"><value>版本 {0}</value></data>
   <data name="Settings_ViewPrivacyInformation" xml:space="preserve"><value>檢視隱私權資訊</value></data>
   <data name="Settings_VisualStyle" xml:space="preserve"><value>視覺樣式</value></data>
@@ -486,4 +485,6 @@
   <data name="WindDown_NotifyTitle" xml:space="preserve"><value>🌙 該準備休息了</value></data>
   <data name="WindDown_SummaryToday" xml:space="preserve"><value>您今天使用電腦 {0}小時{1}分。</value></data>
   <data name="Dashboard_PerDayAverage" xml:space="preserve"><value> · 日均 {0}</value></data>
+  <data name="Settings_LanguageNote" xml:space="preserve"><value>* 由 AI 輔助翻譯，可能有錯誤。</value></data>
+  <data name="Settings_LanguageReport" xml:space="preserve"><value>回報翻譯問題</value></data>
 </root>
