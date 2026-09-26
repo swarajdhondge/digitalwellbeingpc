@@ -23,7 +23,11 @@ namespace digital_wellbeing_app.Views.Sound
                 RenderCanvas();
             };
 
-            this.Loaded += (s, e) => _timer.Start();
+            this.Loaded += (s, e) =>
+            {
+                OnLoaded(s, e);
+                _timer.Start();
+            };
             this.Unloaded += (s, e) => _timer.Stop();
         }
 
