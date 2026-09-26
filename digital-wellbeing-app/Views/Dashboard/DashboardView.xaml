@@ -131,7 +131,7 @@
                                 <TextBlock Text="{l:Loc Dashboard_Week}" Style="{StaticResource Pulse.Eyebrow}"/>
                                 <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
                                     <TextBlock Text="{Binding WeekTotalText}" Style="{StaticResource Pulse.Stat}" FontSize="25"/>
-                                    <TextBlock Text="{Binding WeekAvgText, StringFormat=' · {0}/day avg'}" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Bottom" Margin="0,0,0,3"/>
+                                    <TextBlock Text="{Binding WeekAvgText, StringFormat={l:Loc Dashboard_PerDayAverage}}" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Bottom" Margin="0,0,0,3"/>
                                 </StackPanel>
                             </StackPanel>
                             <Border Grid.Column="1" Background="{DynamicResource Card2}" BorderBrush="{DynamicResource Border}" BorderThickness="1"

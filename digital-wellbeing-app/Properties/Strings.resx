@@ -72,6 +72,7 @@ This cannot be undone. Pulse will close afterward - reopen it to continue.</valu
   <data name="Dashboard_LoudListening" xml:space="preserve"><value>loud listening</value></data>
   <data name="Dashboard_MostUsedToday" xml:space="preserve"><value>MOST USED TODAY</value></data>
   <data name="Dashboard_NoGoalSet" xml:space="preserve"><value>No goal set</value></data>
+  <data name="Dashboard_PerDayAverage" xml:space="preserve"><value> · {0}/day avg</value></data>
   <data name="Dashboard_SameAsLastWeek" xml:space="preserve"><value>same as last week</value></data>
   <data name="Dashboard_SetGoal" xml:space="preserve"><value>Set a goal in </value></data>
   <data name="Dashboard_SilenceDistractionsProtectBlockDeep" xml:space="preserve"><value>Silence distractions and protect a block of deep work.</value></data>

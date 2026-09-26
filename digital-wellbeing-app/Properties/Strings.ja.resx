@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="App_ErrorTitle" xml:space="preserve"><value>Pulse - エラー</value></data>
+  <data name="App_UnexpectedError" xml:space="preserve"><value>予期しないエラーが発生しました:
+
+{0}
+
+エラーは記録されました。アプリは処理を続行しようとします。
+問題が解決しない場合は、アプリを再起動してください。</value></data>
+  <data name="Apps_AppSwitches" xml:space="preserve"><value>アプリの切り替え</value></data>
+  <data name="Apps_AvgFocus" xml:space="preserve"><value>平均集中時間</value></data>
+  <data name="Apps_LongestFocus" xml:space="preserve"><value>最長集中時間</value></data>
+  <data name="Apps_NoAppActive" xml:space="preserve"><value>アクティブなアプリはありません</value></data>
+  <data name="Apps_NoAppsTrackedYet" xml:space="preserve"><value>まだ記録されたアプリはありません</value></data>
+  <data name="Apps_NowUsing" xml:space="preserve"><value>現在使用中</value></data>
+  <data name="Apps_RangeHeaderToday" xml:space="preserve"><value>今日のアプリ</value></data>
+  <data name="Apps_RangeHeaderWeek" xml:space="preserve"><value>今週のアプリ</value></data>
+  <data name="Apps_StartUsingSomeApplicationsThey" xml:space="preserve"><value>アプリを使い始めると、ここに表示されます。</value></data>
+  <data name="Apps_Total" xml:space="preserve"><value>合計 </value></data>
+  <data name="Backup_ChooseFolder" xml:space="preserve"><value>Pulse のバックアップの保存先を選択</value></data>
+  <data name="Backup_ChooseRestoreFile" xml:space="preserve"><value>復元する Pulse のバックアップを選択</value></data>
+  <data name="Backup_CompleteTitle" xml:space="preserve"><value>バックアップ完了</value></data>
+  <data name="Backup_ErrorTitle" xml:space="preserve"><value>バックアップ エラー</value></data>
+  <data name="Backup_Failed" xml:space="preserve"><value>バックアップに失敗しました: {0}</value></data>
+  <data name="Backup_FileFilter" xml:space="preserve"><value>Pulse バックアップ (*.zip)|*.zip</value></data>
+  <data name="Backup_FileNotFound" xml:space="preserve"><value>バックアップ ファイルが見つかりません。</value></data>
+  <data name="Backup_MissingDatabase" xml:space="preserve"><value>バックアップ アーカイブにデータベース ファイルがありません。</value></data>
+  <data name="Backup_RestoreCompleteTitle" xml:space="preserve"><value>復元完了</value></data>
+  <data name="Backup_RestoreConfirm" xml:space="preserve"><value>現在の Pulse のデータはすべてバックアップの内容に置き換えられます。
+
+この操作は元に戻せません。完了後に Pulse は終了します。もう一度開いて続けてください。</value></data>
+  <data name="Backup_RestoreConfirmFrom" xml:space="preserve"><value>現在の Pulse のデータはすべて {0:g} のバックアップの内容に置き換えられます。
+
+この操作は元に戻せません。完了後に Pulse は終了します。もう一度開いて続けてください。</value></data>
+  <data name="Backup_RestoreDone" xml:space="preserve"><value>復元が完了しました。Pulse を終了します。もう一度開いてください。</value></data>
+  <data name="Backup_RestoreErrorTitle" xml:space="preserve"><value>復元エラー</value></data>
+  <data name="Backup_RestoreFailed" xml:space="preserve"><value>復元に失敗しました: {0}</value></data>
+  <data name="Backup_RestoreTitle" xml:space="preserve"><value>バックアップから復元</value></data>
+  <data name="Backup_Saved" xml:space="preserve"><value>バックアップの保存先:
+{0}</value></data>
+  <data name="Break_FollowRule" xml:space="preserve"><value>20-20-20 ルールを守りましょう: 20 秒間、画面から目を離してください。</value></data>
+  <data name="Break_NoSnoozesLeft" xml:space="preserve"><value>スヌーズの残りはありません</value></data>
+  <data name="Break_SnoozeLeft" xml:space="preserve"><value>5 分スヌーズ (残り {0} 回)</value></data>
+  <data name="Common_AppUsage" xml:space="preserve"><value>アプリの使用状況</value></data>
+  <data name="Common_Focus" xml:space="preserve"><value>集中</value></data>
+  <data name="Common_Hearing" xml:space="preserve"><value>聴覚</value></data>
+  <data name="Common_Hearing2" xml:space="preserve"><value>聴覚</value></data>
+  <data name="Common_Insights" xml:space="preserve"><value>インサイト</value></data>
+  <data name="Common_Min15" xml:space="preserve"><value>15 分</value></data>
+  <data name="Common_Min25" xml:space="preserve"><value>25 分</value></data>
+  <data name="Common_Min30" xml:space="preserve"><value>30 分</value></data>
+  <data name="Common_Min45" xml:space="preserve"><value>45 分</value></data>
+  <data name="Common_Min60" xml:space="preserve"><value>60 分</value></data>
+  <data name="Common_Min90" xml:space="preserve"><value>90 分</value></data>
+  <data name="Common_Minutes" xml:space="preserve"><value>分</value></data>
+  <data name="Common_PrivateDevice" xml:space="preserve"><value>プライベート · デバイス内</value></data>
+  <data name="Common_ScreenTime" xml:space="preserve"><value>スクリーンタイム</value></data>
+  <data name="Common_Settings" xml:space="preserve"><value>設定</value></data>
+  <data name="Common_To" xml:space="preserve"><value>～</value></data>
+  <data name="Common_Today" xml:space="preserve"><value>今日</value></data>
+  <data name="Common_Week" xml:space="preserve"><value>週</value></data>
+  <data name="Dashboard_Categories" xml:space="preserve"><value>カテゴリ</value></data>
+  <data name="Dashboard_DailyGoal" xml:space="preserve"><value>1 日の目標</value></data>
+  <data name="Dashboard_EnterFocus" xml:space="preserve"><value>集中モードへ</value></data>
+  <data name="Dashboard_GoalProgress" xml:space="preserve"><value>目標 {0} の {1}%</value></data>
+  <data name="Dashboard_LoudListening" xml:space="preserve"><value>大音量での再生</value></data>
+  <data name="Dashboard_MostUsedToday" xml:space="preserve"><value>今日よく使ったアプリ</value></data>
+  <data name="Dashboard_NoGoalSet" xml:space="preserve"><value>目標未設定</value></data>
+  <data name="Dashboard_SameAsLastWeek" xml:space="preserve"><value>先週と同じ</value></data>
+  <data name="Dashboard_SetGoal" xml:space="preserve"><value>目標の設定: </value></data>
+  <data name="Dashboard_SilenceDistractionsProtectBlockDeep" xml:space="preserve"><value>気が散るものを遮断して、集中作業の時間を守りましょう。</value></data>
+  <data name="Dashboard_SoundLoud" xml:space="preserve"><value>大音量</value></data>
+  <data name="Dashboard_SoundNormal" xml:space="preserve"><value>通常</value></data>
+  <data name="Dashboard_SplitAcrossTopApps" xml:space="preserve"><value>よく使うアプリの内訳</value></data>
+  <data name="Dashboard_StartSession" xml:space="preserve"><value>セッションを開始</value></data>
+  <data name="Dashboard_ThresholdAbove" xml:space="preserve"><value>{0} dB 超</value></data>
+  <data name="Dashboard_TodayScreenTime" xml:space="preserve"><value>今日 · スクリーンタイム</value></data>
+  <data name="Dashboard_VsYesterday" xml:space="preserve"><value>昨日比 {0}{1}</value></data>
+  <data name="Dashboard_Week" xml:space="preserve"><value>今週</value></data>
+  <data name="Dashboard_WeeklyChange" xml:space="preserve"><value>先週比 {0} {1}%</value></data>
+  <data name="Date_WeekLabel" xml:space="preserve"><value>第{0}週 · {1}</value></data>
+  <data name="Export_ChooseFolder" xml:space="preserve"><value>エクスポートしたデータの保存先を選択</value></data>
+  <data name="Export_CompleteTitle" xml:space="preserve"><value>エクスポート完了</value></data>
+  <data name="Export_ErrorTitle" xml:space="preserve"><value>エクスポート エラー</value></data>
+  <data name="Export_Failed" xml:space="preserve"><value>エクスポートに失敗しました: {0}</value></data>
+  <data name="Export_Success" xml:space="preserve"><value>{0} 個のデータ ファイルをエクスポートしました:
+{1}</value></data>
+  <data name="FocusPage_DistractionsCount" xml:space="preserve"><value>気が散った回数: {0}</value></data>
+  <data name="FocusPage_NoDistractions" xml:space="preserve"><value>気が散った回数: 0</value></data>
+  <data name="Focus_AppCategories" xml:space="preserve"><value>アプリのカテゴリ</value></data>
+  <data name="Focus_AutomaticallyMinimizeDistractingApps" xml:space="preserve"><value>気が散るアプリを自動的に最小化します</value></data>
+  <data name="Focus_BeginSession" xml:space="preserve"><value>セッションを開始</value></data>
+  <data name="Focus_Block" xml:space="preserve"><value>ブロック</value></data>
+  <data name="Focus_Blocked" xml:space="preserve"><value>ブロック済み</value></data>
+  <data name="Focus_CategorizeAppsControlWhatS" xml:space="preserve"><value>アプリを分類して、集中セッション中にブロックする対象を決めましょう。</value></data>
+  <data name="Focus_ComingSoon" xml:space="preserve"><value>近日公開</value></data>
+  <data name="Focus_Completed" xml:space="preserve"><value>完了</value></data>
+  <data name="Focus_Custom" xml:space="preserve"><value>カスタム…</value></data>
+  <data name="Focus_Distractions" xml:space="preserve"><value>気が散った回数</value></data>
+  <data name="Focus_Duration" xml:space="preserve"><value>時間</value></data>
+  <data name="Focus_EndSessionEarly" xml:space="preserve"><value>セッションを早めに終了</value></data>
+  <data name="Focus_Enforcement" xml:space="preserve"><value>制御方法</value></data>
+  <data name="Focus_Entertainment" xml:space="preserve"><value>エンタメ</value></data>
+  <data name="Focus_EntertainmentAppsAreBlockedDuring" xml:space="preserve"><value>集中中はエンタメ アプリがブロックされます。仕事と中立のアプリはいつでも使用できます。</value></data>
+  <data name="Focus_FocusSessionActive" xml:space="preserve"><value>集中セッション中</value></data>
+  <data name="Focus_Hide" xml:space="preserve"><value>非表示</value></data>
+  <data name="Focus_HowShouldDistractionsHandled" xml:space="preserve"><value>気が散るアプリの扱い</value></data>
+  <data name="Focus_Neutral" xml:space="preserve"><value>中立</value></data>
+  <data name="Focus_NoFocusSessionsYetStart" xml:space="preserve"><value>集中セッションはまだありません。最初のセッションを始めましょう。</value></data>
+  <data name="Focus_PickLengthHowStrictlyDistractions" xml:space="preserve"><value>時間と、気が散るアプリをどれだけ厳しく扱うかを選んでください。Pulse が前面のアプリを見守り、集中を保てるようにします。</value></data>
+  <data name="Focus_RecentSessions" xml:space="preserve"><value>最近のセッション</value></data>
+  <data name="Focus_Remaining" xml:space="preserve"><value>残り</value></data>
+  <data name="Focus_RemoveFromTaskbarStartMenu" xml:space="preserve"><value>タスクバーとスタート メニューから非表示にします</value></data>
+  <data name="Focus_ShowGentlePopupWhenOpen" xml:space="preserve"><value>気が散るアプリを開いたときに、控えめなポップアップを表示します</value></data>
+  <data name="Focus_StartFocusSession" xml:space="preserve"><value>集中セッションを開始</value></data>
+  <data name="Focus_Suggested" xml:space="preserve"><value>おすすめ</value></data>
+  <data name="Focus_TodaySFocus" xml:space="preserve"><value>今日の集中</value></data>
+  <data name="Focus_Warn" xml:space="preserve"><value>警告</value></data>
+  <data name="Focus_Work" xml:space="preserve"><value>仕事</value></data>
+  <data name="Goal_HoursMinutes" xml:space="preserve"><value>{0}時間{1}分</value></data>
+  <data name="Goal_Minutes" xml:space="preserve"><value>{0}分</value></data>
+  <data name="Goal_ProgressOf" xml:space="preserve"><value>目標 {1} の {0}%</value></data>
+  <data name="Goal_ProgressOver" xml:space="preserve"><value>{0}% - 目標を {1} 超過</value></data>
+  <data name="Goal_ReachedBody" xml:space="preserve"><value>PC を {0} 使用し、目標の {1} を超えました。休憩しましょう。</value></data>
+  <data name="Goal_ReachedTitle" xml:space="preserve"><value>スクリーンタイムの目標に到達</value></data>
+  <data name="Hearing_EstimatedFromSystemVolumeDevice" xml:space="preserve"><value>システムの音量とデバイスの種類から推定した値で、校正された音圧レベルの測定値ではありません。Windows には任意のハードウェアでこれを測定する API がありません。</value></data>
+  <data name="Hearing_Harmful" xml:space="preserve"><value>有害</value></data>
+  <data name="Hearing_HarmfulThreshold" xml:space="preserve"><value>有害のしきい値</value></data>
+  <data name="Hearing_HarmfulTooltip" xml:space="preserve"><value>有害: {0}</value></data>
+  <data name="Hearing_HideTracking" xml:space="preserve"><value>記録を非表示</value></data>
+  <data name="Hearing_KeepEstimatedLevelsUnder85" xml:space="preserve"><value>推定レベルを 85 dB 未満に保ちましょう</value></data>
+  <data name="Hearing_LoudListeningTime" xml:space="preserve"><value>大音量での再生時間</value></data>
+  <data name="Hearing_NoSessionsToday" xml:space="preserve"><value>今日のセッションはありません</value></data>
+  <data name="Hearing_Of" xml:space="preserve"><value>合計再生時間 </value></data>
+  <data name="Hearing_Safe" xml:space="preserve"><value>安全</value></data>
+  <data name="Hearing_SafeLevels" xml:space="preserve"><value>安全なレベル</value></data>
+  <data name="Hearing_SegmentTooltip" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Hearing_SessionDetails" xml:space="preserve"><value>セッションの詳細</value></data>
+  <data name="Hearing_SessionTodayOne" xml:space="preserve"><value>今日のセッション: {0} 件</value></data>
+  <data name="Hearing_SessionsToday" xml:space="preserve"><value>今日のセッション: {0} 件</value></data>
+  <data name="Hearing_ShowDetailedTracking" xml:space="preserve"><value>詳細な記録を表示</value></data>
+  <data name="Hearing_ShowTracking" xml:space="preserve"><value>記録を表示</value></data>
+  <data name="Hearing_ShowingRecentSessions" xml:space="preserve"><value>{1} 件のセッションのうち最新の {0} 件を表示しています</value></data>
+  <data name="Hearing_ThresholdAbove" xml:space="preserve"><value>{0} dB 超</value></data>
+  <data name="Hearing_TotalListeningTime" xml:space="preserve"><value> 中</value></data>
+  <data name="Hearing_WhoGuidance" xml:space="preserve"><value>WHO のガイダンス</value></data>
+  <data name="Help_AppLimits" xml:space="preserve"><value>アプリの制限</value></data>
+  <data name="Help_BreakReminders" xml:space="preserve"><value>休憩リマインダー</value></data>
+  <data name="Help_EstimatesListeningLevelFromSystem" xml:space="preserve"><value>システムのオーディオ メーターから再生レベルを推定します。実際の音声を録音したり聞いたりすることはありません。WHO は 85 dB 未満を推奨しており、有害のしきい値の既定値は 75 dB です。75 dB を超えるバーは赤で表示されます。</value></data>
+  <data name="Help_EverythingStaysDeviceNoAccount" xml:space="preserve"><value>すべてのデータはこのデバイス内に保存されます。アカウント、クラウド、テレメトリはありません。Web サイトの記録は既定でオフです。オンにした場合も保存されるのはホスト名 (例: youtube.com) のみで、完全な URL やページの内容は保存されません。データはいつでも設定から CSV としてエクスポートしたり、すべて削除したりできます。</value></data>
+  <data name="Help_FocusSessionsWatchEntertainmentApps" xml:space="preserve"><value>集中セッションはエンタメ アプリを監視します。「警告」は通知を表示し、「ブロック」はアプリを最小化します。設定で有効にすると、Windows の集中セッションに合わせて Pulse も開始できます。おやすみ時間モードは、一日を締めくくる時間に控えめな枠を画面に表示します。</value></data>
+  <data name="Help_FocusWindDown" xml:space="preserve"><value>集中とおやすみ時間モード</value></data>
+  <data name="Help_Follows202020Rule" xml:space="preserve"><value>20-20-20 ルールに従います: 20 分ごとに、20 フィート (約 6 m) 先を 20 秒間見ます。スヌーズは 3 回まで可能で、5 分間離席するとタイマーがリセットされます。リマインダーは Pulse の上に表示されます。Pulse が通知領域にあるときは通知として表示されます。</value></data>
+  <data name="Help_LaunchWindowsStartupRunsQuietly" xml:space="preserve"><value>Windows の起動時に起動すると、通知領域で静かに動作します。「今すぐバックアップ」はデータベースと設定を含むローカルの ZIP を作成します。復元すると現在のローカル データが置き換えられるため、先に新しいバックアップを作成し、確認内容をよく読んでください。</value></data>
+  <data name="Help_Privacy" xml:space="preserve"><value>プライバシー</value></data>
+  <data name="Help_RecordsWhichAppHasFocus" xml:space="preserve"><value>PC の使用中に、どのアプリがどれだけ前面にあったかを記録します。5 分間操作がないと記録を停止します。ただし、そのアプリが全画面表示中または音声を再生中の場合は継続します。デスクトップやタスクバーのクリックは File Explorer としてカウントされません。アプリ名は保存されますが、プライバシー保護のためウィンドウのタイトルはデータベースに保存されません。集中のために、アプリを仕事・エンタメ・中立に分類できます。</value></data>
+  <data name="Help_ReportBug" xml:space="preserve"><value>バグを報告</value></data>
+  <data name="Help_SetDailyAllowanceUnavailableHours" xml:space="preserve"><value>アプリごとに 1 日の利用時間、利用不可の時間帯、またはその両方を設定できます。「通知」は制限に達したときに通知を送り、「ブロック」はさらにアプリを最小化します。制限は「制限」ページからいつでも一時停止・編集できます。</value></data>
+  <data name="Help_ShowsOneWeekTimeMonday" xml:space="preserve"><value>1 週間 (月曜日～日曜日) ずつ表示します。矢印で過去の週を確認できます。スクリーンタイムの傾向、よく使うアプリ、集中の達成状況、音量レベルが含まれます。前週との比較で習慣が改善しているかがわかり、集中と余暇の比較で時間をどれだけ有効に使えたかがわかります。</value></data>
+  <data name="Help_StartupDataSafety" xml:space="preserve"><value>起動とデータの安全</value></data>
+  <data name="Help_SummaryDayHeroStatTotal" xml:space="preserve"><value>一日のまとめです。メインの数値は、PC を実際に使っていた時間の合計 (アクティブなスクリーンタイム) です。離席中の時間は含まれません。色付きのカードで各セクションの概要を確認でき、そのセクションに直接移動できます。</value></data>
+  <data name="Help_TracksHowLongActivelyUse" xml:space="preserve"><value>PC を実際に使っている時間を記録します。マウスやキーボードの操作が 5 分間ないと一時停止します。ただし、音声の再生中やアプリが全画面表示中 (動画など) の場合は継続します。PC のロック時やスリープ時も一時停止します。タイムラインには一日の流れが、週表示には日ごとの合計が表示されます。</value></data>
+  <data name="Help_ViewGithub" xml:space="preserve"><value>GitHub で見る</value></data>
+  <data name="Insights_CompletedWeek" xml:space="preserve"><value>今週の完了数</value></data>
+  <data name="Insights_DailyAverage" xml:space="preserve"><value>1 日の平均</value></data>
+  <data name="Insights_FocusSessions" xml:space="preserve"><value>集中セッション</value></data>
+  <data name="Insights_FocusVsLeisure" xml:space="preserve"><value>集中と余暇</value></data>
+  <data name="Insights_Leisure" xml:space="preserve"><value>余暇</value></data>
+  <data name="Insights_Other" xml:space="preserve"><value>その他</value></data>
+  <data name="Insights_TopAppsWeek" xml:space="preserve"><value>今週よく使ったアプリ</value></data>
+  <data name="Insights_TotalScreenTime" xml:space="preserve"><value>スクリーンタイムの合計</value></data>
+  <data name="Insights_UnknownApp" xml:space="preserve"><value>不明</value></data>
+  <data name="Insights_VsLastWeek" xml:space="preserve"><value> (先週比)</value></data>
+  <data name="Limits_1Hour" xml:space="preserve"><value>1 時間</value></data>
+  <data name="Limits_2Hours" xml:space="preserve"><value>2 時間</value></data>
+  <data name="Limits_3Hours" xml:space="preserve"><value>3 時間</value></data>
+  <data name="Limits_AddHelp" xml:space="preserve"><value>1 日の利用時間と、時間になったときの Pulse の動作を選んでください。</value></data>
+  <data name="Limits_AddLimit" xml:space="preserve"><value>制限を追加</value></data>
+  <data name="Limits_AddLimit2" xml:space="preserve"><value>制限を追加</value></data>
+  <data name="Limits_AllowanceOrHoursRequired" xml:space="preserve"><value>1 日の利用時間を選ぶか、利用不可の時間帯をオンにするか、両方を使ってください。</value></data>
+  <data name="Limits_AlreadyLimited" xml:space="preserve"><value>制限済み</value></data>
+  <data name="Limits_AlsoKeepAppUnavailableDuring" xml:space="preserve"><value>特定の時間帯はこのアプリを利用不可にする</value></data>
+  <data name="Limits_AppLimits" xml:space="preserve"><value>アプリの制限</value></data>
+  <data name="Limits_CanChangePauseAnyTime" xml:space="preserve"><value>いつでも変更または一時停止できます。</value></data>
+  <data name="Limits_Cancel" xml:space="preserve"><value>キャンセル</value></data>
+  <data name="Limits_ChooseAppGiveDailyAllowance" xml:space="preserve"><value>アプリを選んで 1 日の利用時間を設定し、時間になったときに通知するか最小化するかを決めてください。</value></data>
+  <data name="Limits_CreateAppLimit" xml:space="preserve"><value>アプリの制限を作成</value></data>
+  <data name="Limits_Custom" xml:space="preserve"><value>カスタム</value></data>
+  <data name="Limits_Edit" xml:space="preserve"><value>編集</value></data>
+  <data name="Limits_EditHelp" xml:space="preserve"><value>利用時間、スケジュール、時間になったときの動作を変更します。</value></data>
+  <data name="Limits_EditLimit" xml:space="preserve"><value>制限を編集</value></data>
+  <data name="Limits_EditTitle" xml:space="preserve"><value>{0} を編集</value></data>
+  <data name="Limits_HowMuchTimeShouldApp" xml:space="preserve"><value>このアプリを 1 日に何分使えるようにしますか?</value></data>
+  <data name="Limits_InvalidMinutes" xml:space="preserve"><value>有効な分数を入力してください。</value></data>
+  <data name="Limits_LimitTitle" xml:space="preserve"><value>{0} を制限</value></data>
+  <data name="Limits_MinimizeApp" xml:space="preserve"><value>アプリを最小化</value></data>
+  <data name="Limits_MinutesPerDay" xml:space="preserve"><value>分/日</value></data>
+  <data name="Limits_NoAppLimitsYet" xml:space="preserve"><value>アプリの制限はまだありません</value></data>
+  <data name="Limits_OptionalUsefulBedtimeSchoolWork" xml:space="preserve"><value>任意 — 就寝時間、学校、仕事の時間帯に便利です。</value></data>
+  <data name="Limits_PulseCountsTimeWhileApp" xml:space="preserve"><value>Pulse はアプリが前面にある間の時間をカウントします。</value></data>
+  <data name="Limits_RemindMe" xml:space="preserve"><value>通知する</value></data>
+  <data name="Limits_RemoveLimit" xml:space="preserve"><value>制限を削除</value></data>
+  <data name="Limits_SaveChanges" xml:space="preserve"><value>変更を保存</value></data>
+  <data name="Limits_SelectApp" xml:space="preserve"><value>アプリを選択</value></data>
+  <data name="Limits_SetHealthyBoundariesDistractingApps" xml:space="preserve"><value>気が散るアプリに健全な制限を設けましょう</value></data>
+  <data name="Limits_ShowNotificationLeaveAppOpen" xml:space="preserve"><value>通知を表示し、アプリは開いたままにします</value></data>
+  <data name="Limits_ShowNotificationMoveItsWindow" xml:space="preserve"><value>通知を表示し、ウィンドウを最小化します</value></data>
+  <data name="Limits_SummaryHoursPerDay" xml:space="preserve"><value>{0} 時間/日</value></data>
+  <data name="Limits_SummaryMinimizeApp" xml:space="preserve"><value>アプリを最小化</value></data>
+  <data name="Limits_SummaryMinutesPerDay" xml:space="preserve"><value>{0} 分/日</value></data>
+  <data name="Limits_SummaryPaused" xml:space="preserve"><value>一時停止中 · {0}</value></data>
+  <data name="Limits_SummaryReminder" xml:space="preserve"><value>通知</value></data>
+  <data name="Limits_SummaryUnavailable" xml:space="preserve"><value>利用不可 {0}～{1}</value></data>
+  <data name="Limits_TurnLimitOff" xml:space="preserve"><value>この制限をオンまたはオフにする</value></data>
+  <data name="Limits_UnavailableFrom" xml:space="preserve"><value>利用不可の時間帯</value></data>
+  <data name="Limits_UseAppLittleWhileWill" xml:space="preserve"><value>アプリをしばらく使うと、ここに表示されます。</value></data>
+  <data name="Limits_UseThreeSimpleStepsBelow" xml:space="preserve"><value>下の 3 つの簡単な手順で最初の制限を作成しましょう。</value></data>
+  <data name="Limits_WhatShouldPulseDoWhen" xml:space="preserve"><value>制限に達したとき、Pulse はどうしますか?</value></data>
+  <data name="Limits_WhichAppDoWantLimit" xml:space="preserve"><value>どのアプリを制限しますか?</value></data>
+  <data name="Notify_AppLimitMinimized" xml:space="preserve"><value>{0} が制限に達したため、最小化されました。</value></data>
+  <data name="Notify_AppLimitTitle" xml:space="preserve"><value>アプリの制限に到達</value></data>
+  <data name="Notify_AppLimitWarn" xml:space="preserve"><value>{0} は今日の制限に達しました。</value></data>
+  <data name="Notify_DistractingAppBody" xml:space="preserve"><value>{0} はエンタメに分類されています。
+集中の残り時間: {1}。クリックして対応してください。</value></data>
+  <data name="Notify_DistractingAppTitle" xml:space="preserve"><value>⚠️ 気が散るアプリを検出</value></data>
+  <data name="Notify_HearingAlertBody" xml:space="preserve"><value>しばらくの間、しきい値を超える音量で聞いています。音量を下げることを検討してください。</value></data>
+  <data name="Notify_HearingAlertTitle" xml:space="preserve"><value>聴覚のアラート</value></data>
+  <data name="Screen_ActiveScreenTime" xml:space="preserve"><value>アクティブなスクリーンタイム</value></data>
+  <data name="Screen_BreaksTaken" xml:space="preserve"><value>休憩の回数</value></data>
+  <data name="Screen_DailyAverage" xml:space="preserve"><value>1 日の平均</value></data>
+  <data name="Screen_DailyGoal" xml:space="preserve"><value>1 日の目標</value></data>
+  <data name="Screen_LessThanYesterday" xml:space="preserve"><value>↓ 昨日より {0} 短い</value></data>
+  <data name="Screen_LongestStretch" xml:space="preserve"><value>最長連続使用</value></data>
+  <data name="Screen_MoreThanYesterday" xml:space="preserve"><value>↑ 昨日より {0} 長い</value></data>
+  <data name="Screen_NoDataYesterday" xml:space="preserve"><value>昨日のデータはありません</value></data>
+  <data name="Screen_SameAsYesterday" xml:space="preserve"><value>昨日と同じ</value></data>
+  <data name="Screen_Sessions" xml:space="preserve"><value>セッション</value></data>
+  <data name="Screen_TotalScreenTime" xml:space="preserve"><value>スクリーンタイムの合計</value></data>
+  <data name="Settings_12Months" xml:space="preserve"><value>12 か月</value></data>
+  <data name="Settings_24Months" xml:space="preserve"><value>24 か月</value></data>
+  <data name="Settings_3Months" xml:space="preserve"><value>3 か月</value></data>
+  <data name="Settings_6Months" xml:space="preserve"><value>6 か月</value></data>
+  <data name="Settings_About" xml:space="preserve"><value>バージョン情報</value></data>
+  <data name="Settings_AgoHours" xml:space="preserve"><value>{0}時間</value></data>
+  <data name="Settings_AgoMinutes" xml:space="preserve"><value>{0}分</value></data>
+  <data name="Settings_AgoSeconds" xml:space="preserve"><value>{0}秒</value></data>
+  <data name="Settings_AllDataDeleted" xml:space="preserve"><value>記録されたデータをすべて削除しました。</value></data>
+  <data name="Settings_AllDataStoredLocallyDevice" xml:space="preserve"><value>すべてのデータはこのデバイスにローカルに保存されます。クラウドには何も送信されません。</value></data>
+  <data name="Settings_Amber" xml:space="preserve"><value>アンバー</value></data>
+  <data name="Settings_Appearance" xml:space="preserve"><value>外観</value></data>
+  <data name="Settings_Auto" xml:space="preserve"><value>自動</value></data>
+  <data name="Settings_AutoDetect" xml:space="preserve"><value>自動検出</value></data>
+  <data name="Settings_AutomaticallyDeleteUsageOlderThan" xml:space="preserve"><value>これより古い使用状況を自動的に削除します</value></data>
+  <data name="Settings_BackUpData" xml:space="preserve"><value>データをバックアップ</value></data>
+  <data name="Settings_BackUpNow" xml:space="preserve"><value>今すぐバックアップ</value></data>
+  <data name="Settings_BreakReminders" xml:space="preserve"><value>休憩リマインダー</value></data>
+  <data name="Settings_CheckUpdates" xml:space="preserve"><value>更新を確認</value></data>
+  <data name="Settings_CheckingUpdates" xml:space="preserve"><value>更新を確認しています...</value></data>
+  <data name="Settings_ClosingWindowKeepsPulseTracking" xml:space="preserve"><value>ウィンドウを閉じても、Pulse はバックグラウンドで記録を続けます。終了するにはトレイ アイコンから操作してください。</value></data>
+  <data name="Settings_Dark" xml:space="preserve"><value>ダーク</value></data>
+  <data name="Settings_DataDeletedTitle" xml:space="preserve"><value>データを削除しました</value></data>
+  <data name="Settings_DataPrivacy" xml:space="preserve"><value>データとプライバシー</value></data>
+  <data name="Settings_DatabaseSize" xml:space="preserve"><value>データベースのサイズ</value></data>
+  <data name="Settings_Delete" xml:space="preserve"><value>削除</value></data>
+  <data name="Settings_DeleteAllConfirm" xml:space="preserve"><value>記録されたデータをすべて削除しますか?
+
+次のデータが完全に削除されます:
+- スクリーンタイムの履歴
+- アプリの使用履歴
+- 音量の履歴
+- 集中セッションの履歴
+
+この操作は元に戻せません。</value></data>
+  <data name="Settings_DeleteAllData" xml:space="preserve"><value>すべてのデータを削除</value></data>
+  <data name="Settings_DeleteAllDataTitle" xml:space="preserve"><value>すべてのデータを削除</value></data>
+  <data name="Settings_DeleteDateRange" xml:space="preserve"><value>期間を指定して削除</value></data>
+  <data name="Settings_DeleteFailed" xml:space="preserve"><value>データを削除できませんでした: {0}</value></data>
+  <data name="Settings_DeleteRangeConfirm" xml:space="preserve"><value>{0:yyyy-MM-dd} から {1:yyyy-MM-dd} までの記録されたデータをすべて完全に削除しますか?
+
+この操作は元に戻せません。</value></data>
+  <data name="Settings_DeviceType" xml:space="preserve"><value>デバイスの種類</value></data>
+  <data name="Settings_DiagnosticLogsKeptLast7" xml:space="preserve"><value>診断ログは過去 7 日分が保存されます</value></data>
+  <data name="Settings_Diagnostics" xml:space="preserve"><value>診断</value></data>
+  <data name="Settings_Dim" xml:space="preserve"><value>薄暗く</value></data>
+  <data name="Settings_DisplayReminderWhenWindDown" xml:space="preserve"><value>おやすみ時間モードの開始時にリマインダーを表示します</value></data>
+  <data name="Settings_DownloadingUpdate" xml:space="preserve"><value>更新をダウンロードしています...</value></data>
+  <data name="Settings_Earphones" xml:space="preserve"><value>イヤホン</value></data>
+  <data name="Settings_EnableBreakReminders" xml:space="preserve"><value>休憩リマインダーを有効にする</value></data>
+  <data name="Settings_EnableDailyGoal" xml:space="preserve"><value>1 日の目標を有効にする</value></data>
+  <data name="Settings_EnableWindDownMode" xml:space="preserve"><value>おやすみ時間モードを有効にする</value></data>
+  <data name="Settings_EndDate" xml:space="preserve"><value>終了日</value></data>
+  <data name="Settings_ErrorTitle" xml:space="preserve"><value>エラー</value></data>
+  <data name="Settings_Every15Minutes" xml:space="preserve"><value>15 分ごと</value></data>
+  <data name="Settings_Every20MinutesRecommended" xml:space="preserve"><value>20 分ごと (推奨)</value></data>
+  <data name="Settings_Every30Minutes" xml:space="preserve"><value>30 分ごと</value></data>
+  <data name="Settings_Every45Minutes" xml:space="preserve"><value>45 分ごと</value></data>
+  <data name="Settings_Every60Minutes" xml:space="preserve"><value>60 分ごと</value></data>
+  <data name="Settings_Export" xml:space="preserve"><value>エクスポート</value></data>
+  <data name="Settings_ExportMyData" xml:space="preserve"><value>データをエクスポート</value></data>
+  <data name="Settings_Forever" xml:space="preserve"><value>無期限</value></data>
+  <data name="Settings_From" xml:space="preserve"><value>開始</value></data>
+  <data name="Settings_GentleReminderWhenSTime" xml:space="preserve"><value>一日を締めくくる時間になったら、そっとお知らせします</value></data>
+  <data name="Settings_Github" xml:space="preserve"><value>GitHub</value></data>
+  <data name="Settings_GoalHours" xml:space="preserve"><value>目標: 1 日 {0} 時間</value></data>
+  <data name="Settings_GoalHoursMinutes" xml:space="preserve"><value>目標: 1 日 {0} 時間 {1} 分</value></data>
+  <data name="Settings_GoalMinutes" xml:space="preserve"><value>目標: 1 日 {0} 分</value></data>
+  <data name="Settings_GoalMustBePositive" xml:space="preserve"><value>目標は 0 より大きい値にしてください</value></data>
+  <data name="Settings_Headphones" xml:space="preserve"><value>ヘッドホン</value></data>
+  <data name="Settings_Headsets" xml:space="preserve"><value>ヘッドセット</value></data>
+  <data name="Settings_HealthDown" xml:space="preserve"><value>停止</value></data>
+  <data name="Settings_HealthHealthy" xml:space="preserve"><value>正常</value></data>
+  <data name="Settings_HealthLastSeen" xml:space="preserve"><value>{0} · {1} 前に確認</value></data>
+  <data name="Settings_HealthNotStarted" xml:space="preserve"><value>未開始</value></data>
+  <data name="Settings_HealthStale" xml:space="preserve"><value>応答なし</value></data>
+  <data name="Settings_HearingLevelsShownPulseAre" xml:space="preserve"><value>Pulse に表示される聴覚レベルはシステムの音量に基づく推定値で、校正された音量測定値ではありません。Windows には任意のハードウェアでこれを測定する API がありません。</value></data>
+  <data name="Settings_Hours" xml:space="preserve"><value>時間</value></data>
+  <data name="Settings_KeepHistory" xml:space="preserve"><value>履歴の保存期間</value></data>
+  <data name="Settings_KeepRunningTrayWhenClosed" xml:space="preserve"><value>閉じてもトレイで実行を続ける</value></data>
+  <data name="Settings_Language" xml:space="preserve"><value>言語</value></data>
+  <data name="Settings_LanguageRestart" xml:space="preserve"><value>新しい言語を使うには Pulse を再起動してください。</value></data>
+  <data name="Settings_LanguageSystem" xml:space="preserve"><value>Windows の既定</value></data>
+  <data name="Settings_LaunchWindowsStartup" xml:space="preserve"><value>Windows の起動時に起動</value></data>
+  <data name="Settings_LicensedUnderGnuGeneralPublic" xml:space="preserve"><value>GNU General Public License v3.0 の下でライセンスされています</value></data>
+  <data name="Settings_Light" xml:space="preserve"><value>ライト</value></data>
+  <data name="Settings_Loading" xml:space="preserve"><value>読み込んでいます…</value></data>
+  <data name="Settings_LogFile" xml:space="preserve"><value>ログ ファイル</value></data>
+  <data name="Settings_NoAccountNoCloudNo" xml:space="preserve"><value>アカウント、クラウド、テレメトリはありません。すべてこの PC 内に保存されます。</value></data>
+  <data name="Settings_NoGoalSet" xml:space="preserve"><value>目標未設定</value></data>
+  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>通知はタイトル バーに表示されます。スヌーズまたは閉じることができます。</value></data>
+  <data name="Settings_OffDefaultWhenPulseReads" xml:space="preserve"><value>既定ではオフです。オンにすると、Pulse は Chrome/Edge/Firefox 系ブラウザーのアドレス バーを読み取り、表示中のサイト (例: youtube.com) を記録します。完全な URL、検索語句、ページの内容は記録しません。</value></data>
+  <data name="Settings_Open" xml:space="preserve"><value>開く</value></data>
+  <data name="Settings_OpenFolderFailed" xml:space="preserve"><value>フォルダーを開けませんでした: {0}</value></data>
+  <data name="Settings_OpenLogFolderFailed" xml:space="preserve"><value>ログ フォルダーを開けませんでした: {0}</value></data>
+  <data name="Settings_PermanentlyRemoveAllTrackedData" xml:space="preserve"><value>記録されたデータをすべて完全に削除します</value></data>
+  <data name="Settings_PickStartEndDate" xml:space="preserve"><value>開始日と終了日の両方を選んでください。</value></data>
+  <data name="Settings_PlayNotificationSound" xml:space="preserve"><value>通知音を鳴らす</value></data>
+  <data name="Settings_Private" xml:space="preserve"><value>プライベート</value></data>
+  <data name="Settings_PulseGuessesFromAudioDevice" xml:space="preserve"><value>Pulse はオーディオ デバイスの名前からこれを推測します。推測が間違っている場合 (ヘッドホンの機種を認識できない場合など) は変更してください。</value></data>
+  <data name="Settings_Purple" xml:space="preserve"><value>パープル</value></data>
+  <data name="Settings_RangeDeleted" xml:space="preserve"><value>選択した期間のデータを削除しました。</value></data>
+  <data name="Settings_ReminderInterval" xml:space="preserve"><value>リマインダーの間隔</value></data>
+  <data name="Settings_RemoveTrackedDataBetweenTwo" xml:space="preserve"><value>2 つの日付の間の記録データを削除します</value></data>
+  <data name="Settings_ReplacesCurrentDataCannotUndone" xml:space="preserve"><value>現在のデータを置き換えます。元に戻せず、完了後に Pulse は終了します</value></data>
+  <data name="Settings_RestEyes202020" xml:space="preserve"><value>20-20-20 ルールで目を休めましょう</value></data>
+  <data name="Settings_Restore" xml:space="preserve"><value>復元...</value></data>
+  <data name="Settings_RestoreFromBackup" xml:space="preserve"><value>バックアップから復元</value></data>
+  <data name="Settings_SaveAllTrackedDataAs" xml:space="preserve"><value>記録されたデータをすべて CSV ファイルとして保存します</value></data>
+  <data name="Settings_SaveZipSnapshotDatabaseSettings" xml:space="preserve"><value>データベースと設定のスナップショットを .zip で保存します</value></data>
+  <data name="Settings_Schedule" xml:space="preserve"><value>スケジュール</value></data>
+  <data name="Settings_ScreenTimeGoal" xml:space="preserve"><value>スクリーンタイムの目標</value></data>
+  <data name="Settings_SetTargetDailyScreenTime" xml:space="preserve"><value>1 日のスクリーンタイムの目標を設定します</value></data>
+  <data name="Settings_ShowNotification" xml:space="preserve"><value>通知を表示</value></data>
+  <data name="Settings_ShowVisualBorder" xml:space="preserve"><value>画面に枠を表示</value></data>
+  <data name="Settings_SizeBytes" xml:space="preserve"><value>{0} B</value></data>
+  <data name="Settings_SizeKB" xml:space="preserve"><value>{0:F1} KB</value></data>
+  <data name="Settings_SizeMB" xml:space="preserve"><value>{0:F1} MB</value></data>
+  <data name="Settings_Speakers" xml:space="preserve"><value>スピーカー</value></data>
+  <data name="Settings_StartDate" xml:space="preserve"><value>開始日</value></data>
+  <data name="Settings_StartFocusSessionsFromWindows" xml:space="preserve"><value>Windows の集中セッションから集中セッションを開始</value></data>
+  <data name="Settings_StartPulseQuietlyNotificationArea" xml:space="preserve"><value>サインイン時に Pulse を通知領域で静かに起動します</value></data>
+  <data name="Settings_Startup" xml:space="preserve"><value>起動</value></data>
+  <data name="Settings_StorageLocation" xml:space="preserve"><value>保存場所</value></data>
+  <data name="Settings_SubtleGlowAroundWindowEdges" xml:space="preserve"><value>ウィンドウの縁をほのかに光らせます</value></data>
+  <data name="Settings_Theme" xml:space="preserve"><value>テーマ</value></data>
+  <data name="Settings_TrackScreenTimeAppUsage" xml:space="preserve"><value>スクリーンタイム、アプリの使用状況、音量を記録して、健全なデジタル ライフを保ちましょう。</value></data>
+  <data name="Settings_TrackWebsitesHostname" xml:space="preserve"><value>Web サイトをホスト名で記録</value></data>
+  <data name="Settings_TrackerShowingStaleDownRight" xml:space="preserve"><value>画面のロック直後や PC のスリープ直後に、トラッカーが「応答なし」または「停止」と表示されるのは正常です。その間トラッカーは一時停止し、自動的に再開します。</value></data>
+  <data name="Settings_UnableToDetermine" xml:space="preserve"><value>判定できません</value></data>
+  <data name="Settings_Unknown" xml:space="preserve"><value>不明</value></data>
+  <data name="Settings_UpToDate" xml:space="preserve"><value>最新の状態です!</value></data>
+  <data name="Settings_UpdateAvailablePrompt" xml:space="preserve"><value>新しいバージョン ({0}) が利用可能です。
+
+今すぐ更新しますか?</value></data>
+  <data name="Settings_UpdateAvailableStatus" xml:space="preserve"><value>更新あり: v{0}</value></data>
+  <data name="Settings_UpdateAvailableTitle" xml:space="preserve"><value>更新があります</value></data>
+  <data name="Settings_UpdateCheckFailed" xml:space="preserve"><value>更新の確認に失敗しました: {0}</value></data>
+  <data name="Settings_UpdateServiceUnreachable" xml:space="preserve"><value>更新サービスに接続できませんでした。接続を確認して、もう一度お試しください。</value></data>
+  <data name="Settings_UpdatesUnavailable" xml:space="preserve"><value>このビルドでは更新を利用できません。</value></data>
+  <data name="Settings_UpdatesViaStore" xml:space="preserve"><value>更新は Microsoft Store で管理されています。Store のページを開いています...</value></data>
+  <data name="Settings_Version231" xml:space="preserve"><value>バージョン 2.3.1</value></data>
+  <data name="Settings_VersionFormat" xml:space="preserve"><value>バージョン {0}</value></data>
+  <data name="Settings_ViewPrivacyInformation" xml:space="preserve"><value>プライバシー情報を表示</value></data>
+  <data name="Settings_VisualStyle" xml:space="preserve"><value>表示スタイル</value></data>
+  <data name="Settings_Website" xml:space="preserve"><value>Web サイト</value></data>
+  <data name="Settings_WhenTurnFocusWindowsSettings" xml:space="preserve"><value>Windows の設定で集中モードをオンにすると、Pulse の集中セッションも自動的に開始します。</value></data>
+  <data name="Settings_WindDown" xml:space="preserve"><value>おやすみ時間モード</value></data>
+  <data name="Settings_WindDownActiveRange" xml:space="preserve"><value>{0} から {1} まで有効</value></data>
+  <data name="Settings_WindDownDisabled" xml:space="preserve"><value>おやすみ時間モードは無効です</value></data>
+  <data name="Shell_AppMarkedAsEntertainmentStay" xml:space="preserve"><value>このアプリはエンタメに分類されています。作業に集中しましょう!</value></data>
+  <data name="Shell_AppUsageSubtitle" xml:space="preserve"><value>実際に何に時間を使ったか。</value></data>
+  <data name="Shell_AppUsageTitle" xml:space="preserve"><value>アプリの使用状況</value></data>
+  <data name="Shell_BackWork" xml:space="preserve"><value>作業に戻る</value></data>
+  <data name="Shell_Close" xml:space="preserve"><value>閉じる</value></data>
+  <data name="Shell_ContinueAnyway" xml:space="preserve"><value>このまま続ける</value></data>
+  <data name="Shell_DayGlance" xml:space="preserve"><value>今日のまとめ</value></data>
+  <data name="Shell_Dismiss" xml:space="preserve"><value>閉じる</value></data>
+  <data name="Shell_EndFocusSession" xml:space="preserve"><value>集中セッションを終了しますか?</value></data>
+  <data name="Shell_EndSession" xml:space="preserve"><value>セッションを終了</value></data>
+  <data name="Shell_EndSessionMessage" xml:space="preserve"><value>まだ {0} 残っています。早めに終了してもよろしいですか?</value></data>
+  <data name="Shell_ErrorCaption" xml:space="preserve"><value>エラー</value></data>
+  <data name="Shell_Exit" xml:space="preserve"><value>終了</value></data>
+  <data name="Shell_FocusModeActive" xml:space="preserve"><value>集中モード中</value></data>
+  <data name="Shell_FocusSubtitle" xml:space="preserve"><value>気が散らない集中作業の時間をつくりましょう。</value></data>
+  <data name="Shell_FocusTimeRemaining" xml:space="preserve"><value>集中セッションの残り時間: {0}</value></data>
+  <data name="Shell_Follow202020Rule" xml:space="preserve"><value>20-20-20 ルールを守りましょう: 20 フィート (約 6 m) 先のものを 20 秒間見てください。</value></data>
+  <data name="Shell_GoodAfternoon" xml:space="preserve"><value>こんにちは</value></data>
+  <data name="Shell_GoodEvening" xml:space="preserve"><value>こんばんは</value></data>
+  <data name="Shell_GoodMorning" xml:space="preserve"><value>おはようございます</value></data>
+  <data name="Shell_HearingSubtitle" xml:space="preserve"><value>大きな音から耳を守ります。</value></data>
+  <data name="Shell_Help" xml:space="preserve"><value>ヘルプ</value></data>
+  <data name="Shell_HelpSubtitle" xml:space="preserve"><value>Pulse の記録の仕組みと、プライバシーの守り方。</value></data>
+  <data name="Shell_InsightsSubtitle" xml:space="preserve"><value>1 週間のリズム。</value></data>
+  <data name="Shell_KeepGoing" xml:space="preserve"><value>続ける</value></data>
+  <data name="Shell_Limits" xml:space="preserve"><value>制限</value></data>
+  <data name="Shell_LimitsSubtitle" xml:space="preserve"><value>アプリごとの使用時間に上限や時間帯を設定します。</value></data>
+  <data name="Shell_Maximize" xml:space="preserve"><value>最大化</value></data>
+  <data name="Shell_Minimize" xml:space="preserve"><value>最小化</value></data>
+  <data name="Shell_OpenSettings" xml:space="preserve"><value>設定を開く</value></data>
+  <data name="Shell_PrivateDevice" xml:space="preserve"><value>プライベート (デバイス内)</value></data>
+  <data name="Shell_ScreenTimeSubtitle" xml:space="preserve"><value>画面がいつ、どれだけオンだったか。</value></data>
+  <data name="Shell_ScreenTimeTitle" xml:space="preserve"><value>スクリーンタイム</value></data>
+  <data name="Shell_SettingsSubtitle" xml:space="preserve"><value>習慣に合わせて Pulse を調整しましょう。</value></data>
+  <data name="Shell_Snooze5Min" xml:space="preserve"><value>5 分スヌーズ</value></data>
+  <data name="Shell_SwitchTheme" xml:space="preserve"><value>テーマを切り替え</value></data>
+  <data name="Shell_SwitchToDarkTheme" xml:space="preserve"><value>ダーク テーマに切り替え</value></data>
+  <data name="Shell_SwitchToLightTheme" xml:space="preserve"><value>ライト テーマに切り替え</value></data>
+  <data name="Shell_TimeBreak" xml:space="preserve"><value>休憩の時間です!</value></data>
+  <data name="Shell_TodaySubtitle" xml:space="preserve"><value>{0:M月d日 dddd} · 今日のまとめ。</value></data>
+  <data name="Shell_Tracking" xml:space="preserve"><value>記録中</value></data>
+  <data name="Shell_TrayIconNotFound" xml:space="preserve"><value>トレイ アイコンが見つかりません:
+{0}</value></data>
+  <data name="Shell_TurnOffReminders" xml:space="preserve"><value>リマインダーをオフにする</value></data>
+  <data name="Time_HoursCompact" xml:space="preserve"><value>{0}時間</value></data>
+  <data name="Time_HoursMinutes" xml:space="preserve"><value>{0}時間{1}分</value></data>
+  <data name="Time_HoursMinutesCompact" xml:space="preserve"><value>{0}時間{1}分</value></data>
+  <data name="Time_HoursMinutesLong" xml:space="preserve"><value>{0}時間{1}分</value></data>
+  <data name="Time_Minutes" xml:space="preserve"><value>{0}分</value></data>
+  <data name="Time_MinutesCompact" xml:space="preserve"><value>{0}分</value></data>
+  <data name="Time_MinutesLong" xml:space="preserve"><value>{0}分</value></data>
+  <data name="Time_MinutesSecondsCompact" xml:space="preserve"><value>{0}分{1}秒</value></data>
+  <data name="Time_SecondsCompact" xml:space="preserve"><value>{0}秒</value></data>
+  <data name="Tray_CheckForUpdates" xml:space="preserve"><value>更新を確認</value></data>
+  <data name="Tray_EndFocusSession" xml:space="preserve"><value>集中セッションを終了</value></data>
+  <data name="Tray_OpenDashboard" xml:space="preserve"><value>ダッシュボードを開く</value></data>
+  <data name="Tray_Reports" xml:space="preserve"><value>レポート</value></data>
+  <data name="Tray_StartFocusSession" xml:space="preserve"><value>集中セッションを開始</value></data>
+  <data name="Tray_StillRunningBody" xml:space="preserve"><value>バックグラウンドで記録を続けています。終了するにはトレイ アイコンを右クリックしてください。この動作は [設定] → [起動] でオフにできます。</value></data>
+  <data name="Tray_StillRunningTitle" xml:space="preserve"><value>Pulse は実行中です</value></data>
+  <data name="Update_AvailablePrompt" xml:space="preserve"><value>新しいバージョン ({0}) が利用可能です。
+
+今すぐ更新しますか?</value></data>
+  <data name="Update_AvailableTitle" xml:space="preserve"><value>更新があります</value></data>
+  <data name="Update_DevBuild" xml:space="preserve"><value>更新の確認は、この開発ビルドではなく、インストール版の Pulse で利用できます。</value></data>
+  <data name="Update_InitFailed" xml:space="preserve"><value>Pulse はこのインストールのアップデーターを初期化できませんでした。</value></data>
+  <data name="Update_PortableBuild" xml:space="preserve"><value>更新の確認は、このポータブル版ではなく、インストール版の Pulse で利用できます。</value></data>
+  <data name="Update_StoreManaged" xml:space="preserve"><value>更新は Microsoft Store によって自動的に管理されます。</value></data>
+  <data name="WeekNav_4WeeksBack" xml:space="preserve"><value>4 週間前</value></data>
+  <data name="WeekNav_ChooseAnotherWeek" xml:space="preserve"><value>別の週を選択</value></data>
+  <data name="WeekNav_JumpWeek" xml:space="preserve"><value>週に移動</value></data>
+  <data name="WeekNav_NextWeek" xml:space="preserve"><value>次の週</value></data>
+  <data name="WeekNav_Oldest" xml:space="preserve"><value>最も古い週</value></data>
+  <data name="WeekNav_PreviousWeek" xml:space="preserve"><value>前の週</value></data>
+  <data name="WeekNav_Week" xml:space="preserve"><value>今週</value></data>
+  <data name="Welcome_AllDataStoredLocallyComputer" xml:space="preserve"><value>すべてのデータはこのコンピューターの次の場所にローカルに保存されます:</value></data>
+  <data name="Welcome_AppNamesUsageDurationNot" xml:space="preserve"><value>アプリ名と使用時間 (ウィンドウの内容は含みません)</value></data>
+  <data name="Welcome_AudioOutputMeterVolumeLevel" xml:space="preserve"><value>オーディオ出力メーター (音量レベルのみ。音声の内容は含みません)</value></data>
+  <data name="Welcome_AudioOutputVolumeLevelsHearing" xml:space="preserve"><value>聴覚保護のためのオーディオ出力の音量レベル</value></data>
+  <data name="Welcome_CanExportDeleteAllData" xml:space="preserve"><value>データはいつでも設定からエクスポートまたはすべて削除できます。</value></data>
+  <data name="Welcome_DataStaysLocal" xml:space="preserve"><value>データはローカルに保存されます</value></data>
+  <data name="Welcome_GetStarted" xml:space="preserve"><value>始める</value></data>
+  <data name="Welcome_IdleDetectionMouseKeyboardInactivity" xml:space="preserve"><value>アイドル検出 (マウス/キーボードの無操作)</value></data>
+  <data name="Welcome_InternetTrafficBrowsingHistoryUrls" xml:space="preserve"><value>インターネット通信、閲覧履歴、URL</value></data>
+  <data name="Welcome_KeystrokesPasswordsTypedContent" xml:space="preserve"><value>キー入力、パスワード、入力した内容</value></data>
+  <data name="Welcome_LocalappdataPulse" xml:space="preserve"><value>%LocalAppData%\Pulse\</value></data>
+  <data name="Welcome_MicrophoneAudioRecordings" xml:space="preserve"><value>マイクの音声や録音</value></data>
+  <data name="Welcome_NothingEverSentCloudNo" xml:space="preserve"><value>クラウドには何も送信されません。アカウントもインターネット接続も不要です。</value></data>
+  <data name="Welcome_PermissionsUsed" xml:space="preserve"><value>使用する権限</value></data>
+  <data name="Welcome_PersonalDigitalWellnessCompanionWindows" xml:space="preserve"><value>Windows 向けのあなた専用デジタル ウェルネス パートナー</value></data>
+  <data name="Welcome_ScreenContentsScreenshotsWindowText" xml:space="preserve"><value>画面の内容、スクリーンショット、ウィンドウのテキスト</value></data>
+  <data name="Welcome_ScreenTimeActiveVsIdle" xml:space="preserve"><value>スクリーンタイム (アクティブ時間とアイドル時間)</value></data>
+  <data name="Welcome_WelcomePulse" xml:space="preserve"><value>Pulse へようこそ</value></data>
+  <data name="Welcome_WhatWeNeverTrack" xml:space="preserve"><value>記録しないもの</value></data>
+  <data name="Welcome_WhatWeTrack" xml:space="preserve"><value>記録するもの</value></data>
+  <data name="Welcome_WindowFocusDetectionTrackActive" xml:space="preserve"><value>ウィンドウのフォーカス検出 (アクティブなアプリの記録用)</value></data>
+  <data name="WindDown_NotifyBody" xml:space="preserve"><value>静かな時間が始まりました。そろそろ片付けて、休む準備をしましょう。{0}</value></data>
+  <data name="WindDown_NotifyTitle" xml:space="preserve"><value>🌙 おやすみ時間モードの時間です</value></data>
+  <data name="WindDown_SummaryToday" xml:space="preserve"><value>今日は PC を {0}時間{1}分 使用しました。</value></data>
+  <data name="Dashboard_PerDayAverage" xml:space="preserve"><value> · 1日平均 {0}</value></data>
+</root>

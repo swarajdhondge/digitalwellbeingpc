@@ -33,10 +33,10 @@ namespace digital_wellbeing_app
         /// </summary>
         private static SKTypeface ChartTypeface()
         {
-            var sample = System.Linq.Enumerable.FirstOrDefault(
-                System.Globalization.CultureInfo.CurrentUICulture.NativeName, c => c > '\u024F');
+            var culture = System.Globalization.CultureInfo.CurrentUICulture;
+            var sample = System.Linq.Enumerable.FirstOrDefault(culture.NativeName, c => c > '\u024F');
             return (sample == default ? null
-                       : SKFontManager.Default.MatchCharacter("Segoe UI", SKFontStyle.Normal, null, sample))
+                       : SKFontManager.Default.MatchCharacter("Segoe UI", SKFontStyle.Normal, new[] { culture.Name }, sample))
                    ?? SKFontManager.Default.MatchFamily("Segoe UI");
         }
 

@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="App_ErrorTitle" xml:space="preserve"><value>Pulse - 錯誤</value></data>
+  <data name="App_UnexpectedError" xml:space="preserve"><value>發生未預期的錯誤：
+
+{0}
+
+錯誤已記錄，應用程式將嘗試繼續執行。
+如果問題持續發生，請重新啟動應用程式。</value></data>
+  <data name="Apps_AppSwitches" xml:space="preserve"><value>應用程式切換次數</value></data>
+  <data name="Apps_AvgFocus" xml:space="preserve"><value>平均專注</value></data>
+  <data name="Apps_LongestFocus" xml:space="preserve"><value>最長專注</value></data>
+  <data name="Apps_NoAppActive" xml:space="preserve"><value>沒有使用中的應用程式</value></data>
+  <data name="Apps_NoAppsTrackedYet" xml:space="preserve"><value>尚未記錄任何應用程式</value></data>
+  <data name="Apps_NowUsing" xml:space="preserve"><value>正在使用</value></data>
+  <data name="Apps_RangeHeaderToday" xml:space="preserve"><value>今日應用程式</value></data>
+  <data name="Apps_RangeHeaderWeek" xml:space="preserve"><value>本週應用程式</value></data>
+  <data name="Apps_StartUsingSomeApplicationsThey" xml:space="preserve"><value>開始使用應用程式後，它們就會顯示在這裡。</value></data>
+  <data name="Apps_Total" xml:space="preserve"><value>總計 </value></data>
+  <data name="Backup_ChooseFolder" xml:space="preserve"><value>選擇 Pulse 備份的儲存位置</value></data>
+  <data name="Backup_ChooseRestoreFile" xml:space="preserve"><value>選擇要還原的 Pulse 備份</value></data>
+  <data name="Backup_CompleteTitle" xml:space="preserve"><value>備份完成</value></data>
+  <data name="Backup_ErrorTitle" xml:space="preserve"><value>備份錯誤</value></data>
+  <data name="Backup_Failed" xml:space="preserve"><value>備份失敗：{0}</value></data>
+  <data name="Backup_FileFilter" xml:space="preserve"><value>Pulse 備份 (*.zip)|*.zip</value></data>
+  <data name="Backup_FileNotFound" xml:space="preserve"><value>找不到備份檔案。</value></data>
+  <data name="Backup_MissingDatabase" xml:space="preserve"><value>備份封存中缺少資料庫檔案。</value></data>
+  <data name="Backup_RestoreCompleteTitle" xml:space="preserve"><value>還原完成</value></data>
+  <data name="Backup_RestoreConfirm" xml:space="preserve"><value>這會以備份取代您目前所有的 Pulse 資料。
+
+此動作無法復原。完成後 Pulse 將會關閉，請重新開啟以繼續。</value></data>
+  <data name="Backup_RestoreConfirmFrom" xml:space="preserve"><value>這會以 {0:g} 的備份取代您目前所有的 Pulse 資料。
+
+此動作無法復原。完成後 Pulse 將會關閉，請重新開啟以繼續。</value></data>
+  <data name="Backup_RestoreDone" xml:space="preserve"><value>還原完成。Pulse 即將關閉，請重新開啟。</value></data>
+  <data name="Backup_RestoreErrorTitle" xml:space="preserve"><value>還原錯誤</value></data>
+  <data name="Backup_RestoreFailed" xml:space="preserve"><value>還原失敗：{0}</value></data>
+  <data name="Backup_RestoreTitle" xml:space="preserve"><value>從備份還原</value></data>
+  <data name="Backup_Saved" xml:space="preserve"><value>備份已儲存至：
+{0}</value></data>
+  <data name="Break_FollowRule" xml:space="preserve"><value>遵循 20-20-20 法則：讓視線離開螢幕 20 秒。</value></data>
+  <data name="Break_NoSnoozesLeft" xml:space="preserve"><value>已無延後提醒次數</value></data>
+  <data name="Break_SnoozeLeft" xml:space="preserve"><value>延後 5 分鐘（剩餘 {0} 次）</value></data>
+  <data name="Common_AppUsage" xml:space="preserve"><value>應用程式使用情況</value></data>
+  <data name="Common_Focus" xml:space="preserve"><value>專注</value></data>
+  <data name="Common_Hearing" xml:space="preserve"><value>聽力</value></data>
+  <data name="Common_Hearing2" xml:space="preserve"><value>聽力</value></data>
+  <data name="Common_Insights" xml:space="preserve"><value>洞察</value></data>
+  <data name="Common_Min15" xml:space="preserve"><value>15 分鐘</value></data>
+  <data name="Common_Min25" xml:space="preserve"><value>25 分鐘</value></data>
+  <data name="Common_Min30" xml:space="preserve"><value>30 分鐘</value></data>
+  <data name="Common_Min45" xml:space="preserve"><value>45 分鐘</value></data>
+  <data name="Common_Min60" xml:space="preserve"><value>60 分鐘</value></data>
+  <data name="Common_Min90" xml:space="preserve"><value>90 分鐘</value></data>
+  <data name="Common_Minutes" xml:space="preserve"><value>分鐘</value></data>
+  <data name="Common_PrivateDevice" xml:space="preserve"><value>私密 · 僅存本機</value></data>
+  <data name="Common_ScreenTime" xml:space="preserve"><value>螢幕使用時間</value></data>
+  <data name="Common_Settings" xml:space="preserve"><value>設定</value></data>
+  <data name="Common_To" xml:space="preserve"><value>至</value></data>
+  <data name="Common_Today" xml:space="preserve"><value>今天</value></data>
+  <data name="Common_Week" xml:space="preserve"><value>本週</value></data>
+  <data name="Dashboard_Categories" xml:space="preserve"><value>類別</value></data>
+  <data name="Dashboard_DailyGoal" xml:space="preserve"><value>每日目標</value></data>
+  <data name="Dashboard_EnterFocus" xml:space="preserve"><value>進入專注</value></data>
+  <data name="Dashboard_GoalProgress" xml:space="preserve"><value>目標 {0} · {1}%</value></data>
+  <data name="Dashboard_LoudListening" xml:space="preserve"><value>高音量聆聽</value></data>
+  <data name="Dashboard_MostUsedToday" xml:space="preserve"><value>今日最常使用</value></data>
+  <data name="Dashboard_NoGoalSet" xml:space="preserve"><value>未設定目標</value></data>
+  <data name="Dashboard_SameAsLastWeek" xml:space="preserve"><value>與上週持平</value></data>
+  <data name="Dashboard_SetGoal" xml:space="preserve"><value>設定目標請前往</value></data>
+  <data name="Dashboard_SilenceDistractionsProtectBlockDeep" xml:space="preserve"><value>排除干擾，守護一段深度工作時間。</value></data>
+  <data name="Dashboard_SoundLoud" xml:space="preserve"><value>大聲</value></data>
+  <data name="Dashboard_SoundNormal" xml:space="preserve"><value>正常</value></data>
+  <data name="Dashboard_SplitAcrossTopApps" xml:space="preserve"><value>常用應用程式分布</value></data>
+  <data name="Dashboard_StartSession" xml:space="preserve"><value>開始專注</value></data>
+  <data name="Dashboard_ThresholdAbove" xml:space="preserve"><value>高於 {0} dB</value></data>
+  <data name="Dashboard_TodayScreenTime" xml:space="preserve"><value>今天 · 螢幕使用時間</value></data>
+  <data name="Dashboard_VsYesterday" xml:space="preserve"><value>較昨天 {0}{1}</value></data>
+  <data name="Dashboard_Week" xml:space="preserve"><value>本週</value></data>
+  <data name="Dashboard_WeeklyChange" xml:space="preserve"><value>較上週 {0} {1}%</value></data>
+  <data name="Date_WeekLabel" xml:space="preserve"><value>第 {0} 週 · {1}</value></data>
+  <data name="Export_ChooseFolder" xml:space="preserve"><value>選擇匯出資料的儲存位置</value></data>
+  <data name="Export_CompleteTitle" xml:space="preserve"><value>匯出完成</value></data>
+  <data name="Export_ErrorTitle" xml:space="preserve"><value>匯出錯誤</value></data>
+  <data name="Export_Failed" xml:space="preserve"><value>匯出失敗：{0}</value></data>
+  <data name="Export_Success" xml:space="preserve"><value>已成功匯出 {0} 個資料檔案至：
+{1}</value></data>
+  <data name="FocusPage_DistractionsCount" xml:space="preserve"><value>{0} 次干擾</value></data>
+  <data name="FocusPage_NoDistractions" xml:space="preserve"><value>沒有干擾</value></data>
+  <data name="Focus_AppCategories" xml:space="preserve"><value>應用程式類別</value></data>
+  <data name="Focus_AutomaticallyMinimizeDistractingApps" xml:space="preserve"><value>自動最小化干擾性應用程式</value></data>
+  <data name="Focus_BeginSession" xml:space="preserve"><value>開始專注</value></data>
+  <data name="Focus_Block" xml:space="preserve"><value>封鎖</value></data>
+  <data name="Focus_Blocked" xml:space="preserve"><value>已封鎖</value></data>
+  <data name="Focus_CategorizeAppsControlWhatS" xml:space="preserve"><value>為應用程式分類，以控制專注時段中要封鎖哪些應用程式。</value></data>
+  <data name="Focus_ComingSoon" xml:space="preserve"><value>即將推出</value></data>
+  <data name="Focus_Completed" xml:space="preserve"><value>已完成</value></data>
+  <data name="Focus_Custom" xml:space="preserve"><value>自訂…</value></data>
+  <data name="Focus_Distractions" xml:space="preserve"><value>干擾</value></data>
+  <data name="Focus_Duration" xml:space="preserve"><value>時長</value></data>
+  <data name="Focus_EndSessionEarly" xml:space="preserve"><value>提前結束</value></data>
+  <data name="Focus_Enforcement" xml:space="preserve"><value>執行方式</value></data>
+  <data name="Focus_Entertainment" xml:space="preserve"><value>娛樂</value></data>
+  <data name="Focus_EntertainmentAppsAreBlockedDuring" xml:space="preserve"><value>專注期間會封鎖娛樂應用程式。工作和中性應用程式一律允許使用。</value></data>
+  <data name="Focus_FocusSessionActive" xml:space="preserve"><value>專注時段進行中</value></data>
+  <data name="Focus_Hide" xml:space="preserve"><value>隱藏</value></data>
+  <data name="Focus_HowShouldDistractionsHandled" xml:space="preserve"><value>要如何處理干擾？</value></data>
+  <data name="Focus_Neutral" xml:space="preserve"><value>中性</value></data>
+  <data name="Focus_NoFocusSessionsYetStart" xml:space="preserve"><value>還沒有專注紀錄。開始您的第一次專注吧。</value></data>
+  <data name="Focus_PickLengthHowStrictlyDistractions" xml:space="preserve"><value>選擇時長以及處理干擾的嚴格程度。Pulse 會留意您的前景應用程式，協助您保持專注。</value></data>
+  <data name="Focus_RecentSessions" xml:space="preserve"><value>最近的專注</value></data>
+  <data name="Focus_Remaining" xml:space="preserve"><value>剩餘</value></data>
+  <data name="Focus_RemoveFromTaskbarStartMenu" xml:space="preserve"><value>從工作列和開始功能表中移除</value></data>
+  <data name="Focus_ShowGentlePopupWhenOpen" xml:space="preserve"><value>開啟干擾性應用程式時顯示溫和的快顯提醒</value></data>
+  <data name="Focus_StartFocusSession" xml:space="preserve"><value>開始專注時段</value></data>
+  <data name="Focus_Suggested" xml:space="preserve"><value>建議</value></data>
+  <data name="Focus_TodaySFocus" xml:space="preserve"><value>今日專注</value></data>
+  <data name="Focus_Warn" xml:space="preserve"><value>警告</value></data>
+  <data name="Focus_Work" xml:space="preserve"><value>工作</value></data>
+  <data name="Goal_HoursMinutes" xml:space="preserve"><value>{0}小時{1}分</value></data>
+  <data name="Goal_Minutes" xml:space="preserve"><value>{0}分鐘</value></data>
+  <data name="Goal_ProgressOf" xml:space="preserve"><value>已達目標 {1} 的 {0}%</value></data>
+  <data name="Goal_ProgressOver" xml:space="preserve"><value>{0}% - 超出目標 {1}</value></data>
+  <data name="Goal_ReachedBody" xml:space="preserve"><value>您已使用電腦 {0}，超過了 {1} 的目標。休息一下吧。</value></data>
+  <data name="Goal_ReachedTitle" xml:space="preserve"><value>已達到螢幕使用時間目標</value></data>
+  <data name="Hearing_EstimatedFromSystemVolumeDevice" xml:space="preserve"><value>根據系統音量和裝置類型估算，並非經過校準的聲壓級測量——Windows 沒有適用於任意硬體的相關 API。</value></data>
+  <data name="Hearing_Harmful" xml:space="preserve"><value>有害</value></data>
+  <data name="Hearing_HarmfulThreshold" xml:space="preserve"><value>有害門檻</value></data>
+  <data name="Hearing_HarmfulTooltip" xml:space="preserve"><value>有害：{0}</value></data>
+  <data name="Hearing_HideTracking" xml:space="preserve"><value>隱藏紀錄</value></data>
+  <data name="Hearing_KeepEstimatedLevelsUnder85" xml:space="preserve"><value>將估算音量保持在 85 dB 以下</value></data>
+  <data name="Hearing_LoudListeningTime" xml:space="preserve"><value>高音量聆聽時間</value></data>
+  <data name="Hearing_NoSessionsToday" xml:space="preserve"><value>今天沒有聆聽紀錄</value></data>
+  <data name="Hearing_Of" xml:space="preserve"><value>總聆聽時間 </value></data>
+  <data name="Hearing_Safe" xml:space="preserve"><value>安全</value></data>
+  <data name="Hearing_SafeLevels" xml:space="preserve"><value>安全音量</value></data>
+  <data name="Hearing_SegmentTooltip" xml:space="preserve"><value>{0}（{1}）</value></data>
+  <data name="Hearing_SessionDetails" xml:space="preserve"><value>聆聽詳細資料</value></data>
+  <data name="Hearing_SessionTodayOne" xml:space="preserve"><value>今天 {0} 次聆聽</value></data>
+  <data name="Hearing_SessionsToday" xml:space="preserve"><value>今天 {0} 次聆聽</value></data>
+  <data name="Hearing_ShowDetailedTracking" xml:space="preserve"><value>顯示詳細紀錄</value></data>
+  <data name="Hearing_ShowTracking" xml:space="preserve"><value>顯示紀錄</value></data>
+  <data name="Hearing_ShowingRecentSessions" xml:space="preserve"><value>顯示 {1} 次聆聽中最近的 {0} 次</value></data>
+  <data name="Hearing_ThresholdAbove" xml:space="preserve"><value>高於 {0} dB</value></data>
+  <data name="Hearing_TotalListeningTime" xml:space="preserve"><value> 中</value></data>
+  <data name="Hearing_WhoGuidance" xml:space="preserve"><value>WHO 建議</value></data>
+  <data name="Help_AppLimits" xml:space="preserve"><value>應用程式限制</value></data>
+  <data name="Help_BreakReminders" xml:space="preserve"><value>休息提醒</value></data>
+  <data name="Help_EstimatesListeningLevelFromSystem" xml:space="preserve"><value>根據系統音訊計量估算聆聽音量——絕不會錄製或聆聽實際音訊。WHO 建議保持在 85 dB 以下；預設有害門檻為 75 dB。超過 75 dB 的長條會以紅色顯示。</value></data>
+  <data name="Help_EverythingStaysDeviceNoAccount" xml:space="preserve"><value>所有資料都保留在此裝置上——不需要帳戶、不上雲端、沒有遙測。網站記錄預設為關閉；開啟後僅儲存主機名稱（例如 youtube.com），絕不儲存完整網址或網頁內容。您可以隨時在「設定」中將資料匯出為 CSV 或全部刪除。</value></data>
+  <data name="Help_FocusSessionsWatchEntertainmentApps" xml:space="preserve"><value>專注時段會留意娛樂應用程式。「警告」會顯示通知；「封鎖」會將其最小化。在「設定」中啟用後，Pulse 也能跟隨 Windows 專注工作階段。就寢模式會在該收尾時依排程顯示溫和的邊框。</value></data>
+  <data name="Help_FocusWindDown" xml:space="preserve"><value>專注與就寢模式</value></data>
+  <data name="Help_Follows202020Rule" xml:space="preserve"><value>遵循 20-20-20 法則：每 20 分鐘，看向 20 英尺（約 6 公尺）外 20 秒。最多可延後提醒 3 次；離開 5 分鐘後計時器會重設。提醒會顯示在 Pulse 視窗上方；Pulse 位於通知區域時則以通知形式顯示。</value></data>
+  <data name="Help_LaunchWindowsStartupRunsQuietly" xml:space="preserve"><value>「Windows 啟動時執行」會讓 Pulse 在通知區域中安靜執行。「立即備份」會建立一個包含資料庫和設定的本機 ZIP 檔。「還原」會取代目前的本機資料，因此請先建立新的備份，並仔細閱讀確認訊息。</value></data>
+  <data name="Help_Privacy" xml:space="preserve"><value>隱私權</value></data>
+  <data name="Help_RecordsWhichAppHasFocus" xml:space="preserve"><value>記錄您使用電腦時哪個應用程式位於焦點以及持續多久。5 分鐘沒有輸入後會停止記錄，除非該應用程式為全螢幕或正在播放音訊。按一下桌面或工作列不會計入 File Explorer（檔案總管）。會儲存應用程式名稱，但為保護隱私，視窗標題絕不會儲存至資料庫。可將應用程式分類為工作、娛樂或中性，供專注功能使用。</value></data>
+  <data name="Help_ReportBug" xml:space="preserve"><value>回報問題</value></data>
+  <data name="Help_SetDailyAllowanceUnavailableHours" xml:space="preserve"><value>可為應用程式設定每日時長、無法使用時段，或兩者同時設定。達到限制時，「提醒」會傳送通知；「封鎖」還會將該應用程式最小化。您可以隨時在「限制」頁面暫停或編輯限制。</value></data>
+  <data name="Help_ShowsOneWeekTimeMonday" xml:space="preserve"><value>一次顯示一週（週一至週日）；使用箭頭瀏覽之前的週次。包括螢幕使用時間趨勢、常用應用程式、專注完成情況和音量。與前一週的比較可看出您的習慣是否有所改善；專注與休閒的比較可看出您的時間運用效率。</value></data>
+  <data name="Help_StartupDataSafety" xml:space="preserve"><value>啟動與資料安全</value></data>
+  <data name="Help_SummaryDayHeroStatTotal" xml:space="preserve"><value>您一天的摘要。主要數據是總活躍螢幕使用時間——也就是您實際使用電腦的時間，離開的時間不計入。彩色卡片會預覽各個區塊，按一下即可直接前往。</value></data>
+  <data name="Help_TracksHowLongActivelyUse" xml:space="preserve"><value>記錄您實際使用電腦的時間。5 分鐘沒有滑鼠或鍵盤輸入後會暫停，除非正在播放音訊或有應用程式為全螢幕（例如影片）。電腦鎖定或睡眠時也會暫停。時間軸顯示您的一天；每週檢視顯示每日總計。</value></data>
+  <data name="Help_ViewGithub" xml:space="preserve"><value>在 GitHub 上檢視</value></data>
+  <data name="Insights_CompletedWeek" xml:space="preserve"><value>本週已完成</value></data>
+  <data name="Insights_DailyAverage" xml:space="preserve"><value>每日平均</value></data>
+  <data name="Insights_FocusSessions" xml:space="preserve"><value>專注時段</value></data>
+  <data name="Insights_FocusVsLeisure" xml:space="preserve"><value>專注與休閒</value></data>
+  <data name="Insights_Leisure" xml:space="preserve"><value>休閒</value></data>
+  <data name="Insights_Other" xml:space="preserve"><value>其他</value></data>
+  <data name="Insights_TopAppsWeek" xml:space="preserve"><value>本週常用應用程式</value></data>
+  <data name="Insights_TotalScreenTime" xml:space="preserve"><value>螢幕使用總時間</value></data>
+  <data name="Insights_UnknownApp" xml:space="preserve"><value>未知</value></data>
+  <data name="Insights_VsLastWeek" xml:space="preserve"><value>（較上週）</value></data>
+  <data name="Limits_1Hour" xml:space="preserve"><value>1 小時</value></data>
+  <data name="Limits_2Hours" xml:space="preserve"><value>2 小時</value></data>
+  <data name="Limits_3Hours" xml:space="preserve"><value>3 小時</value></data>
+  <data name="Limits_AddHelp" xml:space="preserve"><value>選擇每日時長，以及時間用完時 Pulse 應執行的動作。</value></data>
+  <data name="Limits_AddLimit" xml:space="preserve"><value>新增限制</value></data>
+  <data name="Limits_AddLimit2" xml:space="preserve"><value>新增限制</value></data>
+  <data name="Limits_AllowanceOrHoursRequired" xml:space="preserve"><value>請選擇每日時長、開啟無法使用時段，或兩者同時使用。</value></data>
+  <data name="Limits_AlreadyLimited" xml:space="preserve"><value>已設限制</value></data>
+  <data name="Limits_AlsoKeepAppUnavailableDuring" xml:space="preserve"><value>同時在特定時段停用此應用程式</value></data>
+  <data name="Limits_AppLimits" xml:space="preserve"><value>您的應用程式限制</value></data>
+  <data name="Limits_CanChangePauseAnyTime" xml:space="preserve"><value>您可以隨時變更或暫停。</value></data>
+  <data name="Limits_Cancel" xml:space="preserve"><value>取消</value></data>
+  <data name="Limits_ChooseAppGiveDailyAllowance" xml:space="preserve"><value>選擇一個應用程式，設定每日時長，並決定時間用完時 Pulse 要提醒您還是將其最小化。</value></data>
+  <data name="Limits_CreateAppLimit" xml:space="preserve"><value>建立應用程式限制</value></data>
+  <data name="Limits_Custom" xml:space="preserve"><value>自訂</value></data>
+  <data name="Limits_Edit" xml:space="preserve"><value>編輯</value></data>
+  <data name="Limits_EditHelp" xml:space="preserve"><value>變更時長、排程，或時間用完時的動作。</value></data>
+  <data name="Limits_EditLimit" xml:space="preserve"><value>編輯限制</value></data>
+  <data name="Limits_EditTitle" xml:space="preserve"><value>編輯 {0}</value></data>
+  <data name="Limits_HowMuchTimeShouldApp" xml:space="preserve"><value>此應用程式每天可以使用多久？</value></data>
+  <data name="Limits_InvalidMinutes" xml:space="preserve"><value>請輸入有效的分鐘數。</value></data>
+  <data name="Limits_LimitTitle" xml:space="preserve"><value>限制 {0}</value></data>
+  <data name="Limits_MinimizeApp" xml:space="preserve"><value>最小化應用程式</value></data>
+  <data name="Limits_MinutesPerDay" xml:space="preserve"><value>分鐘/天</value></data>
+  <data name="Limits_NoAppLimitsYet" xml:space="preserve"><value>還沒有應用程式限制</value></data>
+  <data name="Limits_OptionalUsefulBedtimeSchoolWork" xml:space="preserve"><value>選用——適合就寢、上課或上班時間。</value></data>
+  <data name="Limits_PulseCountsTimeWhileApp" xml:space="preserve"><value>應用程式位於前景時，Pulse 會計時。</value></data>
+  <data name="Limits_RemindMe" xml:space="preserve"><value>提醒我</value></data>
+  <data name="Limits_RemoveLimit" xml:space="preserve"><value>移除限制</value></data>
+  <data name="Limits_SaveChanges" xml:space="preserve"><value>儲存變更</value></data>
+  <data name="Limits_SelectApp" xml:space="preserve"><value>選取應用程式</value></data>
+  <data name="Limits_SetHealthyBoundariesDistractingApps" xml:space="preserve"><value>為干擾性應用程式設定健康的界線</value></data>
+  <data name="Limits_ShowNotificationLeaveAppOpen" xml:space="preserve"><value>顯示通知，應用程式保持開啟</value></data>
+  <data name="Limits_ShowNotificationMoveItsWindow" xml:space="preserve"><value>顯示通知，並移開其視窗</value></data>
+  <data name="Limits_SummaryHoursPerDay" xml:space="preserve"><value>每天 {0} 小時</value></data>
+  <data name="Limits_SummaryMinimizeApp" xml:space="preserve"><value>最小化應用程式</value></data>
+  <data name="Limits_SummaryMinutesPerDay" xml:space="preserve"><value>每天 {0} 分鐘</value></data>
+  <data name="Limits_SummaryPaused" xml:space="preserve"><value>已暫停 · {0}</value></data>
+  <data name="Limits_SummaryReminder" xml:space="preserve"><value>提醒</value></data>
+  <data name="Limits_SummaryUnavailable" xml:space="preserve"><value>{0}–{1} 無法使用</value></data>
+  <data name="Limits_TurnLimitOff" xml:space="preserve"><value>開啟或關閉此限制</value></data>
+  <data name="Limits_UnavailableFrom" xml:space="preserve"><value>無法使用時段：從</value></data>
+  <data name="Limits_UseAppLittleWhileWill" xml:space="preserve"><value>使用應用程式一段時間後，它就會顯示在這裡。</value></data>
+  <data name="Limits_UseThreeSimpleStepsBelow" xml:space="preserve"><value>依照下方三個簡單步驟建立您的第一個限制。</value></data>
+  <data name="Limits_WhatShouldPulseDoWhen" xml:space="preserve"><value>達到限制時 Pulse 應該怎麼做？</value></data>
+  <data name="Limits_WhichAppDoWantLimit" xml:space="preserve"><value>您想限制哪個應用程式？</value></data>
+  <data name="Notify_AppLimitMinimized" xml:space="preserve"><value>{0} 已達到使用限制，已被最小化。</value></data>
+  <data name="Notify_AppLimitTitle" xml:space="preserve"><value>已達到應用程式限制</value></data>
+  <data name="Notify_AppLimitWarn" xml:space="preserve"><value>{0} 今天已達到使用限制。</value></data>
+  <data name="Notify_DistractingAppBody" xml:space="preserve"><value>{0} 已標記為娛樂應用程式。
+專注剩餘 {1}。按一下以回應。</value></data>
+  <data name="Notify_DistractingAppTitle" xml:space="preserve"><value>⚠️ 偵測到干擾性應用程式</value></data>
+  <data name="Notify_HearingAlertBody" xml:space="preserve"><value>您已有一段時間以高於門檻的音量聆聽。建議調低音量。</value></data>
+  <data name="Notify_HearingAlertTitle" xml:space="preserve"><value>聽力警示</value></data>
+  <data name="Screen_ActiveScreenTime" xml:space="preserve"><value>活躍螢幕使用時間</value></data>
+  <data name="Screen_BreaksTaken" xml:space="preserve"><value>休息次數</value></data>
+  <data name="Screen_DailyAverage" xml:space="preserve"><value>每日平均</value></data>
+  <data name="Screen_DailyGoal" xml:space="preserve"><value>每日目標</value></data>
+  <data name="Screen_LessThanYesterday" xml:space="preserve"><value>↓ 比昨天少 {0}</value></data>
+  <data name="Screen_LongestStretch" xml:space="preserve"><value>最長連續使用</value></data>
+  <data name="Screen_MoreThanYesterday" xml:space="preserve"><value>↑ 比昨天多 {0}</value></data>
+  <data name="Screen_NoDataYesterday" xml:space="preserve"><value>沒有昨天的資料</value></data>
+  <data name="Screen_SameAsYesterday" xml:space="preserve"><value>與昨天持平</value></data>
+  <data name="Screen_Sessions" xml:space="preserve"><value>使用次數</value></data>
+  <data name="Screen_TotalScreenTime" xml:space="preserve"><value>螢幕使用總時間</value></data>
+  <data name="Settings_12Months" xml:space="preserve"><value>12 個月</value></data>
+  <data name="Settings_24Months" xml:space="preserve"><value>24 個月</value></data>
+  <data name="Settings_3Months" xml:space="preserve"><value>3 個月</value></data>
+  <data name="Settings_6Months" xml:space="preserve"><value>6 個月</value></data>
+  <data name="Settings_About" xml:space="preserve"><value>關於</value></data>
+  <data name="Settings_AgoHours" xml:space="preserve"><value>{0}小時</value></data>
+  <data name="Settings_AgoMinutes" xml:space="preserve"><value>{0}分鐘</value></data>
+  <data name="Settings_AgoSeconds" xml:space="preserve"><value>{0}秒</value></data>
+  <data name="Settings_AllDataDeleted" xml:space="preserve"><value>已刪除所有記錄的資料。</value></data>
+  <data name="Settings_AllDataStoredLocallyDevice" xml:space="preserve"><value>您的所有資料都儲存在此裝置上，不會傳送到雲端。</value></data>
+  <data name="Settings_Amber" xml:space="preserve"><value>琥珀</value></data>
+  <data name="Settings_Appearance" xml:space="preserve"><value>外觀</value></data>
+  <data name="Settings_Auto" xml:space="preserve"><value>自動</value></data>
+  <data name="Settings_AutoDetect" xml:space="preserve"><value>自動偵測</value></data>
+  <data name="Settings_AutomaticallyDeleteUsageOlderThan" xml:space="preserve"><value>自動刪除早於此時間的使用紀錄</value></data>
+  <data name="Settings_BackUpData" xml:space="preserve"><value>備份您的資料</value></data>
+  <data name="Settings_BackUpNow" xml:space="preserve"><value>立即備份</value></data>
+  <data name="Settings_BreakReminders" xml:space="preserve"><value>休息提醒</value></data>
+  <data name="Settings_CheckUpdates" xml:space="preserve"><value>檢查更新</value></data>
+  <data name="Settings_CheckingUpdates" xml:space="preserve"><value>正在檢查更新...</value></data>
+  <data name="Settings_ClosingWindowKeepsPulseTracking" xml:space="preserve"><value>關閉視窗後 Pulse 會繼續在背景記錄。可從系統匣圖示結束。</value></data>
+  <data name="Settings_Dark" xml:space="preserve"><value>深色</value></data>
+  <data name="Settings_DataDeletedTitle" xml:space="preserve"><value>資料已刪除</value></data>
+  <data name="Settings_DataPrivacy" xml:space="preserve"><value>資料與隱私權</value></data>
+  <data name="Settings_DatabaseSize" xml:space="preserve"><value>資料庫大小</value></data>
+  <data name="Settings_Delete" xml:space="preserve"><value>刪除</value></data>
+  <data name="Settings_DeleteAllConfirm" xml:space="preserve"><value>確定要刪除所有記錄的資料嗎？
+
+這將永久移除：
+- 螢幕使用時間紀錄
+- 應用程式使用紀錄
+- 聲音暴露紀錄
+- 專注時段紀錄
+
+此動作無法復原。</value></data>
+  <data name="Settings_DeleteAllData" xml:space="preserve"><value>刪除所有資料</value></data>
+  <data name="Settings_DeleteAllDataTitle" xml:space="preserve"><value>刪除所有資料</value></data>
+  <data name="Settings_DeleteDateRange" xml:space="preserve"><value>刪除日期範圍</value></data>
+  <data name="Settings_DeleteFailed" xml:space="preserve"><value>無法刪除資料：{0}</value></data>
+  <data name="Settings_DeleteRangeConfirm" xml:space="preserve"><value>要永久刪除 {0:yyyy-MM-dd} 至 {1:yyyy-MM-dd} 的所有記錄資料嗎？
+
+此動作無法復原。</value></data>
+  <data name="Settings_DeviceType" xml:space="preserve"><value>裝置類型</value></data>
+  <data name="Settings_DiagnosticLogsKeptLast7" xml:space="preserve"><value>診斷記錄保留最近 7 天</value></data>
+  <data name="Settings_Diagnostics" xml:space="preserve"><value>診斷</value></data>
+  <data name="Settings_Dim" xml:space="preserve"><value>柔和</value></data>
+  <data name="Settings_DisplayReminderWhenWindDown" xml:space="preserve"><value>就寢模式開始時顯示提醒</value></data>
+  <data name="Settings_DownloadingUpdate" xml:space="preserve"><value>正在下載更新...</value></data>
+  <data name="Settings_Earphones" xml:space="preserve"><value>入耳式耳機</value></data>
+  <data name="Settings_EnableBreakReminders" xml:space="preserve"><value>啟用休息提醒</value></data>
+  <data name="Settings_EnableDailyGoal" xml:space="preserve"><value>啟用每日目標</value></data>
+  <data name="Settings_EnableWindDownMode" xml:space="preserve"><value>啟用就寢模式</value></data>
+  <data name="Settings_EndDate" xml:space="preserve"><value>結束日期</value></data>
+  <data name="Settings_ErrorTitle" xml:space="preserve"><value>錯誤</value></data>
+  <data name="Settings_Every15Minutes" xml:space="preserve"><value>每 15 分鐘</value></data>
+  <data name="Settings_Every20MinutesRecommended" xml:space="preserve"><value>每 20 分鐘（建議）</value></data>
+  <data name="Settings_Every30Minutes" xml:space="preserve"><value>每 30 分鐘</value></data>
+  <data name="Settings_Every45Minutes" xml:space="preserve"><value>每 45 分鐘</value></data>
+  <data name="Settings_Every60Minutes" xml:space="preserve"><value>每 60 分鐘</value></data>
+  <data name="Settings_Export" xml:space="preserve"><value>匯出</value></data>
+  <data name="Settings_ExportMyData" xml:space="preserve"><value>匯出我的資料</value></data>
+  <data name="Settings_Forever" xml:space="preserve"><value>永久</value></data>
+  <data name="Settings_From" xml:space="preserve"><value>從</value></data>
+  <data name="Settings_GentleReminderWhenSTime" xml:space="preserve"><value>該休息時給您溫和的提醒</value></data>
+  <data name="Settings_Github" xml:space="preserve"><value>GitHub</value></data>
+  <data name="Settings_GoalHours" xml:space="preserve"><value>目標：每天 {0} 小時</value></data>
+  <data name="Settings_GoalHoursMinutes" xml:space="preserve"><value>目標：每天 {0} 小時 {1} 分鐘</value></data>
+  <data name="Settings_GoalMinutes" xml:space="preserve"><value>目標：每天 {0} 分鐘</value></data>
+  <data name="Settings_GoalMustBePositive" xml:space="preserve"><value>目標必須大於 0</value></data>
+  <data name="Settings_Headphones" xml:space="preserve"><value>頭戴式耳機</value></data>
+  <data name="Settings_Headsets" xml:space="preserve"><value>耳機麥克風</value></data>
+  <data name="Settings_HealthDown" xml:space="preserve"><value>已停止</value></data>
+  <data name="Settings_HealthHealthy" xml:space="preserve"><value>正常</value></data>
+  <data name="Settings_HealthLastSeen" xml:space="preserve"><value>{0} · 最後活動於 {1}前</value></data>
+  <data name="Settings_HealthNotStarted" xml:space="preserve"><value>未啟動</value></data>
+  <data name="Settings_HealthStale" xml:space="preserve"><value>延遲</value></data>
+  <data name="Settings_HearingLevelsShownPulseAre" xml:space="preserve"><value>Pulse 中顯示的聽力音量是根據系統音量估算的，並非經過校準的聲音測量——Windows 沒有適用於任意硬體的相關 API。</value></data>
+  <data name="Settings_Hours" xml:space="preserve"><value>小時</value></data>
+  <data name="Settings_KeepHistory" xml:space="preserve"><value>保留歷史紀錄</value></data>
+  <data name="Settings_KeepRunningTrayWhenClosed" xml:space="preserve"><value>關閉後在系統匣中繼續執行</value></data>
+  <data name="Settings_Language" xml:space="preserve"><value>語言</value></data>
+  <data name="Settings_LanguageRestart" xml:space="preserve"><value>重新啟動 Pulse 以使用新語言。</value></data>
+  <data name="Settings_LanguageSystem" xml:space="preserve"><value>Windows 預設</value></data>
+  <data name="Settings_LaunchWindowsStartup" xml:space="preserve"><value>Windows 啟動時執行</value></data>
+  <data name="Settings_LicensedUnderGnuGeneralPublic" xml:space="preserve"><value>依據 GNU 通用公共授權條款 v3.0 授權</value></data>
+  <data name="Settings_Light" xml:space="preserve"><value>淺色</value></data>
+  <data name="Settings_Loading" xml:space="preserve"><value>正在載入…</value></data>
+  <data name="Settings_LogFile" xml:space="preserve"><value>記錄檔</value></data>
+  <data name="Settings_NoAccountNoCloudNo" xml:space="preserve"><value>不需要帳戶、不上雲端、沒有遙測。所有資料都保留在這台電腦上。</value></data>
+  <data name="Settings_NoGoalSet" xml:space="preserve"><value>未設定目標</value></data>
+  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>通知會顯示在標題列中。您可以延後提醒或關閉它們。</value></data>
+  <data name="Settings_OffDefaultWhenPulseReads" xml:space="preserve"><value>預設為關閉。開啟後，Pulse 會讀取 Chrome/Edge/Firefox 系列瀏覽器的網址列，記錄您正在瀏覽的網站（例如 youtube.com）——絕不記錄完整網址、搜尋字詞或網頁內容。</value></data>
+  <data name="Settings_Open" xml:space="preserve"><value>開啟</value></data>
+  <data name="Settings_OpenFolderFailed" xml:space="preserve"><value>無法開啟資料夾：{0}</value></data>
+  <data name="Settings_OpenLogFolderFailed" xml:space="preserve"><value>無法開啟記錄資料夾：{0}</value></data>
+  <data name="Settings_PermanentlyRemoveAllTrackedData" xml:space="preserve"><value>永久移除所有記錄的資料</value></data>
+  <data name="Settings_PickStartEndDate" xml:space="preserve"><value>請選擇開始日期和結束日期。</value></data>
+  <data name="Settings_PlayNotificationSound" xml:space="preserve"><value>播放通知音效</value></data>
+  <data name="Settings_Private" xml:space="preserve"><value>私密</value></data>
+  <data name="Settings_PulseGuessesFromAudioDevice" xml:space="preserve"><value>Pulse 會根據音訊裝置名稱進行判斷——如果判斷有誤（例如無法辨識您的耳機型號），可以在此變更。</value></data>
+  <data name="Settings_Purple" xml:space="preserve"><value>紫色</value></data>
+  <data name="Settings_RangeDeleted" xml:space="preserve"><value>已刪除所選日期範圍內的資料。</value></data>
+  <data name="Settings_ReminderInterval" xml:space="preserve"><value>提醒間隔</value></data>
+  <data name="Settings_RemoveTrackedDataBetweenTwo" xml:space="preserve"><value>移除兩個日期之間的記錄資料</value></data>
+  <data name="Settings_ReplacesCurrentDataCannotUndone" xml:space="preserve"><value>取代目前的資料——無法復原，完成後會關閉 Pulse</value></data>
+  <data name="Settings_RestEyes202020" xml:space="preserve"><value>用 20-20-20 法則讓眼睛休息一下</value></data>
+  <data name="Settings_Restore" xml:space="preserve"><value>還原...</value></data>
+  <data name="Settings_RestoreFromBackup" xml:space="preserve"><value>從備份還原</value></data>
+  <data name="Settings_SaveAllTrackedDataAs" xml:space="preserve"><value>將所有記錄的資料儲存為 CSV 檔案</value></data>
+  <data name="Settings_SaveZipSnapshotDatabaseSettings" xml:space="preserve"><value>將資料庫和設定儲存為 .zip 快照</value></data>
+  <data name="Settings_Schedule" xml:space="preserve"><value>排程</value></data>
+  <data name="Settings_ScreenTimeGoal" xml:space="preserve"><value>螢幕使用時間目標</value></data>
+  <data name="Settings_SetTargetDailyScreenTime" xml:space="preserve"><value>設定每日螢幕使用時間目標</value></data>
+  <data name="Settings_ShowNotification" xml:space="preserve"><value>顯示通知</value></data>
+  <data name="Settings_ShowVisualBorder" xml:space="preserve"><value>顯示視覺邊框</value></data>
+  <data name="Settings_SizeBytes" xml:space="preserve"><value>{0} B</value></data>
+  <data name="Settings_SizeKB" xml:space="preserve"><value>{0:F1} KB</value></data>
+  <data name="Settings_SizeMB" xml:space="preserve"><value>{0:F1} MB</value></data>
+  <data name="Settings_Speakers" xml:space="preserve"><value>喇叭</value></data>
+  <data name="Settings_StartDate" xml:space="preserve"><value>開始日期</value></data>
+  <data name="Settings_StartFocusSessionsFromWindows" xml:space="preserve"><value>透過 Windows 專注開始專注時段</value></data>
+  <data name="Settings_StartPulseQuietlyNotificationArea" xml:space="preserve"><value>登入時在通知區域中安靜啟動 Pulse</value></data>
+  <data name="Settings_Startup" xml:space="preserve"><value>啟動</value></data>
+  <data name="Settings_StorageLocation" xml:space="preserve"><value>儲存位置</value></data>
+  <data name="Settings_SubtleGlowAroundWindowEdges" xml:space="preserve"><value>視窗邊緣的柔和光暈</value></data>
+  <data name="Settings_Theme" xml:space="preserve"><value>佈景主題</value></data>
+  <data name="Settings_TrackScreenTimeAppUsage" xml:space="preserve"><value>記錄您的螢幕使用時間、應用程式使用情況和音訊暴露，維持健康的數位生活。</value></data>
+  <data name="Settings_TrackWebsitesHostname" xml:space="preserve"><value>依主機名稱記錄網站</value></data>
+  <data name="Settings_TrackerShowingStaleDownRight" xml:space="preserve"><value>在螢幕鎖定或電腦睡眠後，記錄器顯示「延遲」或「已停止」是正常的——記錄器會在這段期間暫停，之後自動恢復。</value></data>
+  <data name="Settings_UnableToDetermine" xml:space="preserve"><value>無法判斷</value></data>
+  <data name="Settings_Unknown" xml:space="preserve"><value>未知</value></data>
+  <data name="Settings_UpToDate" xml:space="preserve"><value>您使用的是最新版本！</value></data>
+  <data name="Settings_UpdateAvailablePrompt" xml:space="preserve"><value>有新版本（{0}）可用。
+
+要立即更新嗎？</value></data>
+  <data name="Settings_UpdateAvailableStatus" xml:space="preserve"><value>有可用的更新：v{0}</value></data>
+  <data name="Settings_UpdateAvailableTitle" xml:space="preserve"><value>有可用的更新</value></data>
+  <data name="Settings_UpdateCheckFailed" xml:space="preserve"><value>檢查更新失敗：{0}</value></data>
+  <data name="Settings_UpdateServiceUnreachable" xml:space="preserve"><value>無法連線至更新服務。請檢查網路連線後再試一次。</value></data>
+  <data name="Settings_UpdatesUnavailable" xml:space="preserve"><value>此版本無法使用更新。</value></data>
+  <data name="Settings_UpdatesViaStore" xml:space="preserve"><value>更新由 Microsoft Store 管理。正在開啟 Store 頁面...</value></data>
+  <data name="Settings_Version231" xml:space="preserve"><value>版本 2.3.1</value></data>
+  <data name="Settings_VersionFormat" xml:space="preserve"><value>版本 {0}</value></data>
+  <data name="Settings_ViewPrivacyInformation" xml:space="preserve"><value>檢視隱私權資訊</value></data>
+  <data name="Settings_VisualStyle" xml:space="preserve"><value>視覺樣式</value></data>
+  <data name="Settings_Website" xml:space="preserve"><value>網站</value></data>
+  <data name="Settings_WhenTurnFocusWindowsSettings" xml:space="preserve"><value>在 Windows 設定中開啟專注時，自動同時開始 Pulse 專注時段。</value></data>
+  <data name="Settings_WindDown" xml:space="preserve"><value>就寢模式</value></data>
+  <data name="Settings_WindDownActiveRange" xml:space="preserve"><value>生效時間：{0} 至 {1}</value></data>
+  <data name="Settings_WindDownDisabled" xml:space="preserve"><value>就寢模式已關閉</value></data>
+  <data name="Shell_AppMarkedAsEntertainmentStay" xml:space="preserve"><value>此應用程式已標記為娛樂。請專注於您的工作！</value></data>
+  <data name="Shell_AppUsageSubtitle" xml:space="preserve"><value>您的注意力究竟去了哪裡。</value></data>
+  <data name="Shell_AppUsageTitle" xml:space="preserve"><value>應用程式使用情況</value></data>
+  <data name="Shell_BackWork" xml:space="preserve"><value>回去工作</value></data>
+  <data name="Shell_Close" xml:space="preserve"><value>關閉</value></data>
+  <data name="Shell_ContinueAnyway" xml:space="preserve"><value>仍要繼續</value></data>
+  <data name="Shell_DayGlance" xml:space="preserve"><value>今日一覽</value></data>
+  <data name="Shell_Dismiss" xml:space="preserve"><value>關閉</value></data>
+  <data name="Shell_EndFocusSession" xml:space="preserve"><value>要結束專注時段嗎？</value></data>
+  <data name="Shell_EndSession" xml:space="preserve"><value>結束專注</value></data>
+  <data name="Shell_EndSessionMessage" xml:space="preserve"><value>還剩 {0}。確定要提前結束嗎？</value></data>
+  <data name="Shell_ErrorCaption" xml:space="preserve"><value>錯誤</value></data>
+  <data name="Shell_Exit" xml:space="preserve"><value>結束</value></data>
+  <data name="Shell_FocusModeActive" xml:space="preserve"><value>專注模式已開啟</value></data>
+  <data name="Shell_FocusSubtitle" xml:space="preserve"><value>開闢一段不受干擾的深度工作時間。</value></data>
+  <data name="Shell_FocusTimeRemaining" xml:space="preserve"><value>專注時段剩餘 {0}</value></data>
+  <data name="Shell_Follow202020Rule" xml:space="preserve"><value>遵循 20-20-20 法則：看向 20 英尺（約 6 公尺）外的物體 20 秒。</value></data>
+  <data name="Shell_GoodAfternoon" xml:space="preserve"><value>午安</value></data>
+  <data name="Shell_GoodEvening" xml:space="preserve"><value>晚安</value></data>
+  <data name="Shell_GoodMorning" xml:space="preserve"><value>早安</value></data>
+  <data name="Shell_HearingSubtitle" xml:space="preserve"><value>保護您的耳朵免受高音量傷害。</value></data>
+  <data name="Shell_Help" xml:space="preserve"><value>說明</value></data>
+  <data name="Shell_HelpSubtitle" xml:space="preserve"><value>Pulse 如何記錄，以及如何保護您的隱私。</value></data>
+  <data name="Shell_InsightsSubtitle" xml:space="preserve"><value>您這一週的節奏。</value></data>
+  <data name="Shell_KeepGoing" xml:space="preserve"><value>繼續專注</value></data>
+  <data name="Shell_Limits" xml:space="preserve"><value>限制</value></data>
+  <data name="Shell_LimitsSubtitle" xml:space="preserve"><value>為個別應用程式設定使用時間上限或排程。</value></data>
+  <data name="Shell_Maximize" xml:space="preserve"><value>最大化</value></data>
+  <data name="Shell_Minimize" xml:space="preserve"><value>最小化</value></data>
+  <data name="Shell_OpenSettings" xml:space="preserve"><value>開啟設定</value></data>
+  <data name="Shell_PrivateDevice" xml:space="preserve"><value>私密，僅存本機</value></data>
+  <data name="Shell_ScreenTimeSubtitle" xml:space="preserve"><value>您的螢幕何時亮著、亮了多久。</value></data>
+  <data name="Shell_ScreenTimeTitle" xml:space="preserve"><value>螢幕使用時間</value></data>
+  <data name="Shell_SettingsSubtitle" xml:space="preserve"><value>調整 Pulse，貼合您的習慣。</value></data>
+  <data name="Shell_Snooze5Min" xml:space="preserve"><value>延後 5 分鐘</value></data>
+  <data name="Shell_SwitchTheme" xml:space="preserve"><value>切換佈景主題</value></data>
+  <data name="Shell_SwitchToDarkTheme" xml:space="preserve"><value>切換為深色主題</value></data>
+  <data name="Shell_SwitchToLightTheme" xml:space="preserve"><value>切換為淺色主題</value></data>
+  <data name="Shell_TimeBreak" xml:space="preserve"><value>該休息一下了！</value></data>
+  <data name="Shell_TodaySubtitle" xml:space="preserve"><value>{0:M月d日 dddd} · 今日一覽。</value></data>
+  <data name="Shell_Tracking" xml:space="preserve"><value>記錄中</value></data>
+  <data name="Shell_TrayIconNotFound" xml:space="preserve"><value>找不到系統匣圖示：
+{0}</value></data>
+  <data name="Shell_TurnOffReminders" xml:space="preserve"><value>關閉提醒</value></data>
+  <data name="Time_HoursCompact" xml:space="preserve"><value>{0}小時</value></data>
+  <data name="Time_HoursMinutes" xml:space="preserve"><value>{0}小時{1}分</value></data>
+  <data name="Time_HoursMinutesCompact" xml:space="preserve"><value>{0}小時{1}分</value></data>
+  <data name="Time_HoursMinutesLong" xml:space="preserve"><value>{0}小時{1}分鐘</value></data>
+  <data name="Time_Minutes" xml:space="preserve"><value>{0}分</value></data>
+  <data name="Time_MinutesCompact" xml:space="preserve"><value>{0}分</value></data>
+  <data name="Time_MinutesLong" xml:space="preserve"><value>{0}分鐘</value></data>
+  <data name="Time_MinutesSecondsCompact" xml:space="preserve"><value>{0}分{1}秒</value></data>
+  <data name="Time_SecondsCompact" xml:space="preserve"><value>{0}秒</value></data>
+  <data name="Tray_CheckForUpdates" xml:space="preserve"><value>檢查更新</value></data>
+  <data name="Tray_EndFocusSession" xml:space="preserve"><value>結束專注時段</value></data>
+  <data name="Tray_OpenDashboard" xml:space="preserve"><value>開啟儀表板</value></data>
+  <data name="Tray_Reports" xml:space="preserve"><value>報告</value></data>
+  <data name="Tray_StartFocusSession" xml:space="preserve"><value>開始專注時段</value></data>
+  <data name="Tray_StillRunningBody" xml:space="preserve"><value>記錄會在背景繼續進行。以滑鼠右鍵按一下系統匣圖示即可結束，或在「設定 → 啟動」中關閉此功能。</value></data>
+  <data name="Tray_StillRunningTitle" xml:space="preserve"><value>Pulse 仍在執行</value></data>
+  <data name="Update_AvailablePrompt" xml:space="preserve"><value>有新版本（{0}）可用。
+
+要立即更新嗎？</value></data>
+  <data name="Update_AvailableTitle" xml:space="preserve"><value>有可用的更新</value></data>
+  <data name="Update_DevBuild" xml:space="preserve"><value>更新檢查僅適用於已安裝的 Pulse 應用程式，不適用於此開發版本。</value></data>
+  <data name="Update_InitFailed" xml:space="preserve"><value>Pulse 無法為此安裝初始化更新程式。</value></data>
+  <data name="Update_PortableBuild" xml:space="preserve"><value>更新檢查僅適用於已安裝的 Pulse 應用程式，不適用於此可攜式版本。</value></data>
+  <data name="Update_StoreManaged" xml:space="preserve"><value>更新由 Microsoft Store 自動管理。</value></data>
+  <data name="WeekNav_4WeeksBack" xml:space="preserve"><value>4 週前</value></data>
+  <data name="WeekNav_ChooseAnotherWeek" xml:space="preserve"><value>選擇其他週</value></data>
+  <data name="WeekNav_JumpWeek" xml:space="preserve"><value>跳至某一週</value></data>
+  <data name="WeekNav_NextWeek" xml:space="preserve"><value>下一週</value></data>
+  <data name="WeekNav_Oldest" xml:space="preserve"><value>最早</value></data>
+  <data name="WeekNav_PreviousWeek" xml:space="preserve"><value>上一週</value></data>
+  <data name="WeekNav_Week" xml:space="preserve"><value>本週</value></data>
+  <data name="Welcome_AllDataStoredLocallyComputer" xml:space="preserve"><value>所有資料都儲存在您電腦本機的以下位置：</value></data>
+  <data name="Welcome_AppNamesUsageDurationNot" xml:space="preserve"><value>應用程式名稱和使用時間（不含視窗內容）</value></data>
+  <data name="Welcome_AudioOutputMeterVolumeLevel" xml:space="preserve"><value>音訊輸出計量（僅音量大小，不含音訊內容）</value></data>
+  <data name="Welcome_AudioOutputVolumeLevelsHearing" xml:space="preserve"><value>用於聽力保護的音訊輸出音量</value></data>
+  <data name="Welcome_CanExportDeleteAllData" xml:space="preserve"><value>您可以隨時在「設定」中匯出或刪除所有資料。</value></data>
+  <data name="Welcome_DataStaysLocal" xml:space="preserve"><value>您的資料保留在本機</value></data>
+  <data name="Welcome_GetStarted" xml:space="preserve"><value>開始使用</value></data>
+  <data name="Welcome_IdleDetectionMouseKeyboardInactivity" xml:space="preserve"><value>閒置偵測（滑鼠/鍵盤無操作）</value></data>
+  <data name="Welcome_InternetTrafficBrowsingHistoryUrls" xml:space="preserve"><value>網路流量、瀏覽記錄或網址</value></data>
+  <data name="Welcome_KeystrokesPasswordsTypedContent" xml:space="preserve"><value>按鍵、密碼或輸入的內容</value></data>
+  <data name="Welcome_LocalappdataPulse" xml:space="preserve"><value>%LocalAppData%\Pulse\</value></data>
+  <data name="Welcome_MicrophoneAudioRecordings" xml:space="preserve"><value>麥克風音訊或錄音</value></data>
+  <data name="Welcome_NothingEverSentCloudNo" xml:space="preserve"><value>絕不會傳送任何資料到雲端，不需要帳戶，也不需要網路。</value></data>
+  <data name="Welcome_PermissionsUsed" xml:space="preserve"><value>使用的權限</value></data>
+  <data name="Welcome_PersonalDigitalWellnessCompanionWindows" xml:space="preserve"><value>您的 Windows 個人數位健康助手</value></data>
+  <data name="Welcome_ScreenContentsScreenshotsWindowText" xml:space="preserve"><value>螢幕內容、螢幕擷取畫面或視窗文字</value></data>
+  <data name="Welcome_ScreenTimeActiveVsIdle" xml:space="preserve"><value>螢幕使用時間（活躍與閒置時段）</value></data>
+  <data name="Welcome_WelcomePulse" xml:space="preserve"><value>歡迎使用 Pulse</value></data>
+  <data name="Welcome_WhatWeNeverTrack" xml:space="preserve"><value>我們絕不記錄的內容</value></data>
+  <data name="Welcome_WhatWeTrack" xml:space="preserve"><value>我們記錄的內容</value></data>
+  <data name="Welcome_WindowFocusDetectionTrackActive" xml:space="preserve"><value>視窗焦點偵測（用於記錄目前使用的應用程式）</value></data>
+  <data name="WindDown_NotifyBody" xml:space="preserve"><value>安靜時段已開始。可以收尾，準備休息了。{0}</value></data>
+  <data name="WindDown_NotifyTitle" xml:space="preserve"><value>🌙 該準備休息了</value></data>
+  <data name="WindDown_SummaryToday" xml:space="preserve"><value>您今天使用電腦 {0}小時{1}分。</value></data>
+  <data name="Dashboard_PerDayAverage" xml:space="preserve"><value> · 日均 {0}</value></data>
+</root>

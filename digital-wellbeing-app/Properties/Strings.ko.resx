@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="App_ErrorTitle" xml:space="preserve"><value>Pulse - 오류</value></data>
+  <data name="App_UnexpectedError" xml:space="preserve"><value>예기치 않은 오류가 발생했습니다.
+
+{0}
+
+오류가 기록되었습니다. 앱이 계속 실행을 시도합니다.
+문제가 계속되면 앱을 다시 시작하세요.</value></data>
+  <data name="Apps_AppSwitches" xml:space="preserve"><value>앱 전환</value></data>
+  <data name="Apps_AvgFocus" xml:space="preserve"><value>평균 집중</value></data>
+  <data name="Apps_LongestFocus" xml:space="preserve"><value>최장 집중</value></data>
+  <data name="Apps_NoAppActive" xml:space="preserve"><value>활성 앱 없음</value></data>
+  <data name="Apps_NoAppsTrackedYet" xml:space="preserve"><value>아직 기록된 앱이 없습니다</value></data>
+  <data name="Apps_NowUsing" xml:space="preserve"><value>현재 사용 중</value></data>
+  <data name="Apps_RangeHeaderToday" xml:space="preserve"><value>오늘의 앱</value></data>
+  <data name="Apps_RangeHeaderWeek" xml:space="preserve"><value>이번 주 앱</value></data>
+  <data name="Apps_StartUsingSomeApplicationsThey" xml:space="preserve"><value>앱을 사용하기 시작하면 여기에 표시됩니다.</value></data>
+  <data name="Apps_Total" xml:space="preserve"><value>합계 </value></data>
+  <data name="Backup_ChooseFolder" xml:space="preserve"><value>Pulse 백업을 저장할 위치 선택</value></data>
+  <data name="Backup_ChooseRestoreFile" xml:space="preserve"><value>복원할 Pulse 백업 선택</value></data>
+  <data name="Backup_CompleteTitle" xml:space="preserve"><value>백업 완료</value></data>
+  <data name="Backup_ErrorTitle" xml:space="preserve"><value>백업 오류</value></data>
+  <data name="Backup_Failed" xml:space="preserve"><value>백업하지 못했습니다: {0}</value></data>
+  <data name="Backup_FileFilter" xml:space="preserve"><value>Pulse 백업 (*.zip)|*.zip</value></data>
+  <data name="Backup_FileNotFound" xml:space="preserve"><value>백업 파일을 찾을 수 없습니다.</value></data>
+  <data name="Backup_MissingDatabase" xml:space="preserve"><value>백업 보관 파일에 데이터베이스 파일이 없습니다.</value></data>
+  <data name="Backup_RestoreCompleteTitle" xml:space="preserve"><value>복원 완료</value></data>
+  <data name="Backup_RestoreConfirm" xml:space="preserve"><value>현재 Pulse 데이터가 모두 백업 내용으로 바뀝니다.
+
+이 작업은 되돌릴 수 없습니다. 완료 후 Pulse가 종료되니 다시 열어 계속하세요.</value></data>
+  <data name="Backup_RestoreConfirmFrom" xml:space="preserve"><value>현재 Pulse 데이터가 모두 {0:g}의 백업 내용으로 바뀝니다.
+
+이 작업은 되돌릴 수 없습니다. 완료 후 Pulse가 종료되니 다시 열어 계속하세요.</value></data>
+  <data name="Backup_RestoreDone" xml:space="preserve"><value>복원이 완료되었습니다. Pulse가 종료됩니다. 다시 열어 주세요.</value></data>
+  <data name="Backup_RestoreErrorTitle" xml:space="preserve"><value>복원 오류</value></data>
+  <data name="Backup_RestoreFailed" xml:space="preserve"><value>복원하지 못했습니다: {0}</value></data>
+  <data name="Backup_RestoreTitle" xml:space="preserve"><value>백업에서 복원</value></data>
+  <data name="Backup_Saved" xml:space="preserve"><value>백업 저장 위치:
+{0}</value></data>
+  <data name="Break_FollowRule" xml:space="preserve"><value>20-20-20 규칙을 지키세요. 20초 동안 화면에서 눈을 떼세요.</value></data>
+  <data name="Break_NoSnoozesLeft" xml:space="preserve"><value>남은 다시 알림 없음</value></data>
+  <data name="Break_SnoozeLeft" xml:space="preserve"><value>5분 후 다시 알림 ({0}회 남음)</value></data>
+  <data name="Common_AppUsage" xml:space="preserve"><value>앱 사용</value></data>
+  <data name="Common_Focus" xml:space="preserve"><value>집중</value></data>
+  <data name="Common_Hearing" xml:space="preserve"><value>청력</value></data>
+  <data name="Common_Hearing2" xml:space="preserve"><value>청력</value></data>
+  <data name="Common_Insights" xml:space="preserve"><value>인사이트</value></data>
+  <data name="Common_Min15" xml:space="preserve"><value>15분</value></data>
+  <data name="Common_Min25" xml:space="preserve"><value>25분</value></data>
+  <data name="Common_Min30" xml:space="preserve"><value>30분</value></data>
+  <data name="Common_Min45" xml:space="preserve"><value>45분</value></data>
+  <data name="Common_Min60" xml:space="preserve"><value>60분</value></data>
+  <data name="Common_Min90" xml:space="preserve"><value>90분</value></data>
+  <data name="Common_Minutes" xml:space="preserve"><value>분</value></data>
+  <data name="Common_PrivateDevice" xml:space="preserve"><value>비공개 · 기기 내 저장</value></data>
+  <data name="Common_ScreenTime" xml:space="preserve"><value>화면 시간</value></data>
+  <data name="Common_Settings" xml:space="preserve"><value>설정</value></data>
+  <data name="Common_To" xml:space="preserve"><value>~</value></data>
+  <data name="Common_Today" xml:space="preserve"><value>오늘</value></data>
+  <data name="Common_Week" xml:space="preserve"><value>주</value></data>
+  <data name="Dashboard_Categories" xml:space="preserve"><value>카테고리</value></data>
+  <data name="Dashboard_DailyGoal" xml:space="preserve"><value>일일 목표</value></data>
+  <data name="Dashboard_EnterFocus" xml:space="preserve"><value>집중 시작</value></data>
+  <data name="Dashboard_GoalProgress" xml:space="preserve"><value>목표 {0}의 {1}%</value></data>
+  <data name="Dashboard_LoudListening" xml:space="preserve"><value>큰 소리로 청취</value></data>
+  <data name="Dashboard_MostUsedToday" xml:space="preserve"><value>오늘 가장 많이 사용한 앱</value></data>
+  <data name="Dashboard_NoGoalSet" xml:space="preserve"><value>목표 없음</value></data>
+  <data name="Dashboard_SameAsLastWeek" xml:space="preserve"><value>지난주와 동일</value></data>
+  <data name="Dashboard_SetGoal" xml:space="preserve"><value>목표 설정 위치: </value></data>
+  <data name="Dashboard_SilenceDistractionsProtectBlockDeep" xml:space="preserve"><value>방해 요소를 차단하고 깊이 집중하는 시간을 지키세요.</value></data>
+  <data name="Dashboard_SoundLoud" xml:space="preserve"><value>큼</value></data>
+  <data name="Dashboard_SoundNormal" xml:space="preserve"><value>보통</value></data>
+  <data name="Dashboard_SplitAcrossTopApps" xml:space="preserve"><value>주요 앱별 사용 시간</value></data>
+  <data name="Dashboard_StartSession" xml:space="preserve"><value>세션 시작</value></data>
+  <data name="Dashboard_ThresholdAbove" xml:space="preserve"><value>{0} dB 초과</value></data>
+  <data name="Dashboard_TodayScreenTime" xml:space="preserve"><value>오늘 · 화면 시간</value></data>
+  <data name="Dashboard_VsYesterday" xml:space="preserve"><value>어제 대비 {0}{1}</value></data>
+  <data name="Dashboard_Week" xml:space="preserve"><value>이번 주</value></data>
+  <data name="Dashboard_WeeklyChange" xml:space="preserve"><value>지난주 대비 {0} {1}%</value></data>
+  <data name="Date_WeekLabel" xml:space="preserve"><value>{0}주차 · {1}</value></data>
+  <data name="Export_ChooseFolder" xml:space="preserve"><value>내보낸 데이터를 저장할 위치 선택</value></data>
+  <data name="Export_CompleteTitle" xml:space="preserve"><value>내보내기 완료</value></data>
+  <data name="Export_ErrorTitle" xml:space="preserve"><value>내보내기 오류</value></data>
+  <data name="Export_Failed" xml:space="preserve"><value>내보내지 못했습니다: {0}</value></data>
+  <data name="Export_Success" xml:space="preserve"><value>데이터 파일 {0}개를 내보냈습니다:
+{1}</value></data>
+  <data name="FocusPage_DistractionsCount" xml:space="preserve"><value>방해 {0}회</value></data>
+  <data name="FocusPage_NoDistractions" xml:space="preserve"><value>방해 없음</value></data>
+  <data name="Focus_AppCategories" xml:space="preserve"><value>앱 카테고리</value></data>
+  <data name="Focus_AutomaticallyMinimizeDistractingApps" xml:space="preserve"><value>방해가 되는 앱을 자동으로 최소화합니다</value></data>
+  <data name="Focus_BeginSession" xml:space="preserve"><value>세션 시작</value></data>
+  <data name="Focus_Block" xml:space="preserve"><value>차단</value></data>
+  <data name="Focus_Blocked" xml:space="preserve"><value>차단됨</value></data>
+  <data name="Focus_CategorizeAppsControlWhatS" xml:space="preserve"><value>앱을 분류하여 집중 세션 중에 차단할 앱을 정하세요.</value></data>
+  <data name="Focus_ComingSoon" xml:space="preserve"><value>곧 제공 예정</value></data>
+  <data name="Focus_Completed" xml:space="preserve"><value>완료</value></data>
+  <data name="Focus_Custom" xml:space="preserve"><value>사용자 지정…</value></data>
+  <data name="Focus_Distractions" xml:space="preserve"><value>방해</value></data>
+  <data name="Focus_Duration" xml:space="preserve"><value>시간</value></data>
+  <data name="Focus_EndSessionEarly" xml:space="preserve"><value>세션 일찍 종료</value></data>
+  <data name="Focus_Enforcement" xml:space="preserve"><value>적용 방식</value></data>
+  <data name="Focus_Entertainment" xml:space="preserve"><value>엔터테인먼트</value></data>
+  <data name="Focus_EntertainmentAppsAreBlockedDuring" xml:space="preserve"><value>집중 중에는 엔터테인먼트 앱이 차단됩니다. 업무 및 중립 앱은 항상 허용됩니다.</value></data>
+  <data name="Focus_FocusSessionActive" xml:space="preserve"><value>집중 세션 진행 중</value></data>
+  <data name="Focus_Hide" xml:space="preserve"><value>숨기기</value></data>
+  <data name="Focus_HowShouldDistractionsHandled" xml:space="preserve"><value>방해 요소 처리 방법</value></data>
+  <data name="Focus_Neutral" xml:space="preserve"><value>중립</value></data>
+  <data name="Focus_NoFocusSessionsYetStart" xml:space="preserve"><value>아직 집중 세션이 없습니다. 첫 세션을 시작해 보세요.</value></data>
+  <data name="Focus_PickLengthHowStrictlyDistractions" xml:space="preserve"><value>시간과 방해 요소를 얼마나 엄격하게 처리할지 선택하세요. Pulse가 전면 앱을 지켜보며 집중을 도와줍니다.</value></data>
+  <data name="Focus_RecentSessions" xml:space="preserve"><value>최근 세션</value></data>
+  <data name="Focus_Remaining" xml:space="preserve"><value>남음</value></data>
+  <data name="Focus_RemoveFromTaskbarStartMenu" xml:space="preserve"><value>작업 표시줄과 시작 메뉴에서 숨깁니다</value></data>
+  <data name="Focus_ShowGentlePopupWhenOpen" xml:space="preserve"><value>방해가 되는 앱을 열면 부드러운 팝업을 표시합니다</value></data>
+  <data name="Focus_StartFocusSession" xml:space="preserve"><value>집중 세션 시작</value></data>
+  <data name="Focus_Suggested" xml:space="preserve"><value>추천</value></data>
+  <data name="Focus_TodaySFocus" xml:space="preserve"><value>오늘의 집중</value></data>
+  <data name="Focus_Warn" xml:space="preserve"><value>경고</value></data>
+  <data name="Focus_Work" xml:space="preserve"><value>업무</value></data>
+  <data name="Goal_HoursMinutes" xml:space="preserve"><value>{0}시간 {1}분</value></data>
+  <data name="Goal_Minutes" xml:space="preserve"><value>{0}분</value></data>
+  <data name="Goal_ProgressOf" xml:space="preserve"><value>목표 {1}의 {0}%</value></data>
+  <data name="Goal_ProgressOver" xml:space="preserve"><value>{0}% - 목표보다 {1} 초과</value></data>
+  <data name="Goal_ReachedBody" xml:space="preserve"><value>PC를 {0} 사용하여 목표인 {1}을(를) 초과했습니다. 잠시 쉬어 보세요.</value></data>
+  <data name="Goal_ReachedTitle" xml:space="preserve"><value>화면 시간 목표 도달</value></data>
+  <data name="Hearing_EstimatedFromSystemVolumeDevice" xml:space="preserve"><value>시스템 볼륨과 기기 유형으로 추정한 값이며, 보정된 음압 수준 측정값이 아닙니다. Windows에는 임의의 하드웨어에서 이를 측정하는 API가 없습니다.</value></data>
+  <data name="Hearing_Harmful" xml:space="preserve"><value>유해</value></data>
+  <data name="Hearing_HarmfulThreshold" xml:space="preserve"><value>유해 기준</value></data>
+  <data name="Hearing_HarmfulTooltip" xml:space="preserve"><value>유해: {0}</value></data>
+  <data name="Hearing_HideTracking" xml:space="preserve"><value>기록 숨기기</value></data>
+  <data name="Hearing_KeepEstimatedLevelsUnder85" xml:space="preserve"><value>추정 수준을 85 dB 미만으로 유지하세요</value></data>
+  <data name="Hearing_LoudListeningTime" xml:space="preserve"><value>큰 소리 청취 시간</value></data>
+  <data name="Hearing_NoSessionsToday" xml:space="preserve"><value>오늘 세션 없음</value></data>
+  <data name="Hearing_Of" xml:space="preserve"><value>총 청취 시간 </value></data>
+  <data name="Hearing_Safe" xml:space="preserve"><value>안전</value></data>
+  <data name="Hearing_SafeLevels" xml:space="preserve"><value>안전한 수준</value></data>
+  <data name="Hearing_SegmentTooltip" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Hearing_SessionDetails" xml:space="preserve"><value>세션 세부 정보</value></data>
+  <data name="Hearing_SessionTodayOne" xml:space="preserve"><value>오늘 세션 {0}개</value></data>
+  <data name="Hearing_SessionsToday" xml:space="preserve"><value>오늘 세션 {0}개</value></data>
+  <data name="Hearing_ShowDetailedTracking" xml:space="preserve"><value>자세한 기록 표시</value></data>
+  <data name="Hearing_ShowTracking" xml:space="preserve"><value>기록 표시</value></data>
+  <data name="Hearing_ShowingRecentSessions" xml:space="preserve"><value>세션 {1}개 중 최근 {0}개 표시</value></data>
+  <data name="Hearing_ThresholdAbove" xml:space="preserve"><value>{0} dB 초과</value></data>
+  <data name="Hearing_TotalListeningTime" xml:space="preserve"><value> 중</value></data>
+  <data name="Hearing_WhoGuidance" xml:space="preserve"><value>WHO 권장 사항</value></data>
+  <data name="Help_AppLimits" xml:space="preserve"><value>앱 제한</value></data>
+  <data name="Help_BreakReminders" xml:space="preserve"><value>휴식 알림</value></data>
+  <data name="Help_EstimatesListeningLevelFromSystem" xml:space="preserve"><value>시스템 오디오 미터로 청취 수준을 추정하며, 실제 오디오를 녹음하거나 듣지 않습니다. WHO는 85 dB 미만을 권장하며, 기본 유해 기준은 75 dB입니다. 75 dB를 넘는 막대는 빨간색으로 표시됩니다.</value></data>
+  <data name="Help_EverythingStaysDeviceNoAccount" xml:space="preserve"><value>모든 데이터는 이 기기에만 저장됩니다. 계정, 클라우드, 원격 분석이 없습니다. 웹사이트 기록은 기본적으로 꺼져 있으며, 켜더라도 호스트 이름(예: youtube.com)만 저장되고 전체 URL이나 페이지 내용은 저장되지 않습니다. 언제든지 설정에서 데이터를 CSV로 내보내거나 모두 삭제할 수 있습니다.</value></data>
+  <data name="Help_FocusSessionsWatchEntertainmentApps" xml:space="preserve"><value>집중 세션은 엔터테인먼트 앱을 감시합니다. 경고는 알림을 표시하고, 차단은 앱을 최소화합니다. 설정에서 사용하도록 설정하면 Windows 집중 세션에 맞춰 Pulse도 시작할 수 있습니다. 취침 모드는 하루를 마무리할 시간에 부드러운 테두리를 표시합니다.</value></data>
+  <data name="Help_FocusWindDown" xml:space="preserve"><value>집중 및 취침 모드</value></data>
+  <data name="Help_Follows202020Rule" xml:space="preserve"><value>20-20-20 규칙을 따릅니다. 20분마다 20피트(약 6m) 떨어진 곳을 20초 동안 바라보세요. 다시 알림은 최대 3회까지 가능하며, 5분 동안 자리를 비우면 타이머가 초기화됩니다. 알림은 Pulse 위에 표시되며, Pulse가 알림 영역에 있을 때는 알림으로 표시됩니다.</value></data>
+  <data name="Help_LaunchWindowsStartupRunsQuietly" xml:space="preserve"><value>Windows 시작 시 실행하면 알림 영역에서 조용히 실행됩니다. 지금 백업은 데이터베이스와 설정이 담긴 로컬 ZIP 파일을 만듭니다. 복원하면 현재 로컬 데이터가 바뀌므로 먼저 새 백업을 만들고 확인 내용을 꼼꼼히 확인하세요.</value></data>
+  <data name="Help_Privacy" xml:space="preserve"><value>개인 정보</value></data>
+  <data name="Help_RecordsWhichAppHasFocus" xml:space="preserve"><value>PC를 사용하는 동안 어떤 앱이 얼마나 오래 포커스를 가졌는지 기록합니다. 5분 동안 입력이 없으면 기록을 멈추지만, 해당 앱이 전체 화면이거나 오디오를 재생 중이면 계속 기록합니다. 바탕 화면이나 작업 표시줄을 클릭해도 File Explorer로 계산되지 않습니다. 앱 이름은 저장되지만, 개인 정보 보호를 위해 창 제목은 데이터베이스에 저장되지 않습니다. 집중 기능을 위해 앱을 업무, 엔터테인먼트, 중립으로 분류할 수 있습니다.</value></data>
+  <data name="Help_ReportBug" xml:space="preserve"><value>버그 신고</value></data>
+  <data name="Help_SetDailyAllowanceUnavailableHours" xml:space="preserve"><value>앱별로 일일 사용 시간, 사용 불가 시간 또는 둘 다 설정할 수 있습니다. 알림은 제한에 도달하면 알림을 보내고, 차단은 앱도 최소화합니다. 제한 페이지에서 언제든지 제한을 일시 중지하거나 편집할 수 있습니다.</value></data>
+  <data name="Help_ShowsOneWeekTimeMonday" xml:space="preserve"><value>한 번에 한 주(월요일~일요일)를 표시하며, 화살표로 이전 주를 볼 수 있습니다. 화면 시간 추세, 주요 앱, 집중 완료율, 소리 수준이 포함됩니다. 주간 비교로 습관이 나아지고 있는지 알 수 있고, 집중과 여가 비교로 시간을 얼마나 생산적으로 썼는지 알 수 있습니다.</value></data>
+  <data name="Help_StartupDataSafety" xml:space="preserve"><value>시작 및 데이터 안전</value></data>
+  <data name="Help_SummaryDayHeroStatTotal" xml:space="preserve"><value>하루 요약입니다. 가장 큰 숫자는 PC를 실제로 사용한 총 활성 화면 시간입니다. 자리를 비운 시간은 포함되지 않습니다. 색이 칠해진 카드는 각 섹션을 미리 보여 주며, 누르면 해당 섹션으로 바로 이동합니다.</value></data>
+  <data name="Help_TracksHowLongActivelyUse" xml:space="preserve"><value>PC를 실제로 사용한 시간을 기록합니다. 5분 동안 마우스나 키보드 입력이 없으면 일시 중지되지만, 오디오가 재생 중이거나 앱이 전체 화면(예: 동영상)이면 계속 기록합니다. PC를 잠그거나 절전 모드로 전환해도 일시 중지됩니다. 타임라인에는 하루 흐름이, 주간 보기에는 일별 합계가 표시됩니다.</value></data>
+  <data name="Help_ViewGithub" xml:space="preserve"><value>GitHub에서 보기</value></data>
+  <data name="Insights_CompletedWeek" xml:space="preserve"><value>이번 주 완료</value></data>
+  <data name="Insights_DailyAverage" xml:space="preserve"><value>일일 평균</value></data>
+  <data name="Insights_FocusSessions" xml:space="preserve"><value>집중 세션</value></data>
+  <data name="Insights_FocusVsLeisure" xml:space="preserve"><value>집중 대 여가</value></data>
+  <data name="Insights_Leisure" xml:space="preserve"><value>여가</value></data>
+  <data name="Insights_Other" xml:space="preserve"><value>기타</value></data>
+  <data name="Insights_TopAppsWeek" xml:space="preserve"><value>이번 주 주요 앱</value></data>
+  <data name="Insights_TotalScreenTime" xml:space="preserve"><value>총 화면 시간</value></data>
+  <data name="Insights_UnknownApp" xml:space="preserve"><value>알 수 없음</value></data>
+  <data name="Insights_VsLastWeek" xml:space="preserve"><value> (지난주 대비)</value></data>
+  <data name="Limits_1Hour" xml:space="preserve"><value>1시간</value></data>
+  <data name="Limits_2Hours" xml:space="preserve"><value>2시간</value></data>
+  <data name="Limits_3Hours" xml:space="preserve"><value>3시간</value></data>
+  <data name="Limits_AddHelp" xml:space="preserve"><value>일일 사용 시간과 시간이 다 되었을 때 Pulse가 할 일을 선택하세요.</value></data>
+  <data name="Limits_AddLimit" xml:space="preserve"><value>제한 추가</value></data>
+  <data name="Limits_AddLimit2" xml:space="preserve"><value>제한 추가</value></data>
+  <data name="Limits_AllowanceOrHoursRequired" xml:space="preserve"><value>일일 사용 시간을 선택하거나, 사용 불가 시간을 켜거나, 둘 다 사용하세요.</value></data>
+  <data name="Limits_AlreadyLimited" xml:space="preserve"><value>이미 제한됨</value></data>
+  <data name="Limits_AlsoKeepAppUnavailableDuring" xml:space="preserve"><value>특정 시간에는 이 앱을 사용할 수 없도록 설정</value></data>
+  <data name="Limits_AppLimits" xml:space="preserve"><value>내 앱 제한</value></data>
+  <data name="Limits_CanChangePauseAnyTime" xml:space="preserve"><value>언제든지 변경하거나 일시 중지할 수 있습니다.</value></data>
+  <data name="Limits_Cancel" xml:space="preserve"><value>취소</value></data>
+  <data name="Limits_ChooseAppGiveDailyAllowance" xml:space="preserve"><value>앱을 선택하고 일일 사용 시간을 정한 뒤, 시간이 다 되면 Pulse가 알려 줄지 앱을 최소화할지 결정하세요.</value></data>
+  <data name="Limits_CreateAppLimit" xml:space="preserve"><value>앱 제한 만들기</value></data>
+  <data name="Limits_Custom" xml:space="preserve"><value>사용자 지정</value></data>
+  <data name="Limits_Edit" xml:space="preserve"><value>편집</value></data>
+  <data name="Limits_EditHelp" xml:space="preserve"><value>사용 시간, 일정 또는 시간이 다 되었을 때의 동작을 변경합니다.</value></data>
+  <data name="Limits_EditLimit" xml:space="preserve"><value>제한 편집</value></data>
+  <data name="Limits_EditTitle" xml:space="preserve"><value>{0} 편집</value></data>
+  <data name="Limits_HowMuchTimeShouldApp" xml:space="preserve"><value>이 앱을 하루에 얼마나 사용할까요?</value></data>
+  <data name="Limits_InvalidMinutes" xml:space="preserve"><value>올바른 분 값을 입력하세요.</value></data>
+  <data name="Limits_LimitTitle" xml:space="preserve"><value>{0} 제한</value></data>
+  <data name="Limits_MinimizeApp" xml:space="preserve"><value>앱 최소화</value></data>
+  <data name="Limits_MinutesPerDay" xml:space="preserve"><value>분/일</value></data>
+  <data name="Limits_NoAppLimitsYet" xml:space="preserve"><value>아직 앱 제한이 없습니다</value></data>
+  <data name="Limits_OptionalUsefulBedtimeSchoolWork" xml:space="preserve"><value>선택 사항 — 취침, 학교, 업무 시간에 유용합니다.</value></data>
+  <data name="Limits_PulseCountsTimeWhileApp" xml:space="preserve"><value>Pulse는 앱이 전면에 있는 동안의 시간을 계산합니다.</value></data>
+  <data name="Limits_RemindMe" xml:space="preserve"><value>알림 받기</value></data>
+  <data name="Limits_RemoveLimit" xml:space="preserve"><value>제한 제거</value></data>
+  <data name="Limits_SaveChanges" xml:space="preserve"><value>변경 내용 저장</value></data>
+  <data name="Limits_SelectApp" xml:space="preserve"><value>앱 선택</value></data>
+  <data name="Limits_SetHealthyBoundariesDistractingApps" xml:space="preserve"><value>방해가 되는 앱에 건강한 경계를 설정하세요</value></data>
+  <data name="Limits_ShowNotificationLeaveAppOpen" xml:space="preserve"><value>알림을 표시하고 앱은 열어 둡니다</value></data>
+  <data name="Limits_ShowNotificationMoveItsWindow" xml:space="preserve"><value>알림을 표시하고 앱 창을 치웁니다</value></data>
+  <data name="Limits_SummaryHoursPerDay" xml:space="preserve"><value>{0}시간/일</value></data>
+  <data name="Limits_SummaryMinimizeApp" xml:space="preserve"><value>앱 최소화</value></data>
+  <data name="Limits_SummaryMinutesPerDay" xml:space="preserve"><value>{0}분/일</value></data>
+  <data name="Limits_SummaryPaused" xml:space="preserve"><value>일시 중지됨 · {0}</value></data>
+  <data name="Limits_SummaryReminder" xml:space="preserve"><value>알림</value></data>
+  <data name="Limits_SummaryUnavailable" xml:space="preserve"><value>사용 불가 {0}~{1}</value></data>
+  <data name="Limits_TurnLimitOff" xml:space="preserve"><value>이 제한 켜기 또는 끄기</value></data>
+  <data name="Limits_UnavailableFrom" xml:space="preserve"><value>사용 불가 시간</value></data>
+  <data name="Limits_UseAppLittleWhileWill" xml:space="preserve"><value>앱을 잠시 사용하면 여기에 표시됩니다.</value></data>
+  <data name="Limits_UseThreeSimpleStepsBelow" xml:space="preserve"><value>아래의 간단한 3단계로 첫 제한을 만들어 보세요.</value></data>
+  <data name="Limits_WhatShouldPulseDoWhen" xml:space="preserve"><value>제한에 도달하면 Pulse가 무엇을 할까요?</value></data>
+  <data name="Limits_WhichAppDoWantLimit" xml:space="preserve"><value>어떤 앱을 제한할까요?</value></data>
+  <data name="Notify_AppLimitMinimized" xml:space="preserve"><value>{0}이(가) 제한에 도달하여 최소화되었습니다.</value></data>
+  <data name="Notify_AppLimitTitle" xml:space="preserve"><value>앱 제한 도달</value></data>
+  <data name="Notify_AppLimitWarn" xml:space="preserve"><value>{0}이(가) 오늘의 제한에 도달했습니다.</value></data>
+  <data name="Notify_DistractingAppBody" xml:space="preserve"><value>{0}은(는) 엔터테인먼트로 분류되어 있습니다.
+집중 시간이 {1} 남았습니다. 클릭하여 응답하세요.</value></data>
+  <data name="Notify_DistractingAppTitle" xml:space="preserve"><value>⚠️ 방해가 되는 앱 감지됨</value></data>
+  <data name="Notify_HearingAlertBody" xml:space="preserve"><value>한동안 기준보다 큰 소리로 듣고 있습니다. 볼륨을 낮춰 보세요.</value></data>
+  <data name="Notify_HearingAlertTitle" xml:space="preserve"><value>청력 알림</value></data>
+  <data name="Screen_ActiveScreenTime" xml:space="preserve"><value>활성 화면 시간</value></data>
+  <data name="Screen_BreaksTaken" xml:space="preserve"><value>휴식 횟수</value></data>
+  <data name="Screen_DailyAverage" xml:space="preserve"><value>일일 평균</value></data>
+  <data name="Screen_DailyGoal" xml:space="preserve"><value>일일 목표</value></data>
+  <data name="Screen_LessThanYesterday" xml:space="preserve"><value>↓ 어제보다 {0} 적음</value></data>
+  <data name="Screen_LongestStretch" xml:space="preserve"><value>최장 연속 사용</value></data>
+  <data name="Screen_MoreThanYesterday" xml:space="preserve"><value>↑ 어제보다 {0} 많음</value></data>
+  <data name="Screen_NoDataYesterday" xml:space="preserve"><value>어제 데이터 없음</value></data>
+  <data name="Screen_SameAsYesterday" xml:space="preserve"><value>어제와 동일</value></data>
+  <data name="Screen_Sessions" xml:space="preserve"><value>세션</value></data>
+  <data name="Screen_TotalScreenTime" xml:space="preserve"><value>총 화면 시간</value></data>
+  <data name="Settings_12Months" xml:space="preserve"><value>12개월</value></data>
+  <data name="Settings_24Months" xml:space="preserve"><value>24개월</value></data>
+  <data name="Settings_3Months" xml:space="preserve"><value>3개월</value></data>
+  <data name="Settings_6Months" xml:space="preserve"><value>6개월</value></data>
+  <data name="Settings_About" xml:space="preserve"><value>정보</value></data>
+  <data name="Settings_AgoHours" xml:space="preserve"><value>{0}시간</value></data>
+  <data name="Settings_AgoMinutes" xml:space="preserve"><value>{0}분</value></data>
+  <data name="Settings_AgoSeconds" xml:space="preserve"><value>{0}초</value></data>
+  <data name="Settings_AllDataDeleted" xml:space="preserve"><value>기록된 데이터가 모두 삭제되었습니다.</value></data>
+  <data name="Settings_AllDataStoredLocallyDevice" xml:space="preserve"><value>모든 데이터는 이 기기에 로컬로 저장됩니다. 클라우드로 전송되는 것은 없습니다.</value></data>
+  <data name="Settings_Amber" xml:space="preserve"><value>앰버</value></data>
+  <data name="Settings_Appearance" xml:space="preserve"><value>모양</value></data>
+  <data name="Settings_Auto" xml:space="preserve"><value>자동</value></data>
+  <data name="Settings_AutoDetect" xml:space="preserve"><value>자동 감지</value></data>
+  <data name="Settings_AutomaticallyDeleteUsageOlderThan" xml:space="preserve"><value>이보다 오래된 사용 기록을 자동으로 삭제합니다</value></data>
+  <data name="Settings_BackUpData" xml:space="preserve"><value>데이터 백업</value></data>
+  <data name="Settings_BackUpNow" xml:space="preserve"><value>지금 백업</value></data>
+  <data name="Settings_BreakReminders" xml:space="preserve"><value>휴식 알림</value></data>
+  <data name="Settings_CheckUpdates" xml:space="preserve"><value>업데이트 확인</value></data>
+  <data name="Settings_CheckingUpdates" xml:space="preserve"><value>업데이트를 확인하는 중...</value></data>
+  <data name="Settings_ClosingWindowKeepsPulseTracking" xml:space="preserve"><value>창을 닫아도 Pulse는 백그라운드에서 계속 기록합니다. 종료하려면 트레이 아이콘을 사용하세요.</value></data>
+  <data name="Settings_Dark" xml:space="preserve"><value>어둡게</value></data>
+  <data name="Settings_DataDeletedTitle" xml:space="preserve"><value>데이터 삭제됨</value></data>
+  <data name="Settings_DataPrivacy" xml:space="preserve"><value>데이터 및 개인 정보</value></data>
+  <data name="Settings_DatabaseSize" xml:space="preserve"><value>데이터베이스 크기</value></data>
+  <data name="Settings_Delete" xml:space="preserve"><value>삭제</value></data>
+  <data name="Settings_DeleteAllConfirm" xml:space="preserve"><value>기록된 데이터를 모두 삭제할까요?
+
+다음 항목이 영구적으로 삭제됩니다.
+- 화면 시간 기록
+- 앱 사용 기록
+- 소리 노출 기록
+- 집중 세션 기록
+
+이 작업은 되돌릴 수 없습니다.</value></data>
+  <data name="Settings_DeleteAllData" xml:space="preserve"><value>모든 데이터 삭제</value></data>
+  <data name="Settings_DeleteAllDataTitle" xml:space="preserve"><value>모든 데이터 삭제</value></data>
+  <data name="Settings_DeleteDateRange" xml:space="preserve"><value>기간 지정 삭제</value></data>
+  <data name="Settings_DeleteFailed" xml:space="preserve"><value>데이터를 삭제하지 못했습니다: {0}</value></data>
+  <data name="Settings_DeleteRangeConfirm" xml:space="preserve"><value>{0:yyyy-MM-dd}부터 {1:yyyy-MM-dd}까지 기록된 데이터를 모두 영구적으로 삭제할까요?
+
+이 작업은 되돌릴 수 없습니다.</value></data>
+  <data name="Settings_DeviceType" xml:space="preserve"><value>기기 유형</value></data>
+  <data name="Settings_DiagnosticLogsKeptLast7" xml:space="preserve"><value>진단 로그는 최근 7일간 보관됩니다</value></data>
+  <data name="Settings_Diagnostics" xml:space="preserve"><value>진단</value></data>
+  <data name="Settings_Dim" xml:space="preserve"><value>흐리게</value></data>
+  <data name="Settings_DisplayReminderWhenWindDown" xml:space="preserve"><value>취침 모드가 시작되면 알림을 표시합니다</value></data>
+  <data name="Settings_DownloadingUpdate" xml:space="preserve"><value>업데이트를 다운로드하는 중...</value></data>
+  <data name="Settings_Earphones" xml:space="preserve"><value>이어폰</value></data>
+  <data name="Settings_EnableBreakReminders" xml:space="preserve"><value>휴식 알림 사용</value></data>
+  <data name="Settings_EnableDailyGoal" xml:space="preserve"><value>일일 목표 사용</value></data>
+  <data name="Settings_EnableWindDownMode" xml:space="preserve"><value>취침 모드 사용</value></data>
+  <data name="Settings_EndDate" xml:space="preserve"><value>종료 날짜</value></data>
+  <data name="Settings_ErrorTitle" xml:space="preserve"><value>오류</value></data>
+  <data name="Settings_Every15Minutes" xml:space="preserve"><value>15분마다</value></data>
+  <data name="Settings_Every20MinutesRecommended" xml:space="preserve"><value>20분마다(권장)</value></data>
+  <data name="Settings_Every30Minutes" xml:space="preserve"><value>30분마다</value></data>
+  <data name="Settings_Every45Minutes" xml:space="preserve"><value>45분마다</value></data>
+  <data name="Settings_Every60Minutes" xml:space="preserve"><value>60분마다</value></data>
+  <data name="Settings_Export" xml:space="preserve"><value>내보내기</value></data>
+  <data name="Settings_ExportMyData" xml:space="preserve"><value>내 데이터 내보내기</value></data>
+  <data name="Settings_Forever" xml:space="preserve"><value>영구</value></data>
+  <data name="Settings_From" xml:space="preserve"><value>시작</value></data>
+  <data name="Settings_GentleReminderWhenSTime" xml:space="preserve"><value>하루를 마무리할 시간이 되면 부드럽게 알려 드립니다</value></data>
+  <data name="Settings_Github" xml:space="preserve"><value>GitHub</value></data>
+  <data name="Settings_GoalHours" xml:space="preserve"><value>목표: 하루 {0}시간</value></data>
+  <data name="Settings_GoalHoursMinutes" xml:space="preserve"><value>목표: 하루 {0}시간 {1}분</value></data>
+  <data name="Settings_GoalMinutes" xml:space="preserve"><value>목표: 하루 {0}분</value></data>
+  <data name="Settings_GoalMustBePositive" xml:space="preserve"><value>목표는 0보다 커야 합니다</value></data>
+  <data name="Settings_Headphones" xml:space="preserve"><value>헤드폰</value></data>
+  <data name="Settings_Headsets" xml:space="preserve"><value>헤드셋</value></data>
+  <data name="Settings_HealthDown" xml:space="preserve"><value>중지됨</value></data>
+  <data name="Settings_HealthHealthy" xml:space="preserve"><value>정상</value></data>
+  <data name="Settings_HealthLastSeen" xml:space="preserve"><value>{0} · {1} 전에 마지막 확인</value></data>
+  <data name="Settings_HealthNotStarted" xml:space="preserve"><value>시작 안 됨</value></data>
+  <data name="Settings_HealthStale" xml:space="preserve"><value>응답 없음</value></data>
+  <data name="Settings_HearingLevelsShownPulseAre" xml:space="preserve"><value>Pulse에 표시되는 청력 수준은 시스템 볼륨을 바탕으로 한 추정치이며, 보정된 소리 측정값이 아닙니다. Windows에는 임의의 하드웨어에서 이를 측정하는 API가 없습니다.</value></data>
+  <data name="Settings_Hours" xml:space="preserve"><value>시간</value></data>
+  <data name="Settings_KeepHistory" xml:space="preserve"><value>기록 보관 기간</value></data>
+  <data name="Settings_KeepRunningTrayWhenClosed" xml:space="preserve"><value>닫아도 트레이에서 계속 실행</value></data>
+  <data name="Settings_Language" xml:space="preserve"><value>언어</value></data>
+  <data name="Settings_LanguageRestart" xml:space="preserve"><value>새 언어를 적용하려면 Pulse를 다시 시작하세요.</value></data>
+  <data name="Settings_LanguageSystem" xml:space="preserve"><value>Windows 기본값</value></data>
+  <data name="Settings_LaunchWindowsStartup" xml:space="preserve"><value>Windows 시작 시 실행</value></data>
+  <data name="Settings_LicensedUnderGnuGeneralPublic" xml:space="preserve"><value>GNU General Public License v3.0에 따라 라이선스가 부여됨</value></data>
+  <data name="Settings_Light" xml:space="preserve"><value>밝게</value></data>
+  <data name="Settings_Loading" xml:space="preserve"><value>로드 중…</value></data>
+  <data name="Settings_LogFile" xml:space="preserve"><value>로그 파일</value></data>
+  <data name="Settings_NoAccountNoCloudNo" xml:space="preserve"><value>계정, 클라우드, 원격 분석이 없습니다. 모든 데이터는 이 PC에만 저장됩니다.</value></data>
+  <data name="Settings_NoGoalSet" xml:space="preserve"><value>목표 없음</value></data>
+  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>알림은 제목 표시줄에 나타납니다. 다시 알림을 설정하거나 닫을 수 있습니다.</value></data>
+  <data name="Settings_OffDefaultWhenPulseReads" xml:space="preserve"><value>기본적으로 꺼져 있습니다. 켜면 Pulse가 Chrome/Edge/Firefox 계열 브라우저의 주소 표시줄을 읽어 방문 중인 사이트(예: youtube.com)를 기록합니다. 전체 URL, 검색어, 페이지 내용은 기록하지 않습니다.</value></data>
+  <data name="Settings_Open" xml:space="preserve"><value>열기</value></data>
+  <data name="Settings_OpenFolderFailed" xml:space="preserve"><value>폴더를 열 수 없습니다: {0}</value></data>
+  <data name="Settings_OpenLogFolderFailed" xml:space="preserve"><value>로그 폴더를 열 수 없습니다: {0}</value></data>
+  <data name="Settings_PermanentlyRemoveAllTrackedData" xml:space="preserve"><value>기록된 데이터를 모두 영구적으로 삭제합니다</value></data>
+  <data name="Settings_PickStartEndDate" xml:space="preserve"><value>시작 날짜와 종료 날짜를 모두 선택하세요.</value></data>
+  <data name="Settings_PlayNotificationSound" xml:space="preserve"><value>알림 소리 재생</value></data>
+  <data name="Settings_Private" xml:space="preserve"><value>비공개</value></data>
+  <data name="Settings_PulseGuessesFromAudioDevice" xml:space="preserve"><value>Pulse가 오디오 기기 이름으로 추측한 값입니다. 추측이 틀렸다면(예: 헤드폰 모델을 인식하지 못한 경우) 직접 변경하세요.</value></data>
+  <data name="Settings_Purple" xml:space="preserve"><value>보라</value></data>
+  <data name="Settings_RangeDeleted" xml:space="preserve"><value>선택한 기간의 데이터가 삭제되었습니다.</value></data>
+  <data name="Settings_ReminderInterval" xml:space="preserve"><value>알림 간격</value></data>
+  <data name="Settings_RemoveTrackedDataBetweenTwo" xml:space="preserve"><value>두 날짜 사이의 기록된 데이터를 삭제합니다</value></data>
+  <data name="Settings_ReplacesCurrentDataCannotUndone" xml:space="preserve"><value>현재 데이터를 대체합니다. 되돌릴 수 없으며 완료 후 Pulse가 종료됩니다</value></data>
+  <data name="Settings_RestEyes202020" xml:space="preserve"><value>20-20-20 규칙으로 눈을 쉬게 하세요</value></data>
+  <data name="Settings_Restore" xml:space="preserve"><value>복원...</value></data>
+  <data name="Settings_RestoreFromBackup" xml:space="preserve"><value>백업에서 복원</value></data>
+  <data name="Settings_SaveAllTrackedDataAs" xml:space="preserve"><value>기록된 모든 데이터를 CSV 파일로 저장합니다</value></data>
+  <data name="Settings_SaveZipSnapshotDatabaseSettings" xml:space="preserve"><value>데이터베이스와 설정의 스냅샷을 .zip으로 저장합니다</value></data>
+  <data name="Settings_Schedule" xml:space="preserve"><value>일정</value></data>
+  <data name="Settings_ScreenTimeGoal" xml:space="preserve"><value>화면 시간 목표</value></data>
+  <data name="Settings_SetTargetDailyScreenTime" xml:space="preserve"><value>일일 화면 시간 목표를 설정합니다</value></data>
+  <data name="Settings_ShowNotification" xml:space="preserve"><value>알림 표시</value></data>
+  <data name="Settings_ShowVisualBorder" xml:space="preserve"><value>화면 테두리 표시</value></data>
+  <data name="Settings_SizeBytes" xml:space="preserve"><value>{0} B</value></data>
+  <data name="Settings_SizeKB" xml:space="preserve"><value>{0:F1} KB</value></data>
+  <data name="Settings_SizeMB" xml:space="preserve"><value>{0:F1} MB</value></data>
+  <data name="Settings_Speakers" xml:space="preserve"><value>스피커</value></data>
+  <data name="Settings_StartDate" xml:space="preserve"><value>시작 날짜</value></data>
+  <data name="Settings_StartFocusSessionsFromWindows" xml:space="preserve"><value>Windows 집중 모드에서 집중 세션 시작</value></data>
+  <data name="Settings_StartPulseQuietlyNotificationArea" xml:space="preserve"><value>로그인하면 알림 영역에서 Pulse를 조용히 시작합니다</value></data>
+  <data name="Settings_Startup" xml:space="preserve"><value>시작</value></data>
+  <data name="Settings_StorageLocation" xml:space="preserve"><value>저장 위치</value></data>
+  <data name="Settings_SubtleGlowAroundWindowEdges" xml:space="preserve"><value>창 가장자리에 은은한 빛을 표시합니다</value></data>
+  <data name="Settings_Theme" xml:space="preserve"><value>테마</value></data>
+  <data name="Settings_TrackScreenTimeAppUsage" xml:space="preserve"><value>화면 시간, 앱 사용, 소리 노출을 기록하여 건강한 디지털 생활을 유지하세요.</value></data>
+  <data name="Settings_TrackWebsitesHostname" xml:space="preserve"><value>호스트 이름으로 웹사이트 기록</value></data>
+  <data name="Settings_TrackerShowingStaleDownRight" xml:space="preserve"><value>화면이 잠기거나 PC가 절전 모드에서 깨어난 직후 추적기가 응답 없음 또는 중지됨으로 표시되는 것은 정상입니다. 그동안 추적기는 일시 중지되었다가 자동으로 다시 시작됩니다.</value></data>
+  <data name="Settings_UnableToDetermine" xml:space="preserve"><value>확인할 수 없음</value></data>
+  <data name="Settings_Unknown" xml:space="preserve"><value>알 수 없음</value></data>
+  <data name="Settings_UpToDate" xml:space="preserve"><value>최신 상태입니다!</value></data>
+  <data name="Settings_UpdateAvailablePrompt" xml:space="preserve"><value>새 버전({0})을 사용할 수 있습니다.
+
+지금 업데이트할까요?</value></data>
+  <data name="Settings_UpdateAvailableStatus" xml:space="preserve"><value>업데이트 가능: v{0}</value></data>
+  <data name="Settings_UpdateAvailableTitle" xml:space="preserve"><value>업데이트 가능</value></data>
+  <data name="Settings_UpdateCheckFailed" xml:space="preserve"><value>업데이트를 확인하지 못했습니다: {0}</value></data>
+  <data name="Settings_UpdateServiceUnreachable" xml:space="preserve"><value>업데이트 서비스에 연결할 수 없습니다. 연결을 확인하고 다시 시도하세요.</value></data>
+  <data name="Settings_UpdatesUnavailable" xml:space="preserve"><value>이 빌드에서는 업데이트를 사용할 수 없습니다.</value></data>
+  <data name="Settings_UpdatesViaStore" xml:space="preserve"><value>업데이트는 Microsoft Store에서 관리합니다. Store 페이지를 여는 중...</value></data>
+  <data name="Settings_Version231" xml:space="preserve"><value>버전 2.3.1</value></data>
+  <data name="Settings_VersionFormat" xml:space="preserve"><value>버전 {0}</value></data>
+  <data name="Settings_ViewPrivacyInformation" xml:space="preserve"><value>개인 정보 보기</value></data>
+  <data name="Settings_VisualStyle" xml:space="preserve"><value>시각 스타일</value></data>
+  <data name="Settings_Website" xml:space="preserve"><value>웹사이트</value></data>
+  <data name="Settings_WhenTurnFocusWindowsSettings" xml:space="preserve"><value>Windows 설정에서 집중 모드를 켜면 Pulse 집중 세션도 자동으로 시작합니다.</value></data>
+  <data name="Settings_WindDown" xml:space="preserve"><value>취침 모드</value></data>
+  <data name="Settings_WindDownActiveRange" xml:space="preserve"><value>{0}부터 {1}까지 사용</value></data>
+  <data name="Settings_WindDownDisabled" xml:space="preserve"><value>취침 모드가 꺼져 있습니다</value></data>
+  <data name="Shell_AppMarkedAsEntertainmentStay" xml:space="preserve"><value>이 앱은 엔터테인먼트로 분류되어 있습니다. 업무에 집중하세요!</value></data>
+  <data name="Shell_AppUsageSubtitle" xml:space="preserve"><value>실제로 어디에 시간을 썼는지 확인하세요.</value></data>
+  <data name="Shell_AppUsageTitle" xml:space="preserve"><value>앱 사용</value></data>
+  <data name="Shell_BackWork" xml:space="preserve"><value>업무로 돌아가기</value></data>
+  <data name="Shell_Close" xml:space="preserve"><value>닫기</value></data>
+  <data name="Shell_ContinueAnyway" xml:space="preserve"><value>계속 사용</value></data>
+  <data name="Shell_DayGlance" xml:space="preserve"><value>하루 한눈에 보기</value></data>
+  <data name="Shell_Dismiss" xml:space="preserve"><value>닫기</value></data>
+  <data name="Shell_EndFocusSession" xml:space="preserve"><value>집중 세션을 종료할까요?</value></data>
+  <data name="Shell_EndSession" xml:space="preserve"><value>세션 종료</value></data>
+  <data name="Shell_EndSessionMessage" xml:space="preserve"><value>아직 {0} 남았습니다. 정말 일찍 종료할까요?</value></data>
+  <data name="Shell_ErrorCaption" xml:space="preserve"><value>오류</value></data>
+  <data name="Shell_Exit" xml:space="preserve"><value>종료</value></data>
+  <data name="Shell_FocusModeActive" xml:space="preserve"><value>집중 모드 사용 중</value></data>
+  <data name="Shell_FocusSubtitle" xml:space="preserve"><value>방해 없이 깊이 집중하는 시간을 만드세요.</value></data>
+  <data name="Shell_FocusTimeRemaining" xml:space="preserve"><value>집중 세션 {0} 남음</value></data>
+  <data name="Shell_Follow202020Rule" xml:space="preserve"><value>20-20-20 규칙을 지키세요. 20피트(약 6m) 떨어진 곳을 20초 동안 바라보세요.</value></data>
+  <data name="Shell_GoodAfternoon" xml:space="preserve"><value>좋은 오후예요</value></data>
+  <data name="Shell_GoodEvening" xml:space="preserve"><value>좋은 저녁이에요</value></data>
+  <data name="Shell_GoodMorning" xml:space="preserve"><value>좋은 아침이에요</value></data>
+  <data name="Shell_HearingSubtitle" xml:space="preserve"><value>큰 소리로부터 귀를 보호합니다.</value></data>
+  <data name="Shell_Help" xml:space="preserve"><value>도움말</value></data>
+  <data name="Shell_HelpSubtitle" xml:space="preserve"><value>Pulse의 기록 방식과 개인 정보 보호 방법.</value></data>
+  <data name="Shell_InsightsSubtitle" xml:space="preserve"><value>한 주 동안의 생활 리듬.</value></data>
+  <data name="Shell_KeepGoing" xml:space="preserve"><value>계속하기</value></data>
+  <data name="Shell_Limits" xml:space="preserve"><value>제한</value></data>
+  <data name="Shell_LimitsSubtitle" xml:space="preserve"><value>앱별 사용 시간에 상한이나 일정을 설정합니다.</value></data>
+  <data name="Shell_Maximize" xml:space="preserve"><value>최대화</value></data>
+  <data name="Shell_Minimize" xml:space="preserve"><value>최소화</value></data>
+  <data name="Shell_OpenSettings" xml:space="preserve"><value>설정 열기</value></data>
+  <data name="Shell_PrivateDevice" xml:space="preserve"><value>비공개 기기 내 저장</value></data>
+  <data name="Shell_ScreenTimeSubtitle" xml:space="preserve"><value>화면이 언제, 얼마나 켜져 있었는지 확인하세요.</value></data>
+  <data name="Shell_ScreenTimeTitle" xml:space="preserve"><value>화면 시간</value></data>
+  <data name="Shell_SettingsSubtitle" xml:space="preserve"><value>습관에 맞게 Pulse를 조정하세요.</value></data>
+  <data name="Shell_Snooze5Min" xml:space="preserve"><value>5분 후 다시 알림</value></data>
+  <data name="Shell_SwitchTheme" xml:space="preserve"><value>테마 전환</value></data>
+  <data name="Shell_SwitchToDarkTheme" xml:space="preserve"><value>어두운 테마로 전환</value></data>
+  <data name="Shell_SwitchToLightTheme" xml:space="preserve"><value>밝은 테마로 전환</value></data>
+  <data name="Shell_TimeBreak" xml:space="preserve"><value>휴식할 시간입니다!</value></data>
+  <data name="Shell_TodaySubtitle" xml:space="preserve"><value>{0:M월 d일 dddd} · 하루 한눈에 보기.</value></data>
+  <data name="Shell_Tracking" xml:space="preserve"><value>기록 중</value></data>
+  <data name="Shell_TrayIconNotFound" xml:space="preserve"><value>트레이 아이콘을 찾을 수 없습니다:
+{0}</value></data>
+  <data name="Shell_TurnOffReminders" xml:space="preserve"><value>알림 끄기</value></data>
+  <data name="Time_HoursCompact" xml:space="preserve"><value>{0}시간</value></data>
+  <data name="Time_HoursMinutes" xml:space="preserve"><value>{0}시간 {1}분</value></data>
+  <data name="Time_HoursMinutesCompact" xml:space="preserve"><value>{0}시간 {1}분</value></data>
+  <data name="Time_HoursMinutesLong" xml:space="preserve"><value>{0}시간 {1}분</value></data>
+  <data name="Time_Minutes" xml:space="preserve"><value>{0}분</value></data>
+  <data name="Time_MinutesCompact" xml:space="preserve"><value>{0}분</value></data>
+  <data name="Time_MinutesLong" xml:space="preserve"><value>{0}분</value></data>
+  <data name="Time_MinutesSecondsCompact" xml:space="preserve"><value>{0}분 {1}초</value></data>
+  <data name="Time_SecondsCompact" xml:space="preserve"><value>{0}초</value></data>
+  <data name="Tray_CheckForUpdates" xml:space="preserve"><value>업데이트 확인</value></data>
+  <data name="Tray_EndFocusSession" xml:space="preserve"><value>집중 세션 종료</value></data>
+  <data name="Tray_OpenDashboard" xml:space="preserve"><value>대시보드 열기</value></data>
+  <data name="Tray_Reports" xml:space="preserve"><value>보고서</value></data>
+  <data name="Tray_StartFocusSession" xml:space="preserve"><value>집중 세션 시작</value></data>
+  <data name="Tray_StillRunningBody" xml:space="preserve"><value>백그라운드에서 계속 기록하고 있습니다. 종료하려면 트레이 아이콘을 마우스 오른쪽 단추로 클릭하거나, 설정 → 시작에서 이 기능을 끄세요.</value></data>
+  <data name="Tray_StillRunningTitle" xml:space="preserve"><value>Pulse가 계속 실행 중입니다</value></data>
+  <data name="Update_AvailablePrompt" xml:space="preserve"><value>새 버전({0})을 사용할 수 있습니다.
+
+지금 업데이트할까요?</value></data>
+  <data name="Update_AvailableTitle" xml:space="preserve"><value>업데이트 가능</value></data>
+  <data name="Update_DevBuild" xml:space="preserve"><value>업데이트 확인은 이 개발 빌드가 아닌 설치된 Pulse 앱에서 사용할 수 있습니다.</value></data>
+  <data name="Update_InitFailed" xml:space="preserve"><value>Pulse가 이 설치의 업데이트 프로그램을 초기화하지 못했습니다.</value></data>
+  <data name="Update_PortableBuild" xml:space="preserve"><value>업데이트 확인은 이 포터블 빌드가 아닌 설치된 Pulse 앱에서 사용할 수 있습니다.</value></data>
+  <data name="Update_StoreManaged" xml:space="preserve"><value>업데이트는 Microsoft Store에서 자동으로 관리합니다.</value></data>
+  <data name="WeekNav_4WeeksBack" xml:space="preserve"><value>4주 전</value></data>
+  <data name="WeekNav_ChooseAnotherWeek" xml:space="preserve"><value>다른 주 선택</value></data>
+  <data name="WeekNav_JumpWeek" xml:space="preserve"><value>주 이동</value></data>
+  <data name="WeekNav_NextWeek" xml:space="preserve"><value>다음 주</value></data>
+  <data name="WeekNav_Oldest" xml:space="preserve"><value>가장 오래된 주</value></data>
+  <data name="WeekNav_PreviousWeek" xml:space="preserve"><value>이전 주</value></data>
+  <data name="WeekNav_Week" xml:space="preserve"><value>이번 주</value></data>
+  <data name="Welcome_AllDataStoredLocallyComputer" xml:space="preserve"><value>모든 데이터는 이 컴퓨터의 다음 위치에 로컬로 저장됩니다.</value></data>
+  <data name="Welcome_AppNamesUsageDurationNot" xml:space="preserve"><value>앱 이름과 사용 시간(창 내용 제외)</value></data>
+  <data name="Welcome_AudioOutputMeterVolumeLevel" xml:space="preserve"><value>오디오 출력 미터(볼륨 수준만, 오디오 내용 제외)</value></data>
+  <data name="Welcome_AudioOutputVolumeLevelsHearing" xml:space="preserve"><value>청력 보호를 위한 오디오 출력 볼륨 수준</value></data>
+  <data name="Welcome_CanExportDeleteAllData" xml:space="preserve"><value>언제든지 설정에서 모든 데이터를 내보내거나 삭제할 수 있습니다.</value></data>
+  <data name="Welcome_DataStaysLocal" xml:space="preserve"><value>데이터는 기기에만 저장됩니다</value></data>
+  <data name="Welcome_GetStarted" xml:space="preserve"><value>시작하기</value></data>
+  <data name="Welcome_IdleDetectionMouseKeyboardInactivity" xml:space="preserve"><value>유휴 감지(마우스/키보드 비활성)</value></data>
+  <data name="Welcome_InternetTrafficBrowsingHistoryUrls" xml:space="preserve"><value>인터넷 트래픽, 검색 기록 또는 URL</value></data>
+  <data name="Welcome_KeystrokesPasswordsTypedContent" xml:space="preserve"><value>키 입력, 암호 또는 입력한 내용</value></data>
+  <data name="Welcome_LocalappdataPulse" xml:space="preserve"><value>%LocalAppData%\Pulse\</value></data>
+  <data name="Welcome_MicrophoneAudioRecordings" xml:space="preserve"><value>마이크 오디오 또는 녹음</value></data>
+  <data name="Welcome_NothingEverSentCloudNo" xml:space="preserve"><value>클라우드로 전송되는 것은 없으며, 계정도 인터넷 연결도 필요 없습니다.</value></data>
+  <data name="Welcome_PermissionsUsed" xml:space="preserve"><value>사용하는 권한</value></data>
+  <data name="Welcome_PersonalDigitalWellnessCompanionWindows" xml:space="preserve"><value>Windows를 위한 나만의 디지털 웰빙 도우미</value></data>
+  <data name="Welcome_ScreenContentsScreenshotsWindowText" xml:space="preserve"><value>화면 내용, 스크린샷 또는 창 텍스트</value></data>
+  <data name="Welcome_ScreenTimeActiveVsIdle" xml:space="preserve"><value>화면 시간(활성 시간과 유휴 시간)</value></data>
+  <data name="Welcome_WelcomePulse" xml:space="preserve"><value>Pulse에 오신 것을 환영합니다</value></data>
+  <data name="Welcome_WhatWeNeverTrack" xml:space="preserve"><value>기록하지 않는 항목</value></data>
+  <data name="Welcome_WhatWeTrack" xml:space="preserve"><value>기록하는 항목</value></data>
+  <data name="Welcome_WindowFocusDetectionTrackActive" xml:space="preserve"><value>창 포커스 감지(활성 앱 기록용)</value></data>
+  <data name="WindDown_NotifyBody" xml:space="preserve"><value>조용한 시간이 시작되었습니다. 하루를 마무리하고 쉴 준비를 해 보세요.{0}</value></data>
+  <data name="WindDown_NotifyTitle" xml:space="preserve"><value>🌙 취침 모드 시간입니다</value></data>
+  <data name="WindDown_SummaryToday" xml:space="preserve"><value>오늘 PC를 {0}시간 {1}분 사용했습니다.</value></data>
+  <data name="Dashboard_PerDayAverage" xml:space="preserve"><value> · 하루 평균 {0}</value></data>
+</root>
