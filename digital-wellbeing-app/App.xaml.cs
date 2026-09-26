@@ -44,7 +44,7 @@ namespace digital_wellbeing_app
                 .AddSkiaSharp()
                 .AddDefaultMappers()
                 .AddDarkTheme()  // Start with dark as base, we customize below
-                .HasGlobalSKTypeface(SKFontManager.Default.MatchFamily("Segoe UI"))
+                .HasTextSettings(new TextSettings { DefaultTypeface = SKFontManager.Default.MatchFamily("Segoe UI") })
             );
         }
 

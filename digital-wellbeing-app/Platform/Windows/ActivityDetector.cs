@@ -1,5 +1,7 @@
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
+using NAudio.CoreAudioApi;
 
 namespace digital_wellbeing_app.Platform.Windows
 {
@@ -28,6 +30,9 @@ namespace digital_wellbeing_app.Platform.Windows
 
         [DllImport("user32.dll")]
         private static extern IntPtr GetDesktopWindow();
+
+        [DllImport("user32.dll")]
+        private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
 
         [StructLayout(LayoutKind.Sequential)]
         private struct RECT
@@ -103,6 +108,51 @@ namespace digital_wellbeing_app.Platform.Windows
         public static bool IsPassivelyConsuming()
         {
             return IsAudioCurrentlyPlaying() || IsFullscreenAppActive();
+        }
+
+        /// <summary>
+        /// Whether the foreground app itself is being consumed: fullscreen, or the source of audio
+        /// that is currently playing. Matched by process name because browsers play audio from a
+        /// separate child process.
+        /// </summary>
+        public static bool IsForegroundConsuming()
+        {
+            if (IsFullscreenAppActive()) return true;
+
+            try
+            {
+                GetWindowThreadProcessId(GetForegroundWindow(), out uint pid);
+                if (pid == 0) return false;
+                string foregroundName;
+                using (var foreground = Process.GetProcessById((int)pid))
+                    foregroundName = foreground.ProcessName;
+
+                using var enumerator = new MMDeviceEnumerator();
+                using var device = enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
+                var sessions = device.AudioSessionManager.Sessions;
+                for (int i = 0; i < sessions.Count; i++)
+                {
+                    using var session = sessions[i];
+                    if (session.State != NAudio.CoreAudioApi.Interfaces.AudioSessionState.AudioSessionStateActive
+                        || session.AudioMeterInformation.MasterPeakValue <= 0.001f)
+                        continue;
+                    try
+                    {
+                        using var source = Process.GetProcessById((int)session.GetProcessID);
+                        if (string.Equals(source.ProcessName, foregroundName, StringComparison.OrdinalIgnoreCase))
+                            return true;
+                    }
+                    catch
+                    {
+                        // The audio source exited between enumeration and lookup.
+                    }
+                }
+            }
+            catch
+            {
+                // No audio device or the foreground process exited: treat as not consuming.
+            }
+            return false;
         }
 
         /// <summary>

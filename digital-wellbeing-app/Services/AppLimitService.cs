@@ -98,10 +98,10 @@ namespace digital_wellbeing_app.Services
                 }
 
                 var now = DateTime.Now;
-                var liveSeconds = session.StartTime.Date == now.Date && now > session.StartTime
-                    ? (int)(now - session.StartTime).TotalSeconds
-                    : 0;
-                if (!IsLimitExceeded(limit, now, liveSeconds)) return;
+                var usedSeconds = _appTracker.GetSessionsForRange(now.Date, now.Date)
+                    .Where(s => AppIdentity.NormalizeKey(s.ExecutablePath, s.AppName) == key)
+                    .Sum(s => s.Duration.TotalSeconds);
+                if (!HasReachedLimit(limit, now, usedSeconds)) return;
 
                 if (_lastActionTime.TryGetValue(key, out var last) && DateTime.Now - last < ActionCooldown)
                     return;
@@ -129,20 +129,12 @@ namespace digital_wellbeing_app.Services
         /// so it's testable without a live tracker.
         /// </summary>
         public static bool IsLimitExceeded(AppLimit limit, DateTime now, int liveUsageSeconds = 0)
-        {
-            if (limit.ScheduleEnabled && IsTimeInSchedule(limit, now))
-                return true;
+            => HasReachedLimit(limit, now,
+                DatabaseService.GetAppUsageSecondsForDate(limit.AppIdentifier, now.Date) + Math.Max(0, liveUsageSeconds));
 
-            if (limit.DailyLimitMinutes > 0)
-            {
-                var usedSeconds = DatabaseService.GetAppUsageSecondsForDate(limit.AppIdentifier, now.Date)
-                                  + Math.Max(0, liveUsageSeconds);
-                if (usedSeconds >= limit.DailyLimitMinutes * 60)
-                    return true;
-            }
-
-            return false;
-        }
+        private static bool HasReachedLimit(AppLimit limit, DateTime now, double usedSeconds)
+            => (limit.ScheduleEnabled && IsTimeInSchedule(limit, now))
+                || (limit.DailyLimitMinutes > 0 && usedSeconds >= limit.DailyLimitMinutes * 60);
 
         /// <summary>Ported from WindDownService.IsTimeInWindDownPeriod - same overnight-aware math.</summary>
         private static bool IsTimeInSchedule(AppLimit limit, DateTime time)

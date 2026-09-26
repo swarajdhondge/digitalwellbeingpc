@@ -1,7 +1,6 @@
 version: 2
 updates:
-  # .NET dependencies (digital-wellbeing-app, Tests, UITests, FixtureSeeder - all referenced
-  # from the root solution, so the root directory covers all of them).
+  # .NET application and test dependencies.
   - package-ecosystem: "nuget"
     directory: "/"
     schedule:
@@ -10,6 +9,16 @@ updates:
     labels:
       - "dependencies"
       - ".net"
+    ignore:
+      # OpenTK (via LiveCharts/SkiaSharp) only accepts GLFW 3.3.x.
+      - dependency-name: "OpenTK.redist.glfw"
+        versions: [">= 3.4"]
+      # NAudio 3 is a major release; upgrade deliberately, not through Dependabot.
+      - dependency-name: "NAudio"
+        versions: [">= 3"]
+      # System.Drawing.Common 10+ targets .NET 10; the app targets .NET 9.
+      - dependency-name: "System.Drawing.Common"
+        versions: [">= 10"]
 
   # Marketing site (pulse/, Next.js).
   - package-ecosystem: "npm"

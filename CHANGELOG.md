@@ -1,5 +1,24 @@
 # Changelog
 
+## [v2.3.1] - 2026-09-26
+
+Accurate app tracking and security updates.
+
+### Fixes
+- **File Explorer no longer counts time you didn't use it** (#32). Clicking the desktop or taskbar was recorded as File Explorer usage.
+- **Away time isn't credited to the app in front.** After 5 minutes without input, app time stops unless that app is fullscreen or playing audio. Background music no longer adds hours to whatever window was left open.
+- **Clock changes don't inflate totals.** A daylight-saving, time-zone or manual clock change no longer adds the jump to screen time or app time.
+- **No double counting around saves and midnight.** Live app time is read together with saved time, sessions are split at midnight on shutdown, and a day's total is kept when the clock returns to it.
+- **Pages show current numbers.** Insights, Settings diagnostics and the Hearing page now reload when opened instead of showing values from startup.
+- **Help page corrected** to describe how tracking actually works.
+
+### Security & dependencies
+- Patched vulnerable website dependencies (Next.js, sharp, browserslist, nanoid, baseline-browser-mapping).
+- Updated LiveCharts 2.0.5 (stable), Material Design 5.3.2, NAudio 2.4.0, System.Drawing.Common 9.0.20 and Velopack 1.2.158.
+
+### Thanks
+- @Arham254 for the File Explorer tracking fix.
+
 ## [v2.3.0] - 2026-08-01
 
 Per-app time limits, Windows Focus integration, opt-in website tracking, and more honest hearing guidance.

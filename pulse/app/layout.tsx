@@ -8,7 +8,7 @@ const hanken = Hanken_Grotesk({
   display: "swap",
 });
 
-const SITE_URL = "https://digitalwellbeingpc.vercel.app";
+const SITE_URL = "https://www.digitalwellbeingpc.com";
 const DESCRIPTION =
   "Pulse is a free, private, open-source Digital Wellbeing app for Windows. Track screen time, app usage, and focus sessions, and protect your hearing — all on-device. No account, no cloud, no telemetry.";
 

@@ -56,7 +56,7 @@ const shots = [
   { src: "/screenshots/weeklyreport.png", label: "Insights" },
 ];
 
-const SITE_URL = "https://digitalwellbeingpc.vercel.app";
+const SITE_URL = "https://www.digitalwellbeingpc.com";
 
 // Structured data for rich results — a free Windows SoftwareApplication.
 const jsonLd = {

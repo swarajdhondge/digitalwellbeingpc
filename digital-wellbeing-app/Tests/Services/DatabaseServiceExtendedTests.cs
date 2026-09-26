@@ -76,7 +76,7 @@ namespace digital_wellbeing_app.Tests.Services
         }
 
         [Fact]
-        public void ConcurrentReads_DoNotThrow()
+        public async Task ConcurrentReads_DoNotThrow()
         {
             // Verify thread safety by reading from multiple threads simultaneously
             var tasks = new List<Task>();
@@ -103,7 +103,7 @@ namespace digital_wellbeing_app.Tests.Services
                 }));
             }
 
-            Task.WaitAll(tasks.ToArray());
+            await Task.WhenAll(tasks);
             Assert.Empty(exceptions);
         }
 

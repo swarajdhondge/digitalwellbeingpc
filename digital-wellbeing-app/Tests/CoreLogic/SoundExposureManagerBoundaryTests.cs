@@ -135,7 +135,7 @@ namespace digital_wellbeing_app.Tests.CoreLogic
                     if (i % 2 == 0)
                         mgr.HandleVolumeChange(0.4, "ConcurrentDevice", "Headphones", 0.3f, TimeSpan.FromSeconds(10));
                     else
-                        periodicSaveMethod.Invoke(mgr, new object?[] { null, null });
+                        periodicSaveMethod.Invoke(mgr, new object[] { null, null });
                 }
             })).ToArray();
 

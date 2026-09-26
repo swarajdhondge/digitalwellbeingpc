@@ -1,98 +1,58 @@
 # Contributing to Pulse
 
-Thanks for your interest in improving **Pulse — DigitalWellbeingPC**!
-Contributions of all kinds are welcome: bug reports, feature ideas, code, docs,
-and design.
+Thanks for helping improve Pulse. Bug reports, fixes, docs and design ideas are all welcome.
 
-By contributing you agree that your contributions will be licensed under the
-project's [GNU General Public License v3.0](LICENSE).
+By contributing you agree your work is licensed under [GPL-3.0](LICENSE) and you follow the
+[Code of Conduct](CODE_OF_CONDUCT.md).
 
-Please also read our [Code of Conduct](CODE_OF_CONDUCT.md).
+## Setup
 
-## Getting started
-
-### Prerequisites
-
-- [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
-- Windows 10 (build 17763+) or Windows 11
-- (Optional, for the marketing site) Node.js 20+ for `pulse/`
-
-### Build & run
+Requires the [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0) and Windows 10 (17763+) or 11.
+Node.js 20+ is only needed for the website in `pulse/`.
 
 ```powershell
-# from the repo root
-dotnet build
-dotnet run --project digital-wellbeing-app
+dotnet run --project digital-wellbeing-app               # run the app
+dotnet test digital-wellbeing-app/Tests/Tests.csproj     # unit tests (must pass)
 ```
 
-> **Antivirus note:** Some AV products (e.g. Quick Heal) quarantine freshly
-> built, unsigned executables when they are launched from a shell. If this
-> happens, run the app from Visual Studio / VS Code, or add the build output
-> directory to your AV exclusions while developing.
+`UITests/` holds FlaUI tests that drive the real app and need an interactive desktop.
 
-### Run the tests
+If your antivirus quarantines the freshly built, unsigned exe, run it from your IDE or exclude
+the build folder.
 
-```powershell
-dotnet test digital-wellbeing-app/Tests/Tests.csproj
-```
-
-UI tests live in `UITests/` (FlaUI) and require an interactive desktop session.
-
-## Project layout
+## Layout
 
 | Path | What it is |
 |---|---|
-| `digital-wellbeing-app/` | The WPF desktop app (.NET 9) |
-| `digital-wellbeing-app/Tests/` | xUnit unit tests |
-| `UITests/` | FlaUI UI automation & screenshot capture |
-| `pulse/` | Next.js marketing site (deployed to Vercel) |
-| `scripts/` | Build / release / screenshot helper scripts |
-| `.github/` | CI workflows, issue/PR templates, README screenshots |
+| `digital-wellbeing-app/` | WPF app (MVVM: `Views/`, `ViewModels/`, `Models/`; tracking in `CoreLogic/`; data and logic in `Services/`; Win32 interop in `Platform/Windows/`) |
+| `digital-wellbeing-app/Tests/` | xUnit tests, one file per class under test |
+| `UITests/` | FlaUI UI tests and screenshot capture |
+| `pulse/` | Website (Next.js, deployed to Vercel) |
 
-Architecture: MVVM (`Views/`, `ViewModels/`, `Models/`), a `Services/` layer for
-business logic and data access, core tracking in `CoreLogic/`, and
-platform-specific interop under `Platform/Windows/`.
+## Pull requests
 
-## Coding conventions
+1. Open or find an issue first for anything bigger than a small fix.
+2. Keep each PR to **one** change. Unrelated refactors, renames, formatting sweeps and features go in separate PRs.
+3. Add or update a test that fails without your change.
+4. **Test it yourself and show it.** Run the unit tests and use the change in the running app. In the PR,
+   list what you ran and what you saw, with a screenshot for UI changes. PRs without this are closed.
+5. CI must be green.
+6. Use a [Conventional Commits](https://www.conventionalcommits.org/) title, e.g. `fix: stop counting the desktop as File Explorer`.
+7. Don't commit build output, installers, archives or personal data.
 
-- PascalCase for public members, `_camelCase` for private fields.
-- Interfaces prefixed with `I`.
-- `async`/`await` for all I/O — **never block the UI thread**; background work via
-  `Task.Run`, UI-thread delays via `Task.Delay` (never `Thread.Sleep`).
-- MVVM: bind UI state via `INotifyPropertyChanged`; avoid direct UI manipulation
-  from code-behind.
-- Nullable reference types are enabled — keep the build warning-clean.
-- Run `dotnet format` before committing.
+## AI-assisted contributions
 
-## Pull request process
+Using AI tools is fine. You are still the author, so:
 
-1. Fork the repo and create a topic branch (`feat/…`, `fix/…`, `docs/…`).
-2. Make your change, add or update tests, and keep the build warning-clean.
-3. Run `dotnet build` and `dotnet test digital-wellbeing-app/Tests/Tests.csproj` —
-   both must pass.
-4. Use [Conventional Commits](https://www.conventionalcommits.org/) for commit
-   messages (e.g. `fix: correct category attribution in reports`).
-5. Open a PR against `main`, fill in the PR template, and link any related issue.
+- **Understand every line** you submit and be ready to explain it in review.
+- **Run it.** Test the change in the app yourself. Tests written by the same tool that wrote the code are
+  not enough on their own.
+- **Keep it minimal.** No generated boilerplate, speculative abstractions, unused code or restated comments.
+- **Say so** in the PR description when a tool wrote a significant part of the change.
 
-CI will build the app, run the unit tests, and build the `pulse/` site on every
-PR. All checks must be green before merge.
+PRs that are large, unfocused or clearly unreviewed may be closed with a request to split or trim them.
 
-## Regenerating screenshots
+## Bugs and security
 
-README, website, and Microsoft Store screenshots are **generated**, never hand
-cropped. See [`scripts/capture-screenshots.ps1`](scripts/capture-screenshots.ps1)
-and the [Screenshot pipeline](#screenshot-pipeline) section below.
-
-### Screenshot pipeline
-
-> Documented in full in Phase 3 of the v2.2 release. In short: the FlaUI capture
-> suite launches the built app at a fixed window size, seeds a fixture database
-> so views show believable data, navigates each section via the nav-rail
-> automation IDs, captures every section in both Light and Dark themes, and
-> writes canonical PNGs to `.github/screenshots/` (with the site subset copied to
-> `pulse/public/screenshots/`). Regenerate instead of editing images by hand.
-
-## Reporting bugs & requesting features
-
-Use the issue templates under **Issues → New issue**. For security issues, follow
-[SECURITY.md](SECURITY.md) and report privately.
+Use the issue templates for bugs and feature requests. Report security issues privately as described in
+[SECURITY.md](SECURITY.md).

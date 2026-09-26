@@ -52,6 +52,7 @@ namespace digital_wellbeing_app.CoreLogic
             };
             _periodicSaveTimer.Elapsed += OnPeriodicSave;
             _periodicSaveTimer.Start();
+            TrackingHealthService.RecordHeartbeat(nameof(SoundExposureManager));
         }
 
         public void HandleDeviceChange(string newDeviceName, string newDeviceType)

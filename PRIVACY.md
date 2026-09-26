@@ -1,6 +1,6 @@
 # Privacy Policy
 
-_Last updated: 2026-07-17_
+_Last updated: 2026-09-26_
 
 **Pulse — DigitalWellbeingPC** ("Pulse", "the app") is a privacy-first Windows
 application. This policy explains exactly what data the app handles. The short
@@ -10,7 +10,8 @@ version: **everything stays on your computer.**
 
 Pulse tracks, entirely on your local machine:
 
-- **Screen time** — active vs. idle time derived from mouse/keyboard activity.
+- **Screen time** — active vs. idle time derived from mouse/keyboard activity, and
+  whether audio is playing or an app is fullscreen.
 - **App usage** — which application window is in the foreground and for how long
   (process name, executable path, and a friendly display name).
 - **Audio exposure** — the system's audio **output** peak level, used only to
@@ -54,8 +55,11 @@ or disclose.
 ## Your control over your data
 
 - **Export:** Settings → export screen time, app usage, and sound data to CSV.
-- **Delete:** Settings lets you delete all stored data (and, in v2.2+, delete a
-  specific date range). Uninstalling the app also removes its local data store.
+- **Backup:** Settings → Back up now writes a ZIP of your data to a folder you
+  choose. It stays on your device.
+- **Delete:** Settings lets you delete all stored data or a specific date range.
+  Uninstalling does not remove `%LocalAppData%\Pulse\`; delete your data in
+  Settings first, or remove that folder, to erase everything.
 
 ## Children's privacy
 

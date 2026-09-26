@@ -23,6 +23,7 @@ namespace digital_wellbeing_app.CoreLogic
         private TimeSpan _activeTime;
         private DateTime _sessionStartTime;
         private DateTime _lastSaved;
+        private DateTime? _lastActivityCheck;
 
         // Throttles the tracking-health heartbeat write - _timer ticks every 1s, far too often to
         // write on every tick.
@@ -40,6 +41,7 @@ namespace digital_wellbeing_app.CoreLogic
         // Idle detection settings
         private const int IdleThresholdSeconds = 300; // 5 minutes
         private const int SaveIntervalMinutes = 5;    // Save every 5 minutes (was 15)
+        private static readonly TimeSpan MaxTickGap = TimeSpan.FromSeconds(60);
 
         // State tracking
         private TrackingState _state = TrackingState.Active;
@@ -49,13 +51,13 @@ namespace digital_wellbeing_app.CoreLogic
         // Public properties
         public TimeSpan CurrentActiveTime => _activeTime;
         public DateTime SessionStartTime => _sessionStartTime;
-        
+
         /// <summary>Current tracking state (Active, Idle, or Paused)</summary>
         public TrackingState State => _state;
-        
+
         /// <summary>When the current segment started (resets every 5 min save)</summary>
         public DateTime? CurrentSessionStart => _currentSegmentStart;
-        
+
         /// <summary>Seconds accumulated in current segment (resets every 5 min)</summary>
         public int CurrentSessionSeconds => _currentSegmentAccumulated;
 
@@ -64,7 +66,7 @@ namespace digital_wellbeing_app.CoreLogic
 
         /// <summary>Total seconds in current continuous session (only resets on idle/pause)</summary>
         public int ContinuousSessionSeconds => _continuousSessionSeconds;
-        
+
         /// <summary>Number of sessions tracked today</summary>
         public int SessionCount => _sessionCount;
 
@@ -77,6 +79,7 @@ namespace digital_wellbeing_app.CoreLogic
         /// have no recent input, which would otherwise make activity-based accumulation flaky.)
         /// </summary>
         public Func<TimeSpan> IdleTimeProvider { get; set; } = WindowsIdleTimeHelper.GetIdleTime;
+        public Func<bool> PassiveConsumptionProvider { get; set; } = ActivityDetector.IsPassivelyConsuming;
 
         /// <summary>
         /// Source of "now" for every day-boundary/segment/save decision after construction.
@@ -120,6 +123,7 @@ namespace digital_wellbeing_app.CoreLogic
                 _continuousSessionStart = Clock();
                 _continuousSessionSeconds = 0;
                 _state = TrackingState.Active;
+                _lastActivityCheck = Clock();
                 _timer.Start();
             }
         }
@@ -173,6 +177,7 @@ namespace digital_wellbeing_app.CoreLogic
                 _state = TrackingState.Active;
                 _idleStartTime = null;
 
+                _lastActivityCheck = Clock();
                 _timer.Start();
             }
             StateChanged?.Invoke(this, TrackingState.Active);
@@ -206,6 +211,7 @@ namespace digital_wellbeing_app.CoreLogic
                 _continuousSessionStart = now;
                 _continuousSessionSeconds = 0;
                 _lastSaved = now;
+                _lastActivityCheck = now;
             }
         }
 
@@ -222,7 +228,30 @@ namespace digital_wellbeing_app.CoreLogic
 
             lock (_stateLock)
             {
-                // Check for day rollover at midnight
+                if (_state == TrackingState.Paused) return;
+                var checkTime = Clock();
+                var previousCheck = _lastActivityCheck ?? checkTime.AddSeconds(-1);
+                // A gap far beyond the 1s tick is a wall-clock jump (DST, time zone, manual
+                // change), not usage: count it as a single tick.
+                if (checkTime - previousCheck > MaxTickGap) previousCheck = checkTime.AddSeconds(-1);
+                _lastActivityCheck = checkTime;
+                var elapsed = checkTime > previousCheck ? checkTime - previousCheck : TimeSpan.Zero;
+
+                var idleTime = IdleTimeProvider();
+                bool shouldPauseTracking = idleTime.TotalSeconds > IdleThresholdSeconds && !PassiveConsumptionProvider();
+                var activeEnd = shouldPauseTracking
+                    ? checkTime - (idleTime - TimeSpan.FromSeconds(IdleThresholdSeconds))
+                    : checkTime;
+
+                // Credit only the active portion of a delayed tick to each day.
+                if (previousCheck.Date < checkTime.Date)
+                {
+                    var midnight = previousCheck.Date.AddDays(1);
+                    var priorDayEnd = activeEnd < midnight ? activeEnd : midnight;
+                    if (_state == TrackingState.Active && priorDayEnd > previousCheck)
+                        Accumulate(priorDayEnd - previousCheck);
+                    elapsed = checkTime - checkTime.Date;
+                }
                 CheckDayRollover();
 
                 var utcNow = DateTime.UtcNow;
@@ -232,13 +261,6 @@ namespace digital_wellbeing_app.CoreLogic
                     TrackingHealthService.RecordHeartbeat(nameof(ScreenTimeTracker));
                 }
 
-                // Get current idle state
-                var idleTime = IdleTimeProvider();
-                bool isUserIdle = idleTime.TotalSeconds > IdleThresholdSeconds;
-                bool isPassivelyConsuming = ActivityDetector.IsPassivelyConsuming();
-
-                bool shouldPauseTracking = isUserIdle && !isPassivelyConsuming;
-
                 if (shouldPauseTracking)
                 {
                     if (_state != TrackingState.Idle)
@@ -247,6 +269,8 @@ namespace digital_wellbeing_app.CoreLogic
 
                         if (_state == TrackingState.Active)
                         {
+                            var activeStart = previousCheck < checkTime.Date ? checkTime.Date : previousCheck;
+                            if (activeEnd > activeStart) Accumulate(activeEnd - activeStart);
                             SaveSessionData();
                             SaveCurrentScreenSession();
                         }
@@ -259,6 +283,7 @@ namespace digital_wellbeing_app.CoreLogic
                 {
                     if (_state == TrackingState.Idle)
                     {
+                        elapsed = TimeSpan.Zero;
                         _currentSegmentStart = Clock();
                         _currentSegmentAccumulated = 0;
                         _continuousSessionStart = Clock();
@@ -269,9 +294,8 @@ namespace digital_wellbeing_app.CoreLogic
                         stateChangeToReport = _state;
                     }
 
-                    _activeTime = _activeTime.Add(TimeSpan.FromSeconds(1));
-                    _currentSegmentAccumulated++;
-                    _continuousSessionSeconds++;
+                    // Timer callbacks can be delayed under load; count elapsed time, not callbacks.
+                    Accumulate(elapsed);
                 }
 
                 // Periodic save
@@ -296,6 +320,15 @@ namespace digital_wellbeing_app.CoreLogic
             {
                 StateChanged?.Invoke(this, stateChangeToReport.Value);
             }
+        }
+
+        private void Accumulate(TimeSpan elapsed)
+        {
+            var previousSeconds = (int)_activeTime.TotalSeconds;
+            _activeTime += elapsed;
+            var addedSeconds = (int)_activeTime.TotalSeconds - previousSeconds;
+            _currentSegmentAccumulated += addedSeconds;
+            _continuousSessionSeconds += addedSeconds;
         }
 
         private void CheckDayRollover()
@@ -335,13 +368,8 @@ namespace digital_wellbeing_app.CoreLogic
                     var existingEntry = db.Table<ScreenTimePeriod>().FirstOrDefault(x => x.SessionDate == todayKey);
                     if (existingEntry != null)
                     {
-                        // Race guard: another path (e.g. LoadSessionData at a near-simultaneous
-                        // startup) already created today's row - update it in place instead of
-                        // inserting a duplicate.
-                        existingEntry.SessionStartTime = _sessionStartTime.ToString("o");
-                        existingEntry.LastRecordedTime = Clock().ToString("o");
-                        existingEntry.AccumulatedActiveSeconds = 0;
-                        db.Update(existingEntry);
+                        // A clock/time-zone change can return to a date already recorded.
+                        _activeTime = TimeSpan.FromSeconds(existingEntry.AccumulatedActiveSeconds);
                     }
                     else
                     {

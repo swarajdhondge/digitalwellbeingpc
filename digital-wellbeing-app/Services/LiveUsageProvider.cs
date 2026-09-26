@@ -55,7 +55,7 @@ namespace digital_wellbeing_app.Services
 
         /// <summary>Per-app durations for today, persisted rows plus the live current session.</summary>
         public static List<TodayAppEntry> GetTodayAppEntries()
-            => CombineTodayAppEntries(AppTracker?.CurrentSession);
+            => GroupAppEntries(GetAppSessionsForRange(DateTime.Today, DateTime.Today));
 
         /// <summary>Total app time today, live session included.</summary>
         public static TimeSpan GetTodayAppTime()
@@ -67,26 +67,8 @@ namespace digital_wellbeing_app.Services
         /// lag the App Usage and Dashboard pages by the periodic-save interval.
         /// </summary>
         public static List<AppUsageSession> GetAppSessionsForRange(DateTime startDate, DateTime endDate)
-        {
-            var sessions = DatabaseService.GetAppUsageSessionsForRange(startDate, endDate).ToList();
-            var now = DateTime.Now;
-            var rangeStart = startDate.Date;
-            var rangeEndExclusive = endDate.Date.AddDays(1);
-            var live = AppTracker?.CurrentSession;
-
-            if (live != null && now >= rangeStart && now < rangeEndExclusive && now > live.StartTime)
-            {
-                sessions.Add(new AppUsageSession
-                {
-                    AppName = live.AppName,
-                    ExecutablePath = live.ExecutablePath,
-                    StartTime = live.StartTime < rangeStart ? rangeStart : live.StartTime,
-                    EndTime = now
-                });
-            }
-
-            return sessions;
-        }
+            => AppTracker?.GetSessionsForRange(startDate, endDate)
+                ?? DatabaseService.GetAppUsageSessionsForRange(startDate, endDate).ToList();
 
         /// <summary>
         /// Testable core: today's persisted app sessions grouped per app, with an optional live
@@ -94,38 +76,31 @@ namespace digital_wellbeing_app.Services
         /// </summary>
         public static List<TodayAppEntry> CombineTodayAppEntries(AppUsageSession? liveSession)
         {
-            var map = new Dictionary<string, TodayAppEntry>(StringComparer.OrdinalIgnoreCase);
-
-            foreach (var s in DatabaseService.GetAppUsageSessionsForDate(DateTime.Now))
+            var sessions = DatabaseService.GetAppUsageSessionsForDate(DateTime.Today).ToList();
+            // A caller may still hold the segment that a periodic save just closed.
+            if (liveSession != null && liveSession.EndTime == default)
             {
-                var key = AppIdentity.NormalizeKey(s.ExecutablePath, s.AppName);
-                if (key.Length == 0) continue;
-                var dur = s.EndTime - s.StartTime;
-                map[key] = map.TryGetValue(key, out var existing)
-                    ? existing with { Duration = existing.Duration + dur }
-                    : new TodayAppEntry(s.AppName, s.ExecutablePath, dur);
-            }
-
-            if (liveSession != null)
-            {
-                var live = DateTime.Now - liveSession.StartTime;
-                if (live > TimeSpan.Zero)
-                {
-                    var key = AppIdentity.NormalizeKey(liveSession.ExecutablePath, liveSession.AppName);
-                    if (key.Length > 0)
+                var now = DateTime.Now;
+                var start = liveSession.StartTime < now.Date ? now.Date : liveSession.StartTime;
+                if (now > start)
+                    sessions.Add(new AppUsageSession
                     {
-                        map[key] = map.TryGetValue(key, out var existing)
-                            ? existing with { Duration = existing.Duration + live }
-                            : new TodayAppEntry(liveSession.AppName, liveSession.ExecutablePath, live);
-                    }
-                }
+                        AppName = liveSession.AppName,
+                        ExecutablePath = liveSession.ExecutablePath,
+                        StartTime = start,
+                        EndTime = now
+                    });
             }
+            return GroupAppEntries(sessions);
+        }
 
-            return map
-                .Select(kv => kv.Value)
+        private static List<TodayAppEntry> GroupAppEntries(IEnumerable<AppUsageSession> sessions)
+            => sessions.GroupBy(s => AppIdentity.NormalizeKey(s.ExecutablePath, s.AppName), StringComparer.OrdinalIgnoreCase)
+                .Where(g => g.Key.Length > 0)
+                .Select(g => new TodayAppEntry(g.First().AppName, g.First().ExecutablePath,
+                    TimeSpan.FromTicks(g.Sum(s => s.Duration.Ticks))))
                 .OrderByDescending(e => e.Duration)
                 .ToList();
-        }
 
         // --- Sound exposure ---
 

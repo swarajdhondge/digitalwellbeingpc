@@ -18,7 +18,7 @@
     <ApplicationIcon>Resources\Icons\digital-balance-icon.ico</ApplicationIcon>
     <Win32Icon>Resources\Icons\digital-balance-icon.ico</Win32Icon>
 
-    <Version>2.3.0</Version>
+    <Version>2.3.1</Version>
     
     <!-- Disable assembly info generation to fix WPF temp project duplicate attribute issue -->
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -37,12 +37,14 @@
   <ItemGroup>
     <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
     <PackageReference Include="sqlite-net-pcl" Version="1.11.285" />
-    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
-    <PackageReference Include="NAudio" Version="2.1.0" />
-    <PackageReference Include="MaterialDesignThemes" Version="5.2.1" />
-    <PackageReference Include="MaterialDesignColors" Version="5.2.1" />
-    <PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.0.0-rc3.3" />
-    <PackageReference Include="Velopack" Version="1.2.0" />
+    <PackageReference Include="System.Drawing.Common" Version="9.0.20" />
+    <PackageReference Include="NAudio" Version="2.4.0" />
+    <PackageReference Include="MaterialDesignThemes" Version="5.3.2" />
+    <PackageReference Include="MaterialDesignColors" Version="5.3.2" />
+    <PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.0.5" />
+    <!-- SkiaSharp's OpenTK dependency otherwise selects a prerelease native runtime. -->
+    <PackageReference Include="OpenTK.redist.glfw" Version="3.3.8.39" />
+    <PackageReference Include="Velopack" Version="1.2.158" />
   </ItemGroup>
 
   <ItemGroup>

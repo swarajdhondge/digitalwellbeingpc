@@ -473,7 +473,7 @@
                         </Border>
                         <StackPanel VerticalAlignment="Center" Margin="14,0,0,0">
                             <TextBlock Text="Pulse - DigitalWellbeingPC" Style="{StaticResource Pulse.CardTitle}" FontSize="15"/>
-                            <TextBlock x:Name="AboutVersionText" Text="Version 2.3.0" Style="{StaticResource Pulse.Body2}"/>
+                            <TextBlock x:Name="AboutVersionText" Text="Version 2.3.1" Style="{StaticResource Pulse.Body2}"/>
                         </StackPanel>
                     </StackPanel>
                     <TextBlock Text="Track your screen time, app usage, and audio exposure to maintain a healthy digital lifestyle."
