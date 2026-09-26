@@ -1,5 +1,10 @@
 # Changelog
 
+## [Unreleased]
+
+### Features
+- **Translation-ready UI** (#35). All text now comes from standard `.resx` resources, so Pulse can ship in any language. It follows the Windows display language, or you can pick one in **Settings → Appearance → Language**. Dates, times and chart labels follow the chosen language. See CONTRIBUTING.md to add a translation.
+
 ## [v2.3.1] - 2026-09-26
 
 Accurate app tracking and security updates.

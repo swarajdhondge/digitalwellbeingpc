@@ -35,7 +35,7 @@ namespace digital_wellbeing_app.ViewModels
         private string _topAppDuration = string.Empty;
 
         // Sound status
-        private string _soundStatus = "Normal";
+        private string _soundStatus = Loc.Get("Dashboard_SoundNormal");
         private bool _isSoundWarning = false;
 
         // Weekly summary
@@ -46,7 +46,7 @@ namespace digital_wellbeing_app.ViewModels
         // Daily goal / day ring
         private bool _hasGoal;
         private double _ringFraction;
-        private string _goalText = "No goal set";
+        private string _goalText = Loc.Get("Dashboard_NoGoalSet");
         private bool _isOverGoal;
 
         // This-week bar chart + categories + sparkline
@@ -282,7 +282,7 @@ namespace digital_wellbeing_app.ViewModels
 
             // — Load threshold from settings —
             var threshold = _settingsService.LoadHarmfulThreshold();
-            ThresholdLabel = $"ABOVE {(int)threshold} dB";
+            ThresholdLabel = Loc.Format("Dashboard_ThresholdAbove", (int)threshold);
 
             // — Screen Time (single source of truth: live session + persisted) —
             var tsScreen = LiveUsageProvider.GetTodayActiveTime();
@@ -298,7 +298,7 @@ namespace digital_wellbeing_app.ViewModels
                 RingFraction = Math.Clamp(progress, 0, 1);
                 IsOverGoal = progress > 1.0;
                 var goalTs = TimeSpan.FromMinutes(goalMinutes!.Value);
-                GoalText = $"of {TimeFormatHelper.FormatCompact(goalTs)} goal · {(int)(progress * 100)}%";
+                GoalText = Loc.Format("Dashboard_GoalProgress", TimeFormatHelper.FormatCompact(goalTs), (int)(progress * 100));
             }
             else
             {
@@ -306,7 +306,7 @@ namespace digital_wellbeing_app.ViewModels
                 // screen time as a fraction of a soft 8-hour "full day" reference.
                 RingFraction = Math.Clamp(tsScreen.TotalHours / 8.0, 0, 1);
                 IsOverGoal = false;
-                GoalText = "No goal set";
+                GoalText = Loc.Get("Dashboard_NoGoalSet");
             }
 
             // — Sound Sessions —
@@ -319,7 +319,7 @@ namespace digital_wellbeing_app.ViewModels
 
             // — Sound Status Badge —
             IsSoundWarning = tsHarm.TotalSeconds > 0;
-            SoundStatus = IsSoundWarning ? "Loud" : "Normal";
+            SoundStatus = IsSoundWarning ? Loc.Get("Dashboard_SoundLoud") : Loc.Get("Dashboard_SoundNormal");
 
             // — App Usage & Top Apps (shared "today so far": persisted + live session) —
             var appEntries = LiveUsageProvider.GetTodayAppEntries();
@@ -361,7 +361,7 @@ namespace digital_wellbeing_app.ViewModels
             else
             {
                 TopAppName = "—";
-                TopAppDuration = "0 m";
+                TopAppDuration = TimeFormatHelper.FormatDuration(TimeSpan.Zero);
                 TopAppIcon = null!;
                 TopApps = new ObservableCollection<TopAppInfo>();
             }
@@ -373,19 +373,18 @@ namespace digital_wellbeing_app.ViewModels
             
             if (Math.Abs(changePercent) < 1)
             {
-                WeeklyChangeText = "same as last week";
+                WeeklyChangeText = Loc.Get("Dashboard_SameAsLastWeek");
             }
             else
             {
                 var arrow = improved ? "↓" : "↑";
-                WeeklyChangeText = $"{arrow} {Math.Abs(changePercent):F0}% vs last week";
+                WeeklyChangeText = Loc.Format("Dashboard_WeeklyChange", arrow, Math.Abs(changePercent).ToString("F0"));
             }
 
             // — This week bar chart + sparkline (real daily trend) —
             var weekStart = ReportService.GetWeekStart(today);
             var weekEnd = ReportService.GetWeekEnd(today);
             var trend = _reportService.GetDailyScreenTimeTrend(weekStart, weekEnd);
-            var dayLabels = new[] { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
             double maxMin = Math.Max(1, trend.Count > 0 ? trend.Max(d => d.TotalSeconds / 60.0) : 1);
             int todayIdx = trend.FindIndex(d => d.Date.Date == today);
 
@@ -395,7 +394,7 @@ namespace digital_wellbeing_app.ViewModels
                 double min = trend[i].TotalSeconds / 60.0;
                 bars.Add(new WeekBar
                 {
-                    Label = i < dayLabels.Length ? dayLabels[i] : trend[i].Date.ToString("ddd"),
+                    Label = trend[i].Date.ToString("ddd"),
                     Duration = TimeFormatHelper.FormatCompact(TimeSpan.FromMinutes(min)),
                     HeightPx = Math.Max(6, (min / maxMin) * 110),
                     IsToday = i == todayIdx,
@@ -413,7 +412,7 @@ namespace digital_wellbeing_app.ViewModels
                 double diff = (trend[todayIdx].TotalSeconds - trend[todayIdx - 1].TotalSeconds) / 60.0;
                 HasVsYesterday = true;
                 var sign = diff >= 0 ? "+" : "−";
-                VsYesterdayText = $"{sign}{TimeFormatHelper.FormatCompact(TimeSpan.FromMinutes(Math.Abs(diff)))} vs yesterday";
+                VsYesterdayText = Loc.Format("Dashboard_VsYesterday", sign, TimeFormatHelper.FormatCompact(TimeSpan.FromMinutes(Math.Abs(diff))));
             }
             else { HasVsYesterday = false; }
 
@@ -467,9 +466,9 @@ namespace digital_wellbeing_app.ViewModels
 
         private static string CatName(AppCategoryType c) => c switch
         {
-            AppCategoryType.Work => "Work",
-            AppCategoryType.Entertainment => "Entertainment",
-            _ => "Neutral",
+            AppCategoryType.Work => Loc.Get("Focus_Work"),
+            AppCategoryType.Entertainment => Loc.Get("Focus_Entertainment"),
+            _ => Loc.Get("Focus_Neutral"),
         };
         private static string CatIcon(AppCategoryType c) => c switch
         {

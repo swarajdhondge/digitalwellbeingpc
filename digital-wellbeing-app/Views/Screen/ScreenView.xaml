@@ -1,6 +1,7 @@
 <UserControl
     x:Class="digital_wellbeing_app.Views.Screen.ScreenView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:l="clr-namespace:digital_wellbeing_app.Helpers"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -25,10 +26,10 @@
             <!-- Today / Week segmented toggle -->
             <Border Style="{StaticResource Pulse.SegmentBar}" Margin="0,0,0,16">
                 <StackPanel Orientation="Horizontal">
-                    <RadioButton x:Name="TodayToggle" Content="Today" Style="{StaticResource Pulse.Segment}"
+                    <RadioButton x:Name="TodayToggle" Content="{l:Loc Common_Today}" Style="{StaticResource Pulse.Segment}"
                                  GroupName="ScreenRange" Click="TodayToggle_Click"
                                  IsChecked="{Binding IsWeeklyView, Converter={StaticResource InverseBool}, Mode=OneWay}"/>
-                    <RadioButton x:Name="WeeklyToggle" Content="Week" Style="{StaticResource Pulse.Segment}"
+                    <RadioButton x:Name="WeeklyToggle" Content="{l:Loc Common_Week}" Style="{StaticResource Pulse.Segment}"
                                  GroupName="ScreenRange" Click="WeeklyToggle_Click"
                                  IsChecked="{Binding IsWeeklyView, Mode=OneWay}"/>
                 </StackPanel>
@@ -40,7 +41,7 @@
                 <!-- Hero: active screen time + 24h timeline -->
                 <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
                     <StackPanel>
-                        <TextBlock Text="ACTIVE SCREEN TIME" Style="{StaticResource Pulse.Eyebrow}"/>
+                        <TextBlock Text="{l:Loc Screen_ActiveScreenTime}" Style="{StaticResource Pulse.Eyebrow}"/>
                         <TextBlock Text="{Binding TodayTimeText}" Style="{StaticResource Pulse.Stat}" Margin="0,6,0,0"/>
                         <TextBlock Text="{Binding ContextLine}" Style="{StaticResource Pulse.Body2}" Margin="0,2,0,0"/>
 
@@ -86,7 +87,7 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Daily goal" Style="{StaticResource Pulse.CardTitle}" FontSize="14"/>
+                            <TextBlock Text="{l:Loc Screen_DailyGoal}" Style="{StaticResource Pulse.CardTitle}" FontSize="14"/>
                             <TextBlock Grid.Column="1" Text="{Binding GoalProgressText}" Style="{StaticResource Pulse.Body2}"/>
                         </Grid>
                         <Grid Height="8">
@@ -115,17 +116,17 @@
                         <StackPanel Grid.Column="0" HorizontalAlignment="Center">
                             <TextBlock Text="{Binding SessionCount}" Style="{StaticResource Pulse.CardTitle}" FontSize="22"
                                        HorizontalAlignment="Center"/>
-                            <TextBlock Text="Sessions" Style="{StaticResource Pulse.Body2}" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                            <TextBlock Text="{l:Loc Screen_Sessions}" Style="{StaticResource Pulse.Body2}" HorizontalAlignment="Center" Margin="0,4,0,0"/>
                         </StackPanel>
                         <StackPanel Grid.Column="1" HorizontalAlignment="Center">
                             <TextBlock Text="{Binding LongestSession}" Style="{StaticResource Pulse.CardTitle}" FontSize="22"
                                        HorizontalAlignment="Center"/>
-                            <TextBlock Text="Longest stretch" Style="{StaticResource Pulse.Body2}" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                            <TextBlock Text="{l:Loc Screen_LongestStretch}" Style="{StaticResource Pulse.Body2}" HorizontalAlignment="Center" Margin="0,4,0,0"/>
                         </StackPanel>
                         <StackPanel Grid.Column="2" HorizontalAlignment="Center">
                             <TextBlock Text="{Binding BreakCount}" Style="{StaticResource Pulse.CardTitle}" FontSize="22"
                                        HorizontalAlignment="Center"/>
-                            <TextBlock Text="Breaks taken" Style="{StaticResource Pulse.Body2}" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                            <TextBlock Text="{l:Loc Screen_BreaksTaken}" Style="{StaticResource Pulse.Body2}" HorizontalAlignment="Center" Margin="0,4,0,0"/>
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -150,11 +151,11 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <StackPanel>
-                                <TextBlock Text="Total screen time" Style="{StaticResource Pulse.Body2}"/>
+                                <TextBlock Text="{l:Loc Screen_TotalScreenTime}" Style="{StaticResource Pulse.Body2}"/>
                                 <TextBlock Text="{Binding WeeklyTotalText}" Style="{StaticResource Pulse.CardTitle}" FontSize="16" Margin="0,3,0,0"/>
                             </StackPanel>
                             <StackPanel Grid.Column="1" HorizontalAlignment="Right">
-                                <TextBlock Text="Daily average" Style="{StaticResource Pulse.Body2}" HorizontalAlignment="Right"/>
+                                <TextBlock Text="{l:Loc Screen_DailyAverage}" Style="{StaticResource Pulse.Body2}" HorizontalAlignment="Right"/>
                                 <TextBlock Text="{Binding WeeklyAverageText}" Style="{StaticResource Pulse.CardTitle}" FontSize="16" Margin="0,3,0,0"/>
                             </StackPanel>
                         </Grid>

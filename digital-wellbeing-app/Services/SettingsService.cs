@@ -182,6 +182,19 @@ namespace digital_wellbeing_app.Services
             SaveToDisk();
         }
 
+        // --- Language ---
+        /// <summary>UI language tag such as "zh-Hans"; empty means follow the Windows display language.</summary>
+        public string LoadLanguage()
+            => _values.TryGetValue("Language", out var val)
+                ? (val is System.Text.Json.JsonElement je ? je.GetString() : val as string) ?? string.Empty
+                : string.Empty;
+
+        public void SaveLanguage(string languageTag)
+        {
+            _values["Language"] = languageTag;
+            SaveToDisk();
+        }
+
         // --- Website tracking persistence ---
         /// <summary>
         /// Whether Pulse reads browser address bars to log hostname-level website usage. Default

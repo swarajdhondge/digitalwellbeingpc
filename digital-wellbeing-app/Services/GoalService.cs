@@ -143,10 +143,10 @@ namespace digital_wellbeing_app.Services
             if (progress > 1.0)
             {
                 var overTime = currentTime - TimeSpan.FromMinutes(goal.Value);
-                return $"{percent}% - Over goal by {TimeFormatHelper.FormatCompact(overTime)}";
+                return Loc.Format("Goal_ProgressOver", percent, TimeFormatHelper.FormatCompact(overTime));
             }
 
-            return $"{percent}% of {goalText} goal";
+            return Loc.Format("Goal_ProgressOf", percent, goalText);
         }
 
         /// <summary>

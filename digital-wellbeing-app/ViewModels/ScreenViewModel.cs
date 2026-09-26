@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Threading;
 using digital_wellbeing_app.Helpers;
@@ -29,7 +30,7 @@ namespace digital_wellbeing_app.ViewModels
 
         #region Properties - Today's Time
 
-        private string _todayTimeText = "0 hr 0 min";
+        private string _todayTimeText = Loc.Format("Time_HoursMinutesLong", 0, 0);
         public string TodayTimeText
         {
             get => _todayTimeText;
@@ -85,7 +86,7 @@ namespace digital_wellbeing_app.ViewModels
             set { if (_sessionCount == value) return; _sessionCount = value; OnPropertyChanged(nameof(SessionCount)); }
         }
 
-        private string _longestSession = "0 min";
+        private string _longestSession = Loc.Format("Time_MinutesLong", 0);
         public string LongestSession
         {
             get => _longestSession;
@@ -135,7 +136,7 @@ namespace digital_wellbeing_app.ViewModels
 
         #region Properties - Weekly Stats (Phase 2.5)
 
-        private string _weeklyAverageText = "0 hr 0 min";
+        private string _weeklyAverageText = Loc.Format("Time_HoursMinutesLong", 0, 0);
         public string WeeklyAverageText
         {
             get => _weeklyAverageText;
@@ -149,7 +150,7 @@ namespace digital_wellbeing_app.ViewModels
             set { if (_weeklyAverageMinutes == value) return; _weeklyAverageMinutes = value; OnPropertyChanged(nameof(WeeklyAverageMinutes)); }
         }
 
-        private string _weeklyTotalText = "0 m";
+        private string _weeklyTotalText = TimeFormatHelper.FormatDuration(TimeSpan.Zero);
         public string WeeklyTotalText
         {
             get => _weeklyTotalText;
@@ -390,22 +391,22 @@ namespace digital_wellbeing_app.ViewModels
 
             if (yesterdayMinutes == 0)
             {
-                ContextLine = "No data from yesterday";
+                ContextLine = Loc.Get("Screen_NoDataYesterday");
                 return;
             }
 
             var diff = todayMinutes - yesterdayMinutes;
             if (diff > 0)
             {
-                ContextLine = $"↑ {TimeFormatHelper.FormatDuration(TimeSpan.FromMinutes(Math.Abs(diff)))} more than yesterday";
+                ContextLine = Loc.Format("Screen_MoreThanYesterday", TimeFormatHelper.FormatDuration(TimeSpan.FromMinutes(Math.Abs(diff))));
             }
             else if (diff < 0)
             {
-                ContextLine = $"↓ {TimeFormatHelper.FormatDuration(TimeSpan.FromMinutes(Math.Abs(diff)))} less than yesterday";
+                ContextLine = Loc.Format("Screen_LessThanYesterday", TimeFormatHelper.FormatDuration(TimeSpan.FromMinutes(Math.Abs(diff))));
             }
             else
             {
-                ContextLine = "Same as yesterday";
+                ContextLine = Loc.Get("Screen_SameAsYesterday");
             }
         }
 
@@ -599,7 +600,7 @@ namespace digital_wellbeing_app.ViewModels
 
                 WeeklyUsage.Add(new WeeklyUsageItem
                 {
-                    Day = day.DayOfWeek.ToString(),
+                    Day = CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(day.DayOfWeek),
                     Usage = TimeFormatHelper.FormatDuration(ts),
                     Minutes = (int)ts.TotalMinutes,
                     Seconds = sec,
@@ -620,7 +621,7 @@ namespace digital_wellbeing_app.ViewModels
             else
             {
                 WeeklyAverageMinutes = 0;
-                WeeklyAverageText = "0 m";
+                WeeklyAverageText = TimeFormatHelper.FormatDuration(TimeSpan.Zero);
             }
         }
 

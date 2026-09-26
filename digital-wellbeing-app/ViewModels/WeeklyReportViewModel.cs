@@ -226,7 +226,7 @@ namespace digital_wellbeing_app.ViewModels
                 {
                     LabelsPaint = new SolidColorPaint(TextSecondary),
                     SeparatorsPaint = new SolidColorPaint(SKColor.Parse("#334155")) { StrokeThickness = 1 },
-                    Labeler = value => $"{value:F0}h",
+                    Labeler = value => Loc.Format("Time_HoursCompact", value.ToString("F0")),
                     MinLimit = 0
                 }
             };
@@ -283,7 +283,7 @@ namespace digital_wellbeing_app.ViewModels
                 {
                     LabelsPaint = new SolidColorPaint(TextSecondary),
                     SeparatorsPaint = new SolidColorPaint(SKColor.Parse("#334155")) { StrokeThickness = 1 },
-                    Labeler = value => $"{value:F0}h",
+                    Labeler = value => Loc.Format("Time_HoursCompact", value.ToString("F0")),
                     MinLimit = 0
                 }
             };
@@ -317,7 +317,7 @@ namespace digital_wellbeing_app.ViewModels
                 new PieSeries<double>
                 {
                     Values = new[] { focus },
-                    Name = "Focus",
+                    Name = Loc.Get("Common_Focus"),
                     Fill = new SolidColorPaint(StatusSuccess),
                     Pushout = 0,
                     InnerRadius = 60
@@ -325,7 +325,7 @@ namespace digital_wellbeing_app.ViewModels
                 new PieSeries<double>
                 {
                     Values = new[] { leisure },
-                    Name = "Leisure",
+                    Name = Loc.Get("Insights_Leisure"),
                     Fill = new SolidColorPaint(StatusWarning),
                     Pushout = 0,
                     InnerRadius = 60
@@ -333,7 +333,7 @@ namespace digital_wellbeing_app.ViewModels
                 new PieSeries<double>
                 {
                     Values = new[] { other },
-                    Name = "Other",
+                    Name = Loc.Get("Insights_Other"),
                     Fill = new SolidColorPaint(SKColor.Parse("#64748B")),
                     Pushout = 0,
                     InnerRadius = 60
@@ -352,7 +352,7 @@ namespace digital_wellbeing_app.ViewModels
 
         private static string TruncateName(string name, int maxLength)
         {
-            if (string.IsNullOrEmpty(name)) return "Unknown";
+            if (string.IsNullOrEmpty(name)) return Loc.Get("Insights_UnknownApp");
             if (name.Length <= maxLength) return name;
             return name.Substring(0, maxLength - 1) + "…";
         }

@@ -34,6 +34,7 @@ _Android-style Digital Wellbeing for Windows — calm, private, and 100% on-devi
 - **Weekly Reports** — Daily averages, peak usage times, top apps, and a week-over-week comparison.
 - **Your data** — CSV export, local backup and restore, and delete by date range. Optional website tracking stores hostnames only.
 - **Calm design** — Graphite UI with a signature accent per section; Light, Dark, or Auto.
+- **Your language** — Follows your Windows language, or pick one in Settings. Translations welcome: see [CONTRIBUTING.md](CONTRIBUTING.md#translations).
 
 <p align="center">
   <img src=".github/screenshots/dashboard-light.png" alt="Pulse — Light theme" width="400"/>

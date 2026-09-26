@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media.Animation;
+using digital_wellbeing_app.Helpers;
 using digital_wellbeing_app.Views.AppUsage;
 using digital_wellbeing_app.Views.Dashboard;
 using digital_wellbeing_app.Views.Focus;
@@ -211,8 +212,8 @@ namespace digital_wellbeing_app.MainWindow
             Dispatcher.Invoke(() =>
             {
                 if (_trayIcon == null) return;
-                _trayIcon.BalloonTipTitle = "Hearing alert";
-                _trayIcon.BalloonTipText = "You've been listening above your threshold for a while. Consider lowering the volume.";
+                _trayIcon.BalloonTipTitle = Loc.Get("Notify_HearingAlertTitle");
+                _trayIcon.BalloonTipText = Loc.Get("Notify_HearingAlertBody");
                 _trayIcon.BalloonTipIcon = ToolTipIcon.Warning;
                 _trayIcon.ShowBalloonTip(10000);
             });
@@ -239,14 +240,14 @@ namespace digital_wellbeing_app.MainWindow
 
             // Update the in-app overlay
             DistractingAppName.Text = appName;
-            FocusTimeRemaining.Text = $"{timeText} remaining in focus session";
+            FocusTimeRemaining.Text = Loc.Format("Shell_FocusTimeRemaining", timeText);
 
             // Show tray balloon notification (this works without app registration)
             // The balloon plays its own warning sound, so we don't need to play one manually
             if (_trayIcon != null)
             {
-                _trayIcon.BalloonTipTitle = "⚠️ Distracting App Detected";
-                _trayIcon.BalloonTipText = $"{appName} is marked as Entertainment.\n{timeText} remaining in focus. Click to respond.";
+                _trayIcon.BalloonTipTitle = Loc.Get("Notify_DistractingAppTitle");
+                _trayIcon.BalloonTipText = Loc.Format("Notify_DistractingAppBody", appName, timeText);
                 _trayIcon.BalloonTipIcon = ToolTipIcon.Warning;
                 _trayIcon.BalloonTipClicked -= OnFocusWarningBalloonClicked;
                 _trayIcon.BalloonTipClicked += OnFocusWarningBalloonClicked;
@@ -342,13 +343,13 @@ namespace digital_wellbeing_app.MainWindow
                 if (app?.ScreenTracker != null)
                 {
                     var activeTime = app.ScreenTracker.CurrentActiveTime;
-                    summary = $"\nYou used your PC for {(int)activeTime.TotalHours}h {activeTime.Minutes}m today.";
+                    summary = "\n" + Loc.Format("WindDown_SummaryToday", (int)activeTime.TotalHours, activeTime.Minutes);
                 }
             }
             catch { /* ignore - show notification without summary */ }
 
-            _trayIcon.BalloonTipTitle = "🌙 Time to Wind Down";
-            _trayIcon.BalloonTipText = $"Quiet hours have started. Consider wrapping up and getting ready for rest.{summary}";
+            _trayIcon.BalloonTipTitle = Loc.Get("WindDown_NotifyTitle");
+            _trayIcon.BalloonTipText = Loc.Format("WindDown_NotifyBody", summary);
             _trayIcon.BalloonTipIcon = ToolTipIcon.Info;
             _trayIcon.ShowBalloonTip(5000);
         }
@@ -455,12 +456,12 @@ namespace digital_wellbeing_app.MainWindow
             if (_trayIcon == null) return;
 
             var goalFormatted = goalMinutes >= 60
-                ? $"{goalMinutes / 60}h {goalMinutes % 60}m"
-                : $"{goalMinutes}m";
-            var currentFormatted = $"{(int)currentTime.TotalHours}h {currentTime.Minutes}m";
+                ? Loc.Format("Goal_HoursMinutes", goalMinutes / 60, goalMinutes % 60)
+                : Loc.Format("Goal_Minutes", goalMinutes);
+            var currentFormatted = Loc.Format("Goal_HoursMinutes", (int)currentTime.TotalHours, currentTime.Minutes);
 
-            _trayIcon.BalloonTipTitle = "Screen Time Goal Reached";
-            _trayIcon.BalloonTipText = $"You've used your PC for {currentFormatted}, exceeding your {goalFormatted} goal. Consider taking a break.";
+            _trayIcon.BalloonTipTitle = Loc.Get("Goal_ReachedTitle");
+            _trayIcon.BalloonTipText = Loc.Format("Goal_ReachedBody", currentFormatted, goalFormatted);
             _trayIcon.BalloonTipIcon = ToolTipIcon.Info;
             _trayIcon.ShowBalloonTip(5000);
         }
@@ -508,7 +509,7 @@ namespace digital_wellbeing_app.MainWindow
 
             var remaining = _focusSessionService.TimeRemaining;
             var timeText = $"{(int)remaining.TotalMinutes}:{remaining.Seconds:D2}";
-            EndSessionMessage.Text = $"You still have {timeText} remaining. Are you sure you want to end early?";
+            EndSessionMessage.Text = Loc.Format("Shell_EndSessionMessage", timeText);
             EndSessionOverlay.Visibility = Visibility.Visible;
         }
 
@@ -582,17 +583,17 @@ namespace digital_wellbeing_app.MainWindow
             try
             {
                 // Create toast XML with action buttons
-                string toastXml = @"
+                string toastXml = $@"
                     <toast activationType='foreground' launch='action=open'>
                         <visual>
                             <binding template='ToastGeneric'>
-                                <text>Time for a break!</text>
-                                <text>Follow the 20-20-20 rule: Look away from screen for 20 seconds.</text>
+                                <text>{System.Security.SecurityElement.Escape(Loc.Get("Shell_TimeBreak"))}</text>
+                                <text>{System.Security.SecurityElement.Escape(Loc.Get("Break_FollowRule"))}</text>
                             </binding>
                         </visual>
                         <actions>
-                            <action content='Snooze 5 min' arguments='action=snooze' activationType='foreground'/>
-                            <action content='Dismiss' arguments='action=dismiss' activationType='foreground'/>
+                            <action content='{System.Security.SecurityElement.Escape(Loc.Get("Shell_Snooze5Min"))}' arguments='action=snooze' activationType='foreground'/>
+                            <action content='{System.Security.SecurityElement.Escape(Loc.Get("Shell_Dismiss"))}' arguments='action=dismiss' activationType='foreground'/>
                         </actions>
                         <audio src='ms-winsoundevent:Notification.Default'/>
                     </toast>";
@@ -671,8 +672,8 @@ namespace digital_wellbeing_app.MainWindow
             // Fallback to legacy balloon tip
             if (_trayIcon != null)
             {
-                _trayIcon.BalloonTipTitle = "Time for a break!";
-                _trayIcon.BalloonTipText = "Follow the 20-20-20 rule: Look away from screen for 20 seconds.";
+                _trayIcon.BalloonTipTitle = Loc.Get("Shell_TimeBreak");
+                _trayIcon.BalloonTipText = Loc.Get("Break_FollowRule");
                 _trayIcon.BalloonTipIcon = ToolTipIcon.Info;
                 _trayIcon.ShowBalloonTip(10000);
             }
@@ -685,10 +686,10 @@ namespace digital_wellbeing_app.MainWindow
         /// </summary>
         private void ShowAppLimitNotification(string appName, Models.FocusEnforcementLevel level)
         {
-            var title = "App limit reached";
+            var title = Loc.Get("Notify_AppLimitTitle");
             var body = level == Models.FocusEnforcementLevel.Warn
-                ? $"{appName} has hit its limit for today."
-                : $"{appName} has hit its limit and was minimized.";
+                ? Loc.Format("Notify_AppLimitWarn", appName)
+                : Loc.Format("Notify_AppLimitMinimized", appName);
 
             try
             {
@@ -832,12 +833,12 @@ namespace digital_wellbeing_app.MainWindow
                 int remaining = _breakReminderService.MaxSnoozeCount - _breakReminderService.SnoozeCount;
                 if (remaining > 0)
                 {
-                    OverlaySnoozeButton.Content = $"Snooze 5 min ({remaining} left)";
+                    OverlaySnoozeButton.Content = Loc.Format("Break_SnoozeLeft", remaining);
                     OverlaySnoozeButton.IsEnabled = true;
                 }
                 else
                 {
-                    OverlaySnoozeButton.Content = "No snoozes left";
+                    OverlaySnoozeButton.Content = Loc.Get("Break_NoSnoozesLeft");
                     OverlaySnoozeButton.IsEnabled = false;
                 }
             }
@@ -869,8 +870,8 @@ namespace digital_wellbeing_app.MainWindow
             if (!System.IO.File.Exists(iconPath))
             {
                 System.Windows.MessageBox.Show(
-                    $"Tray icon not found:\n{iconPath}",
-                    "Error",
+                    Loc.Format("Shell_TrayIconNotFound", iconPath),
+                    Loc.Get("Shell_ErrorCaption"),
                     MessageBoxButton.OK,
                     MessageBoxImage.Error
                 );
@@ -887,13 +888,13 @@ namespace digital_wellbeing_app.MainWindow
             _trayIcon.ContextMenuStrip = new ContextMenuStrip();
 
             // Quick navigate
-            _trayIcon.ContextMenuStrip.Items.Add("Open Dashboard", null, (s, e) => { ShowWindow(); Dashboard_Click(null, new RoutedEventArgs()); });
-            _trayIcon.ContextMenuStrip.Items.Add("Focus", null, (s, e) => { ShowWindow(); Focus_Click(null, new RoutedEventArgs()); });
-            _trayIcon.ContextMenuStrip.Items.Add("Reports", null, (s, e) => { ShowWindow(); Reports_Click(null, new RoutedEventArgs()); });
+            _trayIcon.ContextMenuStrip.Items.Add(Loc.Get("Tray_OpenDashboard"), null, (s, e) => { ShowWindow(); Dashboard_Click(null, new RoutedEventArgs()); });
+            _trayIcon.ContextMenuStrip.Items.Add(Loc.Get("Common_Focus"), null, (s, e) => { ShowWindow(); Focus_Click(null, new RoutedEventArgs()); });
+            _trayIcon.ContextMenuStrip.Items.Add(Loc.Get("Tray_Reports"), null, (s, e) => { ShowWindow(); Reports_Click(null, new RoutedEventArgs()); });
             _trayIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
 
             // Focus session toggle
-            var focusItem = new ToolStripMenuItem("Start Focus Session");
+            var focusItem = new ToolStripMenuItem(Loc.Get("Tray_StartFocusSession"));
             focusItem.Click += (s, e) =>
             {
                 Dispatcher.Invoke(() =>
@@ -913,8 +914,8 @@ namespace digital_wellbeing_app.MainWindow
             _trayIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
 
             // Settings and Updates
-            _trayIcon.ContextMenuStrip.Items.Add("Settings", null, (s, e) => { ShowWindow(); Settings_Click(null, new RoutedEventArgs()); });
-            _trayIcon.ContextMenuStrip.Items.Add("Check for Updates", null, async (s, e) =>
+            _trayIcon.ContextMenuStrip.Items.Add(Loc.Get("Common_Settings"), null, (s, e) => { ShowWindow(); Settings_Click(null, new RoutedEventArgs()); });
+            _trayIcon.ContextMenuStrip.Items.Add(Loc.Get("Tray_CheckForUpdates"), null, async (s, e) =>
             {
                 try
                 {
@@ -938,14 +939,14 @@ namespace digital_wellbeing_app.MainWindow
                 }
             });
             _trayIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
-            _trayIcon.ContextMenuStrip.Items.Add("Exit", null, (s, e) => ExitApplication());
+            _trayIcon.ContextMenuStrip.Items.Add(Loc.Get("Shell_Exit"), null, (s, e) => ExitApplication());
 
             // Update focus item text dynamically when menu opens
             _trayIcon.ContextMenuStrip.Opening += (s, e) =>
             {
                 focusItem.Text = _focusSessionService?.IsInFocusMode == true
-                    ? "End Focus Session"
-                    : "Start Focus Session";
+                    ? Loc.Get("Tray_EndFocusSession")
+                    : Loc.Get("Tray_StartFocusSession");
             };
             _trayIcon.DoubleClick += (s, e) => ShowWindow();
             
@@ -1133,8 +1134,8 @@ namespace digital_wellbeing_app.MainWindow
                 var settings = new Services.SettingsService();
                 if (settings.LoadCloseToTrayHintShown() || _trayIcon == null) return;
 
-                _trayIcon.BalloonTipTitle = "Pulse is still running";
-                _trayIcon.BalloonTipText = "Tracking continues in the background. Right-click the tray icon to quit, or turn this off in Settings → Startup.";
+                _trayIcon.BalloonTipTitle = Loc.Get("Tray_StillRunningTitle");
+                _trayIcon.BalloonTipText = Loc.Get("Tray_StillRunningBody");
                 _trayIcon.BalloonTipIcon = ToolTipIcon.Info;
                 _trayIcon.ShowBalloonTip(5000);
 
@@ -1299,12 +1300,12 @@ namespace digital_wellbeing_app.MainWindow
         private static string Greeting()
         {
             var h = DateTime.Now.Hour;
-            return h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening";
+            return h < 12 ? Loc.Get("Shell_GoodMorning") : h < 18 ? Loc.Get("Shell_GoodAfternoon") : Loc.Get("Shell_GoodEvening");
         }
 
         /// <summary>Dashboard subtitle, e.g. "Wednesday, May 30 · your day at a glance."</summary>
         private static string TodaySubtitle()
-            => $"{DateTime.Now:dddd, MMMM d} · your day at a glance.";
+            => Loc.Format("Shell_TodaySubtitle", DateTime.Now);
 
         /// <summary>
         /// Navigate to a new view with a fade transition animation.
@@ -1339,28 +1340,28 @@ namespace digital_wellbeing_app.MainWindow
             => NavigateTo(_dashboardView, NavDashboard, "Dashboard", Greeting(), TodaySubtitle());
 
         private void ScreenTime_Click(object? sender, RoutedEventArgs e)
-            => NavigateTo(_screenView, NavScreen, "Screentime", "Screen Time", "When and how long your display stayed awake.");
+            => NavigateTo(_screenView, NavScreen, "Screentime", Loc.Get("Shell_ScreenTimeTitle"), Loc.Get("Shell_ScreenTimeSubtitle"));
 
         private void Sound_Click(object? sender, RoutedEventArgs e)
-            => NavigateTo(_soundView, NavSound, "Sound", "Hearing", "Protecting your ears from loud exposure.");
+            => NavigateTo(_soundView, NavSound, "Sound", Loc.Get("Common_Hearing2"), Loc.Get("Shell_HearingSubtitle"));
 
         private void AppUsage_Click(object? sender, RoutedEventArgs e)
-            => NavigateTo(_appUsageView, NavApps, "Appusage", "App Usage", "Where your attention actually went.");
+            => NavigateTo(_appUsageView, NavApps, "Appusage", Loc.Get("Shell_AppUsageTitle"), Loc.Get("Shell_AppUsageSubtitle"));
 
         private void Focus_Click(object? sender, RoutedEventArgs e)
-            => NavigateTo(_focusView, NavFocus, "Focus", "Focus", "Carve out distraction-free deep work.");
+            => NavigateTo(_focusView, NavFocus, "Focus", Loc.Get("Common_Focus"), Loc.Get("Shell_FocusSubtitle"));
 
         private void Limits_Click(object? sender, RoutedEventArgs e)
-            => NavigateTo(_limitsView, NavLimits, "Limits", "Limits", "Cap or schedule how long individual apps can run.");
+            => NavigateTo(_limitsView, NavLimits, "Limits", Loc.Get("Shell_Limits"), Loc.Get("Shell_LimitsSubtitle"));
 
         private void Reports_Click(object? sender, RoutedEventArgs e)
-            => NavigateTo(_reportsView, NavReports, "Weekly", "Insights", "Your rhythm across the week.");
+            => NavigateTo(_reportsView, NavReports, "Weekly", Loc.Get("Common_Insights"), Loc.Get("Shell_InsightsSubtitle"));
 
         private void Help_Click(object? sender, RoutedEventArgs e)
-            => NavigateTo(_helpView, NavHelp, "Help", "Help", "How Pulse tracks — and protects your privacy.");
+            => NavigateTo(_helpView, NavHelp, "Help", Loc.Get("Shell_Help"), Loc.Get("Shell_HelpSubtitle"));
 
         private void Settings_Click(object? sender, RoutedEventArgs e)
-            => NavigateTo(_settingsView, NavSettings, "Settings", "Settings", "Tune Pulse to fit your habits.");
+            => NavigateTo(_settingsView, NavSettings, "Settings", Loc.Get("Common_Settings"), Loc.Get("Shell_SettingsSubtitle"));
 
         private void Exit_Click(object? sender, RoutedEventArgs e)
         {
@@ -1395,7 +1396,7 @@ namespace digital_wellbeing_app.MainWindow
             var ts = new Services.ThemeService();
             bool isDark = IsEffectiveDark(ts);
             ThemeToggleIcon.Kind = isDark ? PackIconKind.WeatherSunny : PackIconKind.WeatherNight;
-            ThemeToggleButton.ToolTip = isDark ? "Switch to light theme" : "Switch to dark theme";
+            ThemeToggleButton.ToolTip = isDark ? Loc.Get("Shell_SwitchToLightTheme") : Loc.Get("Shell_SwitchToDarkTheme");
         }
 
         private static bool IsEffectiveDark(Services.ThemeService ts)

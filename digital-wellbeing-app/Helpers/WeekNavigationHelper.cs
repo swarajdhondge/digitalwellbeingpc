@@ -27,7 +27,7 @@ namespace digital_wellbeing_app.Helpers
                 weekStart,
                 CalendarWeekRule.FirstFourDayWeek,
                 DayOfWeek.Monday);
-            return $"W{weekNumber} \u00B7 {range}";
+            return Loc.Format("Date_WeekLabel", weekNumber, range);
         }
 
         public static DateTime Clamp(DateTime requested, DateTime? earliestWeekStart)

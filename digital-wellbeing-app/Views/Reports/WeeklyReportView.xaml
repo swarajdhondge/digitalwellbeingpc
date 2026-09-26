@@ -1,5 +1,6 @@
 <UserControl x:Class="digital_wellbeing_app.Views.Reports.WeeklyReportView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:l="clr-namespace:digital_wellbeing_app.Helpers"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -44,7 +45,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0">
-                                <TextBlock Text="DAILY AVERAGE" Style="{StaticResource Pulse.Eyebrow}"/>
+                                <TextBlock Text="{l:Loc Insights_DailyAverage}" Style="{StaticResource Pulse.Eyebrow}"/>
                                 <TextBlock Text="{Binding AverageDailyTime}" Style="{StaticResource Pulse.Stat}" FontSize="44" Margin="0,6,0,0"/>
                             </StackPanel>
                             <Border Grid.Column="1" VerticalAlignment="Top" Padding="11,6" CornerRadius="{StaticResource Radius.SM}">
@@ -85,16 +86,16 @@
                 <StackPanel Grid.Column="1">
                     <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
                         <StackPanel>
-                            <TextBlock Text="TOTAL SCREEN TIME" Style="{StaticResource Pulse.Eyebrow}"/>
+                            <TextBlock Text="{l:Loc Insights_TotalScreenTime}" Style="{StaticResource Pulse.Eyebrow}"/>
                             <TextBlock Text="{Binding TotalScreenTime}" Style="{StaticResource Pulse.Stat}" FontSize="34" Margin="0,4,0,4"/>
                             <TextBlock Style="{StaticResource Pulse.Body2}">
-                                <Run Text="{Binding ChangePercent, Mode=OneWay}"/><Run Text=" vs last week"/>
+                                <Run Text="{Binding ChangePercent, Mode=OneWay}"/><Run Text="{l:Loc Insights_VsLastWeek}"/>
                             </TextBlock>
                         </StackPanel>
                     </Border>
                     <Border Style="{StaticResource Pulse.Card}">
                         <StackPanel>
-                            <TextBlock Text="FOCUS VS LEISURE" Style="{StaticResource Pulse.Eyebrow}" Margin="0,0,0,14"/>
+                            <TextBlock Text="{l:Loc Insights_FocusVsLeisure}" Style="{StaticResource Pulse.Eyebrow}" Margin="0,0,0,14"/>
                             <Border CornerRadius="7" Height="14" ClipToBounds="True" Margin="0,0,0,14" Background="{DynamicResource Track}">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -110,19 +111,19 @@
                             <Grid Margin="0,0,0,8">
                                 <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
                                 <Ellipse Grid.Column="0" Width="9" Height="9" Fill="{StaticResource Good}" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                <TextBlock Grid.Column="1" Text="Focus" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text="{l:Loc Common_Focus}" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"/>
                                 <TextBlock Grid.Column="2" Text="{Binding FocusTime}" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"/>
                             </Grid>
                             <Grid Margin="0,0,0,8">
                                 <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
                                 <Ellipse Grid.Column="0" Width="9" Height="9" Fill="{StaticResource Warn}" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                <TextBlock Grid.Column="1" Text="Leisure" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text="{l:Loc Insights_Leisure}" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"/>
                                 <TextBlock Grid.Column="2" Text="{Binding LeisureTime}" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"/>
                             </Grid>
                             <Grid>
                                 <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
                                 <Ellipse Grid.Column="0" Width="9" Height="9" Fill="{DynamicResource Ink3}" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                <TextBlock Grid.Column="1" Text="Other" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text="{l:Loc Insights_Other}" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"/>
                                 <TextBlock Grid.Column="2" Text="{Binding OtherTime}" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"/>
                             </Grid>
                         </StackPanel>
@@ -133,7 +134,7 @@
             <!-- Top apps this week (2-column grid) -->
             <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
                 <StackPanel>
-                    <TextBlock Text="TOP APPS THIS WEEK" Style="{StaticResource Pulse.Eyebrow}" Margin="0,0,0,16"/>
+                    <TextBlock Text="{l:Loc Insights_TopAppsWeek}" Style="{StaticResource Pulse.Eyebrow}" Margin="0,0,0,16"/>
                     <ItemsControl ItemsSource="{Binding TopApps}" AlternationCount="8">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate><UniformGrid Columns="2"/></ItemsPanelTemplate>
@@ -183,8 +184,8 @@
                                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                     <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="14,0,0,0">
-                        <TextBlock Text="Focus sessions" Style="{StaticResource Pulse.CardTitle}" FontSize="15"/>
-                        <TextBlock Text="Completed this week" Style="{StaticResource Pulse.Body2}" Margin="0,2,0,0"/>
+                        <TextBlock Text="{l:Loc Insights_FocusSessions}" Style="{StaticResource Pulse.CardTitle}" FontSize="15"/>
+                        <TextBlock Text="{l:Loc Insights_CompletedWeek}" Style="{StaticResource Pulse.Body2}" Margin="0,2,0,0"/>
                     </StackPanel>
                     <TextBlock Grid.Column="2" Text="{Binding FocusSessionCount}" Style="{StaticResource Pulse.Stat}" FontSize="26" VerticalAlignment="Center"/>
                 </Grid>

@@ -10,7 +10,6 @@
         <ResourceDictionary>
             <!-- Global Converters -->
             <converters:PercentageToWidthConverter x:Key="PercentageToWidthConverter"/>
-            <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
             <converters:IndexToSegmentColorConverter x:Key="IndexToSegmentColorConverter"/>
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
             <converters:GoalProgressToWidthConverter x:Key="GoalProgressToWidthConverter"/>

@@ -38,7 +38,7 @@ namespace digital_wellbeing_app.ViewModels
             set { if (_currentWindowTitle == value) return; _currentWindowTitle = value; OnPropertyChanged(nameof(CurrentWindowTitle)); }
         }
 
-        private string _currentAppDuration = "0m 0s";
+        private string _currentAppDuration = Loc.Format("Time_MinutesSecondsCompact", 0, 0);
         public string CurrentAppDuration
         {
             get => _currentAppDuration;
@@ -70,14 +70,14 @@ namespace digital_wellbeing_app.ViewModels
             set { if (_switchCount == value) return; _switchCount = value; OnPropertyChanged(nameof(SwitchCount)); }
         }
 
-        private string _averageFocusTime = "0m";
+        private string _averageFocusTime = TimeFormatHelper.FormatCompact(TimeSpan.Zero);
         public string AverageFocusTime
         {
             get => _averageFocusTime;
             set { if (_averageFocusTime == value) return; _averageFocusTime = value; OnPropertyChanged(nameof(AverageFocusTime)); }
         }
 
-        private string _longestSessionTime = "0m";
+        private string _longestSessionTime = TimeFormatHelper.FormatCompact(TimeSpan.Zero);
         public string LongestSessionTime
         {
             get => _longestSessionTime;
@@ -225,7 +225,7 @@ namespace digital_wellbeing_app.ViewModels
             }
             else
             {
-                CurrentAppName = "No app active";
+                CurrentAppName = Loc.Get("Apps_NoAppActive");
                 CurrentWindowTitle = string.Empty;
                 CurrentAppDuration = "—";
                 IsTracking = false;
@@ -244,8 +244,8 @@ namespace digital_wellbeing_app.ViewModels
             if (allSessions.Count == 0)
             {
                 SwitchCount = 0;
-                AverageFocusTime = "0m";
-                LongestSessionTime = "0m";
+                AverageFocusTime = TimeFormatHelper.FormatCompact(TimeSpan.Zero);
+                LongestSessionTime = TimeFormatHelper.FormatCompact(TimeSpan.Zero);
                 return;
             }
 
@@ -269,7 +269,7 @@ namespace digital_wellbeing_app.ViewModels
         }
 
         /// <summary>Header for the app list, reflecting the selected range.</summary>
-        public string RangeHeader => _isWeekView ? "APPS THIS WEEK" : "TODAY'S APPS";
+        public string RangeHeader => _isWeekView ? Loc.Get("Apps_RangeHeaderWeek") : Loc.Get("Apps_RangeHeaderToday");
 
         /// <summary>Called by the view when the Today/Week segmented toggle changes.</summary>
         public void SetWeekView(bool week)

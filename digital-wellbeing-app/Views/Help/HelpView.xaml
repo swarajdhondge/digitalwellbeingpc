@@ -1,6 +1,7 @@
 <UserControl
     x:Class="digital_wellbeing_app.Views.Help.HelpView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:l="clr-namespace:digital_wellbeing_app.Helpers"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
     FontFamily="{DynamicResource Font.Primary}"
@@ -50,10 +51,10 @@
                                 <Border Style="{StaticResource FaqIcon}" Background="{StaticResource Accent.Dashboard.Soft}">
                                     <md:PackIcon Kind="ViewDashboardOutline" Width="18" Height="18" Foreground="{StaticResource Accent.Dashboard}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
-                                <TextBlock Text="Today" Style="{StaticResource FaqTitle}"/>
+                                <TextBlock Text="{l:Loc Common_Today}" Style="{StaticResource FaqTitle}"/>
                             </StackPanel>
                             <TextBlock Style="{StaticResource FaqBody}"
-                                       Text="The summary of your day. The hero stat is total active screen time — time spent actively using your PC. Time away isn't counted. Tinted cards preview each section and link straight to it."/>
+                                       Text="{l:Loc Help_SummaryDayHeroStatTotal}"/>
                         </StackPanel>
                     </Border>
 
@@ -64,10 +65,10 @@
                                 <Border Style="{StaticResource FaqIcon}" Background="{StaticResource Accent.Appusage.Soft}">
                                     <md:PackIcon Kind="ViewGridOutline" Width="18" Height="18" Foreground="{StaticResource Accent.Appusage}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
-                                <TextBlock Text="App usage" Style="{StaticResource FaqTitle}"/>
+                                <TextBlock Text="{l:Loc Common_AppUsage}" Style="{StaticResource FaqTitle}"/>
                             </StackPanel>
                             <TextBlock Style="{StaticResource FaqBody}"
-                                       Text="Records which app has focus and for how long while you're using the PC. After 5 minutes without input it stops, unless that app is fullscreen or playing audio. Clicking the desktop or taskbar doesn't count as File Explorer. App names are stored, but window titles are never saved to the database for privacy. Categorize apps as Work, Entertainment or Neutral for Focus."/>
+                                       Text="{l:Loc Help_RecordsWhichAppHasFocus}"/>
                         </StackPanel>
                     </Border>
 
@@ -78,10 +79,10 @@
                                 <Border Style="{StaticResource FaqIcon}" Background="{StaticResource Accent.Focus.Soft}">
                                     <md:PackIcon Kind="Target" Width="18" Height="18" Foreground="{StaticResource Accent.Focus}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
-                                <TextBlock Text="Focus &amp; Wind Down" Style="{StaticResource FaqTitle}"/>
+                                <TextBlock Text="{l:Loc Help_FocusWindDown}" Style="{StaticResource FaqTitle}"/>
                             </StackPanel>
                             <TextBlock Style="{StaticResource FaqBody}"
-                                       Text="Focus sessions watch for Entertainment apps. Warn shows a notification; Block minimizes them. Pulse can also follow Windows Focus sessions when enabled in Settings. Wind Down adds a gentle scheduled border when it's time to wrap up."/>
+                                       Text="{l:Loc Help_FocusSessionsWatchEntertainmentApps}"/>
                         </StackPanel>
                     </Border>
 
@@ -92,10 +93,10 @@
                                 <Border Style="{StaticResource FaqIcon}" Background="{StaticResource Accent.Weekly.Soft}">
                                     <md:PackIcon Kind="TimerLockOutline" Width="18" Height="18" Foreground="{StaticResource Accent.Weekly}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
-                                <TextBlock Text="App limits" Style="{StaticResource FaqTitle}"/>
+                                <TextBlock Text="{l:Loc Help_AppLimits}" Style="{StaticResource FaqTitle}"/>
                             </StackPanel>
                             <TextBlock Style="{StaticResource FaqBody}"
-                                       Text="Set a daily allowance, unavailable hours, or both for an app. Remind sends a notification when the limit is reached; Block also minimizes the app. Pause or edit a limit anytime from the Limits page."/>
+                                       Text="{l:Loc Help_SetDailyAllowanceUnavailableHours}"/>
                         </StackPanel>
                     </Border>
 
@@ -106,10 +107,10 @@
                                 <Border Style="{StaticResource FaqIcon}" Background="{StaticResource Accent.Dashboard.Soft}">
                                     <md:PackIcon Kind="Eye" Width="18" Height="18" Foreground="{StaticResource Accent.Dashboard}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
-                                <TextBlock Text="Break reminders" Style="{StaticResource FaqTitle}"/>
+                                <TextBlock Text="{l:Loc Help_BreakReminders}" Style="{StaticResource FaqTitle}"/>
                             </StackPanel>
                             <TextBlock Style="{StaticResource FaqBody}"
-                                       Text="Follows the 20-20-20 rule: every 20 minutes, look 20 feet away for 20 seconds. Snooze up to 3 times; the timer resets after 5 minutes away. Reminders appear over Pulse, or as a notification when Pulse is in the notification area."/>
+                                       Text="{l:Loc Help_Follows202020Rule}"/>
                         </StackPanel>
                     </Border>
                 </StackPanel>
@@ -123,10 +124,10 @@
                                 <Border Style="{StaticResource FaqIcon}" Background="{StaticResource Accent.Screentime.Soft}">
                                     <md:PackIcon Kind="MonitorDashboard" Width="18" Height="18" Foreground="{StaticResource Accent.Screentime}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
-                                <TextBlock Text="Screen time" Style="{StaticResource FaqTitle}"/>
+                                <TextBlock Text="{l:Loc Common_ScreenTime}" Style="{StaticResource FaqTitle}"/>
                             </StackPanel>
                             <TextBlock Style="{StaticResource FaqBody}"
-                                       Text="Tracks how long you actively use your PC. After 5 minutes without mouse or keyboard input it pauses, unless audio is playing or an app is fullscreen (for example, a video). Locking or sleeping the PC pauses it too. The timeline shows your day; the weekly view shows daily totals."/>
+                                       Text="{l:Loc Help_TracksHowLongActivelyUse}"/>
                         </StackPanel>
                     </Border>
 
@@ -137,10 +138,10 @@
                                 <Border Style="{StaticResource FaqIcon}" Background="{StaticResource Accent.Sound.Soft}">
                                     <md:PackIcon Kind="VolumeHigh" Width="18" Height="18" Foreground="{StaticResource Accent.Sound}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
-                                <TextBlock Text="Hearing" Style="{StaticResource FaqTitle}"/>
+                                <TextBlock Text="{l:Loc Common_Hearing2}" Style="{StaticResource FaqTitle}"/>
                             </StackPanel>
                             <TextBlock Style="{StaticResource FaqBody}"
-                                       Text="Estimates listening level from the system audio meter — it never records or listens to actual audio. The WHO suggests staying under 85 dB; the default harmful threshold is 75 dB. Bars over 75 dB are shown in red."/>
+                                       Text="{l:Loc Help_EstimatesListeningLevelFromSystem}"/>
                         </StackPanel>
                     </Border>
 
@@ -151,10 +152,10 @@
                                 <Border Style="{StaticResource FaqIcon}" Background="{StaticResource Accent.Weekly.Soft}">
                                     <md:PackIcon Kind="ChartBoxOutline" Width="18" Height="18" Foreground="{StaticResource Accent.Weekly}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
-                                <TextBlock Text="Insights" Style="{StaticResource FaqTitle}"/>
+                                <TextBlock Text="{l:Loc Common_Insights}" Style="{StaticResource FaqTitle}"/>
                             </StackPanel>
                             <TextBlock Style="{StaticResource FaqBody}"
-                                       Text="Shows one week at a time (Monday to Sunday); use the arrows to browse earlier weeks. Includes screen-time trends, top apps, focus completion and sound levels. Week-over-week comparisons show whether your habits are improving; focus vs. leisure shows how productive your time was."/>
+                                       Text="{l:Loc Help_ShowsOneWeekTimeMonday}"/>
                         </StackPanel>
                     </Border>
 
@@ -165,10 +166,10 @@
                                 <Border Style="{StaticResource FaqIcon}" Background="{StaticResource Accent.Settings.Soft}">
                                     <md:PackIcon Kind="ShieldCheckOutline" Width="18" Height="18" Foreground="{StaticResource Accent.Settings}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
-                                <TextBlock Text="Privacy" Style="{StaticResource FaqTitle}"/>
+                                <TextBlock Text="{l:Loc Help_Privacy}" Style="{StaticResource FaqTitle}"/>
                             </StackPanel>
                             <TextBlock Style="{StaticResource FaqBody}"
-                                       Text="Everything stays on this device — no account, no cloud, no telemetry. Website tracking is off by default — if you turn it on, only the hostname (e.g. youtube.com) is stored, never full URLs or page content. Export your data as CSV or delete it all from Settings at any time."/>
+                                       Text="{l:Loc Help_EverythingStaysDeviceNoAccount}"/>
                         </StackPanel>
                     </Border>
                     <!-- Startup &amp; data safety (steel) -->
@@ -178,10 +179,10 @@
                                 <Border Style="{StaticResource FaqIcon}" Background="{StaticResource Accent.Settings.Soft}">
                                     <md:PackIcon Kind="ContentSaveCheckOutline" Width="18" Height="18" Foreground="{StaticResource Accent.Settings}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
-                                <TextBlock Text="Startup &amp; data safety" Style="{StaticResource FaqTitle}"/>
+                                <TextBlock Text="{l:Loc Help_StartupDataSafety}" Style="{StaticResource FaqTitle}"/>
                             </StackPanel>
                             <TextBlock Style="{StaticResource FaqBody}"
-                                       Text="Launch on Windows startup runs quietly in the notification area. Back up now creates a local ZIP containing your database and settings. Restore replaces current local data, so make a fresh backup first and review the confirmation carefully."/>
+                                       Text="{l:Loc Help_LaunchWindowsStartupRunsQuietly}"/>
                         </StackPanel>
                     </Border>
                 </StackPanel>
@@ -192,12 +193,12 @@
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                         <md:PackIcon Kind="BugOutline" Width="16" Height="16" Foreground="{DynamicResource Accent}" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                        <TextBlock x:Name="ReportBugLink" Text="Report a bug" Style="{StaticResource Pulse.Body2}" Foreground="{DynamicResource Accent}"
+                        <TextBlock x:Name="ReportBugLink" Text="{l:Loc Help_ReportBug}" Style="{StaticResource Pulse.Body2}" Foreground="{DynamicResource Accent}"
                                    TextDecorations="Underline" Cursor="Hand" MouseLeftButtonDown="ReportBug_Click"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <md:PackIcon Kind="Github" Width="16" Height="16" Foreground="{DynamicResource Accent}" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                        <TextBlock x:Name="GitHubLink" Text="View on GitHub" Style="{StaticResource Pulse.Body2}" Foreground="{DynamicResource Accent}"
+                        <TextBlock x:Name="GitHubLink" Text="{l:Loc Help_ViewGithub}" Style="{StaticResource Pulse.Body2}" Foreground="{DynamicResource Accent}"
                                    TextDecorations="Underline" Cursor="Hand" MouseLeftButtonDown="GitHub_Click"/>
                     </StackPanel>
                 </StackPanel>

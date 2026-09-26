@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using digital_wellbeing_app.Helpers;
 using digital_wellbeing_app.ViewModels;
 
 namespace digital_wellbeing_app.Views.Sound
@@ -38,7 +39,7 @@ namespace digital_wellbeing_app.Views.Sound
             RenderCanvas();
 
             SessionsList.Visibility = Visibility.Collapsed;
-            ToggleDetailsButton.Content = "Show detailed tracking";
+            ToggleDetailsButton.Content = Loc.Get("Hearing_ShowDetailedTracking");
         }
 
         private void RenderCanvas()
@@ -67,7 +68,7 @@ namespace digital_wellbeing_app.Views.Sound
                     Width = width,
                     Height = h,
                     Fill = safeBrush,
-                    ToolTip = $"{seg.SessionLabel} ({seg.DeviceName})"
+                    ToolTip = Loc.Format("Hearing_SegmentTooltip", seg.SessionLabel, seg.DeviceName)
                 };
                 System.Windows.Controls.Canvas.SetLeft(safeRect, x1);
                 canvas.Children.Add(safeRect);
@@ -82,7 +83,7 @@ namespace digital_wellbeing_app.Views.Sound
                             Width = hw,
                             Height = h,
                             Fill = harmBrush,
-                            ToolTip = $"Harmful: {seg.SessionLabel}"
+                            ToolTip = Loc.Format("Hearing_HarmfulTooltip", seg.SessionLabel)
                         };
                         System.Windows.Controls.Canvas.SetLeft(harmRect, x1 + width - hw);
                         canvas.Children.Add(harmRect);
@@ -96,12 +97,12 @@ namespace digital_wellbeing_app.Views.Sound
             if (SessionsList.Visibility == Visibility.Collapsed)
             {
                 SessionsList.Visibility = Visibility.Visible;
-                ToggleDetailsButton.Content = "Hide tracking";
+                ToggleDetailsButton.Content = Loc.Get("Hearing_HideTracking");
             }
             else
             {
                 SessionsList.Visibility = Visibility.Collapsed;
-                ToggleDetailsButton.Content = "Show tracking";
+                ToggleDetailsButton.Content = Loc.Get("Hearing_ShowTracking");
             }
         }
     }

@@ -1,5 +1,6 @@
 <UserControl x:Class="digital_wellbeing_app.Views.Dashboard.DashboardView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:l="clr-namespace:digital_wellbeing_app.Helpers"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -56,7 +57,7 @@
 
                         <!-- Right of ring -->
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock Text="TODAY · SCREEN TIME" Style="{StaticResource Pulse.Eyebrow}"/>
+                            <TextBlock Text="{l:Loc Dashboard_TodayScreenTime}" Style="{StaticResource Pulse.Eyebrow}"/>
                             <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
                                 <Border Style="{StaticResource Pulse.Pill}" Background="{DynamicResource Card2}"
                                         BorderBrush="{DynamicResource Border}" BorderThickness="1"
@@ -72,7 +73,7 @@
                                 </StackPanel>
                             </StackPanel>
 
-                            <TextBlock Text="Split across your top apps" Style="{StaticResource Pulse.Body2}" Margin="0,18,0,9"/>
+                            <TextBlock Text="{l:Loc Dashboard_SplitAcrossTopApps}" Style="{StaticResource Pulse.Body2}" Margin="0,18,0,9"/>
                             <Border Height="16">
                                 <ItemsControl ItemsSource="{Binding TopApps}">
                                     <ItemsControl.ItemsPanel>
@@ -127,7 +128,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0">
-                                <TextBlock Text="THIS WEEK" Style="{StaticResource Pulse.Eyebrow}"/>
+                                <TextBlock Text="{l:Loc Dashboard_Week}" Style="{StaticResource Pulse.Eyebrow}"/>
                                 <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
                                     <TextBlock Text="{Binding WeekTotalText}" Style="{StaticResource Pulse.Stat}" FontSize="25"/>
                                     <TextBlock Text="{Binding WeekAvgText, StringFormat=' · {0}/day avg'}" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Bottom" Margin="0,0,0,3"/>
@@ -136,7 +137,7 @@
                             <Border Grid.Column="1" Background="{DynamicResource Card2}" BorderBrush="{DynamicResource Border}" BorderThickness="1"
                                     CornerRadius="{StaticResource Radius.MD}" Padding="13,8" VerticalAlignment="Center">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Insights" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource Accent.Weekly}" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{l:Loc Common_Insights}" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource Accent.Weekly}" VerticalAlignment="Center"/>
                                     <md:PackIcon Kind="ArrowTopRight" Width="15" Height="15" Foreground="{StaticResource Accent.Weekly}" VerticalAlignment="Center" Margin="5,0,0,0"/>
                                 </StackPanel>
                             </Border>
@@ -184,7 +185,7 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="HEARING" Style="{StaticResource Pulse.Eyebrow}"/>
+                                <TextBlock Text="{l:Loc Common_Hearing}" Style="{StaticResource Pulse.Eyebrow}"/>
                                 <Border Grid.Column="1" Style="{StaticResource Pulse.Pill.Good}">
                                     <StackPanel Orientation="Horizontal">
                                         <Ellipse Style="{StaticResource Pulse.Dot}" VerticalAlignment="Center"/>
@@ -202,7 +203,7 @@
                                 </Grid>
                                 <StackPanel VerticalAlignment="Center">
                                     <TextBlock Text="{Binding SoundTime}" Style="{StaticResource Pulse.Stat}" FontSize="21"/>
-                                    <TextBlock Text="loud listening" Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
+                                    <TextBlock Text="{l:Loc Dashboard_LoudListening}" Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
@@ -212,7 +213,7 @@
                     <Border Grid.Column="1" Background="{StaticResource Accent.Appusage.Soft}" BorderBrush="{DynamicResource Border}" BorderThickness="1"
                             CornerRadius="{StaticResource Radius.XL}" Padding="22" Effect="{DynamicResource Shadow.Card}" Margin="8,0,0,0">
                         <StackPanel>
-                            <TextBlock Text="CATEGORIES" Style="{StaticResource Pulse.Eyebrow}" Margin="0,0,0,14"/>
+                            <TextBlock Text="{l:Loc Dashboard_Categories}" Style="{StaticResource Pulse.Eyebrow}" Margin="0,0,0,14"/>
                             <ItemsControl ItemsSource="{Binding Categories}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
@@ -249,7 +250,7 @@
                         CornerRadius="{StaticResource Radius.XL}" Padding="22" Effect="{DynamicResource Shadow.Card}"
                         Cursor="Hand" Margin="0,0,0,16" MouseLeftButtonUp="MostUsed_Click">
                     <StackPanel>
-                        <TextBlock Text="MOST USED TODAY" Style="{StaticResource Pulse.Eyebrow}" Margin="0,0,0,14"/>
+                        <TextBlock Text="{l:Loc Dashboard_MostUsedToday}" Style="{StaticResource Pulse.Eyebrow}" Margin="0,0,0,14"/>
                         <Grid Margin="0,0,0,14">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
@@ -282,12 +283,12 @@
                         <Border Width="42" Height="42" CornerRadius="11" HorizontalAlignment="Left" Background="{StaticResource Accent.Focus.Soft}">
                             <md:PackIcon Kind="Target" Width="21" Height="21" Foreground="{StaticResource Accent.Focus}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
-                        <TextBlock Text="Enter Focus" Style="{StaticResource Pulse.Stat}" FontSize="19" Margin="0,14,0,6"/>
-                        <TextBlock Text="Silence distractions and protect a block of deep work." Style="{StaticResource Pulse.Body2}" Margin="0,0,0,18"/>
+                        <TextBlock Text="{l:Loc Dashboard_EnterFocus}" Style="{StaticResource Pulse.Stat}" FontSize="19" Margin="0,14,0,6"/>
+                        <TextBlock Text="{l:Loc Dashboard_SilenceDistractionsProtectBlockDeep}" Style="{StaticResource Pulse.Body2}" Margin="0,0,0,18"/>
                         <Button Style="{StaticResource Pulse.Button.Primary}" Background="{StaticResource Accent.Focus}"
                                 HorizontalAlignment="Stretch" Click="EnterFocus_Click">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Start a session" VerticalAlignment="Center"/>
+                                <TextBlock Text="{l:Loc Dashboard_StartSession}" VerticalAlignment="Center"/>
                                 <md:PackIcon Kind="ArrowRight" Width="17" Height="17" VerticalAlignment="Center" Margin="8,0,0,0"/>
                             </StackPanel>
                         </Button>
@@ -303,7 +304,7 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="DAILY GOAL" Style="{StaticResource Pulse.Eyebrow}"/>
+                            <TextBlock Text="{l:Loc Dashboard_DailyGoal}" Style="{StaticResource Pulse.Eyebrow}"/>
                             <TextBlock Grid.Column="1" Text="{Binding GoalText}" Style="{StaticResource Pulse.Muted}" VerticalAlignment="Center"/>
                         </Grid>
                         <Grid Height="9" Margin="0,0,0,14">
@@ -330,7 +331,7 @@
                         <StackPanel Orientation="Horizontal">
                             <md:PackIcon Kind="MoonWaningCrescent" Width="16" Height="16" Foreground="{DynamicResource Ink3}" VerticalAlignment="Center"/>
                             <TextBlock Style="{StaticResource Pulse.Body2}" FontSize="12.5" VerticalAlignment="Center" Margin="8,0,0,0">
-                                <Run Text="Set a goal in "/><Run Text="Settings" FontWeight="SemiBold" Foreground="{DynamicResource Ink}"/>
+                                <Run Text="{l:Loc Dashboard_SetGoal}"/><Run Text="{l:Loc Common_Settings}" FontWeight="SemiBold" Foreground="{DynamicResource Ink}"/>
                             </TextBlock>
                         </StackPanel>
                     </StackPanel>

@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.IO.Compression;
 using System.Text.Json;
+using digital_wellbeing_app.Helpers;
 
 namespace digital_wellbeing_app.Services
 {
@@ -69,7 +70,7 @@ namespace digital_wellbeing_app.Services
         public static void RestoreBackup(string zipPath)
         {
             if (!File.Exists(zipPath))
-                throw new FileNotFoundException("Backup file not found.", zipPath);
+                throw new FileNotFoundException(Loc.Get("Backup_FileNotFound"), zipPath);
 
             var stagingDir = Path.Combine(Path.GetTempPath(), "pulse-restore-staging", Guid.NewGuid().ToString("N"));
             Directory.CreateDirectory(stagingDir);
@@ -80,7 +81,7 @@ namespace digital_wellbeing_app.Services
 
                 var extractedDb = Path.Combine(stagingDir, DbFileNameInBackup);
                 if (!File.Exists(extractedDb))
-                    throw new InvalidDataException("Backup archive is missing the database file.");
+                    throw new InvalidDataException(Loc.Get("Backup_MissingDatabase"));
 
                 // Close before touching the live file - CloseConnection() is safe to call even if
                 // no connection is currently open.
