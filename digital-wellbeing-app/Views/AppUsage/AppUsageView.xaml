@@ -1,6 +1,7 @@
 <UserControl
     x:Class="digital_wellbeing_app.Views.AppUsage.AppUsageView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:l="clr-namespace:digital_wellbeing_app.Helpers"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:vm="clr-namespace:digital_wellbeing_app.ViewModels"
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -28,10 +29,10 @@
             <!-- Today / Week segmented toggle -->
             <Border Style="{StaticResource Pulse.SegmentBar}" Margin="0,0,0,16">
                 <StackPanel Orientation="Horizontal">
-                    <RadioButton Content="Today" AutomationProperties.AutomationId="AppRangeToday"
+                    <RadioButton Content="{l:Loc Common_Today}" AutomationProperties.AutomationId="AppRangeToday"
                                  Style="{StaticResource Pulse.Segment}" GroupName="AppRange" IsChecked="True"
                                  Checked="TodayRange_Checked"/>
-                    <RadioButton Content="Week" AutomationProperties.AutomationId="AppRangeWeek"
+                    <RadioButton Content="{l:Loc Common_Week}" AutomationProperties.AutomationId="AppRangeWeek"
                                  Style="{StaticResource Pulse.Segment}" GroupName="AppRange"
                                  Checked="WeekRange_Checked"/>
                 </StackPanel>
@@ -62,7 +63,7 @@
                     </Border>
 
                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                        <TextBlock Text="NOW USING" Style="{StaticResource Pulse.Eyebrow}"/>
+                        <TextBlock Text="{l:Loc Apps_NowUsing}" Style="{StaticResource Pulse.Eyebrow}"/>
                         <TextBlock Text="{Binding CurrentAppName}" FontSize="17" FontWeight="SemiBold"
                                    Foreground="{DynamicResource Ink}" Margin="0,3,0,0" TextTrimming="CharacterEllipsis"/>
                     </StackPanel>
@@ -86,19 +87,19 @@
                 <Border Grid.Column="0" Style="{StaticResource Pulse.Card}" Padding="20" Margin="0,0,8,0">
                     <StackPanel>
                         <TextBlock Text="{Binding SwitchCount}" Style="{StaticResource Pulse.Stat}" FontSize="28"/>
-                        <TextBlock Text="App switches" Style="{StaticResource Pulse.Body2}" Margin="0,4,0,0"/>
+                        <TextBlock Text="{l:Loc Apps_AppSwitches}" Style="{StaticResource Pulse.Body2}" Margin="0,4,0,0"/>
                     </StackPanel>
                 </Border>
                 <Border Grid.Column="1" Style="{StaticResource Pulse.Card}" Padding="20" Margin="8,0,8,0">
                     <StackPanel>
                         <TextBlock Text="{Binding AverageFocusTime}" Style="{StaticResource Pulse.Stat}" FontSize="28"/>
-                        <TextBlock Text="Avg focus" Style="{StaticResource Pulse.Body2}" Margin="0,4,0,0"/>
+                        <TextBlock Text="{l:Loc Apps_AvgFocus}" Style="{StaticResource Pulse.Body2}" Margin="0,4,0,0"/>
                     </StackPanel>
                 </Border>
                 <Border Grid.Column="2" Style="{StaticResource Pulse.Card}" Padding="20" Margin="8,0,0,0">
                     <StackPanel>
                         <TextBlock Text="{Binding LongestSessionTime}" Style="{StaticResource Pulse.Stat}" FontSize="28"/>
-                        <TextBlock Text="Longest focus" Style="{StaticResource Pulse.Body2}" Margin="0,4,0,0"/>
+                        <TextBlock Text="{l:Loc Apps_LongestFocus}" Style="{StaticResource Pulse.Body2}" Margin="0,4,0,0"/>
                     </StackPanel>
                 </Border>
             </Grid>
@@ -112,7 +113,7 @@
                         <TextBlock Text="{Binding RangeHeader}" Style="{StaticResource Pulse.Eyebrow}" VerticalAlignment="Center"/>
                         <StackPanel Grid.Column="1" Orientation="Horizontal"
                                     Visibility="{Binding IsWeekView, Converter={StaticResource BoolToVisibilityConverter}}">
-                            <TextBlock Text="Total " Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"/>
+                            <TextBlock Text="{l:Loc Apps_Total}" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center"/>
                             <TextBlock Text="{Binding WeekTotalText}" Style="{StaticResource Pulse.CardTitle}" FontSize="14"/>
                         </StackPanel>
                     </Grid>
@@ -154,9 +155,9 @@
                 <StackPanel HorizontalAlignment="Center">
                     <md:PackIcon Kind="ApplicationOutline" Width="44" Height="44" Foreground="{DynamicResource Ink3}"
                                  HorizontalAlignment="Center" Margin="0,0,0,14"/>
-                    <TextBlock Text="No apps tracked yet" Style="{StaticResource Pulse.CardTitle}" FontSize="15"
+                    <TextBlock Text="{l:Loc Apps_NoAppsTrackedYet}" Style="{StaticResource Pulse.CardTitle}" FontSize="15"
                                HorizontalAlignment="Center" Margin="0,0,0,6"/>
-                    <TextBlock Text="Start using some applications and they'll appear here."
+                    <TextBlock Text="{l:Loc Apps_StartUsingSomeApplicationsThey}"
                                Style="{StaticResource Pulse.Body2}" HorizontalAlignment="Center" TextAlignment="Center"/>
                 </StackPanel>
             </Border>

@@ -52,6 +52,17 @@ Using AI tools is fine. You are still the author, so:
 
 PRs that are large, unfocused or clearly unreviewed may be closed with a request to split or trim them.
 
+## Translations
+
+All UI text lives in `digital-wellbeing-app/Properties/Strings.resx` (English). To add a language:
+
+1. Copy it to `Strings.<culture>.resx` in the same folder, using a .NET culture name such as `zh-Hans`, `es`, `pt-BR` or `ja`.
+2. Translate only the `<value>` text. Keep the keys and any `{0}` placeholders; you may change a date pattern after the colon, e.g. `{0:dddd, d. MMMM}`. Remove keys you haven't translated; they fall back to English.
+3. Run the app, pick the language in **Settings → Appearance → Language**, restart Pulse, and check every page for cut-off or overlapping text. Add screenshots to the PR.
+
+`dotnet test` checks that translations use known keys and keep every placeholder. New text in code goes into
+`Strings.resx` and is read with `{l:Loc Key}` in XAML or `Loc.Get("Key")` / `Loc.Format("Key", ...)` in C#.
+
 ## Bugs and security
 
 Use the issue templates for bugs and feature requests. Report security issues privately as described in

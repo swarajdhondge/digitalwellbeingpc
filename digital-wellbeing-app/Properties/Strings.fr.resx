@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="App_ErrorTitle" xml:space="preserve"><value>Pulse - Erreur</value></data>
+  <data name="App_UnexpectedError" xml:space="preserve"><value>Une erreur inattendue s'est produite :
+
+{0}
+
+L'erreur a été enregistrée. L'application va tenter de continuer.
+Si le problème persiste, redémarrez l'application.</value></data>
+  <data name="Apps_AppSwitches" xml:space="preserve"><value>Changements d'app</value></data>
+  <data name="Apps_AvgFocus" xml:space="preserve"><value>Concentration moy.</value></data>
+  <data name="Apps_LongestFocus" xml:space="preserve"><value>Plus longue concentration</value></data>
+  <data name="Apps_NoAppActive" xml:space="preserve"><value>Aucune app active</value></data>
+  <data name="Apps_NoAppsTrackedYet" xml:space="preserve"><value>Aucune app suivie pour l'instant</value></data>
+  <data name="Apps_NowUsing" xml:space="preserve"><value>EN COURS D'UTILISATION</value></data>
+  <data name="Apps_RangeHeaderToday" xml:space="preserve"><value>APPS DU JOUR</value></data>
+  <data name="Apps_RangeHeaderWeek" xml:space="preserve"><value>APPS DE LA SEMAINE</value></data>
+  <data name="Apps_StartUsingSomeApplicationsThey" xml:space="preserve"><value>Utilisez quelques applications et elles apparaîtront ici.</value></data>
+  <data name="Apps_Total" xml:space="preserve"><value>Total </value></data>
+  <data name="Backup_ChooseFolder" xml:space="preserve"><value>Choisissez où enregistrer votre sauvegarde Pulse</value></data>
+  <data name="Backup_ChooseRestoreFile" xml:space="preserve"><value>Choisissez une sauvegarde Pulse à restaurer</value></data>
+  <data name="Backup_CompleteTitle" xml:space="preserve"><value>Sauvegarde terminée</value></data>
+  <data name="Backup_ErrorTitle" xml:space="preserve"><value>Erreur de sauvegarde</value></data>
+  <data name="Backup_Failed" xml:space="preserve"><value>Échec de la sauvegarde : {0}</value></data>
+  <data name="Backup_FileFilter" xml:space="preserve"><value>Sauvegarde Pulse (*.zip)|*.zip</value></data>
+  <data name="Backup_FileNotFound" xml:space="preserve"><value>Fichier de sauvegarde introuvable.</value></data>
+  <data name="Backup_MissingDatabase" xml:space="preserve"><value>Le fichier de base de données est absent de l'archive de sauvegarde.</value></data>
+  <data name="Backup_RestoreCompleteTitle" xml:space="preserve"><value>Restauration terminée</value></data>
+  <data name="Backup_RestoreConfirm" xml:space="preserve"><value>Cette action remplacera TOUTES vos données Pulse actuelles par la sauvegarde.
+
+Cette opération est irréversible. Pulse se fermera ensuite - rouvrez-le pour continuer.</value></data>
+  <data name="Backup_RestoreConfirmFrom" xml:space="preserve"><value>Cette action remplacera TOUTES vos données Pulse actuelles par la sauvegarde du {0:g}.
+
+Cette opération est irréversible. Pulse se fermera ensuite - rouvrez-le pour continuer.</value></data>
+  <data name="Backup_RestoreDone" xml:space="preserve"><value>Restauration terminée. Pulse va se fermer - veuillez le rouvrir.</value></data>
+  <data name="Backup_RestoreErrorTitle" xml:space="preserve"><value>Erreur de restauration</value></data>
+  <data name="Backup_RestoreFailed" xml:space="preserve"><value>Échec de la restauration : {0}</value></data>
+  <data name="Backup_RestoreTitle" xml:space="preserve"><value>Restaurer une sauvegarde</value></data>
+  <data name="Backup_Saved" xml:space="preserve"><value>Sauvegarde enregistrée dans :
+{0}</value></data>
+  <data name="Break_FollowRule" xml:space="preserve"><value>Appliquez la règle 20-20-20 : détournez les yeux de l'écran pendant 20 secondes.</value></data>
+  <data name="Break_NoSnoozesLeft" xml:space="preserve"><value>Plus aucun report possible</value></data>
+  <data name="Break_SnoozeLeft" xml:space="preserve"><value>Reporter de 5 min (reste {0})</value></data>
+  <data name="Common_AppUsage" xml:space="preserve"><value>Utilisation des apps</value></data>
+  <data name="Common_Focus" xml:space="preserve"><value>Concentration</value></data>
+  <data name="Common_Hearing" xml:space="preserve"><value>AUDITION</value></data>
+  <data name="Common_Hearing2" xml:space="preserve"><value>Audition</value></data>
+  <data name="Common_Insights" xml:space="preserve"><value>Bilan</value></data>
+  <data name="Common_Min15" xml:space="preserve"><value>15 min</value></data>
+  <data name="Common_Min25" xml:space="preserve"><value>25 min</value></data>
+  <data name="Common_Min30" xml:space="preserve"><value>30 min</value></data>
+  <data name="Common_Min45" xml:space="preserve"><value>45 min</value></data>
+  <data name="Common_Min60" xml:space="preserve"><value>60 min</value></data>
+  <data name="Common_Min90" xml:space="preserve"><value>90 min</value></data>
+  <data name="Common_Minutes" xml:space="preserve"><value>minutes</value></data>
+  <data name="Common_PrivateDevice" xml:space="preserve"><value>Privé · sur l'appareil</value></data>
+  <data name="Common_ScreenTime" xml:space="preserve"><value>Temps d'écran</value></data>
+  <data name="Common_Settings" xml:space="preserve"><value>Paramètres</value></data>
+  <data name="Common_To" xml:space="preserve"><value>à</value></data>
+  <data name="Common_Today" xml:space="preserve"><value>Aujourd'hui</value></data>
+  <data name="Common_Week" xml:space="preserve"><value>Semaine</value></data>
+  <data name="Dashboard_Categories" xml:space="preserve"><value>CATÉGORIES</value></data>
+  <data name="Dashboard_DailyGoal" xml:space="preserve"><value>OBJECTIF QUOTIDIEN</value></data>
+  <data name="Dashboard_EnterFocus" xml:space="preserve"><value>Se concentrer</value></data>
+  <data name="Dashboard_GoalProgress" xml:space="preserve"><value>sur un objectif de {0} · {1} %</value></data>
+  <data name="Dashboard_LoudListening" xml:space="preserve"><value>écoute forte</value></data>
+  <data name="Dashboard_MostUsedToday" xml:space="preserve"><value>LES PLUS UTILISÉES AUJOURD'HUI</value></data>
+  <data name="Dashboard_NoGoalSet" xml:space="preserve"><value>Aucun objectif défini</value></data>
+  <data name="Dashboard_SameAsLastWeek" xml:space="preserve"><value>comme la semaine dernière</value></data>
+  <data name="Dashboard_SetGoal" xml:space="preserve"><value>Définissez un objectif dans </value></data>
+  <data name="Dashboard_SilenceDistractionsProtectBlockDeep" xml:space="preserve"><value>Faites taire les distractions et protégez un moment de travail approfondi.</value></data>
+  <data name="Dashboard_SoundLoud" xml:space="preserve"><value>Fort</value></data>
+  <data name="Dashboard_SoundNormal" xml:space="preserve"><value>Normal</value></data>
+  <data name="Dashboard_SplitAcrossTopApps" xml:space="preserve"><value>Réparti entre vos apps principales</value></data>
+  <data name="Dashboard_StartSession" xml:space="preserve"><value>Démarrer une session</value></data>
+  <data name="Dashboard_ThresholdAbove" xml:space="preserve"><value>AU-DESSUS DE {0} dB</value></data>
+  <data name="Dashboard_TodayScreenTime" xml:space="preserve"><value>AUJOURD'HUI · TEMPS D'ÉCRAN</value></data>
+  <data name="Dashboard_VsYesterday" xml:space="preserve"><value>{0}{1} par rapport à hier</value></data>
+  <data name="Dashboard_Week" xml:space="preserve"><value>CETTE SEMAINE</value></data>
+  <data name="Dashboard_WeeklyChange" xml:space="preserve"><value>{0} {1} % par rapport à la semaine dernière</value></data>
+  <data name="Date_WeekLabel" xml:space="preserve"><value>Sem. {0} · {1}</value></data>
+  <data name="Export_ChooseFolder" xml:space="preserve"><value>Choisissez où enregistrer vos données exportées</value></data>
+  <data name="Export_CompleteTitle" xml:space="preserve"><value>Exportation terminée</value></data>
+  <data name="Export_ErrorTitle" xml:space="preserve"><value>Erreur d'exportation</value></data>
+  <data name="Export_Failed" xml:space="preserve"><value>Échec de l'exportation : {0}</value></data>
+  <data name="Export_Success" xml:space="preserve"><value>{0} fichiers de données exportés dans :
+{1}</value></data>
+  <data name="FocusPage_DistractionsCount" xml:space="preserve"><value>{0} distractions</value></data>
+  <data name="FocusPage_NoDistractions" xml:space="preserve"><value>Aucune distraction</value></data>
+  <data name="Focus_AppCategories" xml:space="preserve"><value>CATÉGORIES D'APPS</value></data>
+  <data name="Focus_AutomaticallyMinimizeDistractingApps" xml:space="preserve"><value>Réduire automatiquement les apps distrayantes</value></data>
+  <data name="Focus_BeginSession" xml:space="preserve"><value>Commencer la session</value></data>
+  <data name="Focus_Block" xml:space="preserve"><value>Bloquer</value></data>
+  <data name="Focus_Blocked" xml:space="preserve"><value>Bloqué</value></data>
+  <data name="Focus_CategorizeAppsControlWhatS" xml:space="preserve"><value>Classez vos apps pour contrôler ce qui est bloqué pendant les sessions de concentration.</value></data>
+  <data name="Focus_ComingSoon" xml:space="preserve"><value>Bientôt disponible</value></data>
+  <data name="Focus_Completed" xml:space="preserve"><value>Terminé</value></data>
+  <data name="Focus_Custom" xml:space="preserve"><value>Personnalisé…</value></data>
+  <data name="Focus_Distractions" xml:space="preserve"><value>Distractions</value></data>
+  <data name="Focus_Duration" xml:space="preserve"><value>DURÉE</value></data>
+  <data name="Focus_EndSessionEarly" xml:space="preserve"><value>Terminer la session plus tôt</value></data>
+  <data name="Focus_Enforcement" xml:space="preserve"><value>Fermeté</value></data>
+  <data name="Focus_Entertainment" xml:space="preserve"><value>Divertissement</value></data>
+  <data name="Focus_EntertainmentAppsAreBlockedDuring" xml:space="preserve"><value>Les apps de divertissement sont bloquées pendant la concentration. Les apps de travail et neutres sont toujours autorisées.</value></data>
+  <data name="Focus_FocusSessionActive" xml:space="preserve"><value>Session de concentration active</value></data>
+  <data name="Focus_Hide" xml:space="preserve"><value>Masquer</value></data>
+  <data name="Focus_HowShouldDistractionsHandled" xml:space="preserve"><value>COMMENT GÉRER LES DISTRACTIONS ?</value></data>
+  <data name="Focus_Neutral" xml:space="preserve"><value>Neutre</value></data>
+  <data name="Focus_NoFocusSessionsYetStart" xml:space="preserve"><value>Aucune session de concentration pour l'instant. Démarrez votre première session.</value></data>
+  <data name="Focus_PickLengthHowStrictlyDistractions" xml:space="preserve"><value>Choisissez une durée et la fermeté face aux distractions. Pulse surveille votre app au premier plan et vous aide à rester concentré.</value></data>
+  <data name="Focus_RecentSessions" xml:space="preserve"><value>SESSIONS RÉCENTES</value></data>
+  <data name="Focus_Remaining" xml:space="preserve"><value>restant</value></data>
+  <data name="Focus_RemoveFromTaskbarStartMenu" xml:space="preserve"><value>Retirer de la barre des tâches et du menu Démarrer</value></data>
+  <data name="Focus_ShowGentlePopupWhenOpen" xml:space="preserve"><value>Afficher une fenêtre discrète quand vous ouvrez une app distrayante</value></data>
+  <data name="Focus_StartFocusSession" xml:space="preserve"><value>Démarrer une session de concentration</value></data>
+  <data name="Focus_Suggested" xml:space="preserve"><value>Suggéré</value></data>
+  <data name="Focus_TodaySFocus" xml:space="preserve"><value>Concentration du jour</value></data>
+  <data name="Focus_Warn" xml:space="preserve"><value>Avertir</value></data>
+  <data name="Focus_Work" xml:space="preserve"><value>Travail</value></data>
+  <data name="Goal_HoursMinutes" xml:space="preserve"><value>{0} h {1} min</value></data>
+  <data name="Goal_Minutes" xml:space="preserve"><value>{0} min</value></data>
+  <data name="Goal_ProgressOf" xml:space="preserve"><value>{0} % de l'objectif de {1}</value></data>
+  <data name="Goal_ProgressOver" xml:space="preserve"><value>{0} % - Objectif dépassé de {1}</value></data>
+  <data name="Goal_ReachedBody" xml:space="preserve"><value>Vous avez utilisé votre PC pendant {0}, au-delà de votre objectif de {1}. Pensez à faire une pause.</value></data>
+  <data name="Goal_ReachedTitle" xml:space="preserve"><value>Objectif de temps d'écran atteint</value></data>
+  <data name="Hearing_EstimatedFromSystemVolumeDevice" xml:space="preserve"><value>Estimé à partir du volume système et du type d'appareil, et non d'une mesure calibrée du niveau de pression acoustique - Windows ne fournit aucune API pour cela sur un matériel quelconque.</value></data>
+  <data name="Hearing_Harmful" xml:space="preserve"><value>Nocif</value></data>
+  <data name="Hearing_HarmfulThreshold" xml:space="preserve"><value>SEUIL NOCIF</value></data>
+  <data name="Hearing_HarmfulTooltip" xml:space="preserve"><value>Nocif : {0}</value></data>
+  <data name="Hearing_HideTracking" xml:space="preserve"><value>Masquer le suivi</value></data>
+  <data name="Hearing_KeepEstimatedLevelsUnder85" xml:space="preserve"><value>Maintenez les niveaux estimés sous 85 dB</value></data>
+  <data name="Hearing_LoudListeningTime" xml:space="preserve"><value>TEMPS D'ÉCOUTE FORTE</value></data>
+  <data name="Hearing_NoSessionsToday" xml:space="preserve"><value>Aucune session aujourd'hui</value></data>
+  <data name="Hearing_Of" xml:space="preserve"><value>sur </value></data>
+  <data name="Hearing_Safe" xml:space="preserve"><value>Sûr</value></data>
+  <data name="Hearing_SafeLevels" xml:space="preserve"><value>Niveaux sûrs</value></data>
+  <data name="Hearing_SegmentTooltip" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Hearing_SessionDetails" xml:space="preserve"><value>DÉTAILS DES SESSIONS</value></data>
+  <data name="Hearing_SessionTodayOne" xml:space="preserve"><value>{0} session aujourd'hui</value></data>
+  <data name="Hearing_SessionsToday" xml:space="preserve"><value>{0} sessions aujourd'hui</value></data>
+  <data name="Hearing_ShowDetailedTracking" xml:space="preserve"><value>Afficher le suivi détaillé</value></data>
+  <data name="Hearing_ShowTracking" xml:space="preserve"><value>Afficher le suivi</value></data>
+  <data name="Hearing_ShowingRecentSessions" xml:space="preserve"><value>Affichage des {0} sessions les plus récentes sur {1}</value></data>
+  <data name="Hearing_ThresholdAbove" xml:space="preserve"><value>Au-dessus de {0} dB</value></data>
+  <data name="Hearing_TotalListeningTime" xml:space="preserve"><value> de temps d'écoute total</value></data>
+  <data name="Hearing_WhoGuidance" xml:space="preserve"><value>Recommandation WHO</value></data>
+  <data name="Help_AppLimits" xml:space="preserve"><value>Limites d'apps</value></data>
+  <data name="Help_BreakReminders" xml:space="preserve"><value>Rappels de pause</value></data>
+  <data name="Help_EstimatesListeningLevelFromSystem" xml:space="preserve"><value>Estime le niveau d'écoute à partir de l'indicateur audio du système — il n'enregistre ni n'écoute jamais le son réel. La WHO recommande de rester sous 85 dB ; le seuil nocif par défaut est de 75 dB. Les barres au-dessus de 75 dB s'affichent en rouge.</value></data>
+  <data name="Help_EverythingStaysDeviceNoAccount" xml:space="preserve"><value>Tout reste sur cet appareil — pas de compte, pas de cloud, pas de télémétrie. Le suivi des sites web est désactivé par défaut — si vous l'activez, seul le nom d'hôte (p. ex. youtube.com) est enregistré, jamais les URL complètes ni le contenu des pages. Exportez vos données en CSV ou supprimez-les entièrement depuis les Paramètres à tout moment.</value></data>
+  <data name="Help_FocusSessionsWatchEntertainmentApps" xml:space="preserve"><value>Les sessions de concentration surveillent les apps de divertissement. Avertir affiche une notification ; Bloquer les réduit. Pulse peut aussi suivre les sessions de concentration de Windows si cette option est activée dans les Paramètres. Le mode Coucher ajoute une bordure discrète à heure fixe lorsqu'il est temps de terminer.</value></data>
+  <data name="Help_FocusWindDown" xml:space="preserve"><value>Concentration et mode Coucher</value></data>
+  <data name="Help_Follows202020Rule" xml:space="preserve"><value>Suit la règle 20-20-20 : toutes les 20 minutes, regardez à 6 mètres pendant 20 secondes. Vous pouvez reporter jusqu'à 3 fois ; le minuteur se réinitialise après 5 minutes d'absence. Les rappels s'affichent par-dessus Pulse, ou sous forme de notification quand Pulse est dans la zone de notification.</value></data>
+  <data name="Help_LaunchWindowsStartupRunsQuietly" xml:space="preserve"><value>Lancer au démarrage de Windows exécute Pulse discrètement dans la zone de notification. Sauvegarder maintenant crée un fichier ZIP local contenant votre base de données et vos paramètres. Restaurer remplace les données locales actuelles : faites donc d'abord une nouvelle sauvegarde et lisez attentivement la confirmation.</value></data>
+  <data name="Help_Privacy" xml:space="preserve"><value>Confidentialité</value></data>
+  <data name="Help_RecordsWhichAppHasFocus" xml:space="preserve"><value>Enregistre quelle app est active et pendant combien de temps lorsque vous utilisez le PC. Après 5 minutes sans activité, le suivi s'arrête, sauf si l'app est en plein écran ou lit du son. Cliquer sur le bureau ou la barre des tâches ne compte pas comme File Explorer. Les noms d'apps sont enregistrés, mais les titres de fenêtres ne sont jamais stockés dans la base de données, par souci de confidentialité. Classez vos apps en Travail, Divertissement ou Neutre pour la concentration.</value></data>
+  <data name="Help_ReportBug" xml:space="preserve"><value>Signaler un bug</value></data>
+  <data name="Help_SetDailyAllowanceUnavailableHours" xml:space="preserve"><value>Définissez un quota quotidien, des heures d'indisponibilité, ou les deux pour une app. Me rappeler envoie une notification quand la limite est atteinte ; Bloquer réduit aussi l'app. Suspendez ou modifiez une limite à tout moment depuis la page Limites.</value></data>
+  <data name="Help_ShowsOneWeekTimeMonday" xml:space="preserve"><value>Affiche une semaine à la fois (du lundi au dimanche) ; utilisez les flèches pour parcourir les semaines précédentes. Inclut les tendances du temps d'écran, les apps principales, les sessions de concentration terminées et les niveaux sonores. Les comparaisons d'une semaine à l'autre montrent si vos habitudes s'améliorent ; concentration vs loisirs montre à quel point votre temps a été productif.</value></data>
+  <data name="Help_StartupDataSafety" xml:space="preserve"><value>Démarrage et sécurité des données</value></data>
+  <data name="Help_SummaryDayHeroStatTotal" xml:space="preserve"><value>Le résumé de votre journée. La statistique principale est le temps d'écran actif total — le temps passé à utiliser activement votre PC. Le temps d'absence n'est pas compté. Les cartes colorées donnent un aperçu de chaque section et y mènent directement.</value></data>
+  <data name="Help_TracksHowLongActivelyUse" xml:space="preserve"><value>Mesure combien de temps vous utilisez activement votre PC. Après 5 minutes sans activité de la souris ou du clavier, le suivi se met en pause, sauf si du son est lu ou qu'une app est en plein écran (une vidéo, par exemple). Le verrouillage ou la mise en veille du PC le met aussi en pause. La chronologie montre votre journée ; la vue hebdomadaire montre les totaux quotidiens.</value></data>
+  <data name="Help_ViewGithub" xml:space="preserve"><value>Voir sur GitHub</value></data>
+  <data name="Insights_CompletedWeek" xml:space="preserve"><value>Terminées cette semaine</value></data>
+  <data name="Insights_DailyAverage" xml:space="preserve"><value>MOYENNE QUOTIDIENNE</value></data>
+  <data name="Insights_FocusSessions" xml:space="preserve"><value>Sessions de concentration</value></data>
+  <data name="Insights_FocusVsLeisure" xml:space="preserve"><value>CONCENTRATION VS LOISIRS</value></data>
+  <data name="Insights_Leisure" xml:space="preserve"><value>Loisirs</value></data>
+  <data name="Insights_Other" xml:space="preserve"><value>Autre</value></data>
+  <data name="Insights_TopAppsWeek" xml:space="preserve"><value>APPS PRINCIPALES DE LA SEMAINE</value></data>
+  <data name="Insights_TotalScreenTime" xml:space="preserve"><value>TEMPS D'ÉCRAN TOTAL</value></data>
+  <data name="Insights_UnknownApp" xml:space="preserve"><value>Inconnu</value></data>
+  <data name="Insights_VsLastWeek" xml:space="preserve"><value> par rapport à la semaine dernière</value></data>
+  <data name="Limits_1Hour" xml:space="preserve"><value>1 heure</value></data>
+  <data name="Limits_2Hours" xml:space="preserve"><value>2 heures</value></data>
+  <data name="Limits_3Hours" xml:space="preserve"><value>3 heures</value></data>
+  <data name="Limits_AddHelp" xml:space="preserve"><value>Choisissez un quota quotidien et ce que Pulse doit faire quand le temps est écoulé.</value></data>
+  <data name="Limits_AddLimit" xml:space="preserve"><value>AJOUTER UNE LIMITE</value></data>
+  <data name="Limits_AddLimit2" xml:space="preserve"><value>Ajouter une limite</value></data>
+  <data name="Limits_AllowanceOrHoursRequired" xml:space="preserve"><value>Choisissez un quota quotidien, activez des heures d'indisponibilité, ou les deux.</value></data>
+  <data name="Limits_AlreadyLimited" xml:space="preserve"><value>Déjà limitée</value></data>
+  <data name="Limits_AlsoKeepAppUnavailableDuring" xml:space="preserve"><value>Rendre aussi cette app indisponible à certaines heures</value></data>
+  <data name="Limits_AppLimits" xml:space="preserve"><value>VOS LIMITES D'APPS</value></data>
+  <data name="Limits_CanChangePauseAnyTime" xml:space="preserve"><value>Vous pouvez la modifier ou la suspendre à tout moment.</value></data>
+  <data name="Limits_Cancel" xml:space="preserve"><value>Annuler</value></data>
+  <data name="Limits_ChooseAppGiveDailyAllowance" xml:space="preserve"><value>Choisissez une app, attribuez-lui un quota quotidien et décidez si Pulse doit vous le rappeler ou la réduire quand le temps est écoulé.</value></data>
+  <data name="Limits_CreateAppLimit" xml:space="preserve"><value>Créer une limite d'app</value></data>
+  <data name="Limits_Custom" xml:space="preserve"><value>Personnalisé</value></data>
+  <data name="Limits_Edit" xml:space="preserve"><value>Modifier</value></data>
+  <data name="Limits_EditHelp" xml:space="preserve"><value>Modifiez le quota, les horaires ou ce qui se passe quand le temps est écoulé.</value></data>
+  <data name="Limits_EditLimit" xml:space="preserve"><value>MODIFIER LA LIMITE</value></data>
+  <data name="Limits_EditTitle" xml:space="preserve"><value>Modifier {0}</value></data>
+  <data name="Limits_HowMuchTimeShouldApp" xml:space="preserve"><value>Combien de temps accorder à cette app chaque jour ?</value></data>
+  <data name="Limits_InvalidMinutes" xml:space="preserve"><value>Saisissez un nombre de minutes valide.</value></data>
+  <data name="Limits_LimitTitle" xml:space="preserve"><value>Limiter {0}</value></data>
+  <data name="Limits_MinimizeApp" xml:space="preserve"><value>Réduire l'app</value></data>
+  <data name="Limits_MinutesPerDay" xml:space="preserve"><value>minutes par jour</value></data>
+  <data name="Limits_NoAppLimitsYet" xml:space="preserve"><value>Aucune limite d'app pour l'instant</value></data>
+  <data name="Limits_OptionalUsefulBedtimeSchoolWork" xml:space="preserve"><value>Facultatif — utile pour le coucher, l'école ou les heures de travail.</value></data>
+  <data name="Limits_PulseCountsTimeWhileApp" xml:space="preserve"><value>Pulse compte le temps pendant lequel l'app est au premier plan.</value></data>
+  <data name="Limits_RemindMe" xml:space="preserve"><value>Me rappeler</value></data>
+  <data name="Limits_RemoveLimit" xml:space="preserve"><value>Supprimer la limite</value></data>
+  <data name="Limits_SaveChanges" xml:space="preserve"><value>Enregistrer</value></data>
+  <data name="Limits_SelectApp" xml:space="preserve"><value>Sélectionner une app</value></data>
+  <data name="Limits_SetHealthyBoundariesDistractingApps" xml:space="preserve"><value>Fixez des limites saines aux apps distrayantes</value></data>
+  <data name="Limits_ShowNotificationLeaveAppOpen" xml:space="preserve"><value>Afficher une notification et laisser l'app ouverte</value></data>
+  <data name="Limits_ShowNotificationMoveItsWindow" xml:space="preserve"><value>Afficher une notification et écarter sa fenêtre</value></data>
+  <data name="Limits_SummaryHoursPerDay" xml:space="preserve"><value>{0} h/jour</value></data>
+  <data name="Limits_SummaryMinimizeApp" xml:space="preserve"><value>Réduire l'app</value></data>
+  <data name="Limits_SummaryMinutesPerDay" xml:space="preserve"><value>{0} min/jour</value></data>
+  <data name="Limits_SummaryPaused" xml:space="preserve"><value>En pause · {0}</value></data>
+  <data name="Limits_SummaryReminder" xml:space="preserve"><value>Rappel</value></data>
+  <data name="Limits_SummaryUnavailable" xml:space="preserve"><value>Indisponible {0}–{1}</value></data>
+  <data name="Limits_TurnLimitOff" xml:space="preserve"><value>Activer ou désactiver cette limite</value></data>
+  <data name="Limits_UnavailableFrom" xml:space="preserve"><value>Indisponible de</value></data>
+  <data name="Limits_UseAppLittleWhileWill" xml:space="preserve"><value>Utilisez une app pendant un moment et elle apparaîtra ici.</value></data>
+  <data name="Limits_UseThreeSimpleStepsBelow" xml:space="preserve"><value>Suivez les trois étapes simples ci-dessous pour créer la première.</value></data>
+  <data name="Limits_WhatShouldPulseDoWhen" xml:space="preserve"><value>Que doit faire Pulse quand la limite est atteinte ?</value></data>
+  <data name="Limits_WhichAppDoWantLimit" xml:space="preserve"><value>Quelle app voulez-vous limiter ?</value></data>
+  <data name="Notify_AppLimitMinimized" xml:space="preserve"><value>{0} a atteint sa limite et a été réduite.</value></data>
+  <data name="Notify_AppLimitTitle" xml:space="preserve"><value>Limite d'app atteinte</value></data>
+  <data name="Notify_AppLimitWarn" xml:space="preserve"><value>{0} a atteint sa limite pour aujourd'hui.</value></data>
+  <data name="Notify_DistractingAppBody" xml:space="preserve"><value>{0} est classée comme Divertissement.
+Il reste {1} de concentration. Cliquez pour répondre.</value></data>
+  <data name="Notify_DistractingAppTitle" xml:space="preserve"><value>⚠️ App distrayante détectée</value></data>
+  <data name="Notify_HearingAlertBody" xml:space="preserve"><value>Vous écoutez au-dessus de votre seuil depuis un moment. Pensez à baisser le volume.</value></data>
+  <data name="Notify_HearingAlertTitle" xml:space="preserve"><value>Alerte audition</value></data>
+  <data name="Screen_ActiveScreenTime" xml:space="preserve"><value>TEMPS D'ÉCRAN ACTIF</value></data>
+  <data name="Screen_BreaksTaken" xml:space="preserve"><value>Pauses prises</value></data>
+  <data name="Screen_DailyAverage" xml:space="preserve"><value>Moyenne quotidienne</value></data>
+  <data name="Screen_DailyGoal" xml:space="preserve"><value>Objectif quotidien</value></data>
+  <data name="Screen_LessThanYesterday" xml:space="preserve"><value>↓ {0} de moins qu'hier</value></data>
+  <data name="Screen_LongestStretch" xml:space="preserve"><value>Plus longue période</value></data>
+  <data name="Screen_MoreThanYesterday" xml:space="preserve"><value>↑ {0} de plus qu'hier</value></data>
+  <data name="Screen_NoDataYesterday" xml:space="preserve"><value>Aucune donnée d'hier</value></data>
+  <data name="Screen_SameAsYesterday" xml:space="preserve"><value>Comme hier</value></data>
+  <data name="Screen_Sessions" xml:space="preserve"><value>Sessions</value></data>
+  <data name="Screen_TotalScreenTime" xml:space="preserve"><value>Temps d'écran total</value></data>
+  <data name="Settings_12Months" xml:space="preserve"><value>12 mois</value></data>
+  <data name="Settings_24Months" xml:space="preserve"><value>24 mois</value></data>
+  <data name="Settings_3Months" xml:space="preserve"><value>3 mois</value></data>
+  <data name="Settings_6Months" xml:space="preserve"><value>6 mois</value></data>
+  <data name="Settings_About" xml:space="preserve"><value>À PROPOS</value></data>
+  <data name="Settings_AgoHours" xml:space="preserve"><value>{0} h</value></data>
+  <data name="Settings_AgoMinutes" xml:space="preserve"><value>{0} min</value></data>
+  <data name="Settings_AgoSeconds" xml:space="preserve"><value>{0} s</value></data>
+  <data name="Settings_AllDataDeleted" xml:space="preserve"><value>Toutes les données suivies ont été supprimées.</value></data>
+  <data name="Settings_AllDataStoredLocallyDevice" xml:space="preserve"><value>Toutes vos données sont stockées localement sur cet appareil. Rien n'est envoyé dans le cloud.</value></data>
+  <data name="Settings_Amber" xml:space="preserve"><value>Ambre</value></data>
+  <data name="Settings_Appearance" xml:space="preserve"><value>APPARENCE</value></data>
+  <data name="Settings_Auto" xml:space="preserve"><value>Auto</value></data>
+  <data name="Settings_AutoDetect" xml:space="preserve"><value>Détection automatique</value></data>
+  <data name="Settings_AutomaticallyDeleteUsageOlderThan" xml:space="preserve"><value>Supprimer automatiquement les données d'utilisation plus anciennes</value></data>
+  <data name="Settings_BackUpData" xml:space="preserve"><value>Sauvegarder vos données</value></data>
+  <data name="Settings_BackUpNow" xml:space="preserve"><value>Sauvegarder maintenant</value></data>
+  <data name="Settings_BreakReminders" xml:space="preserve"><value>RAPPELS DE PAUSE</value></data>
+  <data name="Settings_CheckUpdates" xml:space="preserve"><value>Rechercher des mises à jour</value></data>
+  <data name="Settings_CheckingUpdates" xml:space="preserve"><value>Recherche de mises à jour...</value></data>
+  <data name="Settings_ClosingWindowKeepsPulseTracking" xml:space="preserve"><value>Fermer la fenêtre laisse Pulse suivre votre activité en arrière-plan. Quittez depuis l'icône de la zone de notification.</value></data>
+  <data name="Settings_Dark" xml:space="preserve"><value>Sombre</value></data>
+  <data name="Settings_DataDeletedTitle" xml:space="preserve"><value>Données supprimées</value></data>
+  <data name="Settings_DataPrivacy" xml:space="preserve"><value>DONNÉES ET CONFIDENTIALITÉ</value></data>
+  <data name="Settings_DatabaseSize" xml:space="preserve"><value>Taille de la base de données</value></data>
+  <data name="Settings_Delete" xml:space="preserve"><value>Supprimer</value></data>
+  <data name="Settings_DeleteAllConfirm" xml:space="preserve"><value>Voulez-vous vraiment supprimer TOUTES les données suivies ?
+
+Cela supprimera définitivement :
+- L'historique du temps d'écran
+- L'historique d'utilisation des apps
+- L'historique d'exposition sonore
+- L'historique des sessions de concentration
+
+Cette action est irréversible.</value></data>
+  <data name="Settings_DeleteAllData" xml:space="preserve"><value>Supprimer toutes les données</value></data>
+  <data name="Settings_DeleteAllDataTitle" xml:space="preserve"><value>Supprimer toutes les données</value></data>
+  <data name="Settings_DeleteDateRange" xml:space="preserve"><value>Supprimer une période</value></data>
+  <data name="Settings_DeleteFailed" xml:space="preserve"><value>Impossible de supprimer les données : {0}</value></data>
+  <data name="Settings_DeleteRangeConfirm" xml:space="preserve"><value>Supprimer définitivement toutes les données suivies du {0:yyyy-MM-dd} au {1:yyyy-MM-dd} ?
+
+Cette action est irréversible.</value></data>
+  <data name="Settings_DeviceType" xml:space="preserve"><value>Type d'appareil</value></data>
+  <data name="Settings_DiagnosticLogsKeptLast7" xml:space="preserve"><value>Journaux de diagnostic conservés 7 jours</value></data>
+  <data name="Settings_Diagnostics" xml:space="preserve"><value>DIAGNOSTIC</value></data>
+  <data name="Settings_Dim" xml:space="preserve"><value>Tamisé</value></data>
+  <data name="Settings_DisplayReminderWhenWindDown" xml:space="preserve"><value>Afficher un rappel au début du mode Coucher</value></data>
+  <data name="Settings_DownloadingUpdate" xml:space="preserve"><value>Téléchargement de la mise à jour...</value></data>
+  <data name="Settings_Earphones" xml:space="preserve"><value>Écouteurs</value></data>
+  <data name="Settings_EnableBreakReminders" xml:space="preserve"><value>Activer les rappels de pause</value></data>
+  <data name="Settings_EnableDailyGoal" xml:space="preserve"><value>Activer l'objectif quotidien</value></data>
+  <data name="Settings_EnableWindDownMode" xml:space="preserve"><value>Activer le mode Coucher</value></data>
+  <data name="Settings_EndDate" xml:space="preserve"><value>Date de fin</value></data>
+  <data name="Settings_ErrorTitle" xml:space="preserve"><value>Erreur</value></data>
+  <data name="Settings_Every15Minutes" xml:space="preserve"><value>Toutes les 15 minutes</value></data>
+  <data name="Settings_Every20MinutesRecommended" xml:space="preserve"><value>Toutes les 20 minutes (recommandé)</value></data>
+  <data name="Settings_Every30Minutes" xml:space="preserve"><value>Toutes les 30 minutes</value></data>
+  <data name="Settings_Every45Minutes" xml:space="preserve"><value>Toutes les 45 minutes</value></data>
+  <data name="Settings_Every60Minutes" xml:space="preserve"><value>Toutes les 60 minutes</value></data>
+  <data name="Settings_Export" xml:space="preserve"><value>Exporter</value></data>
+  <data name="Settings_ExportMyData" xml:space="preserve"><value>Exporter mes données</value></data>
+  <data name="Settings_Forever" xml:space="preserve"><value>Toujours</value></data>
+  <data name="Settings_From" xml:space="preserve"><value>De</value></data>
+  <data name="Settings_GentleReminderWhenSTime" xml:space="preserve"><value>Un rappel en douceur quand il est temps de décompresser</value></data>
+  <data name="Settings_Github" xml:space="preserve"><value>GitHub</value></data>
+  <data name="Settings_GoalHours" xml:space="preserve"><value>Objectif : {0} heures par jour</value></data>
+  <data name="Settings_GoalHoursMinutes" xml:space="preserve"><value>Objectif : {0} heures {1} minutes par jour</value></data>
+  <data name="Settings_GoalMinutes" xml:space="preserve"><value>Objectif : {0} minutes par jour</value></data>
+  <data name="Settings_GoalMustBePositive" xml:space="preserve"><value>L'objectif doit être supérieur à 0</value></data>
+  <data name="Settings_Headphones" xml:space="preserve"><value>Casque</value></data>
+  <data name="Settings_Headsets" xml:space="preserve"><value>Micro-casques</value></data>
+  <data name="Settings_HealthDown" xml:space="preserve"><value>Arrêté</value></data>
+  <data name="Settings_HealthHealthy" xml:space="preserve"><value>Opérationnel</value></data>
+  <data name="Settings_HealthLastSeen" xml:space="preserve"><value>{0} · vu il y a {1}</value></data>
+  <data name="Settings_HealthNotStarted" xml:space="preserve"><value>Non démarré</value></data>
+  <data name="Settings_HealthStale" xml:space="preserve"><value>Obsolète</value></data>
+  <data name="Settings_HearingLevelsShownPulseAre" xml:space="preserve"><value>Les niveaux d'écoute affichés dans Pulse sont des estimations basées sur le volume système, et non une mesure sonore calibrée - Windows ne fournit aucune API pour cela sur un matériel quelconque.</value></data>
+  <data name="Settings_Hours" xml:space="preserve"><value>heures</value></data>
+  <data name="Settings_KeepHistory" xml:space="preserve"><value>Conserver l'historique</value></data>
+  <data name="Settings_KeepRunningTrayWhenClosed" xml:space="preserve"><value>Rester dans la zone de notification à la fermeture</value></data>
+  <data name="Settings_Language" xml:space="preserve"><value>Langue</value></data>
+  <data name="Settings_LanguageRestart" xml:space="preserve"><value>Redémarrez Pulse pour utiliser la nouvelle langue.</value></data>
+  <data name="Settings_LanguageSystem" xml:space="preserve"><value>Langue de Windows</value></data>
+  <data name="Settings_LaunchWindowsStartup" xml:space="preserve"><value>Lancer au démarrage de Windows</value></data>
+  <data name="Settings_LicensedUnderGnuGeneralPublic" xml:space="preserve"><value>Sous licence GNU General Public License v3.0</value></data>
+  <data name="Settings_Light" xml:space="preserve"><value>Clair</value></data>
+  <data name="Settings_Loading" xml:space="preserve"><value>Chargement…</value></data>
+  <data name="Settings_LogFile" xml:space="preserve"><value>Fichier journal</value></data>
+  <data name="Settings_NoAccountNoCloudNo" xml:space="preserve"><value>Pas de compte, pas de cloud, pas de télémétrie. Tout reste sur ce PC.</value></data>
+  <data name="Settings_NoGoalSet" xml:space="preserve"><value>Aucun objectif défini</value></data>
+  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>Les notifications s'affichent dans la barre de titre. Vous pouvez les reporter ou les ignorer.</value></data>
+  <data name="Settings_OffDefaultWhenPulseReads" xml:space="preserve"><value>Désactivé par défaut. Une fois activé, Pulse lit la barre d'adresse des navigateurs de la famille Chrome/Edge/Firefox pour noter le site consulté (p. ex. youtube.com) — jamais l'URL complète, les termes de recherche ni le contenu des pages.</value></data>
+  <data name="Settings_Open" xml:space="preserve"><value>Ouvrir</value></data>
+  <data name="Settings_OpenFolderFailed" xml:space="preserve"><value>Impossible d'ouvrir le dossier : {0}</value></data>
+  <data name="Settings_OpenLogFolderFailed" xml:space="preserve"><value>Impossible d'ouvrir le dossier des journaux : {0}</value></data>
+  <data name="Settings_PermanentlyRemoveAllTrackedData" xml:space="preserve"><value>Supprimer définitivement toutes les données suivies</value></data>
+  <data name="Settings_PickStartEndDate" xml:space="preserve"><value>Choisissez une date de début et une date de fin.</value></data>
+  <data name="Settings_PlayNotificationSound" xml:space="preserve"><value>Émettre un son de notification</value></data>
+  <data name="Settings_Private" xml:space="preserve"><value>Privé</value></data>
+  <data name="Settings_PulseGuessesFromAudioDevice" xml:space="preserve"><value>Pulse le déduit du nom de votre appareil audio - modifiez-le si la déduction est erronée (p. ex. s'il ne reconnaît pas votre modèle de casque).</value></data>
+  <data name="Settings_Purple" xml:space="preserve"><value>Violet</value></data>
+  <data name="Settings_RangeDeleted" xml:space="preserve"><value>La période sélectionnée a été supprimée.</value></data>
+  <data name="Settings_ReminderInterval" xml:space="preserve"><value>Intervalle des rappels</value></data>
+  <data name="Settings_RemoveTrackedDataBetweenTwo" xml:space="preserve"><value>Supprimer les données suivies entre deux dates</value></data>
+  <data name="Settings_ReplacesCurrentDataCannotUndone" xml:space="preserve"><value>Remplace vos données actuelles - action irréversible, Pulse se ferme ensuite</value></data>
+  <data name="Settings_RestEyes202020" xml:space="preserve"><value>Reposez vos yeux avec la règle 20-20-20</value></data>
+  <data name="Settings_Restore" xml:space="preserve"><value>Restaurer...</value></data>
+  <data name="Settings_RestoreFromBackup" xml:space="preserve"><value>Restaurer une sauvegarde</value></data>
+  <data name="Settings_SaveAllTrackedDataAs" xml:space="preserve"><value>Enregistrer toutes les données suivies en fichiers CSV</value></data>
+  <data name="Settings_SaveZipSnapshotDatabaseSettings" xml:space="preserve"><value>Enregistrer un instantané .zip de votre base de données et de vos paramètres</value></data>
+  <data name="Settings_Schedule" xml:space="preserve"><value>Horaires</value></data>
+  <data name="Settings_ScreenTimeGoal" xml:space="preserve"><value>OBJECTIF DE TEMPS D'ÉCRAN</value></data>
+  <data name="Settings_SetTargetDailyScreenTime" xml:space="preserve"><value>Fixez un objectif de temps d'écran quotidien</value></data>
+  <data name="Settings_ShowNotification" xml:space="preserve"><value>Afficher une notification</value></data>
+  <data name="Settings_ShowVisualBorder" xml:space="preserve"><value>Afficher une bordure visuelle</value></data>
+  <data name="Settings_SizeBytes" xml:space="preserve"><value>{0} o</value></data>
+  <data name="Settings_SizeKB" xml:space="preserve"><value>{0:F1} Ko</value></data>
+  <data name="Settings_SizeMB" xml:space="preserve"><value>{0:F1} Mo</value></data>
+  <data name="Settings_Speakers" xml:space="preserve"><value>Haut-parleurs</value></data>
+  <data name="Settings_StartDate" xml:space="preserve"><value>Date de début</value></data>
+  <data name="Settings_StartFocusSessionsFromWindows" xml:space="preserve"><value>Démarrer les sessions depuis la concentration Windows</value></data>
+  <data name="Settings_StartPulseQuietlyNotificationArea" xml:space="preserve"><value>Démarrer Pulse discrètement dans la zone de notification à l'ouverture de session</value></data>
+  <data name="Settings_Startup" xml:space="preserve"><value>DÉMARRAGE</value></data>
+  <data name="Settings_StorageLocation" xml:space="preserve"><value>Emplacement de stockage</value></data>
+  <data name="Settings_SubtleGlowAroundWindowEdges" xml:space="preserve"><value>Une lueur discrète autour des bords de la fenêtre</value></data>
+  <data name="Settings_Theme" xml:space="preserve"><value>Thème</value></data>
+  <data name="Settings_TrackScreenTimeAppUsage" xml:space="preserve"><value>Suivez votre temps d'écran, l'utilisation des apps et l'exposition sonore pour garder un mode de vie numérique sain.</value></data>
+  <data name="Settings_TrackWebsitesHostname" xml:space="preserve"><value>Suivre les sites web par nom d'hôte</value></data>
+  <data name="Settings_TrackerShowingStaleDownRight" xml:space="preserve"><value>Il est normal qu'un traceur affiche Obsolète ou Arrêté juste après le verrouillage de l'écran ou la mise en veille du PC - les traceurs se mettent alors en pause et reprennent automatiquement.</value></data>
+  <data name="Settings_UnableToDetermine" xml:space="preserve"><value>Impossible à déterminer</value></data>
+  <data name="Settings_Unknown" xml:space="preserve"><value>Inconnu</value></data>
+  <data name="Settings_UpToDate" xml:space="preserve"><value>Vous êtes à jour !</value></data>
+  <data name="Settings_UpdateAvailablePrompt" xml:space="preserve"><value>Une nouvelle version ({0}) est disponible.
+
+Voulez-vous mettre à jour maintenant ?</value></data>
+  <data name="Settings_UpdateAvailableStatus" xml:space="preserve"><value>Mise à jour disponible : v{0}</value></data>
+  <data name="Settings_UpdateAvailableTitle" xml:space="preserve"><value>Mise à jour disponible</value></data>
+  <data name="Settings_UpdateCheckFailed" xml:space="preserve"><value>Échec de la recherche de mises à jour : {0}</value></data>
+  <data name="Settings_UpdateServiceUnreachable" xml:space="preserve"><value>Impossible de joindre le service de mise à jour. Vérifiez votre connexion et réessayez.</value></data>
+  <data name="Settings_UpdatesUnavailable" xml:space="preserve"><value>Les mises à jour ne sont pas disponibles pour cette version.</value></data>
+  <data name="Settings_UpdatesViaStore" xml:space="preserve"><value>Les mises à jour sont gérées par le Microsoft Store. Ouverture de la page du Store...</value></data>
+  <data name="Settings_Version231" xml:space="preserve"><value>Version 2.3.1</value></data>
+  <data name="Settings_VersionFormat" xml:space="preserve"><value>Version {0}</value></data>
+  <data name="Settings_ViewPrivacyInformation" xml:space="preserve"><value>Voir les informations de confidentialité</value></data>
+  <data name="Settings_VisualStyle" xml:space="preserve"><value>Style visuel</value></data>
+  <data name="Settings_Website" xml:space="preserve"><value>Site web</value></data>
+  <data name="Settings_WhenTurnFocusWindowsSettings" xml:space="preserve"><value>Lorsque vous activez la concentration dans les Paramètres Windows, une session de concentration Pulse démarre aussi automatiquement.</value></data>
+  <data name="Settings_WindDown" xml:space="preserve"><value>MODE COUCHER</value></data>
+  <data name="Settings_WindDownActiveRange" xml:space="preserve"><value>Actif de {0} à {1}</value></data>
+  <data name="Settings_WindDownDisabled" xml:space="preserve"><value>Le mode Coucher est désactivé</value></data>
+  <data name="Shell_AppMarkedAsEntertainmentStay" xml:space="preserve"><value>Cette app est classée comme Divertissement. Restez concentré sur votre travail !</value></data>
+  <data name="Shell_AppUsageSubtitle" xml:space="preserve"><value>Où votre attention est vraiment allée.</value></data>
+  <data name="Shell_AppUsageTitle" xml:space="preserve"><value>Utilisation des apps</value></data>
+  <data name="Shell_BackWork" xml:space="preserve"><value>Retour au travail</value></data>
+  <data name="Shell_Close" xml:space="preserve"><value>Fermer</value></data>
+  <data name="Shell_ContinueAnyway" xml:space="preserve"><value>Continuer quand même</value></data>
+  <data name="Shell_DayGlance" xml:space="preserve"><value>Votre journée en un coup d'œil</value></data>
+  <data name="Shell_Dismiss" xml:space="preserve"><value>Ignorer</value></data>
+  <data name="Shell_EndFocusSession" xml:space="preserve"><value>Terminer la session de concentration ?</value></data>
+  <data name="Shell_EndSession" xml:space="preserve"><value>Terminer la session</value></data>
+  <data name="Shell_EndSessionMessage" xml:space="preserve"><value>Il vous reste encore {0}. Voulez-vous vraiment terminer plus tôt ?</value></data>
+  <data name="Shell_ErrorCaption" xml:space="preserve"><value>Erreur</value></data>
+  <data name="Shell_Exit" xml:space="preserve"><value>Quitter</value></data>
+  <data name="Shell_FocusModeActive" xml:space="preserve"><value>Mode concentration actif</value></data>
+  <data name="Shell_FocusSubtitle" xml:space="preserve"><value>Réservez du temps pour un travail approfondi sans distraction.</value></data>
+  <data name="Shell_FocusTimeRemaining" xml:space="preserve"><value>Encore {0} de session de concentration</value></data>
+  <data name="Shell_Follow202020Rule" xml:space="preserve"><value>Appliquez la règle 20-20-20 : regardez un objet situé à 6 mètres pendant 20 secondes.</value></data>
+  <data name="Shell_GoodAfternoon" xml:space="preserve"><value>Bon après-midi</value></data>
+  <data name="Shell_GoodEvening" xml:space="preserve"><value>Bonsoir</value></data>
+  <data name="Shell_GoodMorning" xml:space="preserve"><value>Bonjour</value></data>
+  <data name="Shell_HearingSubtitle" xml:space="preserve"><value>Protégez vos oreilles des expositions sonores fortes.</value></data>
+  <data name="Shell_Help" xml:space="preserve"><value>Aide</value></data>
+  <data name="Shell_HelpSubtitle" xml:space="preserve"><value>Comment Pulse suit votre activité — et protège votre vie privée.</value></data>
+  <data name="Shell_InsightsSubtitle" xml:space="preserve"><value>Votre rythme au fil de la semaine.</value></data>
+  <data name="Shell_KeepGoing" xml:space="preserve"><value>Continuer</value></data>
+  <data name="Shell_Limits" xml:space="preserve"><value>Limites</value></data>
+  <data name="Shell_LimitsSubtitle" xml:space="preserve"><value>Plafonnez ou planifiez la durée d'utilisation de chaque app.</value></data>
+  <data name="Shell_Maximize" xml:space="preserve"><value>Agrandir</value></data>
+  <data name="Shell_Minimize" xml:space="preserve"><value>Réduire</value></data>
+  <data name="Shell_OpenSettings" xml:space="preserve"><value>Ouvrir les paramètres</value></data>
+  <data name="Shell_PrivateDevice" xml:space="preserve"><value>Privé, sur l'appareil</value></data>
+  <data name="Shell_ScreenTimeSubtitle" xml:space="preserve"><value>Quand et combien de temps votre écran est resté allumé.</value></data>
+  <data name="Shell_ScreenTimeTitle" xml:space="preserve"><value>Temps d'écran</value></data>
+  <data name="Shell_SettingsSubtitle" xml:space="preserve"><value>Adaptez Pulse à vos habitudes.</value></data>
+  <data name="Shell_Snooze5Min" xml:space="preserve"><value>Reporter de 5 min</value></data>
+  <data name="Shell_SwitchTheme" xml:space="preserve"><value>Changer de thème</value></data>
+  <data name="Shell_SwitchToDarkTheme" xml:space="preserve"><value>Passer au thème sombre</value></data>
+  <data name="Shell_SwitchToLightTheme" xml:space="preserve"><value>Passer au thème clair</value></data>
+  <data name="Shell_TimeBreak" xml:space="preserve"><value>C'est l'heure de la pause !</value></data>
+  <data name="Shell_TodaySubtitle" xml:space="preserve"><value>{0:dddd d MMMM} · votre journée en un coup d'œil.</value></data>
+  <data name="Shell_Tracking" xml:space="preserve"><value>Suivi</value></data>
+  <data name="Shell_TrayIconNotFound" xml:space="preserve"><value>Icône de la zone de notification introuvable :
+{0}</value></data>
+  <data name="Shell_TurnOffReminders" xml:space="preserve"><value>Désactiver les rappels</value></data>
+  <data name="Time_HoursCompact" xml:space="preserve"><value>{0} h</value></data>
+  <data name="Time_HoursMinutes" xml:space="preserve"><value>{0} h {1} min</value></data>
+  <data name="Time_HoursMinutesCompact" xml:space="preserve"><value>{0} h {1} min</value></data>
+  <data name="Time_HoursMinutesLong" xml:space="preserve"><value>{0} h {1} min</value></data>
+  <data name="Time_Minutes" xml:space="preserve"><value>{0} min</value></data>
+  <data name="Time_MinutesCompact" xml:space="preserve"><value>{0} min</value></data>
+  <data name="Time_MinutesLong" xml:space="preserve"><value>{0} min</value></data>
+  <data name="Time_MinutesSecondsCompact" xml:space="preserve"><value>{0} min {1} s</value></data>
+  <data name="Time_SecondsCompact" xml:space="preserve"><value>{0} s</value></data>
+  <data name="Tray_CheckForUpdates" xml:space="preserve"><value>Rechercher des mises à jour</value></data>
+  <data name="Tray_EndFocusSession" xml:space="preserve"><value>Terminer la session de concentration</value></data>
+  <data name="Tray_OpenDashboard" xml:space="preserve"><value>Ouvrir le tableau de bord</value></data>
+  <data name="Tray_Reports" xml:space="preserve"><value>Rapports</value></data>
+  <data name="Tray_StartFocusSession" xml:space="preserve"><value>Démarrer une session de concentration</value></data>
+  <data name="Tray_StillRunningBody" xml:space="preserve"><value>Le suivi continue en arrière-plan. Cliquez avec le bouton droit sur l'icône de la zone de notification pour quitter, ou désactivez ceci dans Paramètres → Démarrage.</value></data>
+  <data name="Tray_StillRunningTitle" xml:space="preserve"><value>Pulse est toujours en cours d'exécution</value></data>
+  <data name="Update_AvailablePrompt" xml:space="preserve"><value>Une nouvelle version ({0}) est disponible.
+
+Voulez-vous mettre à jour maintenant ?</value></data>
+  <data name="Update_AvailableTitle" xml:space="preserve"><value>Mise à jour disponible</value></data>
+  <data name="Update_DevBuild" xml:space="preserve"><value>La recherche de mises à jour est disponible dans l'app Pulse installée, pas dans cette version de développement.</value></data>
+  <data name="Update_InitFailed" xml:space="preserve"><value>Pulse n'a pas pu initialiser le programme de mise à jour pour cette installation.</value></data>
+  <data name="Update_PortableBuild" xml:space="preserve"><value>La recherche de mises à jour est disponible dans l'app Pulse installée, pas dans cette version portable.</value></data>
+  <data name="Update_StoreManaged" xml:space="preserve"><value>Les mises à jour sont gérées automatiquement par le Microsoft Store.</value></data>
+  <data name="WeekNav_4WeeksBack" xml:space="preserve"><value>Reculer de 4 semaines</value></data>
+  <data name="WeekNav_ChooseAnotherWeek" xml:space="preserve"><value>Choisir une autre semaine</value></data>
+  <data name="WeekNav_JumpWeek" xml:space="preserve"><value>ALLER À UNE SEMAINE</value></data>
+  <data name="WeekNav_NextWeek" xml:space="preserve"><value>Semaine suivante</value></data>
+  <data name="WeekNav_Oldest" xml:space="preserve"><value>Plus ancienne</value></data>
+  <data name="WeekNav_PreviousWeek" xml:space="preserve"><value>Semaine précédente</value></data>
+  <data name="WeekNav_Week" xml:space="preserve"><value>Cette semaine</value></data>
+  <data name="Welcome_AllDataStoredLocallyComputer" xml:space="preserve"><value>Toutes les données sont stockées localement sur votre ordinateur dans :</value></data>
+  <data name="Welcome_AppNamesUsageDurationNot" xml:space="preserve"><value>Noms des apps et durée d'utilisation (pas le contenu des fenêtres)</value></data>
+  <data name="Welcome_AudioOutputMeterVolumeLevel" xml:space="preserve"><value>Indicateur de sortie audio (niveau de volume uniquement, pas le contenu audio)</value></data>
+  <data name="Welcome_AudioOutputVolumeLevelsHearing" xml:space="preserve"><value>Niveaux de volume de sortie audio pour protéger votre audition</value></data>
+  <data name="Welcome_CanExportDeleteAllData" xml:space="preserve"><value>Vous pouvez exporter ou supprimer toutes vos données à tout moment depuis les Paramètres.</value></data>
+  <data name="Welcome_DataStaysLocal" xml:space="preserve"><value>Vos données restent en local</value></data>
+  <data name="Welcome_GetStarted" xml:space="preserve"><value>Commencer</value></data>
+  <data name="Welcome_IdleDetectionMouseKeyboardInactivity" xml:space="preserve"><value>Détection d'inactivité (souris/clavier inactifs)</value></data>
+  <data name="Welcome_InternetTrafficBrowsingHistoryUrls" xml:space="preserve"><value>Trafic Internet, historique de navigation ou URL</value></data>
+  <data name="Welcome_KeystrokesPasswordsTypedContent" xml:space="preserve"><value>Frappes au clavier, mots de passe ou texte saisi</value></data>
+  <data name="Welcome_LocalappdataPulse" xml:space="preserve"><value>%LocalAppData%\Pulse\</value></data>
+  <data name="Welcome_MicrophoneAudioRecordings" xml:space="preserve"><value>Audio du microphone ou enregistrements</value></data>
+  <data name="Welcome_NothingEverSentCloudNo" xml:space="preserve"><value>Rien n'est jamais envoyé dans le cloud, aucun compte requis, aucune connexion Internet nécessaire.</value></data>
+  <data name="Welcome_PermissionsUsed" xml:space="preserve"><value>Autorisations utilisées</value></data>
+  <data name="Welcome_PersonalDigitalWellnessCompanionWindows" xml:space="preserve"><value>Votre compagnon de bien-être numérique pour Windows</value></data>
+  <data name="Welcome_ScreenContentsScreenshotsWindowText" xml:space="preserve"><value>Contenu de l'écran, captures d'écran ou texte des fenêtres</value></data>
+  <data name="Welcome_ScreenTimeActiveVsIdle" xml:space="preserve"><value>Temps d'écran (périodes actives et inactives)</value></data>
+  <data name="Welcome_WelcomePulse" xml:space="preserve"><value>Bienvenue dans Pulse</value></data>
+  <data name="Welcome_WhatWeNeverTrack" xml:space="preserve"><value>Ce que nous ne suivons jamais</value></data>
+  <data name="Welcome_WhatWeTrack" xml:space="preserve"><value>Ce que nous suivons</value></data>
+  <data name="Welcome_WindowFocusDetectionTrackActive" xml:space="preserve"><value>Détection de la fenêtre active (pour suivre l'app utilisée)</value></data>
+  <data name="WindDown_NotifyBody" xml:space="preserve"><value>Les heures calmes ont commencé. Pensez à terminer ce que vous faites et à vous préparer au repos.{0}</value></data>
+  <data name="WindDown_NotifyTitle" xml:space="preserve"><value>🌙 C'est l'heure de décompresser</value></data>
+  <data name="WindDown_SummaryToday" xml:space="preserve"><value>Vous avez utilisé votre PC {0} h {1} min aujourd'hui.</value></data>
+  <data name="Dashboard_PerDayAverage" xml:space="preserve"><value> · {0}/jour en moy.</value></data>
+</root>

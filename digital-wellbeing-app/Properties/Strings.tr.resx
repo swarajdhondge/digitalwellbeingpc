@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="App_ErrorTitle" xml:space="preserve"><value>Pulse - Hata</value></data>
+  <data name="App_UnexpectedError" xml:space="preserve"><value>Beklenmeyen bir hata oluştu:
+
+{0}
+
+Hata günlüğe kaydedildi. Uygulama çalışmaya devam etmeye çalışacak.
+Sorun devam ederse lütfen uygulamayı yeniden başlatın.</value></data>
+  <data name="Apps_AppSwitches" xml:space="preserve"><value>Uygulama geçişleri</value></data>
+  <data name="Apps_AvgFocus" xml:space="preserve"><value>Ort. odak</value></data>
+  <data name="Apps_LongestFocus" xml:space="preserve"><value>En uzun odak</value></data>
+  <data name="Apps_NoAppActive" xml:space="preserve"><value>Etkin uygulama yok</value></data>
+  <data name="Apps_NoAppsTrackedYet" xml:space="preserve"><value>Henüz izlenen uygulama yok</value></data>
+  <data name="Apps_NowUsing" xml:space="preserve"><value>ŞU ANDA KULLANILAN</value></data>
+  <data name="Apps_RangeHeaderToday" xml:space="preserve"><value>BUGÜNÜN UYGULAMALARI</value></data>
+  <data name="Apps_RangeHeaderWeek" xml:space="preserve"><value>BU HAFTANIN UYGULAMALARI</value></data>
+  <data name="Apps_StartUsingSomeApplicationsThey" xml:space="preserve"><value>Birkaç uygulama kullanmaya başlayın, burada görünecekler.</value></data>
+  <data name="Apps_Total" xml:space="preserve"><value>Toplam </value></data>
+  <data name="Backup_ChooseFolder" xml:space="preserve"><value>Pulse yedeğinin kaydedileceği yeri seçin</value></data>
+  <data name="Backup_ChooseRestoreFile" xml:space="preserve"><value>Geri yüklenecek Pulse yedeğini seçin</value></data>
+  <data name="Backup_CompleteTitle" xml:space="preserve"><value>Yedekleme Tamamlandı</value></data>
+  <data name="Backup_ErrorTitle" xml:space="preserve"><value>Yedekleme Hatası</value></data>
+  <data name="Backup_Failed" xml:space="preserve"><value>Yedekleme başarısız oldu: {0}</value></data>
+  <data name="Backup_FileFilter" xml:space="preserve"><value>Pulse yedeği (*.zip)|*.zip</value></data>
+  <data name="Backup_FileNotFound" xml:space="preserve"><value>Yedek dosyası bulunamadı.</value></data>
+  <data name="Backup_MissingDatabase" xml:space="preserve"><value>Yedek arşivinde veritabanı dosyası yok.</value></data>
+  <data name="Backup_RestoreCompleteTitle" xml:space="preserve"><value>Geri Yükleme Tamamlandı</value></data>
+  <data name="Backup_RestoreConfirm" xml:space="preserve"><value>Bu işlem mevcut Pulse verilerinizin TAMAMINI yedektekilerle değiştirecek.
+
+Bu işlem geri alınamaz. Pulse ardından kapanacak - devam etmek için yeniden açın.</value></data>
+  <data name="Backup_RestoreConfirmFrom" xml:space="preserve"><value>Bu işlem mevcut Pulse verilerinizin TAMAMINI {0:g} tarihli yedektekilerle değiştirecek.
+
+Bu işlem geri alınamaz. Pulse ardından kapanacak - devam etmek için yeniden açın.</value></data>
+  <data name="Backup_RestoreDone" xml:space="preserve"><value>Geri yükleme tamamlandı. Pulse şimdi kapanacak - lütfen yeniden açın.</value></data>
+  <data name="Backup_RestoreErrorTitle" xml:space="preserve"><value>Geri Yükleme Hatası</value></data>
+  <data name="Backup_RestoreFailed" xml:space="preserve"><value>Geri yükleme başarısız oldu: {0}</value></data>
+  <data name="Backup_RestoreTitle" xml:space="preserve"><value>Yedekten Geri Yükle</value></data>
+  <data name="Backup_Saved" xml:space="preserve"><value>Yedek şuraya kaydedildi:
+{0}</value></data>
+  <data name="Break_FollowRule" xml:space="preserve"><value>20-20-20 kuralını uygulayın: 20 saniye boyunca ekrandan uzağa bakın.</value></data>
+  <data name="Break_NoSnoozesLeft" xml:space="preserve"><value>Erteleme hakkı kalmadı</value></data>
+  <data name="Break_SnoozeLeft" xml:space="preserve"><value>5 dk ertele ({0} kaldı)</value></data>
+  <data name="Common_AppUsage" xml:space="preserve"><value>Uygulama kullanımı</value></data>
+  <data name="Common_Focus" xml:space="preserve"><value>Odak</value></data>
+  <data name="Common_Hearing" xml:space="preserve"><value>İŞİTME</value></data>
+  <data name="Common_Hearing2" xml:space="preserve"><value>İşitme</value></data>
+  <data name="Common_Insights" xml:space="preserve"><value>İçgörüler</value></data>
+  <data name="Common_Min15" xml:space="preserve"><value>15 dk</value></data>
+  <data name="Common_Min25" xml:space="preserve"><value>25 dk</value></data>
+  <data name="Common_Min30" xml:space="preserve"><value>30 dk</value></data>
+  <data name="Common_Min45" xml:space="preserve"><value>45 dk</value></data>
+  <data name="Common_Min60" xml:space="preserve"><value>60 dk</value></data>
+  <data name="Common_Min90" xml:space="preserve"><value>90 dk</value></data>
+  <data name="Common_Minutes" xml:space="preserve"><value>dakika</value></data>
+  <data name="Common_PrivateDevice" xml:space="preserve"><value>Gizli · cihazda</value></data>
+  <data name="Common_ScreenTime" xml:space="preserve"><value>Ekran süresi</value></data>
+  <data name="Common_Settings" xml:space="preserve"><value>Ayarlar</value></data>
+  <data name="Common_To" xml:space="preserve"><value>ile</value></data>
+  <data name="Common_Today" xml:space="preserve"><value>Bugün</value></data>
+  <data name="Common_Week" xml:space="preserve"><value>Hafta</value></data>
+  <data name="Dashboard_Categories" xml:space="preserve"><value>KATEGORİLER</value></data>
+  <data name="Dashboard_DailyGoal" xml:space="preserve"><value>GÜNLÜK HEDEF</value></data>
+  <data name="Dashboard_EnterFocus" xml:space="preserve"><value>Odağa Geç</value></data>
+  <data name="Dashboard_GoalProgress" xml:space="preserve"><value>/ {0} hedef · %{1}</value></data>
+  <data name="Dashboard_LoudListening" xml:space="preserve"><value>yüksek sesle dinleme</value></data>
+  <data name="Dashboard_MostUsedToday" xml:space="preserve"><value>BUGÜN EN ÇOK KULLANILAN</value></data>
+  <data name="Dashboard_NoGoalSet" xml:space="preserve"><value>Hedef belirlenmedi</value></data>
+  <data name="Dashboard_SameAsLastWeek" xml:space="preserve"><value>geçen haftayla aynı</value></data>
+  <data name="Dashboard_SetGoal" xml:space="preserve"><value>Hedef belirleyin: </value></data>
+  <data name="Dashboard_SilenceDistractionsProtectBlockDeep" xml:space="preserve"><value>Dikkat dağıtıcıları susturun ve derin çalışmaya zaman ayırın.</value></data>
+  <data name="Dashboard_SoundLoud" xml:space="preserve"><value>Yüksek</value></data>
+  <data name="Dashboard_SoundNormal" xml:space="preserve"><value>Normal</value></data>
+  <data name="Dashboard_SplitAcrossTopApps" xml:space="preserve"><value>En çok kullandığınız uygulamalara dağılımı</value></data>
+  <data name="Dashboard_StartSession" xml:space="preserve"><value>Oturum başlat</value></data>
+  <data name="Dashboard_ThresholdAbove" xml:space="preserve"><value>{0} dB ÜZERİ</value></data>
+  <data name="Dashboard_TodayScreenTime" xml:space="preserve"><value>BUGÜN · EKRAN SÜRESİ</value></data>
+  <data name="Dashboard_VsYesterday" xml:space="preserve"><value>düne göre {0}{1}</value></data>
+  <data name="Dashboard_Week" xml:space="preserve"><value>BU HAFTA</value></data>
+  <data name="Dashboard_WeeklyChange" xml:space="preserve"><value>geçen haftaya göre {0} %{1}</value></data>
+  <data name="Date_WeekLabel" xml:space="preserve"><value>{0}. hafta · {1}</value></data>
+  <data name="Export_ChooseFolder" xml:space="preserve"><value>Dışa aktarılan verilerin kaydedileceği yeri seçin</value></data>
+  <data name="Export_CompleteTitle" xml:space="preserve"><value>Dışa Aktarma Tamamlandı</value></data>
+  <data name="Export_ErrorTitle" xml:space="preserve"><value>Dışa Aktarma Hatası</value></data>
+  <data name="Export_Failed" xml:space="preserve"><value>Dışa aktarma başarısız oldu: {0}</value></data>
+  <data name="Export_Success" xml:space="preserve"><value>{0} veri dosyası başarıyla şuraya aktarıldı:
+{1}</value></data>
+  <data name="FocusPage_DistractionsCount" xml:space="preserve"><value>{0} dikkat dağınıklığı</value></data>
+  <data name="FocusPage_NoDistractions" xml:space="preserve"><value>Dikkat dağınıklığı yok</value></data>
+  <data name="Focus_AppCategories" xml:space="preserve"><value>UYGULAMA KATEGORİLERİ</value></data>
+  <data name="Focus_AutomaticallyMinimizeDistractingApps" xml:space="preserve"><value>Dikkat dağıtan uygulamaları otomatik olarak simge durumuna küçült</value></data>
+  <data name="Focus_BeginSession" xml:space="preserve"><value>Oturumu başlat</value></data>
+  <data name="Focus_Block" xml:space="preserve"><value>Engelle</value></data>
+  <data name="Focus_Blocked" xml:space="preserve"><value>Engellendi</value></data>
+  <data name="Focus_CategorizeAppsControlWhatS" xml:space="preserve"><value>Odak oturumlarında nelerin engelleneceğini belirlemek için uygulamalarınızı kategorilere ayırın.</value></data>
+  <data name="Focus_ComingSoon" xml:space="preserve"><value>Yakında</value></data>
+  <data name="Focus_Completed" xml:space="preserve"><value>Tamamlandı</value></data>
+  <data name="Focus_Custom" xml:space="preserve"><value>Özel…</value></data>
+  <data name="Focus_Distractions" xml:space="preserve"><value>Dikkat dağınıklıkları</value></data>
+  <data name="Focus_Duration" xml:space="preserve"><value>SÜRE</value></data>
+  <data name="Focus_EndSessionEarly" xml:space="preserve"><value>Oturumu erken bitir</value></data>
+  <data name="Focus_Enforcement" xml:space="preserve"><value>Uygulama şekli</value></data>
+  <data name="Focus_Entertainment" xml:space="preserve"><value>Eğlence</value></data>
+  <data name="Focus_EntertainmentAppsAreBlockedDuring" xml:space="preserve"><value>Odak sırasında eğlence uygulamaları engellenir. İş ve Nötr uygulamalara her zaman izin verilir.</value></data>
+  <data name="Focus_FocusSessionActive" xml:space="preserve"><value>Odak oturumu etkin</value></data>
+  <data name="Focus_Hide" xml:space="preserve"><value>Gizle</value></data>
+  <data name="Focus_HowShouldDistractionsHandled" xml:space="preserve"><value>DİKKAT DAĞITICILAR NASIL ELE ALINSIN?</value></data>
+  <data name="Focus_Neutral" xml:space="preserve"><value>Nötr</value></data>
+  <data name="Focus_NoFocusSessionsYetStart" xml:space="preserve"><value>Henüz odak oturumu yok. İlk oturumunuzu başlatın.</value></data>
+  <data name="Focus_PickLengthHowStrictlyDistractions" xml:space="preserve"><value>Bir süre ve dikkat dağıtıcılara ne kadar sıkı davranılacağını seçin. Pulse ön plandaki uygulamanızı izler ve sizi hedefte tutar.</value></data>
+  <data name="Focus_RecentSessions" xml:space="preserve"><value>SON OTURUMLAR</value></data>
+  <data name="Focus_Remaining" xml:space="preserve"><value>kaldı</value></data>
+  <data name="Focus_RemoveFromTaskbarStartMenu" xml:space="preserve"><value>Görev çubuğundan ve Başlat menüsünden kaldır</value></data>
+  <data name="Focus_ShowGentlePopupWhenOpen" xml:space="preserve"><value>Dikkat dağıtan bir uygulama açtığınızda nazik bir açılır pencere göster</value></data>
+  <data name="Focus_StartFocusSession" xml:space="preserve"><value>Odak oturumu başlat</value></data>
+  <data name="Focus_Suggested" xml:space="preserve"><value>Önerilen</value></data>
+  <data name="Focus_TodaySFocus" xml:space="preserve"><value>Bugünkü odak</value></data>
+  <data name="Focus_Warn" xml:space="preserve"><value>Uyar</value></data>
+  <data name="Focus_Work" xml:space="preserve"><value>İş</value></data>
+  <data name="Goal_HoursMinutes" xml:space="preserve"><value>{0}sa {1}dk</value></data>
+  <data name="Goal_Minutes" xml:space="preserve"><value>{0}dk</value></data>
+  <data name="Goal_ProgressOf" xml:space="preserve"><value>%{0} / {1} hedef</value></data>
+  <data name="Goal_ProgressOver" xml:space="preserve"><value>%{0} - Hedef {1} aşıldı</value></data>
+  <data name="Goal_ReachedBody" xml:space="preserve"><value>Bilgisayarınızı {0} kullandınız ve {1} hedefinizi aştınız. Biraz mola vermeyi düşünün.</value></data>
+  <data name="Goal_ReachedTitle" xml:space="preserve"><value>Ekran Süresi Hedefine Ulaşıldı</value></data>
+  <data name="Hearing_EstimatedFromSystemVolumeDevice" xml:space="preserve"><value>Sistem ses düzeyi ve cihaz türünden tahmin edilir, kalibre edilmiş bir ses basıncı düzeyi ölçümü değildir - Windows'ta her donanım için buna yönelik bir API yoktur.</value></data>
+  <data name="Hearing_Harmful" xml:space="preserve"><value>Zararlı</value></data>
+  <data name="Hearing_HarmfulThreshold" xml:space="preserve"><value>ZARARLI EŞİK</value></data>
+  <data name="Hearing_HarmfulTooltip" xml:space="preserve"><value>Zararlı: {0}</value></data>
+  <data name="Hearing_HideTracking" xml:space="preserve"><value>İzlemeyi gizle</value></data>
+  <data name="Hearing_KeepEstimatedLevelsUnder85" xml:space="preserve"><value>Tahmini seviyeleri 85 dB'nin altında tutun</value></data>
+  <data name="Hearing_LoudListeningTime" xml:space="preserve"><value>YÜKSEK SESLE DİNLEME SÜRESİ</value></data>
+  <data name="Hearing_NoSessionsToday" xml:space="preserve"><value>Bugün oturum yok</value></data>
+  <data name="Hearing_Of" xml:space="preserve"><value>/ </value></data>
+  <data name="Hearing_Safe" xml:space="preserve"><value>Güvenli</value></data>
+  <data name="Hearing_SafeLevels" xml:space="preserve"><value>Güvenli seviyeler</value></data>
+  <data name="Hearing_SegmentTooltip" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Hearing_SessionDetails" xml:space="preserve"><value>OTURUM AYRINTILARI</value></data>
+  <data name="Hearing_SessionTodayOne" xml:space="preserve"><value>Bugün {0} oturum</value></data>
+  <data name="Hearing_SessionsToday" xml:space="preserve"><value>Bugün {0} oturum</value></data>
+  <data name="Hearing_ShowDetailedTracking" xml:space="preserve"><value>Ayrıntılı izlemeyi göster</value></data>
+  <data name="Hearing_ShowTracking" xml:space="preserve"><value>İzlemeyi göster</value></data>
+  <data name="Hearing_ShowingRecentSessions" xml:space="preserve"><value>{1} oturumdan en son {0} tanesi gösteriliyor</value></data>
+  <data name="Hearing_ThresholdAbove" xml:space="preserve"><value>{0} dB üzeri</value></data>
+  <data name="Hearing_TotalListeningTime" xml:space="preserve"><value> toplam dinleme süresi</value></data>
+  <data name="Hearing_WhoGuidance" xml:space="preserve"><value>WHO önerisi</value></data>
+  <data name="Help_AppLimits" xml:space="preserve"><value>Uygulama sınırları</value></data>
+  <data name="Help_BreakReminders" xml:space="preserve"><value>Mola hatırlatıcıları</value></data>
+  <data name="Help_EstimatesListeningLevelFromSystem" xml:space="preserve"><value>Dinleme seviyesini sistem ses ölçerinden tahmin eder — gerçek sesi asla kaydetmez veya dinlemez. WHO 85 dB'nin altında kalmayı önerir; varsayılan zararlı eşik 75 dB'dir. 75 dB üzerindeki çubuklar kırmızı gösterilir.</value></data>
+  <data name="Help_EverythingStaysDeviceNoAccount" xml:space="preserve"><value>Her şey bu cihazda kalır — hesap yok, bulut yok, telemetri yok. Web sitesi izleme varsayılan olarak kapalıdır — açarsanız yalnızca ana bilgisayar adı (ör. youtube.com) saklanır, asla tam URL'ler veya sayfa içeriği saklanmaz. Verilerinizi istediğiniz zaman Ayarlar'dan CSV olarak dışa aktarabilir veya tamamını silebilirsiniz.</value></data>
+  <data name="Help_FocusSessionsWatchEntertainmentApps" xml:space="preserve"><value>Odak oturumları eğlence uygulamalarını izler. Uyar bir bildirim gösterir; Engelle onları simge durumuna küçültür. Ayarlar'da etkinleştirildiğinde Pulse, Windows odak oturumlarını da takip edebilir. Dinlenme modu, işleri toparlama zamanı geldiğinde zamanlanmış nazik bir kenarlık ekler.</value></data>
+  <data name="Help_FocusWindDown" xml:space="preserve"><value>Odak ve Dinlenme</value></data>
+  <data name="Help_Follows202020Rule" xml:space="preserve"><value>20-20-20 kuralını uygular: her 20 dakikada bir, 20 saniye boyunca 6 metre uzağa bakın. En fazla 3 kez erteleyebilirsiniz; 5 dakika uzakta kaldıktan sonra zamanlayıcı sıfırlanır. Hatırlatıcılar Pulse'ın üzerinde veya Pulse bildirim alanındayken bildirim olarak görünür.</value></data>
+  <data name="Help_LaunchWindowsStartupRunsQuietly" xml:space="preserve"><value>Windows başlangıcında açılma, Pulse'ı bildirim alanında sessizce çalıştırır. Şimdi yedekle, veritabanınızı ve ayarlarınızı içeren yerel bir ZIP oluşturur. Geri yükleme mevcut yerel verilerin yerini alır; bu nedenle önce yeni bir yedek alın ve onay mesajını dikkatle okuyun.</value></data>
+  <data name="Help_Privacy" xml:space="preserve"><value>Gizlilik</value></data>
+  <data name="Help_RecordsWhichAppHasFocus" xml:space="preserve"><value>Bilgisayarı kullanırken hangi uygulamanın odakta olduğunu ve ne kadar süre kaldığını kaydeder. 5 dakika boyunca giriş olmazsa durur; ancak uygulama tam ekransa veya ses çalıyorsa devam eder. Masaüstüne veya görev çubuğuna tıklamak File Explorer olarak sayılmaz. Uygulama adları saklanır, ancak gizlilik için pencere başlıkları asla veritabanına kaydedilmez. Odak için uygulamaları İş, Eğlence veya Nötr olarak sınıflandırın.</value></data>
+  <data name="Help_ReportBug" xml:space="preserve"><value>Hata bildir</value></data>
+  <data name="Help_SetDailyAllowanceUnavailableHours" xml:space="preserve"><value>Bir uygulama için günlük süre, kullanılamaz saatler veya ikisini birden ayarlayın. Hatırlat, sınıra ulaşıldığında bildirim gönderir; Engelle ayrıca uygulamayı simge durumuna küçültür. Bir sınırı istediğiniz zaman Sınırlar sayfasından duraklatın veya düzenleyin.</value></data>
+  <data name="Help_ShowsOneWeekTimeMonday" xml:space="preserve"><value>Her seferinde bir hafta gösterir (Pazartesi'den Pazar'a); önceki haftalara göz atmak için okları kullanın. Ekran süresi eğilimlerini, en çok kullanılan uygulamaları, tamamlanan odak oturumlarını ve ses seviyelerini içerir. Haftalık karşılaştırmalar alışkanlıklarınızın iyileşip iyileşmediğini, odak ve boş zaman karşılaştırması ise zamanınızın ne kadar verimli geçtiğini gösterir.</value></data>
+  <data name="Help_StartupDataSafety" xml:space="preserve"><value>Başlangıç ve veri güvenliği</value></data>
+  <data name="Help_SummaryDayHeroStatTotal" xml:space="preserve"><value>Gününüzün özeti. Ana istatistik toplam etkin ekran süresidir — bilgisayarınızı etkin olarak kullandığınız süre. Uzakta geçen süre sayılmaz. Renkli kartlar her bölümün önizlemesini gösterir ve doğrudan oraya götürür.</value></data>
+  <data name="Help_TracksHowLongActivelyUse" xml:space="preserve"><value>Bilgisayarınızı ne kadar süre etkin olarak kullandığınızı izler. 5 dakika boyunca fare veya klavye girişi olmazsa duraklar; ancak ses çalıyorsa veya bir uygulama tam ekransa (ör. bir video) devam eder. Bilgisayarı kilitlemek veya uyku moduna almak da onu duraklatır. Zaman çizelgesi gününüzü, haftalık görünüm ise günlük toplamları gösterir.</value></data>
+  <data name="Help_ViewGithub" xml:space="preserve"><value>GitHub'da görüntüle</value></data>
+  <data name="Insights_CompletedWeek" xml:space="preserve"><value>Bu hafta tamamlanan</value></data>
+  <data name="Insights_DailyAverage" xml:space="preserve"><value>GÜNLÜK ORTALAMA</value></data>
+  <data name="Insights_FocusSessions" xml:space="preserve"><value>Odak oturumları</value></data>
+  <data name="Insights_FocusVsLeisure" xml:space="preserve"><value>ODAK VE BOŞ ZAMAN</value></data>
+  <data name="Insights_Leisure" xml:space="preserve"><value>Boş zaman</value></data>
+  <data name="Insights_Other" xml:space="preserve"><value>Diğer</value></data>
+  <data name="Insights_TopAppsWeek" xml:space="preserve"><value>BU HAFTANIN EN ÇOK KULLANILANLARI</value></data>
+  <data name="Insights_TotalScreenTime" xml:space="preserve"><value>TOPLAM EKRAN SÜRESİ</value></data>
+  <data name="Insights_UnknownApp" xml:space="preserve"><value>Bilinmiyor</value></data>
+  <data name="Insights_VsLastWeek" xml:space="preserve"><value> (geçen haftaya göre)</value></data>
+  <data name="Limits_1Hour" xml:space="preserve"><value>1 saat</value></data>
+  <data name="Limits_2Hours" xml:space="preserve"><value>2 saat</value></data>
+  <data name="Limits_3Hours" xml:space="preserve"><value>3 saat</value></data>
+  <data name="Limits_AddHelp" xml:space="preserve"><value>Günlük bir süre seçin ve süre dolduğunda Pulse'ın ne yapacağını belirleyin.</value></data>
+  <data name="Limits_AddLimit" xml:space="preserve"><value>SINIR EKLE</value></data>
+  <data name="Limits_AddLimit2" xml:space="preserve"><value>Sınır ekle</value></data>
+  <data name="Limits_AllowanceOrHoursRequired" xml:space="preserve"><value>Günlük bir süre seçin, kullanılamaz saatleri açın veya ikisini birden kullanın.</value></data>
+  <data name="Limits_AlreadyLimited" xml:space="preserve"><value>Zaten sınırlı</value></data>
+  <data name="Limits_AlsoKeepAppUnavailableDuring" xml:space="preserve"><value>Bu uygulamayı belirli saatlerde de kullanılamaz tut</value></data>
+  <data name="Limits_AppLimits" xml:space="preserve"><value>UYGULAMA SINIRLARINIZ</value></data>
+  <data name="Limits_CanChangePauseAnyTime" xml:space="preserve"><value>İstediğiniz zaman değiştirebilir veya duraklatabilirsiniz.</value></data>
+  <data name="Limits_Cancel" xml:space="preserve"><value>İptal</value></data>
+  <data name="Limits_ChooseAppGiveDailyAllowance" xml:space="preserve"><value>Bir uygulama seçin, ona günlük bir süre verin ve süre dolduğunda Pulse'ın size hatırlatmasını mı yoksa uygulamayı simge durumuna küçültmesini mi istediğinize karar verin.</value></data>
+  <data name="Limits_CreateAppLimit" xml:space="preserve"><value>Uygulama sınırı oluştur</value></data>
+  <data name="Limits_Custom" xml:space="preserve"><value>Özel</value></data>
+  <data name="Limits_Edit" xml:space="preserve"><value>Düzenle</value></data>
+  <data name="Limits_EditHelp" xml:space="preserve"><value>Süreyi, zamanlamayı veya süre dolduğunda ne olacağını değiştirin.</value></data>
+  <data name="Limits_EditLimit" xml:space="preserve"><value>SINIRI DÜZENLE</value></data>
+  <data name="Limits_EditTitle" xml:space="preserve"><value>Düzenle: {0}</value></data>
+  <data name="Limits_HowMuchTimeShouldApp" xml:space="preserve"><value>Bu uygulama her gün ne kadar süre alsın?</value></data>
+  <data name="Limits_InvalidMinutes" xml:space="preserve"><value>Geçerli bir dakika sayısı girin.</value></data>
+  <data name="Limits_LimitTitle" xml:space="preserve"><value>Sınırla: {0}</value></data>
+  <data name="Limits_MinimizeApp" xml:space="preserve"><value>Uygulamayı simge durumuna küçült</value></data>
+  <data name="Limits_MinutesPerDay" xml:space="preserve"><value>dakika/gün</value></data>
+  <data name="Limits_NoAppLimitsYet" xml:space="preserve"><value>Henüz uygulama sınırı yok</value></data>
+  <data name="Limits_OptionalUsefulBedtimeSchoolWork" xml:space="preserve"><value>İsteğe bağlı — uyku, okul veya iş saatleri için kullanışlı.</value></data>
+  <data name="Limits_PulseCountsTimeWhileApp" xml:space="preserve"><value>Pulse, uygulama ön plandayken geçen süreyi sayar.</value></data>
+  <data name="Limits_RemindMe" xml:space="preserve"><value>Bana hatırlat</value></data>
+  <data name="Limits_RemoveLimit" xml:space="preserve"><value>Sınırı kaldır</value></data>
+  <data name="Limits_SaveChanges" xml:space="preserve"><value>Değişiklikleri kaydet</value></data>
+  <data name="Limits_SelectApp" xml:space="preserve"><value>Bir uygulama seçin</value></data>
+  <data name="Limits_SetHealthyBoundariesDistractingApps" xml:space="preserve"><value>Dikkat dağıtan uygulamalar için sağlıklı sınırlar belirleyin</value></data>
+  <data name="Limits_ShowNotificationLeaveAppOpen" xml:space="preserve"><value>Bildirim göster ve uygulamayı açık bırak</value></data>
+  <data name="Limits_ShowNotificationMoveItsWindow" xml:space="preserve"><value>Bildirim göster ve penceresini uzaklaştır</value></data>
+  <data name="Limits_SummaryHoursPerDay" xml:space="preserve"><value>{0} sa/gün</value></data>
+  <data name="Limits_SummaryMinimizeApp" xml:space="preserve"><value>Uygulamayı küçült</value></data>
+  <data name="Limits_SummaryMinutesPerDay" xml:space="preserve"><value>{0} dk/gün</value></data>
+  <data name="Limits_SummaryPaused" xml:space="preserve"><value>Duraklatıldı · {0}</value></data>
+  <data name="Limits_SummaryReminder" xml:space="preserve"><value>Hatırlatıcı</value></data>
+  <data name="Limits_SummaryUnavailable" xml:space="preserve"><value>Kullanılamaz {0}–{1}</value></data>
+  <data name="Limits_TurnLimitOff" xml:space="preserve"><value>Bu sınırı aç veya kapat</value></data>
+  <data name="Limits_UnavailableFrom" xml:space="preserve"><value>Kullanılamaz:</value></data>
+  <data name="Limits_UseAppLittleWhileWill" xml:space="preserve"><value>Bir uygulamayı biraz kullanın, burada görünecek.</value></data>
+  <data name="Limits_UseThreeSimpleStepsBelow" xml:space="preserve"><value>İlk sınırınızı oluşturmak için aşağıdaki üç basit adımı izleyin.</value></data>
+  <data name="Limits_WhatShouldPulseDoWhen" xml:space="preserve"><value>Sınıra ulaşıldığında Pulse ne yapsın?</value></data>
+  <data name="Limits_WhichAppDoWantLimit" xml:space="preserve"><value>Hangi uygulamayı sınırlamak istiyorsunuz?</value></data>
+  <data name="Notify_AppLimitMinimized" xml:space="preserve"><value>{0} sınırına ulaştı ve simge durumuna küçültüldü.</value></data>
+  <data name="Notify_AppLimitTitle" xml:space="preserve"><value>Uygulama sınırına ulaşıldı</value></data>
+  <data name="Notify_AppLimitWarn" xml:space="preserve"><value>{0} bugünkü sınırına ulaştı.</value></data>
+  <data name="Notify_DistractingAppBody" xml:space="preserve"><value>{0} Eğlence olarak işaretli.
+Odakta {1} kaldı. Yanıtlamak için tıklayın.</value></data>
+  <data name="Notify_DistractingAppTitle" xml:space="preserve"><value>⚠️ Dikkat Dağıtan Uygulama Algılandı</value></data>
+  <data name="Notify_HearingAlertBody" xml:space="preserve"><value>Bir süredir eşiğinizin üzerinde dinliyorsunuz. Sesi kısmayı düşünün.</value></data>
+  <data name="Notify_HearingAlertTitle" xml:space="preserve"><value>İşitme uyarısı</value></data>
+  <data name="Screen_ActiveScreenTime" xml:space="preserve"><value>ETKİN EKRAN SÜRESİ</value></data>
+  <data name="Screen_BreaksTaken" xml:space="preserve"><value>Verilen molalar</value></data>
+  <data name="Screen_DailyAverage" xml:space="preserve"><value>Günlük ortalama</value></data>
+  <data name="Screen_DailyGoal" xml:space="preserve"><value>Günlük hedef</value></data>
+  <data name="Screen_LessThanYesterday" xml:space="preserve"><value>↓ dünden {0} az</value></data>
+  <data name="Screen_LongestStretch" xml:space="preserve"><value>En uzun süre</value></data>
+  <data name="Screen_MoreThanYesterday" xml:space="preserve"><value>↑ dünden {0} fazla</value></data>
+  <data name="Screen_NoDataYesterday" xml:space="preserve"><value>Dünden veri yok</value></data>
+  <data name="Screen_SameAsYesterday" xml:space="preserve"><value>Dünle aynı</value></data>
+  <data name="Screen_Sessions" xml:space="preserve"><value>Oturumlar</value></data>
+  <data name="Screen_TotalScreenTime" xml:space="preserve"><value>Toplam ekran süresi</value></data>
+  <data name="Settings_12Months" xml:space="preserve"><value>12 ay</value></data>
+  <data name="Settings_24Months" xml:space="preserve"><value>24 ay</value></data>
+  <data name="Settings_3Months" xml:space="preserve"><value>3 ay</value></data>
+  <data name="Settings_6Months" xml:space="preserve"><value>6 ay</value></data>
+  <data name="Settings_About" xml:space="preserve"><value>HAKKINDA</value></data>
+  <data name="Settings_AgoHours" xml:space="preserve"><value>{0}sa</value></data>
+  <data name="Settings_AgoMinutes" xml:space="preserve"><value>{0}dk</value></data>
+  <data name="Settings_AgoSeconds" xml:space="preserve"><value>{0}sn</value></data>
+  <data name="Settings_AllDataDeleted" xml:space="preserve"><value>İzlenen tüm veriler silindi.</value></data>
+  <data name="Settings_AllDataStoredLocallyDevice" xml:space="preserve"><value>Tüm verileriniz bu cihazda yerel olarak saklanır. Buluta hiçbir şey gönderilmez.</value></data>
+  <data name="Settings_Amber" xml:space="preserve"><value>Kehribar</value></data>
+  <data name="Settings_Appearance" xml:space="preserve"><value>GÖRÜNÜM</value></data>
+  <data name="Settings_Auto" xml:space="preserve"><value>Otomatik</value></data>
+  <data name="Settings_AutoDetect" xml:space="preserve"><value>Otomatik algıla</value></data>
+  <data name="Settings_AutomaticallyDeleteUsageOlderThan" xml:space="preserve"><value>Bundan eski kullanım verilerini otomatik olarak sil</value></data>
+  <data name="Settings_BackUpData" xml:space="preserve"><value>Verilerinizi yedekleyin</value></data>
+  <data name="Settings_BackUpNow" xml:space="preserve"><value>Şimdi yedekle</value></data>
+  <data name="Settings_BreakReminders" xml:space="preserve"><value>MOLA HATIRLATICILARI</value></data>
+  <data name="Settings_CheckUpdates" xml:space="preserve"><value>Güncellemeleri denetle</value></data>
+  <data name="Settings_CheckingUpdates" xml:space="preserve"><value>Güncellemeler denetleniyor...</value></data>
+  <data name="Settings_ClosingWindowKeepsPulseTracking" xml:space="preserve"><value>Pencereyi kapatmak Pulse'ın arka planda izlemeye devam etmesini sağlar. Tepsi simgesinden çıkın.</value></data>
+  <data name="Settings_Dark" xml:space="preserve"><value>Koyu</value></data>
+  <data name="Settings_DataDeletedTitle" xml:space="preserve"><value>Veriler Silindi</value></data>
+  <data name="Settings_DataPrivacy" xml:space="preserve"><value>VERİLER VE GİZLİLİK</value></data>
+  <data name="Settings_DatabaseSize" xml:space="preserve"><value>Veritabanı boyutu</value></data>
+  <data name="Settings_Delete" xml:space="preserve"><value>Sil</value></data>
+  <data name="Settings_DeleteAllConfirm" xml:space="preserve"><value>İzlenen TÜM verileri silmek istediğinizden emin misiniz?
+
+Şunlar kalıcı olarak kaldırılacak:
+- Ekran süresi geçmişi
+- Uygulama kullanım geçmişi
+- Ses maruziyeti geçmişi
+- Odak oturumu geçmişi
+
+Bu işlem geri alınamaz.</value></data>
+  <data name="Settings_DeleteAllData" xml:space="preserve"><value>Tüm verileri sil</value></data>
+  <data name="Settings_DeleteAllDataTitle" xml:space="preserve"><value>Tüm Verileri Sil</value></data>
+  <data name="Settings_DeleteDateRange" xml:space="preserve"><value>Tarih aralığını sil</value></data>
+  <data name="Settings_DeleteFailed" xml:space="preserve"><value>Veriler silinemedi: {0}</value></data>
+  <data name="Settings_DeleteRangeConfirm" xml:space="preserve"><value>{0:yyyy-MM-dd} ile {1:yyyy-MM-dd} arasındaki tüm izlenen veriler kalıcı olarak silinsin mi?
+
+Bu işlem geri alınamaz.</value></data>
+  <data name="Settings_DeviceType" xml:space="preserve"><value>Cihaz türü</value></data>
+  <data name="Settings_DiagnosticLogsKeptLast7" xml:space="preserve"><value>Son 7 günün tanılama günlükleri saklanır</value></data>
+  <data name="Settings_Diagnostics" xml:space="preserve"><value>TANILAMA</value></data>
+  <data name="Settings_Dim" xml:space="preserve"><value>Soluk</value></data>
+  <data name="Settings_DisplayReminderWhenWindDown" xml:space="preserve"><value>Dinlenme modu başladığında bir hatırlatıcı göster</value></data>
+  <data name="Settings_DownloadingUpdate" xml:space="preserve"><value>Güncelleme indiriliyor...</value></data>
+  <data name="Settings_Earphones" xml:space="preserve"><value>Kulakiçi kulaklıklar</value></data>
+  <data name="Settings_EnableBreakReminders" xml:space="preserve"><value>Mola hatırlatıcılarını etkinleştir</value></data>
+  <data name="Settings_EnableDailyGoal" xml:space="preserve"><value>Günlük hedefi etkinleştir</value></data>
+  <data name="Settings_EnableWindDownMode" xml:space="preserve"><value>Dinlenme modunu etkinleştir</value></data>
+  <data name="Settings_EndDate" xml:space="preserve"><value>Bitiş tarihi</value></data>
+  <data name="Settings_ErrorTitle" xml:space="preserve"><value>Hata</value></data>
+  <data name="Settings_Every15Minutes" xml:space="preserve"><value>15 dakikada bir</value></data>
+  <data name="Settings_Every20MinutesRecommended" xml:space="preserve"><value>20 dakikada bir (önerilen)</value></data>
+  <data name="Settings_Every30Minutes" xml:space="preserve"><value>30 dakikada bir</value></data>
+  <data name="Settings_Every45Minutes" xml:space="preserve"><value>45 dakikada bir</value></data>
+  <data name="Settings_Every60Minutes" xml:space="preserve"><value>60 dakikada bir</value></data>
+  <data name="Settings_Export" xml:space="preserve"><value>Dışa aktar</value></data>
+  <data name="Settings_ExportMyData" xml:space="preserve"><value>Verilerimi dışa aktar</value></data>
+  <data name="Settings_Forever" xml:space="preserve"><value>Süresiz</value></data>
+  <data name="Settings_From" xml:space="preserve"><value>Aralık</value></data>
+  <data name="Settings_GentleReminderWhenSTime" xml:space="preserve"><value>Dinlenme zamanı geldiğinde nazik bir hatırlatma</value></data>
+  <data name="Settings_Github" xml:space="preserve"><value>GitHub</value></data>
+  <data name="Settings_GoalHours" xml:space="preserve"><value>Hedef: günde {0} saat</value></data>
+  <data name="Settings_GoalHoursMinutes" xml:space="preserve"><value>Hedef: günde {0} saat {1} dakika</value></data>
+  <data name="Settings_GoalMinutes" xml:space="preserve"><value>Hedef: günde {0} dakika</value></data>
+  <data name="Settings_GoalMustBePositive" xml:space="preserve"><value>Hedef 0'dan büyük olmalıdır</value></data>
+  <data name="Settings_Headphones" xml:space="preserve"><value>Kulaklıklar</value></data>
+  <data name="Settings_Headsets" xml:space="preserve"><value>Mikrofonlu kulaklıklar</value></data>
+  <data name="Settings_HealthDown" xml:space="preserve"><value>Çalışmıyor</value></data>
+  <data name="Settings_HealthHealthy" xml:space="preserve"><value>Sağlıklı</value></data>
+  <data name="Settings_HealthLastSeen" xml:space="preserve"><value>{0} · son görülme {1} önce</value></data>
+  <data name="Settings_HealthNotStarted" xml:space="preserve"><value>Başlamadı</value></data>
+  <data name="Settings_HealthStale" xml:space="preserve"><value>Güncel değil</value></data>
+  <data name="Settings_HearingLevelsShownPulseAre" xml:space="preserve"><value>Pulse'ta gösterilen işitme seviyeleri sistem ses düzeyine dayalı tahminlerdir, kalibre edilmiş bir ses ölçümü değildir - Windows'ta her donanım için buna yönelik bir API yoktur.</value></data>
+  <data name="Settings_Hours" xml:space="preserve"><value>saat</value></data>
+  <data name="Settings_KeepHistory" xml:space="preserve"><value>Geçmişi sakla</value></data>
+  <data name="Settings_KeepRunningTrayWhenClosed" xml:space="preserve"><value>Kapatıldığında tepside çalışmaya devam et</value></data>
+  <data name="Settings_Language" xml:space="preserve"><value>Dil</value></data>
+  <data name="Settings_LanguageRestart" xml:space="preserve"><value>Yeni dili kullanmak için Pulse'ı yeniden başlatın.</value></data>
+  <data name="Settings_LanguageSystem" xml:space="preserve"><value>Windows varsayılanı</value></data>
+  <data name="Settings_LaunchWindowsStartup" xml:space="preserve"><value>Windows başlangıcında aç</value></data>
+  <data name="Settings_LicensedUnderGnuGeneralPublic" xml:space="preserve"><value>GNU General Public License v3.0 ile lisanslanmıştır</value></data>
+  <data name="Settings_Light" xml:space="preserve"><value>Açık</value></data>
+  <data name="Settings_Loading" xml:space="preserve"><value>Yükleniyor…</value></data>
+  <data name="Settings_LogFile" xml:space="preserve"><value>Günlük dosyası</value></data>
+  <data name="Settings_NoAccountNoCloudNo" xml:space="preserve"><value>Hesap yok, bulut yok, telemetri yok. Her şey bu bilgisayarda kalır.</value></data>
+  <data name="Settings_NoGoalSet" xml:space="preserve"><value>Hedef belirlenmedi</value></data>
+  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>Bildirimler başlık çubuğunda görünür. Onları erteleyebilir veya kapatabilirsiniz.</value></data>
+  <data name="Settings_OffDefaultWhenPulseReads" xml:space="preserve"><value>Varsayılan olarak kapalıdır. Açıkken Pulse, hangi sitede olduğunuzu (ör. youtube.com) kaydetmek için Chrome/Edge/Firefox ailesi tarayıcıların adres çubuğunu okur — asla tam URL'yi, arama terimlerini veya sayfa içeriğini değil.</value></data>
+  <data name="Settings_Open" xml:space="preserve"><value>Aç</value></data>
+  <data name="Settings_OpenFolderFailed" xml:space="preserve"><value>Klasör açılamadı: {0}</value></data>
+  <data name="Settings_OpenLogFolderFailed" xml:space="preserve"><value>Günlük klasörü açılamadı: {0}</value></data>
+  <data name="Settings_PermanentlyRemoveAllTrackedData" xml:space="preserve"><value>İzlenen tüm verileri kalıcı olarak kaldır</value></data>
+  <data name="Settings_PickStartEndDate" xml:space="preserve"><value>Hem başlangıç hem de bitiş tarihi seçin.</value></data>
+  <data name="Settings_PlayNotificationSound" xml:space="preserve"><value>Bildirim sesi çal</value></data>
+  <data name="Settings_Private" xml:space="preserve"><value>Gizli</value></data>
+  <data name="Settings_PulseGuessesFromAudioDevice" xml:space="preserve"><value>Pulse bunu ses cihazınızın adından tahmin eder - tahmin yanlışsa (ör. kulaklık modelinizi tanımıyorsa) değiştirin.</value></data>
+  <data name="Settings_Purple" xml:space="preserve"><value>Mor</value></data>
+  <data name="Settings_RangeDeleted" xml:space="preserve"><value>Seçilen tarih aralığı silindi.</value></data>
+  <data name="Settings_ReminderInterval" xml:space="preserve"><value>Hatırlatma aralığı</value></data>
+  <data name="Settings_RemoveTrackedDataBetweenTwo" xml:space="preserve"><value>İki tarih arasındaki izlenen verileri kaldır</value></data>
+  <data name="Settings_ReplacesCurrentDataCannotUndone" xml:space="preserve"><value>Mevcut verilerinizin yerini alır - geri alınamaz ve ardından Pulse'ı kapatır</value></data>
+  <data name="Settings_RestEyes202020" xml:space="preserve"><value>20-20-20 kuralıyla gözlerinizi dinlendirin</value></data>
+  <data name="Settings_Restore" xml:space="preserve"><value>Geri yükle...</value></data>
+  <data name="Settings_RestoreFromBackup" xml:space="preserve"><value>Yedekten geri yükle</value></data>
+  <data name="Settings_SaveAllTrackedDataAs" xml:space="preserve"><value>İzlenen tüm verileri CSV dosyaları olarak kaydet</value></data>
+  <data name="Settings_SaveZipSnapshotDatabaseSettings" xml:space="preserve"><value>Veritabanınızın ve ayarlarınızın .zip anlık görüntüsünü kaydedin</value></data>
+  <data name="Settings_Schedule" xml:space="preserve"><value>Zamanlama</value></data>
+  <data name="Settings_ScreenTimeGoal" xml:space="preserve"><value>EKRAN SÜRESİ HEDEFİ</value></data>
+  <data name="Settings_SetTargetDailyScreenTime" xml:space="preserve"><value>Günlük ekran süresi için bir hedef belirleyin</value></data>
+  <data name="Settings_ShowNotification" xml:space="preserve"><value>Bildirim göster</value></data>
+  <data name="Settings_ShowVisualBorder" xml:space="preserve"><value>Görsel kenarlık göster</value></data>
+  <data name="Settings_SizeBytes" xml:space="preserve"><value>{0} B</value></data>
+  <data name="Settings_SizeKB" xml:space="preserve"><value>{0:F1} KB</value></data>
+  <data name="Settings_SizeMB" xml:space="preserve"><value>{0:F1} MB</value></data>
+  <data name="Settings_Speakers" xml:space="preserve"><value>Hoparlörler</value></data>
+  <data name="Settings_StartDate" xml:space="preserve"><value>Başlangıç tarihi</value></data>
+  <data name="Settings_StartFocusSessionsFromWindows" xml:space="preserve"><value>Odak oturumlarını Windows Odak'tan başlat</value></data>
+  <data name="Settings_StartPulseQuietlyNotificationArea" xml:space="preserve"><value>Oturum açtığınızda Pulse'ı bildirim alanında sessizce başlat</value></data>
+  <data name="Settings_Startup" xml:space="preserve"><value>BAŞLANGIÇ</value></data>
+  <data name="Settings_StorageLocation" xml:space="preserve"><value>Depolama konumu</value></data>
+  <data name="Settings_SubtleGlowAroundWindowEdges" xml:space="preserve"><value>Pencere kenarlarında hafif bir parıltı</value></data>
+  <data name="Settings_Theme" xml:space="preserve"><value>Tema</value></data>
+  <data name="Settings_TrackScreenTimeAppUsage" xml:space="preserve"><value>Sağlıklı bir dijital yaşam için ekran sürenizi, uygulama kullanımınızı ve ses maruziyetinizi izleyin.</value></data>
+  <data name="Settings_TrackWebsitesHostname" xml:space="preserve"><value>Web sitelerini ana bilgisayar adına göre izle</value></data>
+  <data name="Settings_TrackerShowingStaleDownRight" xml:space="preserve"><value>Ekranınız kilitlendikten veya bilgisayar uykudan çıktıktan hemen sonra bir izleyicinin Güncel değil veya Çalışmıyor göstermesi normaldir - izleyiciler o sırada duraklar ve otomatik olarak devam eder.</value></data>
+  <data name="Settings_UnableToDetermine" xml:space="preserve"><value>Belirlenemedi</value></data>
+  <data name="Settings_Unknown" xml:space="preserve"><value>Bilinmiyor</value></data>
+  <data name="Settings_UpToDate" xml:space="preserve"><value>Güncelsiniz!</value></data>
+  <data name="Settings_UpdateAvailablePrompt" xml:space="preserve"><value>Yeni bir sürüm ({0}) mevcut.
+
+Şimdi güncellemek ister misiniz?</value></data>
+  <data name="Settings_UpdateAvailableStatus" xml:space="preserve"><value>Güncelleme mevcut: v{0}</value></data>
+  <data name="Settings_UpdateAvailableTitle" xml:space="preserve"><value>Güncelleme Mevcut</value></data>
+  <data name="Settings_UpdateCheckFailed" xml:space="preserve"><value>Güncelleme denetimi başarısız oldu: {0}</value></data>
+  <data name="Settings_UpdateServiceUnreachable" xml:space="preserve"><value>Güncelleme hizmetine ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.</value></data>
+  <data name="Settings_UpdatesUnavailable" xml:space="preserve"><value>Bu derleme için güncelleme yok.</value></data>
+  <data name="Settings_UpdatesViaStore" xml:space="preserve"><value>Güncellemeler Microsoft Store tarafından yönetilir. Store sayfası açılıyor...</value></data>
+  <data name="Settings_Version231" xml:space="preserve"><value>Sürüm 2.3.1</value></data>
+  <data name="Settings_VersionFormat" xml:space="preserve"><value>Sürüm {0}</value></data>
+  <data name="Settings_ViewPrivacyInformation" xml:space="preserve"><value>Gizlilik bilgilerini görüntüle</value></data>
+  <data name="Settings_VisualStyle" xml:space="preserve"><value>Görsel stil</value></data>
+  <data name="Settings_Website" xml:space="preserve"><value>Web sitesi</value></data>
+  <data name="Settings_WhenTurnFocusWindowsSettings" xml:space="preserve"><value>Windows Ayarları'nda Odak'ı açtığınızda otomatik olarak bir Pulse odak oturumu da başlatılır.</value></data>
+  <data name="Settings_WindDown" xml:space="preserve"><value>DİNLENME</value></data>
+  <data name="Settings_WindDownActiveRange" xml:space="preserve"><value>{0} - {1} arası etkin</value></data>
+  <data name="Settings_WindDownDisabled" xml:space="preserve"><value>Dinlenme modu kapalı</value></data>
+  <data name="Shell_AppMarkedAsEntertainmentStay" xml:space="preserve"><value>Bu uygulama Eğlence olarak işaretli. İşinize odaklanın!</value></data>
+  <data name="Shell_AppUsageSubtitle" xml:space="preserve"><value>Dikkatinizin gerçekte nereye gittiği.</value></data>
+  <data name="Shell_AppUsageTitle" xml:space="preserve"><value>Uygulama Kullanımı</value></data>
+  <data name="Shell_BackWork" xml:space="preserve"><value>İşe Dön</value></data>
+  <data name="Shell_Close" xml:space="preserve"><value>Kapat</value></data>
+  <data name="Shell_ContinueAnyway" xml:space="preserve"><value>Yine de Devam Et</value></data>
+  <data name="Shell_DayGlance" xml:space="preserve"><value>Gününüze bir bakış</value></data>
+  <data name="Shell_Dismiss" xml:space="preserve"><value>Kapat</value></data>
+  <data name="Shell_EndFocusSession" xml:space="preserve"><value>Odak Oturumu Bitirilsin mi?</value></data>
+  <data name="Shell_EndSession" xml:space="preserve"><value>Oturumu Bitir</value></data>
+  <data name="Shell_EndSessionMessage" xml:space="preserve"><value>Hâlâ {0} süreniz var. Erken bitirmek istediğinizden emin misiniz?</value></data>
+  <data name="Shell_ErrorCaption" xml:space="preserve"><value>Hata</value></data>
+  <data name="Shell_Exit" xml:space="preserve"><value>Çık</value></data>
+  <data name="Shell_FocusModeActive" xml:space="preserve"><value>Odak Modu Etkin</value></data>
+  <data name="Shell_FocusSubtitle" xml:space="preserve"><value>Dikkat dağıtıcılardan uzak, derin çalışmaya zaman ayırın.</value></data>
+  <data name="Shell_FocusTimeRemaining" xml:space="preserve"><value>Odak oturumunda {0} kaldı</value></data>
+  <data name="Shell_Follow202020Rule" xml:space="preserve"><value>20-20-20 kuralını uygulayın: 20 saniye boyunca 6 metre uzaktaki bir şeye bakın.</value></data>
+  <data name="Shell_GoodAfternoon" xml:space="preserve"><value>İyi günler</value></data>
+  <data name="Shell_GoodEvening" xml:space="preserve"><value>İyi akşamlar</value></data>
+  <data name="Shell_GoodMorning" xml:space="preserve"><value>Günaydın</value></data>
+  <data name="Shell_HearingSubtitle" xml:space="preserve"><value>Kulaklarınızı yüksek sese karşı koruyun.</value></data>
+  <data name="Shell_Help" xml:space="preserve"><value>Yardım</value></data>
+  <data name="Shell_HelpSubtitle" xml:space="preserve"><value>Pulse nasıl izler — ve gizliliğinizi nasıl korur.</value></data>
+  <data name="Shell_InsightsSubtitle" xml:space="preserve"><value>Hafta boyunca ritminiz.</value></data>
+  <data name="Shell_KeepGoing" xml:space="preserve"><value>Devam Et</value></data>
+  <data name="Shell_Limits" xml:space="preserve"><value>Sınırlar</value></data>
+  <data name="Shell_LimitsSubtitle" xml:space="preserve"><value>Uygulamaların ne kadar süre çalışabileceğini sınırlayın veya zamanlayın.</value></data>
+  <data name="Shell_Maximize" xml:space="preserve"><value>Ekranı kapla</value></data>
+  <data name="Shell_Minimize" xml:space="preserve"><value>Simge durumuna küçült</value></data>
+  <data name="Shell_OpenSettings" xml:space="preserve"><value>Ayarları aç</value></data>
+  <data name="Shell_PrivateDevice" xml:space="preserve"><value>Gizli, cihazda</value></data>
+  <data name="Shell_ScreenTimeSubtitle" xml:space="preserve"><value>Ekranınızın ne zaman ve ne kadar süre açık kaldığı.</value></data>
+  <data name="Shell_ScreenTimeTitle" xml:space="preserve"><value>Ekran Süresi</value></data>
+  <data name="Shell_SettingsSubtitle" xml:space="preserve"><value>Pulse'ı alışkanlıklarınıza göre ayarlayın.</value></data>
+  <data name="Shell_Snooze5Min" xml:space="preserve"><value>5 dk ertele</value></data>
+  <data name="Shell_SwitchTheme" xml:space="preserve"><value>Temayı değiştir</value></data>
+  <data name="Shell_SwitchToDarkTheme" xml:space="preserve"><value>Koyu temaya geç</value></data>
+  <data name="Shell_SwitchToLightTheme" xml:space="preserve"><value>Açık temaya geç</value></data>
+  <data name="Shell_TimeBreak" xml:space="preserve"><value>Mola zamanı!</value></data>
+  <data name="Shell_TodaySubtitle" xml:space="preserve"><value>{0:d MMMM dddd} · gününüze bir bakış.</value></data>
+  <data name="Shell_Tracking" xml:space="preserve"><value>İzleniyor</value></data>
+  <data name="Shell_TrayIconNotFound" xml:space="preserve"><value>Tepsi simgesi bulunamadı:
+{0}</value></data>
+  <data name="Shell_TurnOffReminders" xml:space="preserve"><value>Hatırlatıcıları kapat</value></data>
+  <data name="Time_HoursCompact" xml:space="preserve"><value>{0}sa</value></data>
+  <data name="Time_HoursMinutes" xml:space="preserve"><value>{0} sa {1} dk</value></data>
+  <data name="Time_HoursMinutesCompact" xml:space="preserve"><value>{0}sa {1}dk</value></data>
+  <data name="Time_HoursMinutesLong" xml:space="preserve"><value>{0} saat {1} dk</value></data>
+  <data name="Time_Minutes" xml:space="preserve"><value>{0} dk</value></data>
+  <data name="Time_MinutesCompact" xml:space="preserve"><value>{0}dk</value></data>
+  <data name="Time_MinutesLong" xml:space="preserve"><value>{0} dk</value></data>
+  <data name="Time_MinutesSecondsCompact" xml:space="preserve"><value>{0}dk {1}sn</value></data>
+  <data name="Time_SecondsCompact" xml:space="preserve"><value>{0}sn</value></data>
+  <data name="Tray_CheckForUpdates" xml:space="preserve"><value>Güncellemeleri Denetle</value></data>
+  <data name="Tray_EndFocusSession" xml:space="preserve"><value>Odak Oturumunu Bitir</value></data>
+  <data name="Tray_OpenDashboard" xml:space="preserve"><value>Panoyu Aç</value></data>
+  <data name="Tray_Reports" xml:space="preserve"><value>Raporlar</value></data>
+  <data name="Tray_StartFocusSession" xml:space="preserve"><value>Odak Oturumu Başlat</value></data>
+  <data name="Tray_StillRunningBody" xml:space="preserve"><value>İzleme arka planda devam ediyor. Çıkmak için tepsi simgesine sağ tıklayın veya bunu Ayarlar → Başlangıç'tan kapatın.</value></data>
+  <data name="Tray_StillRunningTitle" xml:space="preserve"><value>Pulse hâlâ çalışıyor</value></data>
+  <data name="Update_AvailablePrompt" xml:space="preserve"><value>Yeni bir sürüm ({0}) mevcut.
+
+Şimdi güncellemek ister misiniz?</value></data>
+  <data name="Update_AvailableTitle" xml:space="preserve"><value>Güncelleme Mevcut</value></data>
+  <data name="Update_DevBuild" xml:space="preserve"><value>Güncelleme denetimleri bu geliştirme derlemesinde değil, yüklü Pulse uygulamasında kullanılabilir.</value></data>
+  <data name="Update_InitFailed" xml:space="preserve"><value>Pulse bu yükleme için güncelleyiciyi başlatamadı.</value></data>
+  <data name="Update_PortableBuild" xml:space="preserve"><value>Güncelleme denetimleri bu taşınabilir derlemede değil, yüklü Pulse uygulamasında kullanılabilir.</value></data>
+  <data name="Update_StoreManaged" xml:space="preserve"><value>Güncellemeler Microsoft Store tarafından otomatik olarak yönetilir.</value></data>
+  <data name="WeekNav_4WeeksBack" xml:space="preserve"><value>4 hafta önce</value></data>
+  <data name="WeekNav_ChooseAnotherWeek" xml:space="preserve"><value>Başka bir hafta seçin</value></data>
+  <data name="WeekNav_JumpWeek" xml:space="preserve"><value>BİR HAFTAYA GİT</value></data>
+  <data name="WeekNav_NextWeek" xml:space="preserve"><value>Sonraki hafta</value></data>
+  <data name="WeekNav_Oldest" xml:space="preserve"><value>En eski</value></data>
+  <data name="WeekNav_PreviousWeek" xml:space="preserve"><value>Önceki hafta</value></data>
+  <data name="WeekNav_Week" xml:space="preserve"><value>Bu hafta</value></data>
+  <data name="Welcome_AllDataStoredLocallyComputer" xml:space="preserve"><value>Tüm veriler bilgisayarınızda yerel olarak şurada saklanır:</value></data>
+  <data name="Welcome_AppNamesUsageDurationNot" xml:space="preserve"><value>Uygulama adları ve kullanım süresi (pencere içeriği değil)</value></data>
+  <data name="Welcome_AudioOutputMeterVolumeLevel" xml:space="preserve"><value>Ses çıkışı ölçer (yalnızca ses seviyesi, ses içeriği değil)</value></data>
+  <data name="Welcome_AudioOutputVolumeLevelsHearing" xml:space="preserve"><value>İşitme güvenliği için ses çıkışı seviyeleri</value></data>
+  <data name="Welcome_CanExportDeleteAllData" xml:space="preserve"><value>Tüm verilerinizi istediğiniz zaman Ayarlar'dan dışa aktarabilir veya silebilirsiniz.</value></data>
+  <data name="Welcome_DataStaysLocal" xml:space="preserve"><value>Verileriniz yerel kalır</value></data>
+  <data name="Welcome_GetStarted" xml:space="preserve"><value>Başlayın</value></data>
+  <data name="Welcome_IdleDetectionMouseKeyboardInactivity" xml:space="preserve"><value>Boşta kalma algılama (fare/klavye hareketsizliği)</value></data>
+  <data name="Welcome_InternetTrafficBrowsingHistoryUrls" xml:space="preserve"><value>İnternet trafiği, tarama geçmişi veya URL'ler</value></data>
+  <data name="Welcome_KeystrokesPasswordsTypedContent" xml:space="preserve"><value>Tuş vuruşları, parolalar veya yazılan içerik</value></data>
+  <data name="Welcome_LocalappdataPulse" xml:space="preserve"><value>%LocalAppData%\Pulse\</value></data>
+  <data name="Welcome_MicrophoneAudioRecordings" xml:space="preserve"><value>Mikrofon sesi veya kayıtlar</value></data>
+  <data name="Welcome_NothingEverSentCloudNo" xml:space="preserve"><value>Buluta asla hiçbir şey gönderilmez, hesap gerekmez, internet gerekmez.</value></data>
+  <data name="Welcome_PermissionsUsed" xml:space="preserve"><value>Kullanılan izinler</value></data>
+  <data name="Welcome_PersonalDigitalWellnessCompanionWindows" xml:space="preserve"><value>Windows için kişisel dijital denge yardımcınız</value></data>
+  <data name="Welcome_ScreenContentsScreenshotsWindowText" xml:space="preserve"><value>Ekran içeriği, ekran görüntüleri veya pencere metni</value></data>
+  <data name="Welcome_ScreenTimeActiveVsIdle" xml:space="preserve"><value>Ekran süresi (etkin ve boşta geçen süreler)</value></data>
+  <data name="Welcome_WelcomePulse" xml:space="preserve"><value>Pulse'a hoş geldiniz</value></data>
+  <data name="Welcome_WhatWeNeverTrack" xml:space="preserve"><value>Asla izlemediklerimiz</value></data>
+  <data name="Welcome_WhatWeTrack" xml:space="preserve"><value>İzlediklerimiz</value></data>
+  <data name="Welcome_WindowFocusDetectionTrackActive" xml:space="preserve"><value>Pencere odağı algılama (etkin uygulamayı izlemek için)</value></data>
+  <data name="WindDown_NotifyBody" xml:space="preserve"><value>Sessiz saatler başladı. İşleri toparlayıp dinlenmeye hazırlanmayı düşünün.{0}</value></data>
+  <data name="WindDown_NotifyTitle" xml:space="preserve"><value>🌙 Dinlenme Zamanı</value></data>
+  <data name="WindDown_SummaryToday" xml:space="preserve"><value>Bugün bilgisayarınızı {0} sa {1} dk kullandınız.</value></data>
+  <data name="Dashboard_PerDayAverage" xml:space="preserve"><value> · günlük ort. {0}</value></data>
+</root>

@@ -1,5 +1,6 @@
 <UserControl x:Class="digital_wellbeing_app.Views.Limits.AppLimitsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:l="clr-namespace:digital_wellbeing_app.Helpers"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -20,15 +21,15 @@
                                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                        <TextBlock Text="Set healthy boundaries for distracting apps" Style="{StaticResource Pulse.CardTitle}" FontSize="17"/>
-                        <TextBlock Text="Choose an app, give it a daily allowance, and decide whether Pulse should remind you or minimize it when time is up."
+                        <TextBlock Text="{l:Loc Limits_SetHealthyBoundariesDistractingApps}" Style="{StaticResource Pulse.CardTitle}" FontSize="17"/>
+                        <TextBlock Text="{l:Loc Limits_ChooseAppGiveDailyAllowance}"
                                    Style="{StaticResource Pulse.Body2}" Margin="0,4,0,0" TextWrapping="Wrap"/>
                     </StackPanel>
                 </Grid>
             </Border>
 
             <!-- Existing limits come first so the current state is immediately obvious -->
-            <TextBlock Text="YOUR APP LIMITS" Style="{StaticResource Pulse.Eyebrow}" Margin="2,0,0,8"/>
+            <TextBlock Text="{l:Loc Limits_AppLimits}" Style="{StaticResource Pulse.Eyebrow}" Margin="2,0,0,8"/>
             <Border Style="{StaticResource Pulse.Card}" Margin="0,0,0,16">
                 <StackPanel>
                     <ItemsControl x:Name="ActiveLimitsList" AutomationProperties.AutomationId="ActiveLimitsList">
@@ -54,8 +55,8 @@
                                         <ToggleButton Grid.Column="2" Style="{StaticResource Pulse.Switch}" Margin="12,0"
                                                       IsChecked="{Binding Limit.IsEnabled, Mode=OneWay}" Tag="{Binding}"
                                                       Click="ActiveLimitToggle_Click" VerticalAlignment="Center"
-                                                      ToolTip="Turn this limit on or off"/>
-                                        <Button Grid.Column="3" Content="Edit" Style="{StaticResource Pulse.Button.Ghost}" Padding="13,7"
+                                                      ToolTip="{l:Loc Limits_TurnLimitOff}"/>
+                                        <Button Grid.Column="3" Content="{l:Loc Limits_Edit}" Style="{StaticResource Pulse.Button.Ghost}" Padding="13,7"
                                                 Tag="{Binding}" Click="EditLimit_Click" VerticalAlignment="Center"
                                                 AutomationProperties.AutomationId="{Binding Limit.AppIdentifier, StringFormat='EditLimitButton_{0}'}"/>
                                     </Grid>
@@ -67,19 +68,19 @@
                     <StackPanel x:Name="NoLimitsPanel" HorizontalAlignment="Center" Margin="0,16" MaxWidth="500">
                         <md:PackIcon Kind="TimerSandEmpty" Width="36" Height="36" Foreground="{DynamicResource Ink3}"
                                      HorizontalAlignment="Center" Margin="0,0,0,10"/>
-                        <TextBlock Text="No app limits yet" Style="{StaticResource Pulse.CardTitle}" FontSize="15" HorizontalAlignment="Center"/>
-                        <TextBlock Text="Use the three simple steps below to create your first one."
+                        <TextBlock Text="{l:Loc Limits_NoAppLimitsYet}" Style="{StaticResource Pulse.CardTitle}" FontSize="15" HorizontalAlignment="Center"/>
+                        <TextBlock Text="{l:Loc Limits_UseThreeSimpleStepsBelow}"
                                    Style="{StaticResource Pulse.Body2}" TextAlignment="Center" Margin="0,4,0,0"/>
                     </StackPanel>
                 </StackPanel>
             </Border>
 
             <!-- One linear editor instead of a disconnected two-column picker/form -->
-            <TextBlock x:Name="EditorSectionLabel" Text="ADD A LIMIT" Style="{StaticResource Pulse.Eyebrow}" Margin="2,0,0,8"/>
+            <TextBlock x:Name="EditorSectionLabel" Text="{l:Loc Limits_AddLimit}" Style="{StaticResource Pulse.Eyebrow}" Margin="2,0,0,8"/>
             <Border Style="{StaticResource Pulse.Card}" Padding="26">
                 <StackPanel>
-                    <TextBlock x:Name="EditorTitleText" Text="Create an app limit" Style="{StaticResource Pulse.Stat}" FontSize="22"/>
-                    <TextBlock x:Name="EditorHelpText" Text="You can change or pause it at any time."
+                    <TextBlock x:Name="EditorTitleText" Text="{l:Loc Limits_CreateAppLimit}" Style="{StaticResource Pulse.Stat}" FontSize="22"/>
+                    <TextBlock x:Name="EditorHelpText" Text="{l:Loc Limits_CanChangePauseAnyTime}"
                                Style="{StaticResource Pulse.Body2}" Margin="0,4,0,22"/>
 
                     <!-- Step 1 -->
@@ -89,11 +90,11 @@
                             <TextBlock Text="1" Foreground="{DynamicResource Accent}" FontWeight="SemiBold"
                                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
-                        <TextBlock Grid.Column="1" Text="Which app do you want to limit?" Style="{StaticResource Pulse.CardTitle}"
+                        <TextBlock Grid.Column="1" Text="{l:Loc Limits_WhichAppDoWantLimit}" Style="{StaticResource Pulse.CardTitle}"
                                    FontSize="15" VerticalAlignment="Center"/>
                     </Grid>
                     <ComboBox x:Name="AppPickerCombo" Margin="32,0,0,24" Padding="12,9"
-                              md:HintAssist.Hint="Select an app" md:HintAssist.IsFloating="True"
+                              md:HintAssist.Hint="{l:Loc Limits_SelectApp}" md:HintAssist.IsFloating="True"
                               Foreground="{DynamicResource Ink}" Background="{DynamicResource Card2}"
                               BorderBrush="{DynamicResource Border2}"
                               IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False"
@@ -107,7 +108,7 @@
                                         <Image Source="{Binding Icon}" Width="18" Height="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </Border>
                                     <TextBlock Grid.Column="1" Text="{Binding AppName}" Style="{StaticResource Pulse.Body}" VerticalAlignment="Center"/>
-                                    <TextBlock Grid.Column="2" Text="Already limited" Margin="12,0,0,0" VerticalAlignment="Center">
+                                    <TextBlock Grid.Column="2" Text="{l:Loc Limits_AlreadyLimited}" Margin="12,0,0,0" VerticalAlignment="Center">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock" BasedOn="{StaticResource Pulse.Muted}">
                                                 <Setter Property="Visibility" Value="Collapsed"/>
@@ -119,7 +120,7 @@
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
-                    <TextBlock x:Name="NoAppsText" Text="Use an app for a little while and it will appear here."
+                    <TextBlock x:Name="NoAppsText" Text="{l:Loc Limits_UseAppLittleWhileWill}"
                                Style="{StaticResource Pulse.Body2}" Margin="32,-18,0,24" Visibility="Collapsed"/>
 
                     <!-- Step 2 -->
@@ -130,22 +131,22 @@
                                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <StackPanel Grid.Column="1">
-                            <TextBlock Text="How much time should this app get each day?" Style="{StaticResource Pulse.CardTitle}" FontSize="15"/>
-                            <TextBlock Text="Pulse counts time while the app is in the foreground." Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
+                            <TextBlock Text="{l:Loc Limits_HowMuchTimeShouldApp}" Style="{StaticResource Pulse.CardTitle}" FontSize="15"/>
+                            <TextBlock Text="{l:Loc Limits_PulseCountsTimeWhileApp}" Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
                         </StackPanel>
                     </Grid>
                     <WrapPanel Margin="32,0,0,12">
-                        <Button Content="30 min" Style="{StaticResource Pulse.Chip}" Tag="30" Click="DailyPreset_Click" Margin="0,0,8,0"/>
-                        <Button Content="1 hour" Style="{StaticResource Pulse.Chip}" Tag="60" Click="DailyPreset_Click" Margin="0,0,8,0"/>
-                        <Button Content="2 hours" Style="{StaticResource Pulse.Chip}" Tag="120" Click="DailyPreset_Click" Margin="0,0,8,0"/>
-                        <Button Content="3 hours" Style="{StaticResource Pulse.Chip}" Tag="180" Click="DailyPreset_Click"/>
+                        <Button Content="{l:Loc Common_Min30}" Style="{StaticResource Pulse.Chip}" Tag="30" Click="DailyPreset_Click" Margin="0,0,8,0"/>
+                        <Button Content="{l:Loc Limits_1Hour}" Style="{StaticResource Pulse.Chip}" Tag="60" Click="DailyPreset_Click" Margin="0,0,8,0"/>
+                        <Button Content="{l:Loc Limits_2Hours}" Style="{StaticResource Pulse.Chip}" Tag="120" Click="DailyPreset_Click" Margin="0,0,8,0"/>
+                        <Button Content="{l:Loc Limits_3Hours}" Style="{StaticResource Pulse.Chip}" Tag="180" Click="DailyPreset_Click"/>
                     </WrapPanel>
                     <StackPanel Orientation="Horizontal" Margin="32,0,0,24">
-                        <TextBlock Text="Custom" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <TextBlock Text="{l:Loc Limits_Custom}" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center" Margin="0,0,10,0"/>
                         <TextBox x:Name="DailyLimitTextBox" Width="72" Padding="10,7" TextAlignment="Center" FontSize="15"
                                  Background="{DynamicResource Card2}" Foreground="{DynamicResource Ink}" BorderThickness="0" Text="60"
                                  AutomationProperties.AutomationId="DailyLimitTextBox"/>
-                        <TextBlock Text="minutes per day" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center" Margin="9,0,0,0"/>
+                        <TextBlock Text="{l:Loc Limits_MinutesPerDay}" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center" Margin="9,0,0,0"/>
                     </StackPanel>
 
                     <!-- Optional schedule, deliberately secondary -->
@@ -154,19 +155,19 @@
                             <Grid>
                                 <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
                                 <StackPanel>
-                                    <TextBlock Text="Also keep this app unavailable during certain hours" Style="{StaticResource Pulse.Body}"/>
-                                    <TextBlock Text="Optional — useful for bedtime, school, or work hours." Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
+                                    <TextBlock Text="{l:Loc Limits_AlsoKeepAppUnavailableDuring}" Style="{StaticResource Pulse.Body}"/>
+                                    <TextBlock Text="{l:Loc Limits_OptionalUsefulBedtimeSchoolWork}" Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
                                 </StackPanel>
                                 <ToggleButton x:Name="ScheduleToggle" Grid.Column="1" Style="{StaticResource Pulse.Switch}"
                                               AutomationProperties.AutomationId="ScheduleToggle"
                                               Checked="ScheduleToggle_Changed" Unchecked="ScheduleToggle_Changed" VerticalAlignment="Center"/>
                             </Grid>
                             <StackPanel x:Name="SchedulePanel" Orientation="Horizontal" Visibility="Collapsed" Margin="0,14,0,0">
-                                <TextBlock Text="Unavailable from" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <TextBlock Text="{l:Loc Limits_UnavailableFrom}" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center" Margin="0,0,10,0"/>
                                 <ComboBox x:Name="LimitStartTimeComboBox" Width="120"
                                           Foreground="{DynamicResource Ink}" Background="{DynamicResource Card2}"
                                           BorderBrush="{DynamicResource Border2}"/>
-                                <TextBlock Text="to" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center" Margin="10,0"/>
+                                <TextBlock Text="{l:Loc Common_To}" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center" Margin="10,0"/>
                                 <ComboBox x:Name="LimitEndTimeComboBox" Width="120"
                                           Foreground="{DynamicResource Ink}" Background="{DynamicResource Card2}"
                                           BorderBrush="{DynamicResource Border2}"/>
@@ -181,7 +182,7 @@
                             <TextBlock Text="3" Foreground="{DynamicResource Accent}" FontWeight="SemiBold"
                                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
-                        <TextBlock Grid.Column="1" Text="What should Pulse do when the limit is reached?"
+                        <TextBlock Grid.Column="1" Text="{l:Loc Limits_WhatShouldPulseDoWhen}"
                                    Style="{StaticResource Pulse.CardTitle}" FontSize="15" VerticalAlignment="Center"/>
                     </Grid>
                     <Grid Margin="32,0,0,24">
@@ -192,9 +193,9 @@
                             <StackPanel HorizontalAlignment="Left">
                                 <StackPanel Orientation="Horizontal">
                                     <md:PackIcon Kind="BellOutline" Width="18" Height="18" Margin="0,0,8,0"/>
-                                    <TextBlock Text="Remind me" FontWeight="SemiBold"/>
+                                    <TextBlock Text="{l:Loc Limits_RemindMe}" FontWeight="SemiBold"/>
                                 </StackPanel>
-                                <TextBlock Text="Show a notification and leave the app open" Style="{StaticResource Pulse.Muted}" Margin="26,4,0,0"/>
+                                <TextBlock Text="{l:Loc Limits_ShowNotificationLeaveAppOpen}" Style="{StaticResource Pulse.Muted}" Margin="26,4,0,0"/>
                             </StackPanel>
                         </Button>
                         <Button x:Name="LimitBlockBtn" Grid.Column="1" Style="{StaticResource Pulse.Button.Ghost}"
@@ -203,9 +204,9 @@
                             <StackPanel HorizontalAlignment="Left">
                                 <StackPanel Orientation="Horizontal">
                                     <md:PackIcon Kind="WindowMinimize" Width="18" Height="18" Margin="0,0,8,0"/>
-                                    <TextBlock Text="Minimize the app" FontWeight="SemiBold"/>
+                                    <TextBlock Text="{l:Loc Limits_MinimizeApp}" FontWeight="SemiBold"/>
                                 </StackPanel>
-                                <TextBlock Text="Show a notification and move its window away" Style="{StaticResource Pulse.Muted}" Margin="26,4,0,0"/>
+                                <TextBlock Text="{l:Loc Limits_ShowNotificationMoveItsWindow}" Style="{StaticResource Pulse.Muted}" Margin="26,4,0,0"/>
                             </StackPanel>
                         </Button>
                     </Grid>
@@ -213,12 +214,12 @@
                     <TextBlock x:Name="ValidationText" Foreground="{StaticResource Danger}" Visibility="Collapsed"
                                Margin="32,0,0,12" TextWrapping="Wrap"/>
                     <StackPanel Orientation="Horizontal" Margin="32,0,0,0">
-                        <Button x:Name="SaveLimitButton" Content="Add limit" Style="{StaticResource Pulse.Button.Primary}"
+                        <Button x:Name="SaveLimitButton" Content="{l:Loc Limits_AddLimit2}" Style="{StaticResource Pulse.Button.Primary}"
                                 Padding="22,10" Click="SaveLimitButton_Click" IsEnabled="False"
                                 AutomationProperties.AutomationId="SaveLimitButton"/>
-                        <Button x:Name="CancelEditButton" Content="Cancel" Style="{StaticResource Pulse.Button.Ghost}"
+                        <Button x:Name="CancelEditButton" Content="{l:Loc Limits_Cancel}" Style="{StaticResource Pulse.Button.Ghost}"
                                 Padding="18,10" Margin="8,0,0,0" Click="CancelEditButton_Click" Visibility="Collapsed"/>
-                        <Button x:Name="RemoveLimitButton" Content="Remove limit" Style="{StaticResource Pulse.Button.Ghost}"
+                        <Button x:Name="RemoveLimitButton" Content="{l:Loc Limits_RemoveLimit}" Style="{StaticResource Pulse.Button.Ghost}"
                                 Padding="18,10" Margin="8,0,0,0" Click="RemoveLimitButton_Click" Visibility="Collapsed"
                                 AutomationProperties.AutomationId="RemoveLimitButton"/>
                     </StackPanel>

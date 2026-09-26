@@ -163,14 +163,14 @@ namespace digital_wellbeing_app.Views.Limits
             var parts = new List<string>();
             if (limit.DailyLimitMinutes > 0)
                 parts.Add(limit.DailyLimitMinutes % 60 == 0
-                    ? $"{limit.DailyLimitMinutes / 60} hr/day"
-                    : $"{limit.DailyLimitMinutes} min/day");
+                    ? Loc.Format("Limits_SummaryHoursPerDay", limit.DailyLimitMinutes / 60)
+                    : Loc.Format("Limits_SummaryMinutesPerDay", limit.DailyLimitMinutes));
             if (limit.ScheduleEnabled)
-                parts.Add($"Unavailable {FormatTimeDisplay(limit.ScheduleStartHour, limit.ScheduleStartMinute)}–{FormatTimeDisplay(limit.ScheduleEndHour, limit.ScheduleEndMinute)}");
+                parts.Add(Loc.Format("Limits_SummaryUnavailable", FormatTimeDisplay(limit.ScheduleStartHour, limit.ScheduleStartMinute), FormatTimeDisplay(limit.ScheduleEndHour, limit.ScheduleEndMinute)));
 
-            parts.Add(limit.EnforcementLevel == FocusEnforcementLevel.Warn ? "Reminder" : "Minimize app");
+            parts.Add(limit.EnforcementLevel == FocusEnforcementLevel.Warn ? Loc.Get("Limits_SummaryReminder") : Loc.Get("Limits_SummaryMinimizeApp"));
             var summary = string.Join(" · ", parts);
-            return limit.IsEnabled ? summary : $"Paused · {summary}";
+            return limit.IsEnabled ? summary : Loc.Format("Limits_SummaryPaused", summary);
         }
 
         #endregion
@@ -226,10 +226,10 @@ namespace digital_wellbeing_app.Views.Limits
             var existing = DatabaseService.GetAppLimit(app.AppIdentifier);
             if (existing != null)
             {
-                EditorSectionLabel.Text = "EDIT LIMIT";
-                EditorTitleText.Text = $"Edit {app.AppName}";
-                EditorHelpText.Text = "Change the allowance, schedule, or what happens when time is up.";
-                SaveLimitButton.Content = "Save changes";
+                EditorSectionLabel.Text = Loc.Get("Limits_EditLimit");
+                EditorTitleText.Text = Loc.Format("Limits_EditTitle", app.AppName);
+                EditorHelpText.Text = Loc.Get("Limits_EditHelp");
+                SaveLimitButton.Content = Loc.Get("Limits_SaveChanges");
                 DailyLimitTextBox.Text = existing.DailyLimitMinutes.ToString();
                 SetEnforcement(existing.EnforcementLevel);
                 ScheduleToggle.IsChecked = existing.ScheduleEnabled;
@@ -241,10 +241,10 @@ namespace digital_wellbeing_app.Views.Limits
             }
             else
             {
-                EditorSectionLabel.Text = "ADD A LIMIT";
-                EditorTitleText.Text = $"Limit {app.AppName}";
-                EditorHelpText.Text = "Choose a daily allowance and what Pulse should do when time is up.";
-                SaveLimitButton.Content = "Add limit";
+                EditorSectionLabel.Text = Loc.Get("Limits_AddLimit");
+                EditorTitleText.Text = Loc.Format("Limits_LimitTitle", app.AppName);
+                EditorHelpText.Text = Loc.Get("Limits_AddHelp");
+                SaveLimitButton.Content = Loc.Get("Limits_AddLimit2");
                 DailyLimitTextBox.Text = "60";
                 SetEnforcement(FocusEnforcementLevel.Warn);
                 ScheduleToggle.IsChecked = false;
@@ -262,10 +262,10 @@ namespace digital_wellbeing_app.Views.Limits
             _isChangingPickerSelection = true;
             AppPickerCombo.SelectedIndex = -1;
             _isChangingPickerSelection = false;
-            EditorSectionLabel.Text = "ADD A LIMIT";
-            EditorTitleText.Text = "Create an app limit";
-            EditorHelpText.Text = "You can change or pause it at any time.";
-            SaveLimitButton.Content = "Add limit";
+            EditorSectionLabel.Text = Loc.Get("Limits_AddLimit");
+            EditorTitleText.Text = Loc.Get("Limits_CreateAppLimit");
+            EditorHelpText.Text = Loc.Get("Limits_CanChangePauseAnyTime");
+            SaveLimitButton.Content = Loc.Get("Limits_AddLimit2");
             SaveLimitButton.IsEnabled = false;
             CancelEditButton.Visibility = Visibility.Collapsed;
             RemoveLimitButton.Visibility = Visibility.Collapsed;
@@ -316,7 +316,7 @@ namespace digital_wellbeing_app.Views.Limits
 
             if (!int.TryParse(DailyLimitTextBox.Text, out int minutes) || minutes < 0)
             {
-                ValidationText.Text = "Enter a valid number of minutes.";
+                ValidationText.Text = Loc.Get("Limits_InvalidMinutes");
                 ValidationText.Visibility = Visibility.Visible;
                 return;
             }
@@ -324,7 +324,7 @@ namespace digital_wellbeing_app.Views.Limits
 
             if (minutes == 0 && ScheduleToggle.IsChecked != true)
             {
-                ValidationText.Text = "Choose a daily allowance, turn on unavailable hours, or use both.";
+                ValidationText.Text = Loc.Get("Limits_AllowanceOrHoursRequired");
                 ValidationText.Visibility = Visibility.Visible;
                 return;
             }
@@ -393,12 +393,7 @@ namespace digital_wellbeing_app.Views.Limits
             }
         }
 
-        private static string FormatTimeDisplay(int hour, int minute)
-        {
-            var ampm = hour >= 12 ? "PM" : "AM";
-            var displayHour = hour > 12 ? hour - 12 : (hour == 0 ? 12 : hour);
-            return minute > 0 ? $"{displayHour}:{minute:D2} {ampm}" : $"{displayHour} {ampm}";
-        }
+        private static string FormatTimeDisplay(int hour, int minute) => TimeFormatHelper.FormatClockTime(hour, minute);
 
         private static void SelectTimeInComboBox(System.Windows.Controls.ComboBox comboBox, int hour, int minute)
         {

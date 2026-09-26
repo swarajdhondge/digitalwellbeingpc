@@ -281,6 +281,8 @@ public class ManualChecklistTests
                 var cancelBtn = dialog.FindFirstDescendant(cf => cf.ByName("Cancel"))?.AsButton();
                 cancelBtn?.Invoke();
                 Thread.Sleep(500);
+                // A dialog left open blocks navigation for every later check.
+                Retry.WhileTrue(() => dialog.IsAvailable, TimeSpan.FromSeconds(5), TimeSpan.FromMilliseconds(200));
             }
 
             Record("Backup: full zip-creation round trip via UI automation", true,
@@ -303,31 +305,10 @@ public class ManualChecklistTests
             _app.Nav("NavLimits");
             Thread.Sleep(500);
 
-            var picker = _app.Find("AppPickerList");
-            var firstItem = FindFirstPickerItem(picker);
-
-            if (firstItem == null)
-            {
-                // Diagnostic dump: the screenshot from the general-regression check visibly shows
-                // real app icons in this list, so the data is there - dump what UIA actually sees
-                // under the picker to find out why the AutomationId-based search comes up empty.
-                var dump = picker.FindAllDescendants().Select(e =>
-                {
-                    var id = e.Properties.AutomationId.ValueOrDefault ?? "";
-                    var name = e.Properties.Name.ValueOrDefault ?? "";
-                    var ct = e.Properties.ControlType.ValueOrDefault.ToString();
-                    return $"[{ct}] id='{id}' name='{name}'";
-                }).ToList();
-                Record("Limits: app picker lists real recently-used apps", false,
-                    $"AppPickerList had no AppPickerItem_* match. Descendant dump ({dump.Count} elements): " +
-                    string.Join(" || ", dump));
-                return;
-            }
-
-            Record("Limits: app picker lists real recently-used apps", true, "at least one app found");
-
-            var appNameText = firstItem.Properties.Name.ValueOrDefault ?? "";
-            firstItem.Click();
+            var appNameText = PickApp();
+            Record("Limits: app picker lists real recently-used apps", appNameText != null,
+                appNameText != null ? $"picked '{appNameText}'" : "AppPickerCombo has no items");
+            if (appNameText == null) return;
             Thread.Sleep(400);
             _app.Shot("manual-06-limits-app-selected");
 
@@ -345,33 +326,15 @@ public class ManualChecklistTests
                 .Select(t => t.Properties.Name.ValueOrDefault ?? "").Where(t => t.Length > 0).ToList();
             _app.Shot("manual-07-limits-active-daily");
 
-            // NOT matching by app name here - see the dedicated bug report below. With exactly one
-            // row present at this point in the flow, the summary is simply whichever of the two
-            // texts isn't the (possibly re-prettified, possibly not matching appNameText) row label.
-            var summary1 = rowTexts1.Count >= 2 ? rowTexts1[^1] : null;
+            var (summary1, _) = FindSummaryTextFor(activeList, appNameText);
             Record("Limits: daily-minutes limit appears in Active limits with correct summary",
                 summary1 != null && summary1.Contains("30 min/day"),
                 summary1 != null ? $"summary='{summary1}'" : $"row texts: [{string.Join(" | ", rowTexts1)}]");
 
-            if (rowTexts1.Count >= 2 && !rowTexts1[0].Equals(appNameText, StringComparison.OrdinalIgnoreCase))
-            {
-                Record("BUG FOUND: Active-limits row shows a different app name than the picker used to create it", false,
-                    $"Picker showed '{appNameText}'; Active limits shows '{rowTexts1[0]}'. Root cause: " +
-                    "AppLimitsView.xaml.cs's LoadAppPicker() already calls AppNameService.GetDisplayName() " +
-                    "to build AppLimitPickerDisplay.AppName (the FRIENDLY name, e.g. 'File Explorer' for " +
-                    "explorer.exe). SaveLimitButton_Click then stores that already-friendly string verbatim " +
-                    "into AppLimit.AppName. LoadActiveLimits() calls GetDisplayName() AGAIN on that already-" +
-                    "prettified string - since e.g. 'File Explorer' isn't itself a key in AppNameService's " +
-                    "KnownApps dictionary (only the raw process name 'explorer' is), it falls through to " +
-                    "reading the executable's own FileVersionInfo and shows its FileDescription/ProductName " +
-                    "instead (observed: 'Windows Explorer' and, on another run, 'Microsoft® Windows® " +
-                    "Operating System' - both real version-info fields on explorer.exe, not what the user " +
-                    "picked). Likely affects any tracked app whose friendly name isn't itself a dictionary " +
-                    "key - e.g. VS Code would likely show as whatever Code.exe's FileDescription is instead " +
-                    "of 'VS Code'. Fix: store the raw AppUsageSession.AppName (process name) in AppLimit, " +
-                    "not the already-prettified picker display string - or have LoadActiveLimits read the " +
-                    "limit's raw name, not re-derive from its own already-friendly AppName field.");
-            }
+            if (rowTexts1.Count >= 2)
+                Record("Limits: Active limits row shows the app name that was picked",
+                    rowTexts1[0].Equals(appNameText, StringComparison.OrdinalIgnoreCase),
+                    $"picker='{appNameText}', row='{rowTexts1[0]}'");
 
             // 2) Edit via pencil icon - confirm prefill.
             var editBtn = FindEditButtonFor(activeList, appNameText);
@@ -396,7 +359,7 @@ public class ManualChecklistTests
 
                 var rowTexts2 = _app.Find("ActiveLimitsList").FindAllDescendants(cf => cf.ByControlType(ControlType.Text))
                     .Select(t => t.Properties.Name.ValueOrDefault ?? "").Where(t => t.Length > 0).ToList();
-                var summary2 = rowTexts2.Count >= 2 ? rowTexts2[^1] : null;
+                var (summary2, _) = FindSummaryTextFor(_app.Find("ActiveLimitsList"), appNameText);
                 _app.Shot("manual-09-limits-schedule-only");
                 Record("Limits: schedule-only limit shows time-window summary (no 'min/day')",
                     summary2 != null && !summary2.Contains("min/day") && summary2.Contains('–'),
@@ -416,12 +379,10 @@ public class ManualChecklistTests
             Record("Limits: removing a limit removes it from Active limits", goneFromActive,
                 goneFromActive ? "confirmed" : $"row still present after Remove: summary='{stillThere}'");
 
-            var pickerAfterRemove = FindFirstPickerItem(_app.Find("AppPickerList"), preferAppName: appNameText);
-            if (pickerAfterRemove != null)
+            if (PickApp(preferAppName: appNameText) != null)
             {
-                pickerAfterRemove.Click();
                 Thread.Sleep(300);
-                var resetToDefault = _app.Find("DailyLimitTextBox").AsTextBox().Text == "30"
+                var resetToDefault = _app.Find("DailyLimitTextBox").AsTextBox().Text == "60"
                                       && _app.Find("ScheduleToggle").AsToggleButton().ToggleState == ToggleState.Off;
                 Record("Limits: re-picking a removed app's limit shows fresh defaults (not the deleted config)",
                     resetToDefault,
@@ -539,33 +500,29 @@ public class ManualChecklistTests
         }, TimeSpan.FromMilliseconds(timeoutMs), TimeSpan.FromMilliseconds(250)).Result;
     }
 
-    /// <summary>
-    /// Finds the first (or a name-preferred) app-picker item's clickable element. AppPickerList is
-    /// a plain ItemsControl whose DataTemplate root is a Border with MouseLeftButtonDown - WPF
-    /// gives each generated item a synthetic "DataItem" automation peer that swallows the root
-    /// element's own identity (confirmed empirically: an AutomationId set directly on that root
-    /// Border never surfaced via UIA, while its Image/Text CHILDREN kept their own normal peers).
-    /// So this returns the item's AppName Text element instead of the Border - clicking it still
-    /// fires the Border's handler, since WPF's MouseLeftButtonDown bubbles up from whatever child
-    /// was actually hit.
-    /// </summary>
-    private AutomationElement? FindFirstPickerItem(AutomationElement picker, string? preferAppName = null)
+    /// <summary>Selects an app in the Limits dropdown (preferring <paramref name="preferAppName"/>)
+    /// and returns its display name, or null when the dropdown is empty.</summary>
+    private string? PickApp(string? preferAppName = null)
     {
-        var texts = Retry.WhileEmpty(
-            () => picker.FindAllDescendants(cf => cf.ByControlType(ControlType.Text)),
-            TimeSpan.FromSeconds(5), TimeSpan.FromMilliseconds(200)).Result ?? Array.Empty<AutomationElement>();
-
-        var candidates = texts.Where(e => !string.IsNullOrWhiteSpace(e.Properties.Name.ValueOrDefault ?? "")).ToList();
-        if (candidates.Count == 0) return null;
-
-        if (preferAppName != null)
+        var combo = _app.Find("AppPickerCombo").AsComboBox();
+        combo.Expand();
+        var items = Retry.WhileEmpty(() => combo.Items, TimeSpan.FromSeconds(5), TimeSpan.FromMilliseconds(200)).Result
+                    ?? Array.Empty<ComboBoxItem>();
+        // Items are data-bound, so their own Name is the type name; the app name is the first text.
+        string NameOf(ComboBoxItem item)
+            => item.FindFirstDescendant(cf => cf.ByControlType(ControlType.Text))?.Name ?? "";
+        var pick = items.FirstOrDefault(i => preferAppName != null
+                       && NameOf(i).Equals(preferAppName, StringComparison.OrdinalIgnoreCase))
+                   ?? items.FirstOrDefault(i => NameOf(i).Length > 0);
+        if (pick == null)
         {
-            var match = candidates.FirstOrDefault(c =>
-                (c.Properties.Name.ValueOrDefault ?? "").Contains(preferAppName, StringComparison.OrdinalIgnoreCase));
-            if (match != null) return match;
+            combo.Collapse();
+            return null;
         }
-
-        return candidates.First();
+        var name = NameOf(pick);
+        pick.Select();
+        combo.Collapse();
+        return name;
     }
 
     /// <summary>

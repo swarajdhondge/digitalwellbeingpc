@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="App_ErrorTitle" xml:space="preserve"><value>Pulse - त्रुटि</value></data>
+  <data name="App_UnexpectedError" xml:space="preserve"><value>एक अनपेक्षित त्रुटि हुई:
+
+{0}
+
+त्रुटि लॉग कर ली गई है। ऐप चलता रहने की कोशिश करेगा।
+अगर समस्या बनी रहती है, तो कृपया ऐप को रीस्टार्ट करें।</value></data>
+  <data name="Apps_AppSwitches" xml:space="preserve"><value>ऐप बदले</value></data>
+  <data name="Apps_AvgFocus" xml:space="preserve"><value>औसत फ़ोकस</value></data>
+  <data name="Apps_LongestFocus" xml:space="preserve"><value>सबसे लंबा फ़ोकस</value></data>
+  <data name="Apps_NoAppActive" xml:space="preserve"><value>कोई ऐप सक्रिय नहीं</value></data>
+  <data name="Apps_NoAppsTrackedYet" xml:space="preserve"><value>अभी तक कोई ऐप ट्रैक नहीं हुआ</value></data>
+  <data name="Apps_NowUsing" xml:space="preserve"><value>अभी इस्तेमाल में</value></data>
+  <data name="Apps_RangeHeaderToday" xml:space="preserve"><value>आज के ऐप</value></data>
+  <data name="Apps_RangeHeaderWeek" xml:space="preserve"><value>इस हफ़्ते के ऐप</value></data>
+  <data name="Apps_StartUsingSomeApplicationsThey" xml:space="preserve"><value>कुछ ऐप इस्तेमाल करना शुरू करें, वे यहाँ दिखेंगे।</value></data>
+  <data name="Apps_Total" xml:space="preserve"><value>कुल </value></data>
+  <data name="Backup_ChooseFolder" xml:space="preserve"><value>चुनें कि Pulse बैकअप कहाँ सेव करना है</value></data>
+  <data name="Backup_ChooseRestoreFile" xml:space="preserve"><value>रीस्टोर करने के लिए Pulse बैकअप चुनें</value></data>
+  <data name="Backup_CompleteTitle" xml:space="preserve"><value>बैकअप पूरा हुआ</value></data>
+  <data name="Backup_ErrorTitle" xml:space="preserve"><value>बैकअप त्रुटि</value></data>
+  <data name="Backup_Failed" xml:space="preserve"><value>बैकअप नहीं हो सका: {0}</value></data>
+  <data name="Backup_FileFilter" xml:space="preserve"><value>Pulse बैकअप (*.zip)|*.zip</value></data>
+  <data name="Backup_FileNotFound" xml:space="preserve"><value>बैकअप फ़ाइल नहीं मिली।</value></data>
+  <data name="Backup_MissingDatabase" xml:space="preserve"><value>बैकअप फ़ाइल में डेटाबेस फ़ाइल नहीं है।</value></data>
+  <data name="Backup_RestoreCompleteTitle" xml:space="preserve"><value>रीस्टोर पूरा हुआ</value></data>
+  <data name="Backup_RestoreConfirm" xml:space="preserve"><value>इससे आपका मौजूदा Pulse का सारा डेटा बैकअप से बदल जाएगा।
+
+इसे वापस नहीं किया जा सकता। इसके बाद Pulse बंद हो जाएगा - जारी रखने के लिए इसे फिर से खोलें।</value></data>
+  <data name="Backup_RestoreConfirmFrom" xml:space="preserve"><value>इससे आपका मौजूदा Pulse का सारा डेटा {0:g} के बैकअप से बदल जाएगा।
+
+इसे वापस नहीं किया जा सकता। इसके बाद Pulse बंद हो जाएगा - जारी रखने के लिए इसे फिर से खोलें।</value></data>
+  <data name="Backup_RestoreDone" xml:space="preserve"><value>रीस्टोर पूरा हुआ। Pulse अब बंद होगा - कृपया इसे फिर से खोलें।</value></data>
+  <data name="Backup_RestoreErrorTitle" xml:space="preserve"><value>रीस्टोर त्रुटि</value></data>
+  <data name="Backup_RestoreFailed" xml:space="preserve"><value>रीस्टोर नहीं हो सका: {0}</value></data>
+  <data name="Backup_RestoreTitle" xml:space="preserve"><value>बैकअप से रीस्टोर करें</value></data>
+  <data name="Backup_Saved" xml:space="preserve"><value>बैकअप यहाँ सेव हुआ:
+{0}</value></data>
+  <data name="Break_FollowRule" xml:space="preserve"><value>20-20-20 नियम अपनाएं: 20 सेकंड के लिए स्क्रीन से नज़र हटाएं।</value></data>
+  <data name="Break_NoSnoozesLeft" xml:space="preserve"><value>कोई स्नूज़ बाकी नहीं</value></data>
+  <data name="Break_SnoozeLeft" xml:space="preserve"><value>5 मिनट स्नूज़ करें ({0} बाकी)</value></data>
+  <data name="Common_AppUsage" xml:space="preserve"><value>ऐप का इस्तेमाल</value></data>
+  <data name="Common_Focus" xml:space="preserve"><value>फ़ोकस</value></data>
+  <data name="Common_Hearing" xml:space="preserve"><value>सुनने की सेहत</value></data>
+  <data name="Common_Hearing2" xml:space="preserve"><value>सुनने की सेहत</value></data>
+  <data name="Common_Insights" xml:space="preserve"><value>इनसाइट</value></data>
+  <data name="Common_Min15" xml:space="preserve"><value>15 मिनट</value></data>
+  <data name="Common_Min25" xml:space="preserve"><value>25 मिनट</value></data>
+  <data name="Common_Min30" xml:space="preserve"><value>30 मिनट</value></data>
+  <data name="Common_Min45" xml:space="preserve"><value>45 मिनट</value></data>
+  <data name="Common_Min60" xml:space="preserve"><value>60 मिनट</value></data>
+  <data name="Common_Min90" xml:space="preserve"><value>90 मिनट</value></data>
+  <data name="Common_Minutes" xml:space="preserve"><value>मिनट</value></data>
+  <data name="Common_PrivateDevice" xml:space="preserve"><value>निजी · डिवाइस पर</value></data>
+  <data name="Common_ScreenTime" xml:space="preserve"><value>स्क्रीन टाइम</value></data>
+  <data name="Common_Settings" xml:space="preserve"><value>सेटिंग</value></data>
+  <data name="Common_To" xml:space="preserve"><value>से</value></data>
+  <data name="Common_Today" xml:space="preserve"><value>आज</value></data>
+  <data name="Common_Week" xml:space="preserve"><value>हफ़्ता</value></data>
+  <data name="Dashboard_Categories" xml:space="preserve"><value>कैटेगरी</value></data>
+  <data name="Dashboard_DailyGoal" xml:space="preserve"><value>रोज़ का लक्ष्य</value></data>
+  <data name="Dashboard_EnterFocus" xml:space="preserve"><value>फ़ोकस शुरू करें</value></data>
+  <data name="Dashboard_GoalProgress" xml:space="preserve"><value>{0} के लक्ष्य में से · {1}%</value></data>
+  <data name="Dashboard_LoudListening" xml:space="preserve"><value>तेज़ आवाज़ में सुनना</value></data>
+  <data name="Dashboard_MostUsedToday" xml:space="preserve"><value>आज सबसे ज़्यादा इस्तेमाल</value></data>
+  <data name="Dashboard_NoGoalSet" xml:space="preserve"><value>कोई लक्ष्य सेट नहीं</value></data>
+  <data name="Dashboard_SameAsLastWeek" xml:space="preserve"><value>पिछले हफ़्ते जितना</value></data>
+  <data name="Dashboard_SetGoal" xml:space="preserve"><value>लक्ष्य सेट करें: </value></data>
+  <data name="Dashboard_SilenceDistractionsProtectBlockDeep" xml:space="preserve"><value>ध्यान भटकाने वाली चीज़ों को चुप करें और गहरे काम के लिए समय बचाएं।</value></data>
+  <data name="Dashboard_SoundLoud" xml:space="preserve"><value>तेज़</value></data>
+  <data name="Dashboard_SoundNormal" xml:space="preserve"><value>सामान्य</value></data>
+  <data name="Dashboard_SplitAcrossTopApps" xml:space="preserve"><value>आपके टॉप ऐप में बँटा हुआ</value></data>
+  <data name="Dashboard_StartSession" xml:space="preserve"><value>सेशन शुरू करें</value></data>
+  <data name="Dashboard_ThresholdAbove" xml:space="preserve"><value>{0} dB से ऊपर</value></data>
+  <data name="Dashboard_TodayScreenTime" xml:space="preserve"><value>आज · स्क्रीन टाइम</value></data>
+  <data name="Dashboard_VsYesterday" xml:space="preserve"><value>कल की तुलना में {0}{1}</value></data>
+  <data name="Dashboard_Week" xml:space="preserve"><value>यह हफ़्ता</value></data>
+  <data name="Dashboard_WeeklyChange" xml:space="preserve"><value>पिछले हफ़्ते की तुलना में {0} {1}%</value></data>
+  <data name="Date_WeekLabel" xml:space="preserve"><value>हफ़्ता {0} · {1}</value></data>
+  <data name="Export_ChooseFolder" xml:space="preserve"><value>चुनें कि एक्सपोर्ट किया गया डेटा कहाँ सेव करना है</value></data>
+  <data name="Export_CompleteTitle" xml:space="preserve"><value>एक्सपोर्ट पूरा हुआ</value></data>
+  <data name="Export_ErrorTitle" xml:space="preserve"><value>एक्सपोर्ट त्रुटि</value></data>
+  <data name="Export_Failed" xml:space="preserve"><value>एक्सपोर्ट नहीं हो सका: {0}</value></data>
+  <data name="Export_Success" xml:space="preserve"><value>{0} डेटा फ़ाइलें यहाँ एक्सपोर्ट हो गईं:
+{1}</value></data>
+  <data name="FocusPage_DistractionsCount" xml:space="preserve"><value>{0} बार ध्यान भटका</value></data>
+  <data name="FocusPage_NoDistractions" xml:space="preserve"><value>ध्यान नहीं भटका</value></data>
+  <data name="Focus_AppCategories" xml:space="preserve"><value>ऐप कैटेगरी</value></data>
+  <data name="Focus_AutomaticallyMinimizeDistractingApps" xml:space="preserve"><value>ध्यान भटकाने वाले ऐप अपने-आप छोटे करें</value></data>
+  <data name="Focus_BeginSession" xml:space="preserve"><value>सेशन शुरू करें</value></data>
+  <data name="Focus_Block" xml:space="preserve"><value>ब्लॉक</value></data>
+  <data name="Focus_Blocked" xml:space="preserve"><value>ब्लॉक किए गए</value></data>
+  <data name="Focus_CategorizeAppsControlWhatS" xml:space="preserve"><value>फ़ोकस सेशन के दौरान क्या ब्लॉक हो, यह तय करने के लिए अपने ऐप की कैटेगरी चुनें।</value></data>
+  <data name="Focus_ComingSoon" xml:space="preserve"><value>जल्द आ रहा है</value></data>
+  <data name="Focus_Completed" xml:space="preserve"><value>पूरे हुए</value></data>
+  <data name="Focus_Custom" xml:space="preserve"><value>कस्टम…</value></data>
+  <data name="Focus_Distractions" xml:space="preserve"><value>ध्यान भटकना</value></data>
+  <data name="Focus_Duration" xml:space="preserve"><value>अवधि</value></data>
+  <data name="Focus_EndSessionEarly" xml:space="preserve"><value>सेशन जल्दी खत्म करें</value></data>
+  <data name="Focus_Enforcement" xml:space="preserve"><value>सख़्ती</value></data>
+  <data name="Focus_Entertainment" xml:space="preserve"><value>मनोरंजन</value></data>
+  <data name="Focus_EntertainmentAppsAreBlockedDuring" xml:space="preserve"><value>फ़ोकस के दौरान मनोरंजन ऐप ब्लॉक रहते हैं। काम और सामान्य ऐप हमेशा चल सकते हैं।</value></data>
+  <data name="Focus_FocusSessionActive" xml:space="preserve"><value>फ़ोकस सेशन चालू है</value></data>
+  <data name="Focus_Hide" xml:space="preserve"><value>छिपाएं</value></data>
+  <data name="Focus_HowShouldDistractionsHandled" xml:space="preserve"><value>ध्यान भटकाने वाले ऐप के साथ क्या करें?</value></data>
+  <data name="Focus_Neutral" xml:space="preserve"><value>सामान्य</value></data>
+  <data name="Focus_NoFocusSessionsYetStart" xml:space="preserve"><value>अभी तक कोई फ़ोकस सेशन नहीं। अपना पहला सेशन शुरू करें।</value></data>
+  <data name="Focus_PickLengthHowStrictlyDistractions" xml:space="preserve"><value>अवधि चुनें और तय करें कि ध्यान भटकाने वाले ऐप के साथ कितनी सख़्ती हो। Pulse सामने चल रहे ऐप पर नज़र रखता है और आपको ट्रैक पर रखता है।</value></data>
+  <data name="Focus_RecentSessions" xml:space="preserve"><value>हाल के सेशन</value></data>
+  <data name="Focus_Remaining" xml:space="preserve"><value>बाकी</value></data>
+  <data name="Focus_RemoveFromTaskbarStartMenu" xml:space="preserve"><value>टास्कबार और Start मेन्यू से हटाएं</value></data>
+  <data name="Focus_ShowGentlePopupWhenOpen" xml:space="preserve"><value>ध्यान भटकाने वाला ऐप खोलने पर एक हल्का पॉपअप दिखाएं</value></data>
+  <data name="Focus_StartFocusSession" xml:space="preserve"><value>फ़ोकस सेशन शुरू करें</value></data>
+  <data name="Focus_Suggested" xml:space="preserve"><value>सुझाया गया</value></data>
+  <data name="Focus_TodaySFocus" xml:space="preserve"><value>आज का फ़ोकस</value></data>
+  <data name="Focus_Warn" xml:space="preserve"><value>चेतावनी</value></data>
+  <data name="Focus_Work" xml:space="preserve"><value>काम</value></data>
+  <data name="Goal_HoursMinutes" xml:space="preserve"><value>{0}घं {1}मि</value></data>
+  <data name="Goal_Minutes" xml:space="preserve"><value>{0}मि</value></data>
+  <data name="Goal_ProgressOf" xml:space="preserve"><value>{1} के लक्ष्य का {0}%</value></data>
+  <data name="Goal_ProgressOver" xml:space="preserve"><value>{0}% - लक्ष्य से {1} ज़्यादा</value></data>
+  <data name="Goal_ReachedBody" xml:space="preserve"><value>आपने अपना PC {0} इस्तेमाल किया है, जो आपके {1} के लक्ष्य से ज़्यादा है। थोड़ा ब्रेक लेने के बारे में सोचें।</value></data>
+  <data name="Goal_ReachedTitle" xml:space="preserve"><value>स्क्रीन टाइम का लक्ष्य पूरा हुआ</value></data>
+  <data name="Hearing_EstimatedFromSystemVolumeDevice" xml:space="preserve"><value>यह सिस्टम वॉल्यूम और डिवाइस के प्रकार से लगाया गया अनुमान है, कैलिब्रेट किया गया साउंड-प्रेशर-लेवल माप नहीं - Windows में हर हार्डवेयर के लिए इसका कोई API नहीं है।</value></data>
+  <data name="Hearing_Harmful" xml:space="preserve"><value>नुकसानदेह</value></data>
+  <data name="Hearing_HarmfulThreshold" xml:space="preserve"><value>नुकसानदेह सीमा</value></data>
+  <data name="Hearing_HarmfulTooltip" xml:space="preserve"><value>नुकसानदेह: {0}</value></data>
+  <data name="Hearing_HideTracking" xml:space="preserve"><value>ट्रैकिंग छिपाएं</value></data>
+  <data name="Hearing_KeepEstimatedLevelsUnder85" xml:space="preserve"><value>अनुमानित स्तर 85 dB से नीचे रखें</value></data>
+  <data name="Hearing_LoudListeningTime" xml:space="preserve"><value>तेज़ आवाज़ में सुनने का समय</value></data>
+  <data name="Hearing_NoSessionsToday" xml:space="preserve"><value>आज कोई सेशन नहीं</value></data>
+  <data name="Hearing_Of" xml:space="preserve"><value>/ </value></data>
+  <data name="Hearing_Safe" xml:space="preserve"><value>सुरक्षित</value></data>
+  <data name="Hearing_SafeLevels" xml:space="preserve"><value>सुरक्षित स्तर</value></data>
+  <data name="Hearing_SegmentTooltip" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Hearing_SessionDetails" xml:space="preserve"><value>सेशन की जानकारी</value></data>
+  <data name="Hearing_SessionTodayOne" xml:space="preserve"><value>आज {0} सेशन</value></data>
+  <data name="Hearing_SessionsToday" xml:space="preserve"><value>आज {0} सेशन</value></data>
+  <data name="Hearing_ShowDetailedTracking" xml:space="preserve"><value>पूरी ट्रैकिंग दिखाएं</value></data>
+  <data name="Hearing_ShowTracking" xml:space="preserve"><value>ट्रैकिंग दिखाएं</value></data>
+  <data name="Hearing_ShowingRecentSessions" xml:space="preserve"><value>{1} में से सबसे हाल के {0} सेशन दिखाए जा रहे हैं</value></data>
+  <data name="Hearing_ThresholdAbove" xml:space="preserve"><value>{0} dB से ऊपर</value></data>
+  <data name="Hearing_TotalListeningTime" xml:space="preserve"><value> कुल सुनने का समय</value></data>
+  <data name="Hearing_WhoGuidance" xml:space="preserve"><value>WHO की सलाह</value></data>
+  <data name="Help_AppLimits" xml:space="preserve"><value>ऐप की सीमाएं</value></data>
+  <data name="Help_BreakReminders" xml:space="preserve"><value>ब्रेक रिमाइंडर</value></data>
+  <data name="Help_EstimatesListeningLevelFromSystem" xml:space="preserve"><value>सिस्टम ऑडियो मीटर से सुनने के स्तर का अनुमान लगाता है — यह असली ऑडियो को कभी रिकॉर्ड नहीं करता, न ही सुनता है। WHO 85 dB से नीचे रहने की सलाह देता है; डिफ़ॉल्ट नुकसानदेह सीमा 75 dB है। 75 dB से ऊपर के बार लाल रंग में दिखते हैं।</value></data>
+  <data name="Help_EverythingStaysDeviceNoAccount" xml:space="preserve"><value>सब कुछ इसी डिवाइस पर रहता है — न अकाउंट, न क्लाउड, न टेलीमेट्री। वेबसाइट ट्रैकिंग डिफ़ॉल्ट रूप से बंद है — अगर आप इसे चालू करते हैं, तो सिर्फ़ होस्टनेम (जैसे youtube.com) सेव होता है, कभी पूरा URL या पेज का कंटेंट नहीं। सेटिंग से कभी भी अपना डेटा CSV के रूप में एक्सपोर्ट करें या सब मिटा दें।</value></data>
+  <data name="Help_FocusSessionsWatchEntertainmentApps" xml:space="preserve"><value>फ़ोकस सेशन मनोरंजन ऐप पर नज़र रखते हैं। चेतावनी एक सूचना दिखाती है; ब्लॉक उन्हें छोटा कर देता है। सेटिंग में चालू करने पर Pulse, Windows के फ़ोकस सेशन के साथ भी चल सकता है। वाइंड डाउन काम समेटने के समय पर एक हल्का, शेड्यूल किया हुआ बॉर्डर दिखाता है।</value></data>
+  <data name="Help_FocusWindDown" xml:space="preserve"><value>फ़ोकस और वाइंड डाउन</value></data>
+  <data name="Help_Follows202020Rule" xml:space="preserve"><value>20-20-20 नियम पर चलता है: हर 20 मिनट में, 20 फ़ीट दूर 20 सेकंड तक देखें। 3 बार तक स्नूज़ करें; 5 मिनट दूर रहने के बाद टाइमर रीसेट हो जाता है। रिमाइंडर Pulse के ऊपर दिखते हैं, या Pulse सूचना क्षेत्र में होने पर सूचना के रूप में।</value></data>
+  <data name="Help_LaunchWindowsStartupRunsQuietly" xml:space="preserve"><value>Windows शुरू होने पर Pulse चुपचाप सूचना क्षेत्र में चलता है। 'अभी बैकअप लें' आपके डेटाबेस और सेटिंग की एक लोकल ZIP फ़ाइल बनाता है। रीस्टोर मौजूदा लोकल डेटा को बदल देता है, इसलिए पहले नया बैकअप लें और पुष्टि ध्यान से पढ़ें।</value></data>
+  <data name="Help_Privacy" xml:space="preserve"><value>प्राइवेसी</value></data>
+  <data name="Help_RecordsWhichAppHasFocus" xml:space="preserve"><value>जब आप PC इस्तेमाल कर रहे होते हैं, तब यह रिकॉर्ड करता है कि कौन-सा ऐप सामने है और कितनी देर। 5 मिनट तक कोई इनपुट न होने पर यह रुक जाता है, जब तक वह ऐप फ़ुलस्क्रीन न हो या ऑडियो न चला रहा हो। डेस्कटॉप या टास्कबार पर क्लिक करना File Explorer में नहीं गिना जाता। ऐप के नाम सेव होते हैं, लेकिन प्राइवेसी के लिए विंडो के टाइटल कभी डेटाबेस में सेव नहीं होते। फ़ोकस के लिए ऐप को काम, मनोरंजन या सामान्य कैटेगरी में रखें।</value></data>
+  <data name="Help_ReportBug" xml:space="preserve"><value>बग की रिपोर्ट करें</value></data>
+  <data name="Help_SetDailyAllowanceUnavailableHours" xml:space="preserve"><value>किसी ऐप के लिए रोज़ का समय, बंद रहने के घंटे, या दोनों सेट करें। सीमा पूरी होने पर 'याद दिलाएं' एक सूचना भेजता है; 'ब्लॉक' ऐप को छोटा भी कर देता है। सीमाएं पेज से कभी भी सीमा रोकें या बदलें।</value></data>
+  <data name="Help_ShowsOneWeekTimeMonday" xml:space="preserve"><value>एक बार में एक हफ़्ता (सोमवार से रविवार) दिखाता है; पिछले हफ़्ते देखने के लिए तीरों का इस्तेमाल करें। इसमें स्क्रीन टाइम के ट्रेंड, टॉप ऐप, पूरे हुए फ़ोकस सेशन और आवाज़ के स्तर शामिल हैं। हफ़्ते-दर-हफ़्ते तुलना बताती है कि आपकी आदतें सुधर रही हैं या नहीं; फ़ोकस बनाम आराम बताता है कि आपका समय कितना काम का रहा।</value></data>
+  <data name="Help_StartupDataSafety" xml:space="preserve"><value>स्टार्टअप और डेटा सुरक्षा</value></data>
+  <data name="Help_SummaryDayHeroStatTotal" xml:space="preserve"><value>आपके दिन का सारांश। मुख्य आंकड़ा कुल सक्रिय स्क्रीन टाइम है — यानी PC को सक्रिय रूप से इस्तेमाल करने में लगा समय। दूर रहने का समय नहीं गिना जाता। रंगीन कार्ड हर सेक्शन की झलक दिखाते हैं और सीधे वहाँ ले जाते हैं।</value></data>
+  <data name="Help_TracksHowLongActivelyUse" xml:space="preserve"><value>ट्रैक करता है कि आप अपना PC कितनी देर सक्रिय रूप से इस्तेमाल करते हैं। 5 मिनट तक माउस या कीबोर्ड इनपुट न होने पर यह रुक जाता है, जब तक ऑडियो न चल रहा हो या कोई ऐप फ़ुलस्क्रीन न हो (जैसे कोई वीडियो)। PC लॉक करने या स्लीप में जाने पर भी यह रुक जाता है। टाइमलाइन आपका दिन दिखाती है; हफ़्ते का व्यू रोज़ का कुल समय दिखाता है।</value></data>
+  <data name="Help_ViewGithub" xml:space="preserve"><value>GitHub पर देखें</value></data>
+  <data name="Insights_CompletedWeek" xml:space="preserve"><value>इस हफ़्ते पूरे हुए</value></data>
+  <data name="Insights_DailyAverage" xml:space="preserve"><value>रोज़ का औसत</value></data>
+  <data name="Insights_FocusSessions" xml:space="preserve"><value>फ़ोकस सेशन</value></data>
+  <data name="Insights_FocusVsLeisure" xml:space="preserve"><value>फ़ोकस बनाम आराम</value></data>
+  <data name="Insights_Leisure" xml:space="preserve"><value>आराम</value></data>
+  <data name="Insights_Other" xml:space="preserve"><value>अन्य</value></data>
+  <data name="Insights_TopAppsWeek" xml:space="preserve"><value>इस हफ़्ते के टॉप ऐप</value></data>
+  <data name="Insights_TotalScreenTime" xml:space="preserve"><value>कुल स्क्रीन टाइम</value></data>
+  <data name="Insights_UnknownApp" xml:space="preserve"><value>अज्ञात</value></data>
+  <data name="Insights_VsLastWeek" xml:space="preserve"><value> पिछले हफ़्ते की तुलना में</value></data>
+  <data name="Limits_1Hour" xml:space="preserve"><value>1 घंटा</value></data>
+  <data name="Limits_2Hours" xml:space="preserve"><value>2 घंटे</value></data>
+  <data name="Limits_3Hours" xml:space="preserve"><value>3 घंटे</value></data>
+  <data name="Limits_AddHelp" xml:space="preserve"><value>रोज़ का समय चुनें और तय करें कि समय पूरा होने पर Pulse क्या करे।</value></data>
+  <data name="Limits_AddLimit" xml:space="preserve"><value>सीमा जोड़ें</value></data>
+  <data name="Limits_AddLimit2" xml:space="preserve"><value>सीमा जोड़ें</value></data>
+  <data name="Limits_AllowanceOrHoursRequired" xml:space="preserve"><value>रोज़ का समय चुनें, बंद रहने के घंटे चालू करें, या दोनों का इस्तेमाल करें।</value></data>
+  <data name="Limits_AlreadyLimited" xml:space="preserve"><value>पहले से सीमित</value></data>
+  <data name="Limits_AlsoKeepAppUnavailableDuring" xml:space="preserve"><value>कुछ घंटों के दौरान इस ऐप को बंद भी रखें</value></data>
+  <data name="Limits_AppLimits" xml:space="preserve"><value>आपकी ऐप सीमाएं</value></data>
+  <data name="Limits_CanChangePauseAnyTime" xml:space="preserve"><value>आप इसे कभी भी बदल या रोक सकते हैं।</value></data>
+  <data name="Limits_Cancel" xml:space="preserve"><value>रद्द करें</value></data>
+  <data name="Limits_ChooseAppGiveDailyAllowance" xml:space="preserve"><value>एक ऐप चुनें, उसके लिए रोज़ का समय तय करें, और चुनें कि समय पूरा होने पर Pulse आपको याद दिलाए या ऐप को छोटा कर दे।</value></data>
+  <data name="Limits_CreateAppLimit" xml:space="preserve"><value>ऐप की सीमा बनाएं</value></data>
+  <data name="Limits_Custom" xml:space="preserve"><value>कस्टम</value></data>
+  <data name="Limits_Edit" xml:space="preserve"><value>बदलें</value></data>
+  <data name="Limits_EditHelp" xml:space="preserve"><value>रोज़ का समय, शेड्यूल, या समय पूरा होने पर क्या हो, यह बदलें।</value></data>
+  <data name="Limits_EditLimit" xml:space="preserve"><value>सीमा बदलें</value></data>
+  <data name="Limits_EditTitle" xml:space="preserve"><value>{0} बदलें</value></data>
+  <data name="Limits_HowMuchTimeShouldApp" xml:space="preserve"><value>इस ऐप को रोज़ कितना समय मिलना चाहिए?</value></data>
+  <data name="Limits_InvalidMinutes" xml:space="preserve"><value>मिनट की सही संख्या डालें।</value></data>
+  <data name="Limits_LimitTitle" xml:space="preserve"><value>{0} को सीमित करें</value></data>
+  <data name="Limits_MinimizeApp" xml:space="preserve"><value>ऐप को छोटा करें</value></data>
+  <data name="Limits_MinutesPerDay" xml:space="preserve"><value>मिनट प्रतिदिन</value></data>
+  <data name="Limits_NoAppLimitsYet" xml:space="preserve"><value>अभी तक कोई ऐप सीमा नहीं</value></data>
+  <data name="Limits_OptionalUsefulBedtimeSchoolWork" xml:space="preserve"><value>वैकल्पिक — सोने, स्कूल या काम के समय के लिए उपयोगी।</value></data>
+  <data name="Limits_PulseCountsTimeWhileApp" xml:space="preserve"><value>Pulse तब तक समय गिनता है जब तक ऐप सामने खुला हो।</value></data>
+  <data name="Limits_RemindMe" xml:space="preserve"><value>मुझे याद दिलाएं</value></data>
+  <data name="Limits_RemoveLimit" xml:space="preserve"><value>सीमा हटाएं</value></data>
+  <data name="Limits_SaveChanges" xml:space="preserve"><value>बदलाव सेव करें</value></data>
+  <data name="Limits_SelectApp" xml:space="preserve"><value>एक ऐप चुनें</value></data>
+  <data name="Limits_SetHealthyBoundariesDistractingApps" xml:space="preserve"><value>ध्यान भटकाने वाले ऐप के लिए सही सीमाएं तय करें</value></data>
+  <data name="Limits_ShowNotificationLeaveAppOpen" xml:space="preserve"><value>सूचना दिखाएं और ऐप खुला रहने दें</value></data>
+  <data name="Limits_ShowNotificationMoveItsWindow" xml:space="preserve"><value>सूचना दिखाएं और उसकी विंडो हटा दें</value></data>
+  <data name="Limits_SummaryHoursPerDay" xml:space="preserve"><value>{0} घं/दिन</value></data>
+  <data name="Limits_SummaryMinimizeApp" xml:space="preserve"><value>ऐप छोटा करें</value></data>
+  <data name="Limits_SummaryMinutesPerDay" xml:space="preserve"><value>{0} मि/दिन</value></data>
+  <data name="Limits_SummaryPaused" xml:space="preserve"><value>रुका हुआ · {0}</value></data>
+  <data name="Limits_SummaryReminder" xml:space="preserve"><value>रिमाइंडर</value></data>
+  <data name="Limits_SummaryUnavailable" xml:space="preserve"><value>बंद {0}–{1}</value></data>
+  <data name="Limits_TurnLimitOff" xml:space="preserve"><value>यह सीमा चालू या बंद करें</value></data>
+  <data name="Limits_UnavailableFrom" xml:space="preserve"><value>बंद रहेगा</value></data>
+  <data name="Limits_UseAppLittleWhileWill" xml:space="preserve"><value>किसी ऐप को थोड़ी देर इस्तेमाल करें, वह यहाँ दिखेगा।</value></data>
+  <data name="Limits_UseThreeSimpleStepsBelow" xml:space="preserve"><value>अपनी पहली सीमा बनाने के लिए नीचे दिए तीन आसान चरण अपनाएं।</value></data>
+  <data name="Limits_WhatShouldPulseDoWhen" xml:space="preserve"><value>सीमा पूरी होने पर Pulse क्या करे?</value></data>
+  <data name="Limits_WhichAppDoWantLimit" xml:space="preserve"><value>आप किस ऐप को सीमित करना चाहते हैं?</value></data>
+  <data name="Notify_AppLimitMinimized" xml:space="preserve"><value>{0} की सीमा पूरी हो गई और उसे छोटा कर दिया गया।</value></data>
+  <data name="Notify_AppLimitTitle" xml:space="preserve"><value>ऐप की सीमा पूरी हुई</value></data>
+  <data name="Notify_AppLimitWarn" xml:space="preserve"><value>{0} की आज की सीमा पूरी हो गई है।</value></data>
+  <data name="Notify_DistractingAppBody" xml:space="preserve"><value>{0} को मनोरंजन के रूप में चिह्नित किया गया है।
+फ़ोकस में {1} बाकी। जवाब देने के लिए क्लिक करें।</value></data>
+  <data name="Notify_DistractingAppTitle" xml:space="preserve"><value>⚠️ ध्यान भटकाने वाला ऐप मिला</value></data>
+  <data name="Notify_HearingAlertBody" xml:space="preserve"><value>आप कुछ समय से अपनी सीमा से ज़्यादा तेज़ आवाज़ में सुन रहे हैं। वॉल्यूम कम करने के बारे में सोचें।</value></data>
+  <data name="Notify_HearingAlertTitle" xml:space="preserve"><value>सुनने से जुड़ी चेतावनी</value></data>
+  <data name="Screen_ActiveScreenTime" xml:space="preserve"><value>सक्रिय स्क्रीन टाइम</value></data>
+  <data name="Screen_BreaksTaken" xml:space="preserve"><value>लिए गए ब्रेक</value></data>
+  <data name="Screen_DailyAverage" xml:space="preserve"><value>रोज़ का औसत</value></data>
+  <data name="Screen_DailyGoal" xml:space="preserve"><value>रोज़ का लक्ष्य</value></data>
+  <data name="Screen_LessThanYesterday" xml:space="preserve"><value>↓ कल से {0} कम</value></data>
+  <data name="Screen_LongestStretch" xml:space="preserve"><value>सबसे लंबा दौर</value></data>
+  <data name="Screen_MoreThanYesterday" xml:space="preserve"><value>↑ कल से {0} ज़्यादा</value></data>
+  <data name="Screen_NoDataYesterday" xml:space="preserve"><value>कल का कोई डेटा नहीं</value></data>
+  <data name="Screen_SameAsYesterday" xml:space="preserve"><value>कल जितना</value></data>
+  <data name="Screen_Sessions" xml:space="preserve"><value>सेशन</value></data>
+  <data name="Screen_TotalScreenTime" xml:space="preserve"><value>कुल स्क्रीन टाइम</value></data>
+  <data name="Settings_12Months" xml:space="preserve"><value>12 महीने</value></data>
+  <data name="Settings_24Months" xml:space="preserve"><value>24 महीने</value></data>
+  <data name="Settings_3Months" xml:space="preserve"><value>3 महीने</value></data>
+  <data name="Settings_6Months" xml:space="preserve"><value>6 महीने</value></data>
+  <data name="Settings_About" xml:space="preserve"><value>जानकारी</value></data>
+  <data name="Settings_AgoHours" xml:space="preserve"><value>{0}घं</value></data>
+  <data name="Settings_AgoMinutes" xml:space="preserve"><value>{0}मि</value></data>
+  <data name="Settings_AgoSeconds" xml:space="preserve"><value>{0}से</value></data>
+  <data name="Settings_AllDataDeleted" xml:space="preserve"><value>ट्रैक किया गया सारा डेटा मिटा दिया गया है।</value></data>
+  <data name="Settings_AllDataStoredLocallyDevice" xml:space="preserve"><value>आपका सारा डेटा इसी डिवाइस पर सेव रहता है। क्लाउड पर कुछ नहीं भेजा जाता।</value></data>
+  <data name="Settings_Amber" xml:space="preserve"><value>एम्बर</value></data>
+  <data name="Settings_Appearance" xml:space="preserve"><value>रूप-रंग</value></data>
+  <data name="Settings_Auto" xml:space="preserve"><value>ऑटो</value></data>
+  <data name="Settings_AutoDetect" xml:space="preserve"><value>अपने-आप पहचानें</value></data>
+  <data name="Settings_AutomaticallyDeleteUsageOlderThan" xml:space="preserve"><value>इससे पुराना इस्तेमाल डेटा अपने-आप मिटाएं</value></data>
+  <data name="Settings_BackUpData" xml:space="preserve"><value>अपने डेटा का बैकअप लें</value></data>
+  <data name="Settings_BackUpNow" xml:space="preserve"><value>अभी बैकअप लें</value></data>
+  <data name="Settings_BreakReminders" xml:space="preserve"><value>ब्रेक रिमाइंडर</value></data>
+  <data name="Settings_CheckUpdates" xml:space="preserve"><value>अपडेट देखें</value></data>
+  <data name="Settings_CheckingUpdates" xml:space="preserve"><value>अपडेट देखे जा रहे हैं...</value></data>
+  <data name="Settings_ClosingWindowKeepsPulseTracking" xml:space="preserve"><value>विंडो बंद करने पर भी Pulse बैकग्राउंड में ट्रैक करता रहता है। ट्रे आइकन से बाहर निकलें।</value></data>
+  <data name="Settings_Dark" xml:space="preserve"><value>डार्क</value></data>
+  <data name="Settings_DataDeletedTitle" xml:space="preserve"><value>डेटा मिटा दिया गया</value></data>
+  <data name="Settings_DataPrivacy" xml:space="preserve"><value>डेटा और प्राइवेसी</value></data>
+  <data name="Settings_DatabaseSize" xml:space="preserve"><value>डेटाबेस का साइज़</value></data>
+  <data name="Settings_Delete" xml:space="preserve"><value>मिटाएं</value></data>
+  <data name="Settings_DeleteAllConfirm" xml:space="preserve"><value>क्या आप वाकई ट्रैक किया गया सारा डेटा मिटाना चाहते हैं?
+
+इससे हमेशा के लिए हट जाएगा:
+- स्क्रीन टाइम का इतिहास
+- ऐप के इस्तेमाल का इतिहास
+- आवाज़ के संपर्क का इतिहास
+- फ़ोकस सेशन का इतिहास
+
+इसे वापस नहीं किया जा सकता।</value></data>
+  <data name="Settings_DeleteAllData" xml:space="preserve"><value>सारा डेटा मिटाएं</value></data>
+  <data name="Settings_DeleteAllDataTitle" xml:space="preserve"><value>सारा डेटा मिटाएं</value></data>
+  <data name="Settings_DeleteDateRange" xml:space="preserve"><value>तारीख की रेंज मिटाएं</value></data>
+  <data name="Settings_DeleteFailed" xml:space="preserve"><value>डेटा नहीं मिटाया जा सका: {0}</value></data>
+  <data name="Settings_DeleteRangeConfirm" xml:space="preserve"><value>{0:yyyy-MM-dd} से {1:yyyy-MM-dd} तक का ट्रैक किया गया सारा डेटा हमेशा के लिए मिटाएं?
+
+इसे वापस नहीं किया जा सकता।</value></data>
+  <data name="Settings_DeviceType" xml:space="preserve"><value>डिवाइस का प्रकार</value></data>
+  <data name="Settings_DiagnosticLogsKeptLast7" xml:space="preserve"><value>पिछले 7 दिनों के डायग्नोस्टिक लॉग रखे जाते हैं</value></data>
+  <data name="Settings_Diagnostics" xml:space="preserve"><value>डायग्नोस्टिक</value></data>
+  <data name="Settings_Dim" xml:space="preserve"><value>धीमा</value></data>
+  <data name="Settings_DisplayReminderWhenWindDown" xml:space="preserve"><value>वाइंड डाउन शुरू होने पर रिमाइंडर दिखाएं</value></data>
+  <data name="Settings_DownloadingUpdate" xml:space="preserve"><value>अपडेट डाउनलोड हो रहा है...</value></data>
+  <data name="Settings_Earphones" xml:space="preserve"><value>ईयरफ़ोन</value></data>
+  <data name="Settings_EnableBreakReminders" xml:space="preserve"><value>ब्रेक रिमाइंडर चालू करें</value></data>
+  <data name="Settings_EnableDailyGoal" xml:space="preserve"><value>रोज़ का लक्ष्य चालू करें</value></data>
+  <data name="Settings_EnableWindDownMode" xml:space="preserve"><value>वाइंड डाउन मोड चालू करें</value></data>
+  <data name="Settings_EndDate" xml:space="preserve"><value>आखिरी तारीख</value></data>
+  <data name="Settings_ErrorTitle" xml:space="preserve"><value>त्रुटि</value></data>
+  <data name="Settings_Every15Minutes" xml:space="preserve"><value>हर 15 मिनट</value></data>
+  <data name="Settings_Every20MinutesRecommended" xml:space="preserve"><value>हर 20 मिनट (सुझाया गया)</value></data>
+  <data name="Settings_Every30Minutes" xml:space="preserve"><value>हर 30 मिनट</value></data>
+  <data name="Settings_Every45Minutes" xml:space="preserve"><value>हर 45 मिनट</value></data>
+  <data name="Settings_Every60Minutes" xml:space="preserve"><value>हर 60 मिनट</value></data>
+  <data name="Settings_Export" xml:space="preserve"><value>एक्सपोर्ट</value></data>
+  <data name="Settings_ExportMyData" xml:space="preserve"><value>मेरा डेटा एक्सपोर्ट करें</value></data>
+  <data name="Settings_Forever" xml:space="preserve"><value>हमेशा</value></data>
+  <data name="Settings_From" xml:space="preserve"><value>अवधि</value></data>
+  <data name="Settings_GentleReminderWhenSTime" xml:space="preserve"><value>आराम करने का समय होने पर एक हल्का रिमाइंडर</value></data>
+  <data name="Settings_Github" xml:space="preserve"><value>GitHub</value></data>
+  <data name="Settings_GoalHours" xml:space="preserve"><value>लक्ष्य: रोज़ {0} घंटे</value></data>
+  <data name="Settings_GoalHoursMinutes" xml:space="preserve"><value>लक्ष्य: रोज़ {0} घंटे {1} मिनट</value></data>
+  <data name="Settings_GoalMinutes" xml:space="preserve"><value>लक्ष्य: रोज़ {0} मिनट</value></data>
+  <data name="Settings_GoalMustBePositive" xml:space="preserve"><value>लक्ष्य 0 से ज़्यादा होना चाहिए</value></data>
+  <data name="Settings_Headphones" xml:space="preserve"><value>हेडफ़ोन</value></data>
+  <data name="Settings_Headsets" xml:space="preserve"><value>हेडसेट</value></data>
+  <data name="Settings_HealthDown" xml:space="preserve"><value>बंद</value></data>
+  <data name="Settings_HealthHealthy" xml:space="preserve"><value>ठीक</value></data>
+  <data name="Settings_HealthLastSeen" xml:space="preserve"><value>{0} · आखिरी बार {1} पहले</value></data>
+  <data name="Settings_HealthNotStarted" xml:space="preserve"><value>शुरू नहीं हुआ</value></data>
+  <data name="Settings_HealthStale" xml:space="preserve"><value>रुका हुआ</value></data>
+  <data name="Settings_HearingLevelsShownPulseAre" xml:space="preserve"><value>Pulse में दिखाए गए सुनने के स्तर सिस्टम वॉल्यूम पर आधारित अनुमान हैं, कैलिब्रेट किया गया ध्वनि माप नहीं - Windows में हर हार्डवेयर के लिए इसका कोई API नहीं है।</value></data>
+  <data name="Settings_Hours" xml:space="preserve"><value>घंटे</value></data>
+  <data name="Settings_KeepHistory" xml:space="preserve"><value>इतिहास रखें</value></data>
+  <data name="Settings_KeepRunningTrayWhenClosed" xml:space="preserve"><value>बंद करने पर ट्रे में चलता रहे</value></data>
+  <data name="Settings_Language" xml:space="preserve"><value>भाषा</value></data>
+  <data name="Settings_LanguageRestart" xml:space="preserve"><value>नई भाषा इस्तेमाल करने के लिए Pulse को रीस्टार्ट करें।</value></data>
+  <data name="Settings_LanguageSystem" xml:space="preserve"><value>Windows डिफ़ॉल्ट</value></data>
+  <data name="Settings_LaunchWindowsStartup" xml:space="preserve"><value>Windows शुरू होने पर खोलें</value></data>
+  <data name="Settings_LicensedUnderGnuGeneralPublic" xml:space="preserve"><value>GNU General Public License v3.0 के तहत लाइसेंस प्राप्त</value></data>
+  <data name="Settings_Light" xml:space="preserve"><value>लाइट</value></data>
+  <data name="Settings_Loading" xml:space="preserve"><value>लोड हो रहा है…</value></data>
+  <data name="Settings_LogFile" xml:space="preserve"><value>लॉग फ़ाइल</value></data>
+  <data name="Settings_NoAccountNoCloudNo" xml:space="preserve"><value>न अकाउंट, न क्लाउड, न टेलीमेट्री। सब कुछ इसी PC पर रहता है।</value></data>
+  <data name="Settings_NoGoalSet" xml:space="preserve"><value>कोई लक्ष्य सेट नहीं</value></data>
+  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>सूचनाएं टाइटल बार में दिखती हैं। आप उन्हें स्नूज़ या खारिज कर सकते हैं।</value></data>
+  <data name="Settings_OffDefaultWhenPulseReads" xml:space="preserve"><value>डिफ़ॉल्ट रूप से बंद। चालू होने पर, Pulse Chrome/Edge/Firefox जैसे ब्राउज़र का एड्रेस बार पढ़कर यह लॉग करता है कि आप किस साइट पर हैं (जैसे youtube.com) — कभी पूरा URL, सर्च शब्द या पेज का कंटेंट नहीं।</value></data>
+  <data name="Settings_Open" xml:space="preserve"><value>खोलें</value></data>
+  <data name="Settings_OpenFolderFailed" xml:space="preserve"><value>फ़ोल्डर नहीं खुल सका: {0}</value></data>
+  <data name="Settings_OpenLogFolderFailed" xml:space="preserve"><value>लॉग फ़ोल्डर नहीं खुल सका: {0}</value></data>
+  <data name="Settings_PermanentlyRemoveAllTrackedData" xml:space="preserve"><value>ट्रैक किया गया सारा डेटा हमेशा के लिए हटाएं</value></data>
+  <data name="Settings_PickStartEndDate" xml:space="preserve"><value>शुरुआत और आखिरी, दोनों तारीखें चुनें।</value></data>
+  <data name="Settings_PlayNotificationSound" xml:space="preserve"><value>सूचना की आवाज़ चलाएं</value></data>
+  <data name="Settings_Private" xml:space="preserve"><value>निजी</value></data>
+  <data name="Settings_PulseGuessesFromAudioDevice" xml:space="preserve"><value>Pulse इसका अंदाज़ा आपके ऑडियो डिवाइस के नाम से लगाता है - अगर अंदाज़ा गलत हो (जैसे वह आपके हेडफ़ोन मॉडल को न पहचाने), तो इसे बदल दें।</value></data>
+  <data name="Settings_Purple" xml:space="preserve"><value>बैंगनी</value></data>
+  <data name="Settings_RangeDeleted" xml:space="preserve"><value>चुनी गई तारीख की रेंज मिटा दी गई है।</value></data>
+  <data name="Settings_ReminderInterval" xml:space="preserve"><value>रिमाइंडर का अंतराल</value></data>
+  <data name="Settings_RemoveTrackedDataBetweenTwo" xml:space="preserve"><value>दो तारीखों के बीच का ट्रैक किया गया डेटा हटाएं</value></data>
+  <data name="Settings_ReplacesCurrentDataCannotUndone" xml:space="preserve"><value>आपका मौजूदा डेटा बदल देता है - इसे वापस नहीं किया जा सकता, और इसके बाद Pulse बंद हो जाता है</value></data>
+  <data name="Settings_RestEyes202020" xml:space="preserve"><value>20-20-20 नियम से अपनी आँखों को आराम दें</value></data>
+  <data name="Settings_Restore" xml:space="preserve"><value>रीस्टोर करें...</value></data>
+  <data name="Settings_RestoreFromBackup" xml:space="preserve"><value>बैकअप से रीस्टोर करें</value></data>
+  <data name="Settings_SaveAllTrackedDataAs" xml:space="preserve"><value>ट्रैक किया गया सारा डेटा CSV फ़ाइलों में सेव करें</value></data>
+  <data name="Settings_SaveZipSnapshotDatabaseSettings" xml:space="preserve"><value>अपने डेटाबेस और सेटिंग का .zip स्नैपशॉट सेव करें</value></data>
+  <data name="Settings_Schedule" xml:space="preserve"><value>शेड्यूल</value></data>
+  <data name="Settings_ScreenTimeGoal" xml:space="preserve"><value>स्क्रीन टाइम का लक्ष्य</value></data>
+  <data name="Settings_SetTargetDailyScreenTime" xml:space="preserve"><value>रोज़ के स्क्रीन टाइम का लक्ष्य सेट करें</value></data>
+  <data name="Settings_ShowNotification" xml:space="preserve"><value>सूचना दिखाएं</value></data>
+  <data name="Settings_ShowVisualBorder" xml:space="preserve"><value>रंगीन बॉर्डर दिखाएं</value></data>
+  <data name="Settings_SizeBytes" xml:space="preserve"><value>{0} B</value></data>
+  <data name="Settings_SizeKB" xml:space="preserve"><value>{0:F1} KB</value></data>
+  <data name="Settings_SizeMB" xml:space="preserve"><value>{0:F1} MB</value></data>
+  <data name="Settings_Speakers" xml:space="preserve"><value>स्पीकर</value></data>
+  <data name="Settings_StartDate" xml:space="preserve"><value>शुरुआत की तारीख</value></data>
+  <data name="Settings_StartFocusSessionsFromWindows" xml:space="preserve"><value>Windows फ़ोकस से फ़ोकस सेशन शुरू करें</value></data>
+  <data name="Settings_StartPulseQuietlyNotificationArea" xml:space="preserve"><value>लॉग इन करने पर Pulse को चुपचाप सूचना क्षेत्र में शुरू करें</value></data>
+  <data name="Settings_Startup" xml:space="preserve"><value>स्टार्टअप</value></data>
+  <data name="Settings_StorageLocation" xml:space="preserve"><value>स्टोरेज की जगह</value></data>
+  <data name="Settings_SubtleGlowAroundWindowEdges" xml:space="preserve"><value>विंडो के किनारों पर हल्की चमक</value></data>
+  <data name="Settings_Theme" xml:space="preserve"><value>थीम</value></data>
+  <data name="Settings_TrackScreenTimeAppUsage" xml:space="preserve"><value>सेहतमंद डिजिटल जीवन के लिए अपना स्क्रीन टाइम, ऐप का इस्तेमाल और आवाज़ का संपर्क ट्रैक करें।</value></data>
+  <data name="Settings_TrackWebsitesHostname" xml:space="preserve"><value>होस्टनेम से वेबसाइटें ट्रैक करें</value></data>
+  <data name="Settings_TrackerShowingStaleDownRight" xml:space="preserve"><value>स्क्रीन लॉक होने या PC के स्लीप में जाने के ठीक बाद किसी ट्रैकर का 'रुका हुआ' या 'बंद' दिखना सामान्य है - ट्रैकर तब रुक जाते हैं और अपने-आप फिर शुरू हो जाते हैं।</value></data>
+  <data name="Settings_UnableToDetermine" xml:space="preserve"><value>पता नहीं लगाया जा सका</value></data>
+  <data name="Settings_Unknown" xml:space="preserve"><value>अज्ञात</value></data>
+  <data name="Settings_UpToDate" xml:space="preserve"><value>आपका ऐप अप टू डेट है!</value></data>
+  <data name="Settings_UpdateAvailablePrompt" xml:space="preserve"><value>एक नया वर्शन ({0}) उपलब्ध है।
+
+क्या आप अभी अपडेट करना चाहते हैं?</value></data>
+  <data name="Settings_UpdateAvailableStatus" xml:space="preserve"><value>अपडेट उपलब्ध: v{0}</value></data>
+  <data name="Settings_UpdateAvailableTitle" xml:space="preserve"><value>अपडेट उपलब्ध</value></data>
+  <data name="Settings_UpdateCheckFailed" xml:space="preserve"><value>अपडेट की जाँच नहीं हो सकी: {0}</value></data>
+  <data name="Settings_UpdateServiceUnreachable" xml:space="preserve"><value>अपडेट सेवा से कनेक्ट नहीं हो सका। अपना कनेक्शन जाँचें और फिर से कोशिश करें।</value></data>
+  <data name="Settings_UpdatesUnavailable" xml:space="preserve"><value>इस बिल्ड के लिए अपडेट उपलब्ध नहीं हैं।</value></data>
+  <data name="Settings_UpdatesViaStore" xml:space="preserve"><value>अपडेट Microsoft Store से होते हैं। Store पेज खोला जा रहा है...</value></data>
+  <data name="Settings_Version231" xml:space="preserve"><value>वर्शन 2.3.1</value></data>
+  <data name="Settings_VersionFormat" xml:space="preserve"><value>वर्शन {0}</value></data>
+  <data name="Settings_ViewPrivacyInformation" xml:space="preserve"><value>प्राइवेसी की जानकारी देखें</value></data>
+  <data name="Settings_VisualStyle" xml:space="preserve"><value>विज़ुअल स्टाइल</value></data>
+  <data name="Settings_Website" xml:space="preserve"><value>वेबसाइट</value></data>
+  <data name="Settings_WhenTurnFocusWindowsSettings" xml:space="preserve"><value>जब आप Windows सेटिंग में फ़ोकस चालू करें, तो Pulse का फ़ोकस सेशन भी अपने-आप शुरू करें।</value></data>
+  <data name="Settings_WindDown" xml:space="preserve"><value>वाइंड डाउन</value></data>
+  <data name="Settings_WindDownActiveRange" xml:space="preserve"><value>{0} से {1} तक चालू</value></data>
+  <data name="Settings_WindDownDisabled" xml:space="preserve"><value>वाइंड डाउन बंद है</value></data>
+  <data name="Shell_AppMarkedAsEntertainmentStay" xml:space="preserve"><value>यह ऐप मनोरंजन के रूप में चिह्नित है। अपने काम पर ध्यान बनाए रखें!</value></data>
+  <data name="Shell_AppUsageSubtitle" xml:space="preserve"><value>आपका ध्यान असल में कहाँ गया।</value></data>
+  <data name="Shell_AppUsageTitle" xml:space="preserve"><value>ऐप का इस्तेमाल</value></data>
+  <data name="Shell_BackWork" xml:space="preserve"><value>काम पर लौटें</value></data>
+  <data name="Shell_Close" xml:space="preserve"><value>बंद करें</value></data>
+  <data name="Shell_ContinueAnyway" xml:space="preserve"><value>फिर भी जारी रखें</value></data>
+  <data name="Shell_DayGlance" xml:space="preserve"><value>आपका दिन एक नज़र में</value></data>
+  <data name="Shell_Dismiss" xml:space="preserve"><value>खारिज करें</value></data>
+  <data name="Shell_EndFocusSession" xml:space="preserve"><value>फ़ोकस सेशन खत्म करें?</value></data>
+  <data name="Shell_EndSession" xml:space="preserve"><value>सेशन खत्म करें</value></data>
+  <data name="Shell_EndSessionMessage" xml:space="preserve"><value>आपके पास अभी {0} बाकी है। क्या आप वाकई जल्दी खत्म करना चाहते हैं?</value></data>
+  <data name="Shell_ErrorCaption" xml:space="preserve"><value>त्रुटि</value></data>
+  <data name="Shell_Exit" xml:space="preserve"><value>बाहर निकलें</value></data>
+  <data name="Shell_FocusModeActive" xml:space="preserve"><value>फ़ोकस मोड चालू है</value></data>
+  <data name="Shell_FocusSubtitle" xml:space="preserve"><value>बिना रुकावट गहरे काम के लिए समय निकालें।</value></data>
+  <data name="Shell_FocusTimeRemaining" xml:space="preserve"><value>फ़ोकस सेशन में {0} बाकी</value></data>
+  <data name="Shell_Follow202020Rule" xml:space="preserve"><value>20-20-20 नियम अपनाएं: 20 फ़ीट दूर किसी चीज़ को 20 सेकंड तक देखें।</value></data>
+  <data name="Shell_GoodAfternoon" xml:space="preserve"><value>नमस्ते</value></data>
+  <data name="Shell_GoodEvening" xml:space="preserve"><value>शुभ संध्या</value></data>
+  <data name="Shell_GoodMorning" xml:space="preserve"><value>सुप्रभात</value></data>
+  <data name="Shell_HearingSubtitle" xml:space="preserve"><value>तेज़ आवाज़ से आपके कानों की सुरक्षा।</value></data>
+  <data name="Shell_Help" xml:space="preserve"><value>मदद</value></data>
+  <data name="Shell_HelpSubtitle" xml:space="preserve"><value>Pulse कैसे ट्रैक करता है — और आपकी प्राइवेसी कैसे बचाता है।</value></data>
+  <data name="Shell_InsightsSubtitle" xml:space="preserve"><value>पूरे हफ़्ते की आपकी लय।</value></data>
+  <data name="Shell_KeepGoing" xml:space="preserve"><value>जारी रखें</value></data>
+  <data name="Shell_Limits" xml:space="preserve"><value>सीमाएं</value></data>
+  <data name="Shell_LimitsSubtitle" xml:space="preserve"><value>तय करें कि कोई ऐप कितनी देर या कब चल सकता है।</value></data>
+  <data name="Shell_Maximize" xml:space="preserve"><value>बड़ा करें</value></data>
+  <data name="Shell_Minimize" xml:space="preserve"><value>छोटा करें</value></data>
+  <data name="Shell_OpenSettings" xml:space="preserve"><value>सेटिंग खोलें</value></data>
+  <data name="Shell_PrivateDevice" xml:space="preserve"><value>निजी, डिवाइस पर</value></data>
+  <data name="Shell_ScreenTimeSubtitle" xml:space="preserve"><value>आपकी स्क्रीन कब और कितनी देर चालू रही।</value></data>
+  <data name="Shell_ScreenTimeTitle" xml:space="preserve"><value>स्क्रीन टाइम</value></data>
+  <data name="Shell_SettingsSubtitle" xml:space="preserve"><value>Pulse को अपनी आदतों के हिसाब से सेट करें।</value></data>
+  <data name="Shell_Snooze5Min" xml:space="preserve"><value>5 मिनट स्नूज़ करें</value></data>
+  <data name="Shell_SwitchTheme" xml:space="preserve"><value>थीम बदलें</value></data>
+  <data name="Shell_SwitchToDarkTheme" xml:space="preserve"><value>डार्क थीम पर जाएं</value></data>
+  <data name="Shell_SwitchToLightTheme" xml:space="preserve"><value>लाइट थीम पर जाएं</value></data>
+  <data name="Shell_TimeBreak" xml:space="preserve"><value>ब्रेक का समय!</value></data>
+  <data name="Shell_TodaySubtitle" xml:space="preserve"><value>{0:dddd, d MMMM} · आपका दिन एक नज़र में।</value></data>
+  <data name="Shell_Tracking" xml:space="preserve"><value>ट्रैकिंग</value></data>
+  <data name="Shell_TrayIconNotFound" xml:space="preserve"><value>ट्रे आइकन नहीं मिला:
+{0}</value></data>
+  <data name="Shell_TurnOffReminders" xml:space="preserve"><value>रिमाइंडर बंद करें</value></data>
+  <data name="Time_HoursCompact" xml:space="preserve"><value>{0}घं</value></data>
+  <data name="Time_HoursMinutes" xml:space="preserve"><value>{0} घं {1} मि</value></data>
+  <data name="Time_HoursMinutesCompact" xml:space="preserve"><value>{0}घं {1}मि</value></data>
+  <data name="Time_HoursMinutesLong" xml:space="preserve"><value>{0} घंटे {1} मिनट</value></data>
+  <data name="Time_Minutes" xml:space="preserve"><value>{0} मि</value></data>
+  <data name="Time_MinutesCompact" xml:space="preserve"><value>{0}मि</value></data>
+  <data name="Time_MinutesLong" xml:space="preserve"><value>{0} मिनट</value></data>
+  <data name="Time_MinutesSecondsCompact" xml:space="preserve"><value>{0}मि {1}से</value></data>
+  <data name="Time_SecondsCompact" xml:space="preserve"><value>{0}से</value></data>
+  <data name="Tray_CheckForUpdates" xml:space="preserve"><value>अपडेट देखें</value></data>
+  <data name="Tray_EndFocusSession" xml:space="preserve"><value>फ़ोकस सेशन खत्म करें</value></data>
+  <data name="Tray_OpenDashboard" xml:space="preserve"><value>डैशबोर्ड खोलें</value></data>
+  <data name="Tray_Reports" xml:space="preserve"><value>रिपोर्ट</value></data>
+  <data name="Tray_StartFocusSession" xml:space="preserve"><value>फ़ोकस सेशन शुरू करें</value></data>
+  <data name="Tray_StillRunningBody" xml:space="preserve"><value>ट्रैकिंग बैकग्राउंड में जारी है। बाहर निकलने के लिए ट्रे आइकन पर राइट-क्लिक करें, या इसे सेटिंग → स्टार्टअप में बंद करें।</value></data>
+  <data name="Tray_StillRunningTitle" xml:space="preserve"><value>Pulse अभी भी चल रहा है</value></data>
+  <data name="Update_AvailablePrompt" xml:space="preserve"><value>एक नया वर्शन ({0}) उपलब्ध है।
+
+क्या आप अभी अपडेट करना चाहते हैं?</value></data>
+  <data name="Update_AvailableTitle" xml:space="preserve"><value>अपडेट उपलब्ध</value></data>
+  <data name="Update_DevBuild" xml:space="preserve"><value>अपडेट की जाँच इंस्टॉल किए गए Pulse ऐप में होती है, इस डेवलपमेंट बिल्ड में नहीं।</value></data>
+  <data name="Update_InitFailed" xml:space="preserve"><value>Pulse इस इंस्टॉलेशन के लिए अपडेटर शुरू नहीं कर सका।</value></data>
+  <data name="Update_PortableBuild" xml:space="preserve"><value>अपडेट की जाँच इंस्टॉल किए गए Pulse ऐप में होती है, इस पोर्टेबल बिल्ड में नहीं।</value></data>
+  <data name="Update_StoreManaged" xml:space="preserve"><value>अपडेट Microsoft Store अपने-आप करता है।</value></data>
+  <data name="WeekNav_4WeeksBack" xml:space="preserve"><value>4 हफ़्ते पहले</value></data>
+  <data name="WeekNav_ChooseAnotherWeek" xml:space="preserve"><value>दूसरा हफ़्ता चुनें</value></data>
+  <data name="WeekNav_JumpWeek" xml:space="preserve"><value>किसी हफ़्ते पर जाएं</value></data>
+  <data name="WeekNav_NextWeek" xml:space="preserve"><value>अगला हफ़्ता</value></data>
+  <data name="WeekNav_Oldest" xml:space="preserve"><value>सबसे पुराना</value></data>
+  <data name="WeekNav_PreviousWeek" xml:space="preserve"><value>पिछला हफ़्ता</value></data>
+  <data name="WeekNav_Week" xml:space="preserve"><value>यह हफ़्ता</value></data>
+  <data name="Welcome_AllDataStoredLocallyComputer" xml:space="preserve"><value>सारा डेटा आपके कंप्यूटर पर यहाँ सेव रहता है:</value></data>
+  <data name="Welcome_AppNamesUsageDurationNot" xml:space="preserve"><value>ऐप के नाम और इस्तेमाल की अवधि (विंडो का कंटेंट नहीं)</value></data>
+  <data name="Welcome_AudioOutputMeterVolumeLevel" xml:space="preserve"><value>ऑडियो आउटपुट मीटर (सिर्फ़ वॉल्यूम स्तर, ऑडियो का कंटेंट नहीं)</value></data>
+  <data name="Welcome_AudioOutputVolumeLevelsHearing" xml:space="preserve"><value>सुनने की सुरक्षा के लिए ऑडियो आउटपुट वॉल्यूम स्तर</value></data>
+  <data name="Welcome_CanExportDeleteAllData" xml:space="preserve"><value>आप सेटिंग से कभी भी अपना सारा डेटा एक्सपोर्ट कर सकते हैं या मिटा सकते हैं।</value></data>
+  <data name="Welcome_DataStaysLocal" xml:space="preserve"><value>आपका डेटा आपके पास रहता है</value></data>
+  <data name="Welcome_GetStarted" xml:space="preserve"><value>शुरू करें</value></data>
+  <data name="Welcome_IdleDetectionMouseKeyboardInactivity" xml:space="preserve"><value>निष्क्रियता की पहचान (माउस/कीबोर्ड का इस्तेमाल न होना)</value></data>
+  <data name="Welcome_InternetTrafficBrowsingHistoryUrls" xml:space="preserve"><value>इंटरनेट ट्रैफ़िक, ब्राउज़िंग इतिहास या URL</value></data>
+  <data name="Welcome_KeystrokesPasswordsTypedContent" xml:space="preserve"><value>कीस्ट्रोक, पासवर्ड या टाइप किया गया कंटेंट</value></data>
+  <data name="Welcome_LocalappdataPulse" xml:space="preserve"><value>%LocalAppData%\Pulse\</value></data>
+  <data name="Welcome_MicrophoneAudioRecordings" xml:space="preserve"><value>माइक्रोफ़ोन ऑडियो या रिकॉर्डिंग</value></data>
+  <data name="Welcome_NothingEverSentCloudNo" xml:space="preserve"><value>क्लाउड पर कभी कुछ नहीं भेजा जाता, कोई अकाउंट ज़रूरी नहीं, इंटरनेट की ज़रूरत नहीं।</value></data>
+  <data name="Welcome_PermissionsUsed" xml:space="preserve"><value>इस्तेमाल की गई अनुमतियां</value></data>
+  <data name="Welcome_PersonalDigitalWellnessCompanionWindows" xml:space="preserve"><value>Windows के लिए आपका निजी डिजिटल वेलबीइंग साथी</value></data>
+  <data name="Welcome_ScreenContentsScreenshotsWindowText" xml:space="preserve"><value>स्क्रीन का कंटेंट, स्क्रीनशॉट या विंडो का टेक्स्ट</value></data>
+  <data name="Welcome_ScreenTimeActiveVsIdle" xml:space="preserve"><value>स्क्रीन टाइम (सक्रिय बनाम निष्क्रिय समय)</value></data>
+  <data name="Welcome_WelcomePulse" xml:space="preserve"><value>Pulse में आपका स्वागत है</value></data>
+  <data name="Welcome_WhatWeNeverTrack" xml:space="preserve"><value>हम क्या कभी ट्रैक नहीं करते</value></data>
+  <data name="Welcome_WhatWeTrack" xml:space="preserve"><value>हम क्या ट्रैक करते हैं</value></data>
+  <data name="Welcome_WindowFocusDetectionTrackActive" xml:space="preserve"><value>विंडो फ़ोकस की पहचान (सक्रिय ऐप ट्रैक करने के लिए)</value></data>
+  <data name="WindDown_NotifyBody" xml:space="preserve"><value>शांत समय शुरू हो गया है। काम समेटने और आराम की तैयारी करने के बारे में सोचें।{0}</value></data>
+  <data name="WindDown_NotifyTitle" xml:space="preserve"><value>🌙 वाइंड डाउन का समय</value></data>
+  <data name="WindDown_SummaryToday" xml:space="preserve"><value>आज आपने अपना PC {0}घं {1}मि इस्तेमाल किया।</value></data>
+  <data name="Dashboard_PerDayAverage" xml:space="preserve"><value> · औसत {0}/दिन</value></data>
+</root>

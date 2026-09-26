@@ -1,6 +1,7 @@
 <UserControl
     x:Class="digital_wellbeing_app.Views.Sound.SoundTimelineView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:l="clr-namespace:digital_wellbeing_app.Helpers"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:vm="clr-namespace:digital_wellbeing_app.ViewModels"
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -34,16 +35,16 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0">
-                            <TextBlock Text="LOUD LISTENING TIME" Style="{StaticResource Pulse.Eyebrow}"/>
+                            <TextBlock Text="{l:Loc Hearing_LoudListeningTime}" Style="{StaticResource Pulse.Eyebrow}"/>
                             <TextBlock Text="{Binding TotalHarmfulText}" Style="{StaticResource Pulse.Stat}" Margin="0,6,0,0"/>
                             <TextBlock Style="{StaticResource Pulse.Body2}" Margin="0,2,0,0">
-                                <Run Text="of "/><Run Text="{Binding TotalListeningText, Mode=OneWay}"/><Run Text=" total listening time"/>
+                                <Run Text="{l:Loc Hearing_Of}"/><Run Text="{Binding TotalListeningText, Mode=OneWay}"/><Run Text="{l:Loc Hearing_TotalListeningTime}"/>
                             </TextBlock>
                         </StackPanel>
                         <Border Grid.Column="1" Style="{StaticResource Pulse.Pill.Good}" VerticalAlignment="Top">
                             <StackPanel Orientation="Horizontal">
                                 <md:PackIcon Kind="ShieldCheckOutline" Width="15" Height="15" Foreground="{StaticResource Good}" VerticalAlignment="Center"/>
-                                <TextBlock Text="Safe levels" Margin="7,0,0,0" FontSize="12.5" FontWeight="SemiBold"
+                                <TextBlock Text="{l:Loc Hearing_SafeLevels}" Margin="7,0,0,0" FontSize="12.5" FontWeight="SemiBold"
                                            Foreground="{StaticResource Good}" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Border>
@@ -96,7 +97,7 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0">
-                            <TextBlock Text="HARMFUL THRESHOLD" Style="{StaticResource Pulse.Eyebrow}"/>
+                            <TextBlock Text="{l:Loc Hearing_HarmfulThreshold}" Style="{StaticResource Pulse.Eyebrow}"/>
                             <TextBlock Text="{Binding ThresholdLabel}" Style="{StaticResource Pulse.CardTitle}" FontSize="15" Margin="0,6,0,0"/>
                         </StackPanel>
                         <md:PackIcon Grid.Column="1" Kind="InformationOutline" Width="20" Height="20"
@@ -110,9 +111,9 @@
                                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <StackPanel VerticalAlignment="Center"
-                                    ToolTip="Estimated from system volume and device type, not a calibrated sound-pressure-level measurement - Windows has no API for that on arbitrary hardware.">
-                            <TextBlock Text="WHO guidance" Style="{StaticResource Pulse.CardTitle}" FontSize="15"/>
-                            <TextBlock Text="Keep estimated levels under 85 dB" Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
+                                    ToolTip="{l:Loc Hearing_EstimatedFromSystemVolumeDevice}">
+                            <TextBlock Text="{l:Loc Hearing_WhoGuidance}" Style="{StaticResource Pulse.CardTitle}" FontSize="15"/>
+                            <TextBlock Text="{l:Loc Hearing_KeepEstimatedLevelsUnder85}" Style="{StaticResource Pulse.Muted}" Margin="0,2,0,0"/>
                         </StackPanel>
                     </StackPanel>
                 </Border>
@@ -126,8 +127,8 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="SESSION DETAILS" Style="{StaticResource Pulse.Eyebrow}" VerticalAlignment="Center"/>
-                        <Button x:Name="ToggleDetailsButton" Grid.Column="1" Content="Show tracking"
+                        <TextBlock Text="{l:Loc Hearing_SessionDetails}" Style="{StaticResource Pulse.Eyebrow}" VerticalAlignment="Center"/>
+                        <Button x:Name="ToggleDetailsButton" Grid.Column="1" Content="{l:Loc Hearing_ShowTracking}"
                                 Click="ToggleDetailsButton_Click" Style="{StaticResource Pulse.Button.Ghost}"
                                 Foreground="{DynamicResource Accent}" Padding="12,6"/>
                     </Grid>
@@ -198,11 +199,11 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,18,0,0">
                 <StackPanel Orientation="Horizontal" Margin="0,0,20,0">
                     <Border Width="12" Height="12" Background="{DynamicResource Accent}" CornerRadius="3" VerticalAlignment="Center"/>
-                    <TextBlock Text="Safe" Style="{StaticResource Pulse.Body2}" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="{l:Loc Hearing_Safe}" Style="{StaticResource Pulse.Body2}" Margin="8,0,0,0" VerticalAlignment="Center"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Border Width="12" Height="12" Background="{StaticResource Danger}" CornerRadius="3" VerticalAlignment="Center"/>
-                    <TextBlock Text="Harmful" Style="{StaticResource Pulse.Body2}" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="{l:Loc Hearing_Harmful}" Style="{StaticResource Pulse.Body2}" Margin="8,0,0,0" VerticalAlignment="Center"/>
                 </StackPanel>
             </StackPanel>
         </StackPanel>

@@ -27,6 +27,19 @@ namespace digital_wellbeing_app
         /// <summary>
         /// Configures LiveCharts2 global theme settings
         /// </summary>
+        /// <summary>
+        /// Skia draws chart labels with one typeface and no fallback, so pick one that covers the
+        /// UI language's script (e.g. Microsoft YaHei for Chinese) instead of always Segoe UI.
+        /// </summary>
+        private static SKTypeface ChartTypeface()
+        {
+            var culture = System.Globalization.CultureInfo.CurrentUICulture;
+            var sample = System.Linq.Enumerable.FirstOrDefault(culture.NativeName, c => c > '\u024F');
+            return (sample == default ? null
+                       : SKFontManager.Default.MatchCharacter("Segoe UI", SKFontStyle.Normal, new[] { culture.Name }, sample))
+                   ?? SKFontManager.Default.MatchFamily("Segoe UI");
+        }
+
         public static void ConfigureLiveChartsTheme(bool isDark)
         {
             // Define colors based on theme - matches our design tokens
@@ -44,7 +57,7 @@ namespace digital_wellbeing_app
                 .AddSkiaSharp()
                 .AddDefaultMappers()
                 .AddDarkTheme()  // Start with dark as base, we customize below
-                .HasTextSettings(new TextSettings { DefaultTypeface = SKFontManager.Default.MatchFamily("Segoe UI") })
+                .HasTextSettings(new TextSettings { DefaultTypeface = ChartTypeface() })
             );
         }
 
@@ -90,6 +103,9 @@ namespace digital_wellbeing_app
             // Initialize logging
             Services.LogService.Initialize();
             Services.LogService.Info("App starting up");
+
+            // UI language: must be set before any window or page is created.
+            Helpers.Loc.Apply(new Services.SettingsService().LoadLanguage());
 
             // Single instance check
             _mutex = new Mutex(true, MutexName, out bool isNewInstance);
@@ -234,10 +250,8 @@ namespace digital_wellbeing_app
                     && Current?.MainWindow?.IsVisible == true)
                 {
                     System.Windows.MessageBox.Show(
-                        $"An unexpected error occurred:\n\n{e.Exception.Message}\n\n" +
-                        "The error has been logged. The application will try to continue.\n" +
-                        "If the problem persists, please restart the application.",
-                        "Pulse - Error",
+                        Helpers.Loc.Format("App_UnexpectedError", e.Exception.Message),
+                        Helpers.Loc.Get("App_ErrorTitle"),
                         System.Windows.MessageBoxButton.OK,
                         System.Windows.MessageBoxImage.Error);
                 }

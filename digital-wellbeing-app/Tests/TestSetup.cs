@@ -33,6 +33,10 @@ namespace digital_wellbeing_app.Tests
             LogService.FolderOverride = root;
             LogService.ResetForTesting();
             LogService.Initialize();
+
+            // Assertions check English UI text; don't let a translated Windows display language leak in.
+            System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = System.Globalization.CultureInfo.InvariantCulture;
+            System.Globalization.CultureInfo.CurrentUICulture = System.Globalization.CultureInfo.InvariantCulture;
         }
     }
 }

@@ -113,7 +113,7 @@ namespace digital_wellbeing_app.ViewModels
         {
             // Load threshold from settings
             var threshold = _settingsService.LoadHarmfulThreshold();
-            ThresholdLabel = $"Above {(int)threshold} dB";
+            ThresholdLabel = Loc.Format("Hearing_ThresholdAbove", (int)threshold);
 
             Bars.Clear();
             Sessions.Clear();
@@ -191,15 +191,17 @@ namespace digital_wellbeing_app.ViewModels
             // Update summary text
             if (TotalSessionCount == 0)
             {
-                SessionSummaryText = "No sessions today";
+                SessionSummaryText = Loc.Get("Hearing_NoSessionsToday");
             }
             else if (TotalSessionCount <= MaxRecentSessions)
             {
-                SessionSummaryText = $"{TotalSessionCount} session{(TotalSessionCount == 1 ? "" : "s")} today";
+                SessionSummaryText = TotalSessionCount == 1
+                    ? Loc.Format("Hearing_SessionTodayOne", TotalSessionCount)
+                    : Loc.Format("Hearing_SessionsToday", TotalSessionCount);
             }
             else
             {
-                SessionSummaryText = $"Showing {MaxRecentSessions} most recent of {TotalSessionCount} sessions";
+                SessionSummaryText = Loc.Format("Hearing_ShowingRecentSessions", MaxRecentSessions, TotalSessionCount);
             }
         }
 

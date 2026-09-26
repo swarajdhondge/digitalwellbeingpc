@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Windows.Data;
+using digital_wellbeing_app.Helpers;
 
 namespace digital_wellbeing_app.Converters
 {
@@ -21,18 +22,16 @@ namespace digital_wellbeing_app.Converters
             if (cellWidth < 25)
                 return string.Empty;
 
-            bool isAM = hour < 12;
-            int displayHour = hour % 12 == 0 ? 12 : hour % 12;
-
             if (cellWidth < 40)
-                return $"{displayHour}{(isAM ? "A" : "P")}";
+                return TimeFormatHelper.ClockTime(hour, 0, "ht", "%H");
 
             if (cellWidth < 60)
-                return $"{displayHour} {(isAM ? "AM" : "PM")}";
+                return TimeFormatHelper.ClockTime(hour, 0, "h tt", "H:mm");
 
-            if (hour == 23)
-                return "11:59 PM";
-            return $"{displayHour}:00 {(isAM ? "AM" : "PM")}";
+            // The last label marks the end of the day rather than 11 PM.
+            return hour == 23
+                ? TimeFormatHelper.ClockTime(23, 59, "h:mm tt", "H:mm")
+                : TimeFormatHelper.ClockTime(hour, 0, "h:mm tt", "H:mm");
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

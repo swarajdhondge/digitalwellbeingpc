@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using digital_wellbeing_app.Helpers;
 using Velopack;
 using Velopack.Locators;
 using Velopack.Sources;
@@ -17,13 +18,13 @@ namespace digital_wellbeing_app.Services
         {
             if (PackagedAppInfo.IsPackaged)
             {
-                UnavailableReason = "Updates are managed automatically by Microsoft Store.";
+                UnavailableReason = Loc.Get("Update_StoreManaged");
                 return;
             }
 
             if (!VelopackLocator.IsCurrentSet)
             {
-                UnavailableReason = "Update checks are available in the installed Pulse app, not this development build.";
+                UnavailableReason = Loc.Get("Update_DevBuild");
                 return;
             }
 
@@ -33,12 +34,12 @@ namespace digital_wellbeing_app.Services
                 if (!_updateManager.IsInstalled)
                 {
                     _updateManager = null;
-                    UnavailableReason = "Update checks are available in the installed Pulse app, not this portable build.";
+                    UnavailableReason = Loc.Get("Update_PortableBuild");
                 }
             }
             catch (System.Exception ex)
             {
-                UnavailableReason = "Pulse could not initialize the updater for this installation.";
+                UnavailableReason = Loc.Get("Update_InitFailed");
                 LastError = ex.Message;
                 LogService.Warning($"Updater initialization failed: {ex.Message}");
             }
@@ -101,8 +102,8 @@ namespace digital_wellbeing_app.Services
                 return false;
 
             var result = System.Windows.MessageBox.Show(
-                $"A new version ({update.TargetFullRelease.Version}) is available.\n\nWould you like to update now?",
-                "Update Available",
+                Loc.Format("Update_AvailablePrompt", update.TargetFullRelease.Version),
+                Loc.Get("Update_AvailableTitle"),
                 System.Windows.MessageBoxButton.YesNo,
                 System.Windows.MessageBoxImage.Information);
 

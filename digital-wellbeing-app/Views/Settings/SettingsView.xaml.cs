@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using digital_wellbeing_app.Helpers;
 using System.Windows.Controls;
 using System.Windows.Input;
 using digital_wellbeing_app.Models;
@@ -34,7 +35,7 @@ namespace digital_wellbeing_app.Views.Settings
                 if (!string.IsNullOrEmpty(location))
                 {
                     var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(location);
-                    AboutVersionText.Text = $"Version {fvi.ProductVersion ?? "2.3.1"}";
+                    AboutVersionText.Text = Loc.Format("Settings_VersionFormat", fvi.ProductVersion ?? "2.3.1");
                 }
             }
             catch { /* Keep default text from XAML */ }
@@ -78,6 +79,8 @@ namespace digital_wellbeing_app.Views.Settings
             // Load Hearing settings (device-type override)
             LoadHearingSettings();
 
+            LoadLanguageSettings();
+
             // Note: Hearing Protection threshold is disabled (Coming Soon)
             // Default is 75 dB, set in SettingsService.LoadHarmfulThreshold()
 
@@ -104,7 +107,7 @@ namespace digital_wellbeing_app.Views.Settings
             }
             catch
             {
-                StoragePathText.Text = "Unable to determine";
+                StoragePathText.Text = Loc.Get("Settings_UnableToDetermine");
             }
 
             RefreshDbSize();
@@ -162,7 +165,7 @@ namespace digital_wellbeing_app.Views.Settings
             var to = RangeToPicker.SelectedDate;
             if (from == null || to == null)
             {
-                System.Windows.MessageBox.Show("Pick both a start and end date.", "Delete a date range",
+                System.Windows.MessageBox.Show(Loc.Get("Settings_PickStartEndDate"), Loc.Get("Settings_DeleteDateRange"),
                     MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
@@ -172,20 +175,20 @@ namespace digital_wellbeing_app.Views.Settings
             }
 
             var result = System.Windows.MessageBox.Show(
-                $"Permanently delete all tracked data from {from:yyyy-MM-dd} to {to:yyyy-MM-dd}?\n\nThis cannot be undone.",
-                "Delete a date range", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                Loc.Format("Settings_DeleteRangeConfirm", from, to),
+                Loc.Get("Settings_DeleteDateRange"), MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (result != MessageBoxResult.Yes) return;
 
             try
             {
                 DatabaseService.DeleteDataInRange(from.Value, to.Value);
                 RefreshDbSize();
-                System.Windows.MessageBox.Show("The selected date range has been deleted.", "Data Deleted",
+                System.Windows.MessageBox.Show(Loc.Get("Settings_RangeDeleted"), Loc.Get("Settings_DataDeletedTitle"),
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (System.Exception ex)
             {
-                System.Windows.MessageBox.Show($"Failed to delete data: {ex.Message}", "Error",
+                System.Windows.MessageBox.Show(Loc.Format("Settings_DeleteFailed", ex.Message), Loc.Get("Settings_ErrorTitle"),
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -199,16 +202,16 @@ namespace digital_wellbeing_app.Views.Settings
             }
             catch
             {
-                DbSizeText.Text = "Unknown";
+                DbSizeText.Text = Loc.Get("Settings_Unknown");
             }
         }
 
         private static string FormatFileSize(long bytes)
         {
-            if (bytes <= 0) return "0 B";
-            if (bytes < 1024) return $"{bytes} B";
-            if (bytes < 1024 * 1024) return $"{bytes / 1024.0:F1} KB";
-            return $"{bytes / (1024.0 * 1024.0):F1} MB";
+            if (bytes <= 0) return Loc.Format("Settings_SizeBytes", 0);
+            if (bytes < 1024) return Loc.Format("Settings_SizeBytes", bytes);
+            if (bytes < 1024 * 1024) return Loc.Format("Settings_SizeKB", bytes / 1024.0);
+            return Loc.Format("Settings_SizeMB", bytes / (1024.0 * 1024.0));
         }
 
         private void OpenDataFolder_Click(object sender, RoutedEventArgs e)
@@ -225,8 +228,8 @@ namespace digital_wellbeing_app.Views.Settings
             catch (System.Exception ex)
             {
                 System.Windows.MessageBox.Show(
-                    $"Could not open folder: {ex.Message}",
-                    "Error",
+                    Loc.Format("Settings_OpenFolderFailed", ex.Message),
+                    Loc.Get("Settings_ErrorTitle"),
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
@@ -236,7 +239,7 @@ namespace digital_wellbeing_app.Views.Settings
         {
             var dialog = new System.Windows.Forms.FolderBrowserDialog
             {
-                Description = "Choose where to save your Pulse backup",
+                Description = Loc.Get("Backup_ChooseFolder"),
                 ShowNewFolderButton = true
             };
 
@@ -247,16 +250,16 @@ namespace digital_wellbeing_app.Views.Settings
                 var backupPath = BackupService.CreateBackup(dialog.SelectedPath);
 
                 System.Windows.MessageBox.Show(
-                    $"Backup saved to:\n{backupPath}",
-                    "Backup Complete",
+                    Loc.Format("Backup_Saved", backupPath),
+                    Loc.Get("Backup_CompleteTitle"),
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
             }
             catch (System.Exception ex)
             {
                 System.Windows.MessageBox.Show(
-                    $"Backup failed: {ex.Message}",
-                    "Backup Error",
+                    Loc.Format("Backup_Failed", ex.Message),
+                    Loc.Get("Backup_ErrorTitle"),
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
@@ -266,19 +269,19 @@ namespace digital_wellbeing_app.Views.Settings
         {
             var dialog = new Microsoft.Win32.OpenFileDialog
             {
-                Title = "Choose a Pulse backup to restore",
-                Filter = "Pulse backup (*.zip)|*.zip"
+                Title = Loc.Get("Backup_ChooseRestoreFile"),
+                Filter = Loc.Get("Backup_FileFilter")
             };
 
             if (dialog.ShowDialog() != true) return;
 
             var manifest = BackupService.ReadManifest(dialog.FileName);
-            var fromText = manifest != null ? $" from {manifest.CreatedUtc.ToLocalTime():g}" : "";
 
             var confirm = System.Windows.MessageBox.Show(
-                $"This will replace ALL of your current Pulse data with the backup{fromText}.\n\n" +
-                "This cannot be undone. Pulse will close afterward - reopen it to continue.",
-                "Restore From Backup",
+                manifest != null
+                    ? Loc.Format("Backup_RestoreConfirmFrom", manifest.CreatedUtc.ToLocalTime())
+                    : Loc.Get("Backup_RestoreConfirm"),
+                Loc.Get("Backup_RestoreTitle"),
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning);
 
@@ -289,8 +292,8 @@ namespace digital_wellbeing_app.Views.Settings
                 BackupService.RestoreBackup(dialog.FileName);
 
                 System.Windows.MessageBox.Show(
-                    "Restore complete. Pulse will now close - please reopen it.",
-                    "Restore Complete",
+                    Loc.Get("Backup_RestoreDone"),
+                    Loc.Get("Backup_RestoreCompleteTitle"),
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
 
@@ -299,8 +302,8 @@ namespace digital_wellbeing_app.Views.Settings
             catch (System.Exception ex)
             {
                 System.Windows.MessageBox.Show(
-                    $"Restore failed: {ex.Message}",
-                    "Restore Error",
+                    Loc.Format("Backup_RestoreFailed", ex.Message),
+                    Loc.Get("Backup_RestoreErrorTitle"),
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
@@ -310,7 +313,7 @@ namespace digital_wellbeing_app.Views.Settings
         {
             var dialog = new System.Windows.Forms.FolderBrowserDialog
             {
-                Description = "Choose where to save your exported data",
+                Description = Loc.Get("Export_ChooseFolder"),
                 ShowNewFolderButton = true
             };
 
@@ -322,8 +325,8 @@ namespace digital_wellbeing_app.Views.Settings
                     int count = DataExportService.ExportAllToCsv(exportDir);
 
                     System.Windows.MessageBox.Show(
-                        $"Successfully exported {count} data files to:\n{exportDir}",
-                        "Export Complete",
+                        Loc.Format("Export_Success", count, exportDir),
+                        Loc.Get("Export_CompleteTitle"),
                         MessageBoxButton.OK,
                         MessageBoxImage.Information);
 
@@ -333,8 +336,8 @@ namespace digital_wellbeing_app.Views.Settings
                 catch (System.Exception ex)
                 {
                     System.Windows.MessageBox.Show(
-                        $"Export failed: {ex.Message}",
-                        "Export Error",
+                        Loc.Format("Export_Failed", ex.Message),
+                        Loc.Get("Export_ErrorTitle"),
                         MessageBoxButton.OK,
                         MessageBoxImage.Error);
                 }
@@ -344,14 +347,8 @@ namespace digital_wellbeing_app.Views.Settings
         private void DeleteAllData_Click(object sender, RoutedEventArgs e)
         {
             var result = System.Windows.MessageBox.Show(
-                "Are you sure you want to delete ALL tracked data?\n\n" +
-                "This will permanently remove:\n" +
-                "- Screen time history\n" +
-                "- App usage history\n" +
-                "- Sound exposure history\n" +
-                "- Focus session history\n\n" +
-                "This action cannot be undone.",
-                "Delete All Data",
+                Loc.Get("Settings_DeleteAllConfirm"),
+                Loc.Get("Settings_DeleteAllDataTitle"),
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning);
 
@@ -363,16 +360,16 @@ namespace digital_wellbeing_app.Views.Settings
                     RefreshDbSize();
 
                     System.Windows.MessageBox.Show(
-                        "All tracked data has been deleted.",
-                        "Data Deleted",
+                        Loc.Get("Settings_AllDataDeleted"),
+                        Loc.Get("Settings_DataDeletedTitle"),
                         MessageBoxButton.OK,
                         MessageBoxImage.Information);
                 }
                 catch (System.Exception ex)
                 {
                     System.Windows.MessageBox.Show(
-                        $"Failed to delete data: {ex.Message}",
-                        "Error",
+                        Loc.Format("Settings_DeleteFailed", ex.Message),
+                        Loc.Get("Settings_ErrorTitle"),
                         MessageBoxButton.OK,
                         MessageBoxImage.Error);
                 }
@@ -408,7 +405,7 @@ namespace digital_wellbeing_app.Views.Settings
             {
                 GoalHoursTextBox.Text = "8";
                 GoalMinutesTextBox.Text = "0";
-                CurrentGoalText.Text = "No goal set";
+                CurrentGoalText.Text = Loc.Get("Settings_NoGoalSet");
             }
 
             _isLoadingGoal = false;
@@ -428,7 +425,7 @@ namespace digital_wellbeing_app.Views.Settings
             else
             {
                 _goalService.SetDailyScreenTimeGoal(null);
-                CurrentGoalText.Text = "No goal set";
+                CurrentGoalText.Text = Loc.Get("Settings_NoGoalSet");
             }
         }
 
@@ -461,7 +458,7 @@ namespace digital_wellbeing_app.Views.Settings
             else
             {
                 _goalService.SetDailyScreenTimeGoal(null);
-                CurrentGoalText.Text = "Goal must be greater than 0";
+                CurrentGoalText.Text = Loc.Get("Settings_GoalMustBePositive");
             }
         }
 
@@ -471,11 +468,11 @@ namespace digital_wellbeing_app.Views.Settings
             var mins = totalMinutes % 60;
             
             if (hours > 0 && mins > 0)
-                CurrentGoalText.Text = $"Goal: {hours} hours {mins} minutes per day";
+                CurrentGoalText.Text = Loc.Format("Settings_GoalHoursMinutes", hours, mins);
             else if (hours > 0)
-                CurrentGoalText.Text = $"Goal: {hours} hours per day";
+                CurrentGoalText.Text = Loc.Format("Settings_GoalHours", hours);
             else
-                CurrentGoalText.Text = $"Goal: {mins} minutes per day";
+                CurrentGoalText.Text = Loc.Format("Settings_GoalMinutes", mins);
         }
 
         #endregion
@@ -608,12 +605,7 @@ namespace digital_wellbeing_app.Views.Settings
             }
         }
 
-        private string FormatTimeDisplay(int hour, int minute)
-        {
-            var ampm = hour >= 12 ? "PM" : "AM";
-            var displayHour = hour > 12 ? hour - 12 : (hour == 0 ? 12 : hour);
-            return minute > 0 ? $"{displayHour}:{minute:D2} {ampm}" : $"{displayHour} {ampm}";
-        }
+        private string FormatTimeDisplay(int hour, int minute) => TimeFormatHelper.FormatClockTime(hour, minute);
 
         private void SelectTimeInComboBox(System.Windows.Controls.ComboBox comboBox, int hour, int minute)
         {
@@ -770,14 +762,14 @@ namespace digital_wellbeing_app.Views.Settings
         {
             if (!enabled)
             {
-                WindDownStatusText.Text = "Wind Down is disabled";
+                WindDownStatusText.Text = Loc.Get("Settings_WindDownDisabled");
                 WindDownStatusIcon.Kind = MaterialDesignThemes.Wpf.PackIconKind.MoonWaningCrescent;
                 return;
             }
 
             var startTimeStr = FormatTimeDisplay(startHour, startMinute);
             var endTimeStr = FormatTimeDisplay(endHour, endMinute);
-            WindDownStatusText.Text = $"Active from {startTimeStr} to {endTimeStr}";
+            WindDownStatusText.Text = Loc.Format("Settings_WindDownActiveRange", startTimeStr, endTimeStr);
             WindDownStatusIcon.Kind = MaterialDesignThemes.Wpf.PackIconKind.WeatherNight;
         }
 
@@ -937,14 +929,14 @@ namespace digital_wellbeing_app.Views.Settings
 
         private async void CheckForUpdates_Click(object sender, RoutedEventArgs e)
         {
-            UpdateStatusText.Text = "Checking for updates...";
+            UpdateStatusText.Text = Loc.Get("Settings_CheckingUpdates");
             UpdateStatusText.Visibility = Visibility.Visible;
 
             try
             {
                 if (PackagedAppInfo.IsPackaged)
                 {
-                    UpdateStatusText.Text = "Updates are managed by Microsoft Store. Opening the Store page...";
+                    UpdateStatusText.Text = Loc.Get("Settings_UpdatesViaStore");
                     OpenExternalLink(PackagedAppInfo.GetStoreDeepLink());
                     return;
                 }
@@ -952,37 +944,37 @@ namespace digital_wellbeing_app.Views.Settings
                 var updateService = new UpdateService();
                 if (!updateService.IsAvailable)
                 {
-                    UpdateStatusText.Text = updateService.UnavailableReason ?? "Updates are unavailable for this build.";
+                    UpdateStatusText.Text = updateService.UnavailableReason ?? Loc.Get("Settings_UpdatesUnavailable");
                     return;
                 }
                 var update = await updateService.CheckForUpdatesAsync();
 
                 if (update != null)
                 {
-                    UpdateStatusText.Text = $"Update available: v{update.TargetFullRelease.Version}";
+                    UpdateStatusText.Text = Loc.Format("Settings_UpdateAvailableStatus", update.TargetFullRelease.Version);
 
                     var result = System.Windows.MessageBox.Show(
-                        $"A new version ({update.TargetFullRelease.Version}) is available.\n\nWould you like to update now?",
-                        "Update Available",
+                        Loc.Format("Settings_UpdateAvailablePrompt", update.TargetFullRelease.Version),
+                        Loc.Get("Settings_UpdateAvailableTitle"),
                         MessageBoxButton.YesNo,
                         MessageBoxImage.Information);
 
                     if (result == MessageBoxResult.Yes)
                     {
-                        UpdateStatusText.Text = "Downloading update...";
+                        UpdateStatusText.Text = Loc.Get("Settings_DownloadingUpdate");
                         await updateService.DownloadAndApplyAsync(update);
                     }
                 }
                 else
                 {
                     UpdateStatusText.Text = updateService.LastError == null
-                        ? "You're up to date!"
-                        : "Couldn't reach the update service. Check your connection and try again.";
+                        ? Loc.Get("Settings_UpToDate")
+                        : Loc.Get("Settings_UpdateServiceUnreachable");
                 }
             }
             catch (System.Exception ex)
             {
-                UpdateStatusText.Text = $"Update check failed: {ex.Message}";
+                UpdateStatusText.Text = Loc.Format("Settings_UpdateCheckFailed", ex.Message);
             }
         }
 
@@ -1009,6 +1001,38 @@ namespace digital_wellbeing_app.Views.Settings
 
         #endregion
 
+        #region Language
+
+        private bool _isLoadingLanguage;
+
+        private void LoadLanguageSettings()
+        {
+            _isLoadingLanguage = true;
+            try
+            {
+                var saved = new SettingsService().LoadLanguage();
+                LanguageComboBox.Items.Add(new ComboBoxItem { Content = Loc.Get("Settings_LanguageSystem"), Tag = string.Empty });
+                foreach (var culture in Loc.AvailableLanguages())
+                    LanguageComboBox.Items.Add(new ComboBoxItem { Content = culture.NativeName, Tag = culture.Name });
+                LanguageComboBox.SelectedItem = LanguageComboBox.Items.Cast<ComboBoxItem>()
+                    .FirstOrDefault(i => string.Equals((string)i.Tag, saved, System.StringComparison.OrdinalIgnoreCase))
+                    ?? LanguageComboBox.Items[0];
+            }
+            finally
+            {
+                _isLoadingLanguage = false;
+            }
+        }
+
+        private void LanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_isLoadingLanguage || LanguageComboBox.SelectedItem is not ComboBoxItem item) return;
+            new SettingsService().SaveLanguage((string)item.Tag);
+            LanguageRestartText.Visibility = Visibility.Visible;
+        }
+
+        #endregion
+
         #region Diagnostics
 
         private void LoadTrackerHealth()
@@ -1031,7 +1055,7 @@ namespace digital_wellbeing_app.Views.Settings
             }
             catch (System.Exception ex)
             {
-                System.Windows.MessageBox.Show($"Could not open log folder: {ex.Message}", "Error",
+                System.Windows.MessageBox.Show(Loc.Format("Settings_OpenLogFolderFailed", ex.Message), Loc.Get("Settings_ErrorTitle"),
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -1050,14 +1074,14 @@ namespace digital_wellbeing_app.Views.Settings
         {
             var (statusWord, brush) = info.Status switch
             {
-                TrackingHealthService.HealthStatus.Healthy => ("Healthy", System.Windows.Media.Brushes.LimeGreen),
-                TrackingHealthService.HealthStatus.Stale => ("Stale", System.Windows.Media.Brushes.Orange),
-                TrackingHealthService.HealthStatus.Down => ("Down", System.Windows.Media.Brushes.Red),
-                _ => ("Not started", System.Windows.Media.Brushes.Gray)
+                TrackingHealthService.HealthStatus.Healthy => (Loc.Get("Settings_HealthHealthy"), System.Windows.Media.Brushes.LimeGreen),
+                TrackingHealthService.HealthStatus.Stale => (Loc.Get("Settings_HealthStale"), System.Windows.Media.Brushes.Orange),
+                TrackingHealthService.HealthStatus.Down => (Loc.Get("Settings_HealthDown"), System.Windows.Media.Brushes.Red),
+                _ => (Loc.Get("Settings_HealthNotStarted"), System.Windows.Media.Brushes.Gray)
             };
 
             var lastSeenText = info.LastSeenUtc.HasValue
-                ? $"{statusWord} · last seen {FormatAgo(DateTime.UtcNow - info.LastSeenUtc.Value)} ago"
+                ? Loc.Format("Settings_HealthLastSeen", statusWord, FormatAgo(DateTime.UtcNow - info.LastSeenUtc.Value))
                 : statusWord;
 
             return new TrackerHealthDisplay
@@ -1070,17 +1094,17 @@ namespace digital_wellbeing_app.Views.Settings
 
         private static string FriendlyTrackerName(string trackerName) => trackerName switch
         {
-            "ScreenTimeTracker" => "Screen time",
-            "AppUsageTracker" => "App usage",
-            "SoundExposureManager" => "Hearing",
+            "ScreenTimeTracker" => Loc.Get("Common_ScreenTime"),
+            "AppUsageTracker" => Loc.Get("Common_AppUsage"),
+            "SoundExposureManager" => Loc.Get("Common_Hearing2"),
             _ => trackerName
         };
 
         private static string FormatAgo(TimeSpan age)
         {
-            if (age.TotalSeconds < 90) return $"{(int)age.TotalSeconds}s";
-            if (age.TotalMinutes < 90) return $"{(int)age.TotalMinutes}m";
-            return $"{(int)age.TotalHours}h";
+            if (age.TotalSeconds < 90) return Loc.Format("Settings_AgoSeconds", (int)age.TotalSeconds);
+            if (age.TotalMinutes < 90) return Loc.Format("Settings_AgoMinutes", (int)age.TotalMinutes);
+            return Loc.Format("Settings_AgoHours", (int)age.TotalHours);
         }
     }
 }

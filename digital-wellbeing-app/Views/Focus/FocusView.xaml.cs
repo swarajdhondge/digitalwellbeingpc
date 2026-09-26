@@ -262,7 +262,13 @@ namespace digital_wellbeing_app.Views.Focus
 
             // Update stats
             DistractionsCount.Text = _focusService.CurrentSession.DistractionWarnings.ToString();
-            EnforcementDisplay.Text = _focusService.EnforcementLevel.ToString();
+            EnforcementDisplay.Text = _focusService.EnforcementLevel switch
+            {
+                FocusEnforcementLevel.Warn => Loc.Get("Focus_Warn"),
+                FocusEnforcementLevel.Block => Loc.Get("Focus_Block"),
+                FocusEnforcementLevel.Hide => Loc.Get("Focus_Hide"),
+                _ => _focusService.EnforcementLevel.ToString()
+            };
             
             // Count entertainment apps
             var entertainmentCount = _focusService.GetAllAppCategories()
@@ -484,8 +490,8 @@ namespace digital_wellbeing_app.Views.Focus
                         DurationText = TimeFormatHelper.FormatCompact(session.Duration),
                         TimeText = session.StartTime.ToString("ddd, MMM d @ h:mm tt"),
                         DistractionsText = session.DistractionWarnings > 0 
-                            ? $"{session.DistractionWarnings} distractions" 
-                            : "No distractions",
+                            ? Loc.Format("FocusPage_DistractionsCount", session.DistractionWarnings) 
+                            : Loc.Get("FocusPage_NoDistractions"),
                         StatusIcon = session.Completed ? "Check" : "Close",
                         StatusColor = session.Completed
                             ? (Brush)FindResource("Good")
