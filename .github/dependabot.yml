@@ -1,7 +1,6 @@
 version: 2
 updates:
-  # .NET dependencies (digital-wellbeing-app, Tests, UITests, FixtureSeeder - all referenced
-  # from the root solution, so the root directory covers all of them).
+  # .NET application and test dependencies.
   - package-ecosystem: "nuget"
     directory: "/"
     schedule:
