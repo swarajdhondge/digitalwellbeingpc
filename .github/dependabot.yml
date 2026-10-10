@@ -20,36 +20,6 @@ updates:
       - dependency-name: "System.Drawing.Common"
         versions: [">= 10"]
 
-  # Marketing site (pulse/, Next.js).
-  - package-ecosystem: "npm"
-    directory: "/pulse"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 10
-    labels:
-      - "dependencies"
-      - "site"
-    groups:
-      react:
-        patterns:
-          - "react"
-          - "react-dom"
-          - "@types/react"
-          - "@types/react-dom"
-      tailwind:
-        patterns:
-          - "tailwindcss"
-          - "@tailwindcss/*"
-    ignore:
-      # Current Next.js tooling is not compatible with these majors yet.
-      - dependency-name: "eslint"
-        versions: [">= 10"]
-      - dependency-name: "typescript"
-        versions: [">= 7"]
-      - dependency-name: "@types/node"
-        # Keep type definitions aligned with the Node 24 runtime used by CI/Vercel.
-        versions: [">= 25"]
-
   # Actions used by ci.yml / release.yml / soak-test.yml.
   - package-ecosystem: "github-actions"
     directory: "/"
