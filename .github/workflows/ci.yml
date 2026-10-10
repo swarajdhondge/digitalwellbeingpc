@@ -17,13 +17,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Decide which product surface changed so site-only PRs do not spend a Windows
-  # runner rebuilding the desktop app (and vice versa). Workflow edits run both.
+  # Decide whether the desktop app changed so docs-only PRs do not spend a Windows
+  # runner rebuilding it. Edits to this workflow always run the app job.
   changes:
     runs-on: ubuntu-latest
     outputs:
       app: ${{ steps.filter.outputs.app }}
-      site: ${{ steps.filter.outputs.site }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
@@ -48,22 +47,15 @@ jobs:
           fi
 
           app=false
-          site=false
           while IFS= read -r file; do
             case "$file" in
               DigitalWellbeing.sln|digital-wellbeing-app/*|UITests/*|FixtureSeeder/*|.github/workflows/ci.yml)
                 app=true
                 ;;
             esac
-            case "$file" in
-              pulse/*|.github/workflows/ci.yml)
-                site=true
-                ;;
-            esac
           done <<< "$files"
 
           echo "app=$app" >> "$GITHUB_OUTPUT"
-          echo "site=$site" >> "$GITHUB_OUTPUT"
 
   # --------------------------------------------------------------------------
   # WPF app: build + unit tests (Windows-only, WPF / net9.0-windows).
@@ -89,33 +81,3 @@ jobs:
 
       - name: Unit tests
         run: dotnet test digital-wellbeing-app/Tests/Tests.csproj -c Release --no-build
-
-  # --------------------------------------------------------------------------
-  # Marketing site (pulse/, Next.js). Cross-platform, so Ubuntu is fine.
-  # --------------------------------------------------------------------------
-  site:
-    needs: changes
-    if: needs.changes.outputs.site == 'true'
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: pulse
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: '24'
-          cache: npm
-          cache-dependency-path: pulse/package-lock.json
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Lint
-        run: npm run lint
-
-      - name: Build
-        run: npm run build

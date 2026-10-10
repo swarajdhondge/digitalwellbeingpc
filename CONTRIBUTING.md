@@ -8,7 +8,6 @@ By contributing you agree your work is licensed under [GPL-3.0](LICENSE) and you
 ## Setup
 
 Requires the [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0) and Windows 10 (17763+) or 11.
-Node.js 20+ is only needed for the website in `pulse/`.
 
 ```powershell
 dotnet run --project digital-wellbeing-app               # run the app
@@ -27,7 +26,6 @@ the build folder.
 | `digital-wellbeing-app/` | WPF app (MVVM: `Views/`, `ViewModels/`, `Models/`; tracking in `CoreLogic/`; data and logic in `Services/`; Win32 interop in `Platform/Windows/`) |
 | `digital-wellbeing-app/Tests/` | xUnit tests, one file per class under test |
 | `UITests/` | FlaUI UI tests and screenshot capture |
-| `pulse/` | Website (Next.js, deployed to Vercel) |
 
 ## Pull requests
 

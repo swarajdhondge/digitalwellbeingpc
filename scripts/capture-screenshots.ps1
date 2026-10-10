@@ -6,7 +6,7 @@
     2. Seed a believable fixture database (so shots aren't empty).
     3. Drive the app with FlaUI and capture every section in Light + Dark
        to .github/screenshots/ (canonical README filenames).
-    4. Copy the marketing-site subset into pulse/public/screenshots/.
+    4. Optionally copy the website subset into <SiteDir>\public\screenshots\.
 
   Usage (recommended: run from VS Code's integrated terminal — see AV note):
       ./scripts/capture-screenshots.ps1
@@ -15,6 +15,8 @@
       -NoBuild                        skip the build, reuse the last one
       -SkipSeed                       don't reseed the fixture DB
       -ShotsDir <path>                override output dir (default .github/screenshots)
+      -SiteDir <path>                 site checkout; if set, copy the website subset
+                                      into <SiteDir>\public\screenshots (default: skip)
 
   NOTE — Quick Heal / antivirus:
     A freshly-built, unsigned DigitalWellbeing.exe launched from a plain shell
@@ -36,7 +38,8 @@ param(
     [string]$Configuration = 'Release',
     [switch]$NoBuild,
     [switch]$SkipSeed,
-    [string]$ShotsDir
+    [string]$ShotsDir,
+    [string]$SiteDir
 )
 
 $ErrorActionPreference = 'Stop'
@@ -98,30 +101,35 @@ finally {
     }
 }
 
-# --- 4. Copy the marketing-site subset -----------------------------------------
-# The Pulse Next.js site only uses a handful of the dark-theme shots.
-$siteDir = Join-Path $repoRoot 'pulse\public\screenshots'
-New-Item -ItemType Directory -Force -Path $siteDir | Out-Null
+# --- 4. Copy the website subset (only when -SiteDir is given) ------------------
+# The website only uses a handful of the dark-theme shots.
+if ($SiteDir) {
+    $siteDir = Join-Path $SiteDir 'public\screenshots'
+    New-Item -ItemType Directory -Force -Path $siteDir | Out-Null
 
-$siteSubset = @(
-    'dashboard.png',
-    'screentime.png',
-    'appusage.png',
-    'sound.png',
-    'focusmode.png',
-    'limits.png',
-    'weeklyreport.png'
-)
-Write-Host "Copying site subset -> $siteDir" -ForegroundColor Cyan
-foreach ($name in $siteSubset) {
-    $src = Join-Path $ShotsDir $name
-    if (Test-Path $src) {
-        Copy-Item $src (Join-Path $siteDir $name) -Force
-        Write-Host "  + $name" -ForegroundColor DarkGray
+    $siteSubset = @(
+        'dashboard.png',
+        'screentime.png',
+        'appusage.png',
+        'sound.png',
+        'focusmode.png',
+        'limits.png',
+        'weeklyreport.png'
+    )
+    Write-Host "Copying site subset -> $siteDir" -ForegroundColor Cyan
+    foreach ($name in $siteSubset) {
+        $src = Join-Path $ShotsDir $name
+        if (Test-Path $src) {
+            Copy-Item $src (Join-Path $siteDir $name) -Force
+            Write-Host "  + $name" -ForegroundColor DarkGray
+        }
+        else {
+            Write-Host "  ! missing $name (capture may have failed)" -ForegroundColor Yellow
+        }
     }
-    else {
-        Write-Host "  ! missing $name (capture may have failed)" -ForegroundColor Yellow
-    }
+}
+else {
+    Write-Host 'No -SiteDir given; skipping the website copy.' -ForegroundColor DarkGray
 }
 
 Write-Host "Done. Screenshots in $ShotsDir" -ForegroundColor Green

@@ -173,8 +173,8 @@ jobs:
     steps:
       # NOTE: the demo (demo.mp4/gif) is intentionally NOT attached here. GitHub serves
       # release assets as octet-stream attachments, so they can't be embedded inline —
-      # the README and marketing site reference the repo-committed copies instead
-      # (.github/demo/demo.gif and pulse/public/demo/demo.mp4). So no repo checkout needed.
+      # the README references the repo-committed copy instead
+      # (.github/demo/demo.gif). So no repo checkout needed.
       - name: Download Velopack artifacts
         uses: actions/download-artifact@v8
         with:
