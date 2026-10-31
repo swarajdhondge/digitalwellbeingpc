@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [v2.4.1] - 2026-11-01
 
 Pulse on the command line, and more accurate tracking.
 
@@ -12,6 +12,10 @@ Pulse on the command line, and more accurate tracking.
 - **Break reminders show up when Pulse is open but behind other windows** (#60). The reminder only appeared inside the Pulse window, so it went unseen until Pulse was opened from the notification area. It now also shows a Windows notification whenever Pulse isn't the window you're using.
 - **App time is no longer lost after switching with Alt+Tab or the taskbar.** On Windows 11 the task switcher can report itself as the foreground window just after the app you switched to, which ended tracking until your next switch. Pulse now notices within a second and keeps tracking the app in front.
 - **An unanswered break reminder no longer blocks later ones.** Stepping away for 5 minutes now counts as the break even while a reminder is waiting, and the next one fires on schedule.
+- **Your break reminder interval is kept.** Pulse reset it to 20 minutes every time it started.
+- **App limit warnings show up for the `Setup.exe` install.** Windows was discarding them without showing anything.
+- **Opening Pulse while it runs in the notification area shows its window.** Before, the Start menu or desktop icon did nothing until Pulse was opened from the notification area.
+- **`Setup.exe` works on a PC without .NET.** The GitHub installer now includes the .NET runtime, like the Microsoft Store version, instead of failing with "You must install .NET to run this application".
 
 ## [v2.4.0] - 2026-09-27
 
