@@ -15,6 +15,7 @@ Pulse on the command line, and more accurate tracking.
 - **Your break reminder interval is kept.** Pulse reset it to 20 minutes every time it started.
 - **App limit warnings show up for the `Setup.exe` install.** Windows was discarding them without showing anything.
 - **Opening Pulse while it runs in the notification area shows its window.** Before, the Start menu or desktop icon did nothing until Pulse was opened from the notification area.
+- **The window fits on smaller screens.** On screens such as 1366×768, or 1920×1080 at 125% scaling, Pulse opened taller than the screen with its title bar out of reach.
 - **`Setup.exe` works on a PC without .NET.** The GitHub installer now includes the .NET runtime, like the Microsoft Store version, instead of failing with "You must install .NET to run this application".
 
 ## [v2.4.0] - 2026-09-27

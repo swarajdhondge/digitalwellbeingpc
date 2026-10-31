@@ -129,6 +129,7 @@ namespace digital_wellbeing_app.MainWindow
             RefreshThemeToggleIcon();
 
             // Restore saved window position/size
+            FitToWorkArea();
             RestoreWindowState();
 
             // Handle maximize state for proper corner radius
@@ -1085,6 +1086,18 @@ namespace digital_wellbeing_app.MainWindow
             {
                 // If restore fails, just use default position/size
             }
+        }
+
+        /// <summary>
+        /// The default size (1220×870) is taller than the screen on common setups, such as
+        /// 1366×768, or 1920×1080 at 125% scaling. Centered, its title bar then sits above the
+        /// screen and the window can't be moved. Shrink it to the work area (not below the minimum).
+        /// </summary>
+        private void FitToWorkArea()
+        {
+            var area = SystemParameters.WorkArea;
+            if (Height > area.Height) Height = Math.Max(MinHeight, area.Height);
+            if (Width > area.Width) Width = Math.Max(MinWidth, area.Width);
         }
 
         /// <summary>
