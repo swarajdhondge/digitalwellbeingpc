@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+Pulse on the command line, and more accurate tracking.
+
+### Features
+- **`pulse` command-line tool.** Installed with the app (Microsoft Store and `Setup.exe`). `pulse today`, `pulse week` and `pulse apps` show the same numbers as the app, in the same language; `pulse start` starts Pulse in the notification area and `pulse stop` saves and quits it; `pulse help` lists everything. It only reads the data Pulse records on your PC.
+
 ### Fixes
 - **Sharper text at display scaling above 100%** (#58). The window shadow was drawn by an effect on the whole window, so all text was rendered through an offscreen bitmap and looked soft, most visibly with Chinese text at 125%. The shadow is now its own layer and layout snaps to whole pixels.
 - **Break reminders show up when Pulse is open but behind other windows** (#60). The reminder only appeared inside the Pulse window, so it went unseen until Pulse was opened from the notification area. It now also shows a Windows notification whenever Pulse isn't the window you're using.
