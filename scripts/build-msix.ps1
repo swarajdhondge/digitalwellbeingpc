@@ -39,6 +39,10 @@ New-Item -ItemType Directory -Force -Path $stage | Out-Null
 
 # --- 1. Publish self-contained x64 (matches CI) ---------------------------------
 Write-Host "Publishing Pulse $Version (self-contained x64)..." -ForegroundColor Cyan
+# The `pulse` command-line tool goes in first so the app's copy of any shared library wins.
+dotnet publish (Join-Path $repoRoot 'pulse-cli\pulse-cli.csproj') -c Release -r win-x64 --self-contained true `
+    -p:Version=$Version -p:PublishSingleFile=false -o $stage --nologo
+if ($LASTEXITCODE -ne 0) { throw 'Publish of the command-line tool failed.' }
 dotnet publish $project -c Release -r win-x64 --self-contained true `
     -p:Version=$Version -p:PublishSingleFile=false -o $stage --nologo
 if ($LASTEXITCODE -ne 0) { throw 'Publish failed.' }

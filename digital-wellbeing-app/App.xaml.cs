@@ -15,8 +15,14 @@ namespace digital_wellbeing_app
         {
             // Velopack can fast-exit for install/update hooks, so it must run before WPF
             // initializes. Store/MSIX installations are updated by Microsoft Store instead.
+            // The install/update/uninstall hooks keep `pulse` (installed next to this exe) on the
+            // user's PATH.
             if (!Services.PackagedAppInfo.IsPackaged)
-                VelopackApp.Build().Run();
+                VelopackApp.Build()
+                    .OnAfterInstallFastCallback(_ => Services.CommandLinePath.Add(AppContext.BaseDirectory))
+                    .OnAfterUpdateFastCallback(_ => Services.CommandLinePath.Add(AppContext.BaseDirectory))
+                    .OnBeforeUninstallFastCallback(_ => Services.CommandLinePath.Remove(AppContext.BaseDirectory))
+                    .Run();
 
             var app = new App();
             app.InitializeComponent();
