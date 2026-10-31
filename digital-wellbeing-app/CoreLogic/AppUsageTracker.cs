@@ -51,6 +51,12 @@ namespace digital_wellbeing_app.CoreLogic
         /// </summary>
         public Func<bool> ForegroundConsumingProvider { get; set; } = ActivityDetector.IsForegroundConsuming;
 
+        /// <summary>
+        /// The process owning the foreground window when it is a trackable app, otherwise null.
+        /// The caller owns (disposes) the returned process. Overridable for tests.
+        /// </summary>
+        public Func<Process?> ForegroundAppProvider { get; set; } = GetTrackableForegroundProcess;
+
         public AppUsageTracker()
         {
             _focusListener = new FocusChangeListener(OnAppChanged);
@@ -270,6 +276,7 @@ namespace digital_wellbeing_app.CoreLogic
         private void OnTick()
         {
             var away = IdleTimeProvider().TotalSeconds > AwayThresholdSeconds && !ForegroundConsumingProvider();
+            bool changed = false, recover = false;
             lock (_sessionLock)
             {
                 var now = Clock();
@@ -289,11 +296,49 @@ namespace digital_wellbeing_app.CoreLogic
                 }
                 _lastTick = now;
 
-                if (_isAway == away) return;
-                _isAway = away;
+                if (_isAway == away)
+                {
+                    // Self-heal: the focus hook can end the session on a shell window that
+                    // fires after the real app (Windows 11 Alt+Tab/taskbar: the app, then
+                    // explorer's task-switcher host). No further event follows because the app
+                    // is already in front, so nothing was recorded until the next switch.
+                    recover = !away && _currentSession == null;
+                }
+                else
+                {
+                    _isAway = away;
+                    changed = true;
+                }
             }
-            if (away) OnAppChanged(null);
-            else SynthesizeInitialFocus();
+            if (changed)
+            {
+                if (away) OnAppChanged(null);
+                else SynthesizeInitialFocus();
+            }
+            else if (recover)
+            {
+                var process = ForegroundAppProvider();
+                if (process != null) OnAppChanged(process);
+            }
+        }
+
+        private static Process? GetTrackableForegroundProcess()
+        {
+            try
+            {
+                var handle = NativeMethods.GetForegroundWindow();
+                if (handle == IntPtr.Zero) return null;
+                NativeMethods.GetWindowThreadProcessId(handle, out uint processId);
+                if (processId == 0) return null;
+                var process = Process.GetProcessById((int)processId);
+                if (FocusChangeListener.IsGenuineAppWindow(handle, process)) return process;
+                process.Dispose();
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         private void OnAppChanged(Process? process)

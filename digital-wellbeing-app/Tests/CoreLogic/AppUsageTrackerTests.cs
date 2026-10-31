@@ -44,6 +44,75 @@ namespace digital_wellbeing_app.Tests.CoreLogic
             Assert.Null(tracker.CurrentSession);
         }
 
+        // Windows 11 Alt+Tab/taskbar switch: the hook sees the app, then explorer's task-switcher
+        // host, which ends the session; no further event follows while the app stays in front.
+        [Fact]
+        public void Tick_RecoversForegroundApp_WhenSessionWasEndedByShellWindow()
+        {
+            var now = DateTime.Today.AddHours(10);
+            using var tracker = new AppUsageTracker
+            {
+                Clock = () => now, IdleTimeProvider = () => TimeSpan.Zero, ForegroundConsumingProvider = () => false,
+                ForegroundAppProvider = () => System.Diagnostics.Process.GetCurrentProcess()
+            };
+            CallPrivate(tracker, "OnAppChanged", System.Diagnostics.Process.GetCurrentProcess());
+            CallPrivate(tracker, "OnAppChanged", new object?[] { null });   // shell window event
+            Assert.Null(tracker.CurrentSession);
+
+            CallPrivate(tracker, "OnTick");
+
+            Assert.NotNull(tracker.CurrentSession);
+            Assert.Equal(System.Diagnostics.Process.GetCurrentProcess().ProcessName, tracker.CurrentSession!.AppName);
+        }
+
+        [Fact]
+        public void Tick_DoesNotReplaceARunningSession()
+        {
+            var now = DateTime.Today.AddHours(10);
+            int lookups = 0;
+            using var tracker = new AppUsageTracker
+            {
+                Clock = () => now, IdleTimeProvider = () => TimeSpan.Zero, ForegroundConsumingProvider = () => false,
+                ForegroundAppProvider = () => { lookups++; return System.Diagnostics.Process.GetCurrentProcess(); }
+            };
+            var start = now.AddMinutes(-3);
+            SetField(tracker, "_currentSession", new AppUsageSession { AppName = "notepad", StartTime = start });
+
+            CallPrivate(tracker, "OnTick");
+
+            Assert.Equal("notepad", tracker.CurrentSession!.AppName);
+            Assert.Equal(start, tracker.CurrentSession.StartTime);
+            Assert.Equal(0, lookups);
+        }
+
+        [Fact]
+        public void Tick_DoesNotRecoverWhileAway()
+        {
+            var now = DateTime.Today.AddHours(10);
+            using var tracker = new AppUsageTracker
+            {
+                Clock = () => now, IdleTimeProvider = () => TimeSpan.FromMinutes(10), ForegroundConsumingProvider = () => false,
+                ForegroundAppProvider = () => System.Diagnostics.Process.GetCurrentProcess()
+            };
+            CallPrivate(tracker, "OnTick");
+            now = now.AddSeconds(1);
+            CallPrivate(tracker, "OnTick");
+            Assert.Null(tracker.CurrentSession);
+        }
+
+        [Fact]
+        public void Tick_NothingTrackableInFront_StaysEmpty()
+        {
+            var now = DateTime.Today.AddHours(10);
+            using var tracker = new AppUsageTracker
+            {
+                Clock = () => now, IdleTimeProvider = () => TimeSpan.Zero, ForegroundConsumingProvider = () => false,
+                ForegroundAppProvider = () => null   // desktop or taskbar in front
+            };
+            CallPrivate(tracker, "OnTick");
+            Assert.Null(tracker.CurrentSession);
+        }
+
         [Fact]
         public void PeriodicSave_DoesNotChangeTheDisplayedTotal()
         {
