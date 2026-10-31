@@ -184,6 +184,18 @@ namespace PulseCli.Tests
         }
 
         [Fact]
+        public void Status_WorksBeforeTheAppHasCreatedEveryTable()
+        {
+            using (var db = new SQLiteConnection(DbPath))
+                db.CreateTable<ScreenTimePeriod>();   // e.g. data from an older version, no heartbeat table yet
+
+            var (code, output, _) = Run("status");
+
+            Assert.Equal(CliApp.Ok, code);
+            Assert.Contains("Version", output);
+        }
+
+        [Fact]
         public void Commands_NeverModifyTheDatabase()
         {
             Seed(db => AddScreen(db, DateTime.Today, 600));

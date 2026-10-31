@@ -110,10 +110,8 @@ namespace digital_wellbeing_app.Cli
 
             if (File.Exists(DatabasePath))
             {
-                var lastSeen = DatabaseService.GetAllTrackerHeartbeats()
-                    .Select(h => (DateTime?)h.LastSeenUtc).Max();
-                if (lastSeen is DateTime utc)
-                    _out.WriteLine(Loc.Format("Cli_LastSaved", FormatWhen(utc.ToLocalTime())));
+                if (LastSaved() is DateTime saved)
+                    _out.WriteLine(Loc.Format("Cli_LastSaved", FormatWhen(saved)));
             }
             else
             {
@@ -279,6 +277,20 @@ namespace digital_wellbeing_app.Cli
         }
 
         // ---------------- helpers ----------------
+
+        /// <summary>Last tracker heartbeat (local time); null if none or the app never created the table.</summary>
+        private static DateTime? LastSaved()
+        {
+            try
+            {
+                return DatabaseService.GetAllTrackerHeartbeats()
+                    .Select(h => (DateTime?)h.LastSeenUtc.ToLocalTime()).Max();
+            }
+            catch (SQLite.SQLiteException)
+            {
+                return null;
+            }
+        }
 
         /// <summary>Runs a data command when Pulse has recorded something; wires in live numbers.</summary>
         private int WithData(Func<int> command)
