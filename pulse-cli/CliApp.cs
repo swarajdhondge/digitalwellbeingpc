@@ -337,6 +337,13 @@ namespace digital_wellbeing_app.Cli
             WriteColored(Loc.Get("Cli_NotRecordingHint"), ConsoleColor.Yellow);
         }
 
+        /// <summary>
+        /// App names come from other programs' file descriptions, so they could carry terminal
+        /// control sequences; print them as plain text.
+        /// </summary>
+        internal static string Printable(string text)
+            => string.Concat(text.Select(c => char.IsControl(c) ? '?' : c));
+
         private void WriteAppRows(List<(string Name, TimeSpan Duration)> apps)
         {
             if (apps.Count == 0)
@@ -345,6 +352,7 @@ namespace digital_wellbeing_app.Cli
                 return;
             }
 
+            apps = apps.Select(a => (Printable(a.Name), a.Duration)).ToList();
             var nameWidth = Math.Min(28, apps.Max(a => DisplayWidth(a.Name)));
             var max = Math.Max(1, apps.Max(a => a.Duration.TotalSeconds));
             foreach (var (name, duration) in apps)

@@ -366,6 +366,19 @@ namespace PulseCli.Tests
         }
 
         [Fact]
+        public void AppNames_ArePrintedWithoutControlCharacters()
+        {
+            var today = DateTime.Today;
+            Seed(db => AddApp(db, "evil\u001b]0;pwned\u0007name", today.AddHours(8), 600));
+
+            var output = Run("apps").Out;
+
+            Assert.DoesNotContain('\u001b', output);
+            Assert.DoesNotContain('\u0007', output);
+            Assert.Equal("a?b", CliApp.Printable("a\u009bb"));
+        }
+
+        [Fact]
         public void WideCharacters_AreMeasuredAsTwoColumns()
         {
             Assert.Equal(4, CliApp.DisplayWidth("微信"));

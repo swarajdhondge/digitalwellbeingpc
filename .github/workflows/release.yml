@@ -36,6 +36,11 @@ jobs:
         id: v
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
+          # The version is pasted into later commands, so only accept a plain x.y.z.
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Tag '$GITHUB_REF_NAME' is not vX.Y.Z" >&2
+            exit 1
+          fi
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "Resolved version: $VERSION"
 
