@@ -75,6 +75,14 @@ namespace digital_wellbeing_app
         private EventWaitHandle? _exitRequest;
         private RegisteredWaitHandle? _exitRequestWait;
 
+        // Opening Pulse (Start menu, desktop icon) while it runs in the notification area signals
+        // this event; Pulse then shows its window. Ignored for the first minute, when duplicate
+        // sign-in launches arrive, so Windows startup never puts a window on the desktop.
+        private EventWaitHandle? _showRequest;
+        private RegisteredWaitHandle? _showRequestWait;
+        private static readonly TimeSpan IgnoreShowRequestsAfterStart = TimeSpan.FromMinutes(1);
+        private readonly System.Diagnostics.Stopwatch _sinceStart = System.Diagnostics.Stopwatch.StartNew();
+
         // Writes live.json every 30 s for the command-line tool.
         private System.Threading.Timer? _liveSnapshotTimer;
         private string? _liveSnapshotPath;
@@ -121,12 +129,15 @@ namespace digital_wellbeing_app
             {
                 Services.LogService.Info(Services.StartupService.IsStartupLaunch
                     ? "Silent startup activation ignored because Pulse is already running"
-                    : "Interactive launch ignored because Pulse is already running");
+                    : "Interactive launch: asking the running Pulse to show its window");
 
                 // Duplicate activations must never put UI on the desktop. Windows can invoke
                 // both a legacy Run entry and a packaged StartupTask during sign-in, and older
-                // registrations do not always carry the --startup marker. Silently exiting here
-                // keeps system startup quiet regardless of which activation wins the race.
+                // registrations do not always carry the --startup marker. This launch never shows
+                // UI itself; an interactive one asks the running Pulse, which ignores the request
+                // during its first minute (when those sign-in duplicates arrive).
+                if (!Services.StartupService.IsStartupLaunch)
+                    Services.PulseInstance.RequestShow();
                 Shutdown();
                 return;
             }
@@ -382,6 +393,24 @@ namespace digital_wellbeing_app
             {
                 Services.LogService.Warning($"Command-line exit request unavailable: {ex.Message}");
             }
+
+            try
+            {
+                _showRequest = new EventWaitHandle(false, EventResetMode.AutoReset, Services.PulseInstance.ShowRequestEventName);
+                _showRequestWait = ThreadPool.RegisterWaitForSingleObject(_showRequest, (_, _) =>
+                {
+                    if (_sinceStart.Elapsed < IgnoreShowRequestsAfterStart)
+                    {
+                        Services.LogService.Info("Show request ignored while Pulse is starting");
+                        return;
+                    }
+                    Dispatcher.BeginInvoke(() => (MainWindow as MainWindow.MainWindow)?.ShowWindow());
+                }, null, Timeout.Infinite, executeOnlyOnce: false);
+            }
+            catch (Exception ex)
+            {
+                Services.LogService.Warning($"Show request unavailable: {ex.Message}");
+            }
         }
 
         private void WriteLiveSnapshot()
@@ -411,6 +440,8 @@ namespace digital_wellbeing_app
 
             _exitRequestWait?.Unregister(null);
             _exitRequest?.Dispose();
+            _showRequestWait?.Unregister(null);
+            _showRequest?.Dispose();
             _liveSnapshotTimer?.Dispose();
 
             // Unsubscribe from system events

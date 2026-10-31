@@ -873,7 +873,7 @@ namespace digital_wellbeing_app.MainWindow
             _trayIcon.BalloonTipClosed += TrayIcon_BalloonTipClosed;
         }
 
-        private void ShowWindow()
+        internal void ShowWindow()
         {
             ShowInTaskbar = true;
             Show();
