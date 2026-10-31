@@ -492,15 +492,12 @@ namespace digital_wellbeing_app.Views.Settings
             BreakReminderSoundPanel.Visibility = enabled ? Visibility.Visible : Visibility.Collapsed;
             SoundToggle.IsChecked = soundEnabled;
 
-            // Set interval selection
-            foreach (System.Windows.Controls.ComboBoxItem item in IntervalComboBox.Items)
-            {
-                if (item.Tag?.ToString() == interval.ToString())
-                {
-                    IntervalComboBox.SelectedItem = item;
-                    break;
-                }
-            }
+            // Set interval selection. The XAML has no default selection on purpose: one would fire
+            // SelectionChanged while the page is built, before this guard is set, and save 20 over
+            // the user's interval on every start. An unknown value shows 20 without saving it.
+            var items = IntervalComboBox.Items.OfType<System.Windows.Controls.ComboBoxItem>().ToList();
+            IntervalComboBox.SelectedItem = items.FirstOrDefault(i => i.Tag?.ToString() == interval.ToString())
+                                            ?? items.FirstOrDefault(i => i.Tag?.ToString() == "20");
 
             _isLoadingBreakReminder = false;
         }
