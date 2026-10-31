@@ -104,6 +104,10 @@ pulse help       all commands
 
 It only reads what Pulse records on your PC, in the same language as the app. The app does the recording.
 
+<p align="center">
+  <img src=".github/screenshots/terminal.png" alt="pulse today and pulse week in Windows Terminal" width="640"/>
+</p>
+
 ---
 
 ## Tech stack
