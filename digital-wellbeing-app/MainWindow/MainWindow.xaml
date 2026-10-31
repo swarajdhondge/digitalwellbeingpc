@@ -14,18 +14,30 @@
     ResizeMode="CanResize"
     FontFamily="{DynamicResource Font.Primary}"
     TextOptions.TextFormattingMode="Ideal"
+    UseLayoutRounding="True"
     StateChanged="Window_StateChanged"
     Closing="Window_Closing">
 
-    <!-- Window container with soft shadow -->
+    <Grid>
+    <!-- Soft window shadow, drawn by its own empty element. An Effect on WindowBorder itself
+         would render the whole UI through an offscreen bitmap first, which blurs all text at
+         display scaling above 100% (issue #58). Follows WindowBorder's margin/corners. -->
+    <Border x:Name="WindowShadow"
+            Background="{DynamicResource Bg}"
+            CornerRadius="{Binding CornerRadius, ElementName=WindowBorder}"
+            Margin="{Binding Margin, ElementName=WindowBorder}"
+            IsHitTestVisible="False">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.5" Color="Black"/>
+        </Border.Effect>
+    </Border>
+
+    <!-- Window container -->
     <Border x:Name="WindowBorder"
             AutomationProperties.AutomationId="WindowBorder"
             Background="{DynamicResource Bg}"
             CornerRadius="8"
             Margin="10">
-        <Border.Effect>
-            <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.5" Color="Black"/>
-        </Border.Effect>
 
         <Grid ClipToBounds="True">
             <Grid.ColumnDefinitions>
@@ -434,4 +446,5 @@
             </Grid>
         </Grid>
     </Border>
+    </Grid>
 </Window>

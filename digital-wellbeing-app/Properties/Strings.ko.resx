@@ -150,7 +150,7 @@
   <data name="Help_EverythingStaysDeviceNoAccount" xml:space="preserve"><value>모든 데이터는 이 기기에만 저장됩니다. 계정, 클라우드, 원격 분석이 없습니다. 웹사이트 기록은 기본적으로 꺼져 있으며, 켜더라도 호스트 이름(예: youtube.com)만 저장되고 전체 URL이나 페이지 내용은 저장되지 않습니다. 언제든지 설정에서 데이터를 CSV로 내보내거나 모두 삭제할 수 있습니다.</value></data>
   <data name="Help_FocusSessionsWatchEntertainmentApps" xml:space="preserve"><value>집중 세션은 엔터테인먼트 앱을 감시합니다. 경고는 알림을 표시하고, 차단은 앱을 최소화합니다. 설정에서 사용하도록 설정하면 Windows 집중 세션에 맞춰 Pulse도 시작할 수 있습니다. 취침 모드는 하루를 마무리할 시간에 부드러운 테두리를 표시합니다.</value></data>
   <data name="Help_FocusWindDown" xml:space="preserve"><value>집중 및 취침 모드</value></data>
-  <data name="Help_Follows202020Rule" xml:space="preserve"><value>20-20-20 규칙을 따릅니다. 20분마다 20피트(약 6m) 떨어진 곳을 20초 동안 바라보세요. 다시 알림은 최대 3회까지 가능하며, 5분 동안 자리를 비우면 타이머가 초기화됩니다. 알림은 Pulse 위에 표시되며, Pulse가 알림 영역에 있을 때는 알림으로 표시됩니다.</value></data>
+  <data name="Help_Follows202020Rule" xml:space="preserve"><value>20-20-20 규칙을 따릅니다. 20분마다 20피트(약 6m) 떨어진 곳을 20초 동안 바라보세요. 다시 알림은 최대 3회까지 가능하며, 5분 동안 자리를 비우면 타이머가 초기화됩니다. Pulse를 사용 중일 때는 알림이 Pulse 위에 표시되고, 그렇지 않을 때는 Windows 알림으로도 표시됩니다.</value></data>
   <data name="Help_LaunchWindowsStartupRunsQuietly" xml:space="preserve"><value>Windows 시작 시 실행하면 알림 영역에서 조용히 실행됩니다. 지금 백업은 데이터베이스와 설정이 담긴 로컬 ZIP 파일을 만듭니다. 복원하면 현재 로컬 데이터가 바뀌므로 먼저 새 백업을 만들고 확인 내용을 꼼꼼히 확인하세요.</value></data>
   <data name="Help_Privacy" xml:space="preserve"><value>개인 정보</value></data>
   <data name="Help_RecordsWhichAppHasFocus" xml:space="preserve"><value>PC를 사용하는 동안 어떤 앱이 얼마나 오래 포커스를 가졌는지 기록합니다. 5분 동안 입력이 없으면 기록을 멈추지만, 해당 앱이 전체 화면이거나 오디오를 재생 중이면 계속 기록합니다. 바탕 화면이나 작업 표시줄을 클릭해도 File Explorer로 계산되지 않습니다. 앱 이름은 저장되지만, 개인 정보 보호를 위해 창 제목은 데이터베이스에 저장되지 않습니다. 집중 기능을 위해 앱을 업무, 엔터테인먼트, 중립으로 분류할 수 있습니다.</value></data>

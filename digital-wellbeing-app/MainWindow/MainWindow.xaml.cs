@@ -83,7 +83,7 @@ namespace digital_wellbeing_app.MainWindow
                     Background = System.Windows.Media.Brushes.Black;
                     WindowBorder.Margin = new Thickness(0);
                     WindowBorder.CornerRadius = new CornerRadius(0);
-                    WindowBorder.Effect = null;
+                    WindowShadow.Visibility = Visibility.Collapsed;
                 }
             }
             catch { /* never let screenshot mode break startup */ }
@@ -550,26 +550,31 @@ namespace digital_wellbeing_app.MainWindow
             // Show break notification on UI thread
             Dispatcher.Invoke(() =>
             {
-                // Check if app is visible or minimized/hidden
-                bool isMinimized = WindowState == WindowState.Minimized || !IsVisible;
-                System.Diagnostics.Debug.WriteLine($"isMinimized: {isMinimized}, WindowState: {WindowState}, IsVisible: {IsVisible}");
-                
-                if (isMinimized)
-                {
-                    // Show balloon notification from system tray (balloon has its own sound)
-                    _breakNotificationPending = true;
-                    ShowFallbackBalloon();
-                }
-                else
-                {
-                    // Show centered overlay
+                bool windowShown = IsVisible && WindowState != WindowState.Minimized;
+                // An open Pulse window isn't one the user is looking at: with another app in
+                // front, the in-window overlay alone goes unseen and the break sits pending until
+                // Pulse is opened again (issue #60). Only skip the notification when Pulse is
+                // the active window.
+                bool pulseInFront = windowShown && IsActive;
+                System.Diagnostics.Debug.WriteLine($"windowShown: {windowShown}, pulseInFront: {pulseInFront}");
+
+                // Overlay waits in the window, so it's there whenever the user switches back.
+                if (windowShown)
                     ShowBreakOverlay();
-                    
+
+                if (pulseInFront)
+                {
                     // Play system sound if enabled (only for overlay, balloon has its own)
                     if (_breakReminderService?.SoundEnabled == true)
                     {
                         System.Media.SystemSounds.Asterisk.Play();
                     }
+                }
+                else
+                {
+                    // Show balloon notification from system tray (balloon has its own sound)
+                    _breakNotificationPending = true;
+                    ShowFallbackBalloon();
                 }
             });
         }

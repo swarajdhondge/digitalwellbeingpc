@@ -150,7 +150,7 @@
   <data name="Help_EverythingStaysDeviceNoAccount" xml:space="preserve"><value>すべてのデータはこのデバイス内に保存されます。アカウント、クラウド、テレメトリはありません。Web サイトの記録は既定でオフです。オンにした場合も保存されるのはホスト名 (例: youtube.com) のみで、完全な URL やページの内容は保存されません。データはいつでも設定から CSV としてエクスポートしたり、すべて削除したりできます。</value></data>
   <data name="Help_FocusSessionsWatchEntertainmentApps" xml:space="preserve"><value>集中セッションはエンタメ アプリを監視します。「警告」は通知を表示し、「ブロック」はアプリを最小化します。設定で有効にすると、Windows の集中セッションに合わせて Pulse も開始できます。おやすみ時間モードは、一日を締めくくる時間に控えめな枠を画面に表示します。</value></data>
   <data name="Help_FocusWindDown" xml:space="preserve"><value>集中とおやすみ時間モード</value></data>
-  <data name="Help_Follows202020Rule" xml:space="preserve"><value>20-20-20 ルールに従います: 20 分ごとに、20 フィート (約 6 m) 先を 20 秒間見ます。スヌーズは 3 回まで可能で、5 分間離席するとタイマーがリセットされます。リマインダーは Pulse の上に表示されます。Pulse が通知領域にあるときは通知として表示されます。</value></data>
+  <data name="Help_Follows202020Rule" xml:space="preserve"><value>20-20-20 ルールに従います: 20 分ごとに、20 フィート (約 6 m) 先を 20 秒間見ます。スヌーズは 3 回まで可能で、5 分間離席するとタイマーがリセットされます。Pulse を使用中はリマインダーが Pulse の上に表示され、それ以外のときは Windows の通知としても表示されます。</value></data>
   <data name="Help_LaunchWindowsStartupRunsQuietly" xml:space="preserve"><value>Windows の起動時に起動すると、通知領域で静かに動作します。「今すぐバックアップ」はデータベースと設定を含むローカルの ZIP を作成します。復元すると現在のローカル データが置き換えられるため、先に新しいバックアップを作成し、確認内容をよく読んでください。</value></data>
   <data name="Help_Privacy" xml:space="preserve"><value>プライバシー</value></data>
   <data name="Help_RecordsWhichAppHasFocus" xml:space="preserve"><value>PC の使用中に、どのアプリがどれだけ前面にあったかを記録します。5 分間操作がないと記録を停止します。ただし、そのアプリが全画面表示中または音声を再生中の場合は継続します。デスクトップやタスクバーのクリックは File Explorer としてカウントされません。アプリ名は保存されますが、プライバシー保護のためウィンドウのタイトルはデータベースに保存されません。集中のために、アプリを仕事・エンタメ・中立に分類できます。</value></data>

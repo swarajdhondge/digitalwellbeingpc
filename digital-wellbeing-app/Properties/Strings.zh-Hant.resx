@@ -150,7 +150,7 @@
   <data name="Help_EverythingStaysDeviceNoAccount" xml:space="preserve"><value>所有資料都保留在此裝置上——不需要帳戶、不上雲端、沒有遙測。網站記錄預設為關閉；開啟後僅儲存主機名稱（例如 youtube.com），絕不儲存完整網址或網頁內容。您可以隨時在「設定」中將資料匯出為 CSV 或全部刪除。</value></data>
   <data name="Help_FocusSessionsWatchEntertainmentApps" xml:space="preserve"><value>專注時段會留意娛樂應用程式。「警告」會顯示通知；「封鎖」會將其最小化。在「設定」中啟用後，Pulse 也能跟隨 Windows 專注工作階段。就寢模式會在該收尾時依排程顯示溫和的邊框。</value></data>
   <data name="Help_FocusWindDown" xml:space="preserve"><value>專注與就寢模式</value></data>
-  <data name="Help_Follows202020Rule" xml:space="preserve"><value>遵循 20-20-20 法則：每 20 分鐘，看向 20 英尺（約 6 公尺）外 20 秒。最多可延後提醒 3 次；離開 5 分鐘後計時器會重設。提醒會顯示在 Pulse 視窗上方；Pulse 位於通知區域時則以通知形式顯示。</value></data>
+  <data name="Help_Follows202020Rule" xml:space="preserve"><value>遵循 20-20-20 法則：每 20 分鐘，看向 20 英尺（約 6 公尺）外 20 秒。最多可延後提醒 3 次；離開 5 分鐘後計時器會重設。正在使用 Pulse 時，提醒會顯示在 Pulse 視窗上方；否則也會以 Windows 通知形式顯示。</value></data>
   <data name="Help_LaunchWindowsStartupRunsQuietly" xml:space="preserve"><value>「Windows 啟動時執行」會讓 Pulse 在通知區域中安靜執行。「立即備份」會建立一個包含資料庫和設定的本機 ZIP 檔。「還原」會取代目前的本機資料，因此請先建立新的備份，並仔細閱讀確認訊息。</value></data>
   <data name="Help_Privacy" xml:space="preserve"><value>隱私權</value></data>
   <data name="Help_RecordsWhichAppHasFocus" xml:space="preserve"><value>記錄您使用電腦時哪個應用程式位於焦點以及持續多久。5 分鐘沒有輸入後會停止記錄，除非該應用程式為全螢幕或正在播放音訊。按一下桌面或工作列不會計入 File Explorer（檔案總管）。會儲存應用程式名稱，但為保護隱私，視窗標題絕不會儲存至資料庫。可將應用程式分類為工作、娛樂或中性，供專注功能使用。</value></data>
