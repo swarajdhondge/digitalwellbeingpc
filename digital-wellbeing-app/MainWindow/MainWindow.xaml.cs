@@ -579,98 +579,24 @@ namespace digital_wellbeing_app.MainWindow
             });
         }
 
-        private ToastNotification? _currentToast;
-        private const string APP_ID = "DigitalWellbeing";
-
-        private void ShowToastNotification()
+        /// <summary>
+        /// Windows only shows a toast sent under this process's own app identity: the Store
+        /// package's, or the one Velopack gives the Setup.exe install (its Start menu shortcut
+        /// carries the same ID). A toast under any other ID is stored but never shown, so without
+        /// an identity this throws and the caller falls back to the tray balloon.
+        /// </summary>
+        private static ToastNotifier CreateToastNotifier()
         {
-            System.Diagnostics.Debug.WriteLine("ShowToastNotification called - attempting to show toast");
-            try
-            {
-                // Create toast XML with action buttons
-                string toastXml = $@"
-                    <toast activationType='foreground' launch='action=open'>
-                        <visual>
-                            <binding template='ToastGeneric'>
-                                <text>{System.Security.SecurityElement.Escape(Loc.Get("Shell_TimeBreak"))}</text>
-                                <text>{System.Security.SecurityElement.Escape(Loc.Get("Break_FollowRule"))}</text>
-                            </binding>
-                        </visual>
-                        <actions>
-                            <action content='{System.Security.SecurityElement.Escape(Loc.Get("Shell_Snooze5Min"))}' arguments='action=snooze' activationType='foreground'/>
-                            <action content='{System.Security.SecurityElement.Escape(Loc.Get("Shell_Dismiss"))}' arguments='action=dismiss' activationType='foreground'/>
-                        </actions>
-                        <audio src='ms-winsoundevent:Notification.Default'/>
-                    </toast>";
-
-                var xmlDoc = new XmlDocument();
-                xmlDoc.LoadXml(toastXml);
-
-                _currentToast = new ToastNotification(xmlDoc);
-                
-                // Handle toast activation (button clicks or toast click)
-                _currentToast.Activated += Toast_Activated;
-                _currentToast.Dismissed += Toast_Dismissed;
-
-                // Show the toast
-                ToastNotificationManager.CreateToastNotifier(APP_ID).Show(_currentToast);
-            }
-            catch (Exception ex)
-            {
-                // Fallback to balloon tip if toast fails
-                System.Diagnostics.Debug.WriteLine($"Toast error: {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
-                ShowFallbackBalloon();
-            }
-            System.Diagnostics.Debug.WriteLine("ShowToastNotification completed");
+            if (Services.PackagedAppInfo.IsPackaged)
+                return ToastNotificationManager.CreateToastNotifier();
+            if (GetCurrentProcessExplicitAppUserModelID(out var appId) == 0 && !string.IsNullOrEmpty(appId))
+                return ToastNotificationManager.CreateToastNotifier(appId);
+            throw new InvalidOperationException("No app identity for notifications");
         }
 
-        private void Toast_Activated(ToastNotification sender, object args)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                _breakNotificationPending = false;
-                
-                // Parse the arguments to determine action
-                string arguments = "";
-                if (args is Windows.UI.Notifications.ToastActivatedEventArgs toastArgs)
-                {
-                    arguments = toastArgs.Arguments;
-                }
-
-                if (arguments.Contains("snooze"))
-                {
-                    _breakReminderService?.Snooze(5);
-                }
-                else if (arguments.Contains("dismiss"))
-                {
-                    _breakReminderService?.Dismiss();
-                }
-                else
-                {
-                    // Default click - open app with overlay
-                    Show();
-                    WindowState = WindowState.Normal;
-                    Activate();
-                    Topmost = true;
-                    Topmost = false;
-                    ShowBreakOverlay();
-                }
-            });
-        }
-
-        private void Toast_Dismissed(ToastNotification sender, ToastDismissedEventArgs args)
-        {
-            // Only auto-dismiss if user swiped away (not if they clicked a button)
-            if (args.Reason == ToastDismissalReason.UserCanceled && _breakNotificationPending)
-            {
-                Dispatcher.Invoke(() =>
-                {
-                    _breakNotificationPending = false;
-                    _breakReminderService?.Dismiss();
-                });
-            }
-        }
+        [System.Runtime.InteropServices.DllImport("shell32.dll")]
+        private static extern int GetCurrentProcessExplicitAppUserModelID(
+            [System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.LPWStr)] out string appId);
 
         private void ShowFallbackBalloon()
         {
@@ -723,7 +649,7 @@ namespace digital_wellbeing_app.MainWindow
                     NavigateToLimits();
                 });
 
-                ToastNotificationManager.CreateToastNotifier(APP_ID).Show(toast);
+                CreateToastNotifier().Show(toast);
             }
             catch (Exception ex)
             {
@@ -762,18 +688,6 @@ namespace digital_wellbeing_app.MainWindow
             // This prevents the timer from restarting when balloon auto-closes
         }
 
-        private void ClearToastNotifications()
-        {
-            try
-            {
-                ToastNotificationManager.History.Clear(APP_ID);
-            }
-            catch
-            {
-                // Ignore errors
-            }
-        }
-
         private void OnBreakDismissed()
         {
             // Hide notification on UI thread
@@ -781,7 +695,6 @@ namespace digital_wellbeing_app.MainWindow
             {
                 BreakOverlay.Visibility = Visibility.Collapsed;
                 _breakNotificationPending = false;
-                ClearToastNotifications();
             });
         }
 
