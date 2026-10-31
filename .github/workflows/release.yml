@@ -91,10 +91,11 @@ jobs:
       # The `pulse` command-line tool ships next to the app. Published first so the app's copy
       # of any shared library wins.
       - name: Publish command-line tool
-        run: dotnet publish pulse-cli/pulse-cli.csproj -c Release -p:Version=${{ needs.version.outputs.version }} -o ./publish
+        run: dotnet publish pulse-cli/pulse-cli.csproj -c Release -r win-x64 --self-contained true -p:Version=${{ needs.version.outputs.version }} -o ./publish
 
+      # Self-contained, like the Store package: Setup.exe must run on a PC without .NET installed.
       - name: Publish application
-        run: dotnet publish ${{ env.PROJECT }} -c Release -p:Version=${{ needs.version.outputs.version }} -o ./publish
+        run: dotnet publish ${{ env.PROJECT }} -c Release -r win-x64 --self-contained true -p:Version=${{ needs.version.outputs.version }} -o ./publish
 
       # Brand the Setup.exe so it doesn't look like a generic/untrusted bundle:
       #   --icon        the Pulse app icon on Setup.exe + Add/Remove Programs
