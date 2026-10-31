@@ -502,6 +502,9 @@
   <data name="Cli_BadOption" xml:space="preserve"><value>«{0}» — не параметр команды «{1}». Выполните «pulse help».</value></data>
   <data name="Cli_NoData" xml:space="preserve"><value>Pulse ещё ничего не записал на этом ПК. Откройте Pulse хотя бы раз и повторите попытку.</value></data>
   <data name="Cli_DataBusy" xml:space="preserve"><value>Сейчас не удалось прочитать данные Pulse. Повторите попытку через несколько секунд.</value></data>
+  <data name="Cli_DataNeedsApp" xml:space="preserve"><value>Не удалось прочитать данные Pulse. Запустите Pulse хотя бы раз командой: pulse start, и повторите попытку.</value></data>
+  <data name="Cli_BadNumber" xml:space="preserve"><value>После «{0}» нужно указать число, например: pulse apps -n 5</value></data>
+  <data name="Cli_Failed" xml:space="preserve"><value>Что-то пошло не так: {0}</value></data>
   <data name="Cli_StatusRecording" xml:space="preserve"><value>Pulse работает и ведёт запись.</value></data>
   <data name="Cli_StatusNotRunning" xml:space="preserve"><value>Pulse не запущен, поэтому ничего не записывается.</value></data>
   <data name="Cli_StartHint" xml:space="preserve"><value>Запустите его командой: pulse start</value></data>

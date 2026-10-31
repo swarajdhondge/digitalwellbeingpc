@@ -26,10 +26,12 @@ namespace PulseCli.Tests
             CultureInfo.DefaultThreadCurrentCulture = CultureInfo.DefaultThreadCurrentUICulture = english;
             LiveUsageProvider.LiveActiveTime = () => null;
             LiveUsageProvider.LiveAppSessionsForRange = (_, _) => null;
+            CliApp.IsAppRunning = () => false;   // never depend on a Pulse running on this PC
         }
 
         public void Dispose()
         {
+            CliApp.IsAppRunning = PulseInstance.IsRunning;
             DatabaseService.CloseConnection();
             Environment.SetEnvironmentVariable("PULSE_DATA_DIR", null);
             try { Directory.Delete(_dir, true); } catch { }
@@ -104,9 +106,35 @@ namespace PulseCli.Tests
         [Theory]
         [InlineData("today", "--week")]
         [InlineData("apps", "--bogus")]
-        [InlineData("apps", "-n", "zero")]
         public void BadOption_Fails(params string[] args)
-            => Assert.Equal(CliApp.Error, Run(args).Code);
+        {
+            var (code, _, error) = Run(args);
+            Assert.Equal(CliApp.Error, code);
+            Assert.Contains("isn't an option", error);
+        }
+
+        [Theory]
+        [InlineData("-n", "zero")]
+        [InlineData("-n", "0")]
+        [InlineData("-n", "-3")]
+        [InlineData("--top")]
+        public void Apps_BadCount_SaysANumberIsNeeded(params string[] options)
+        {
+            var (code, _, error) = Run(new[] { "apps" }.Concat(options).ToArray());
+            Assert.Equal(CliApp.Error, code);
+            Assert.Contains("needs a number", error);
+        }
+
+        [Theory]
+        [InlineData("today", "--help")]
+        [InlineData("apps", "-h")]
+        [InlineData("stop", "/?")]
+        public void HelpAfterACommand_ShowsHelp(params string[] args)
+        {
+            var (code, output, _) = Run(args);
+            Assert.Equal(CliApp.Ok, code);
+            Assert.Equal(Run("help").Out, output);
+        }
 
         [Fact]
         public void DataCommands_WithoutDatabase_ExplainAndReturnNoData()
@@ -196,6 +224,40 @@ namespace PulseCli.Tests
         }
 
         [Fact]
+        public void Status_OnAFreshInstall_OnlySaysHowToStart()
+        {
+            var (code, output, _) = Run("status");
+            Assert.Equal(CliApp.Ok, code);
+            Assert.Contains("pulse start", output);
+            Assert.DoesNotContain("hasn't recorded", output);
+            Assert.False(File.Exists(DbPath));
+        }
+
+        [Fact]
+        public void DataTheAppHasNotUpgradedYet_AsksToStartPulse()
+        {
+            using (var db = new SQLiteConnection(DbPath))
+                db.CreateTable<ScreenTimePeriod>();   // tables the commands need are missing
+
+            var (code, _, error) = Run("today");
+
+            Assert.Equal(CliApp.Error, code);
+            Assert.Contains("pulse start", error);
+            Assert.DoesNotContain("in a moment", error);
+        }
+
+        [Fact]
+        public void UnreadableDatabase_FailsWithAMessage()
+        {
+            File.WriteAllText(DbPath, "this is not a database");
+
+            var (code, _, error) = Run("week");
+
+            Assert.Equal(CliApp.Error, code);
+            Assert.Contains("pulse start", error);
+        }
+
+        [Fact]
         public void Commands_NeverModifyTheDatabase()
         {
             Seed(db => AddScreen(db, DateTime.Today, 600));
@@ -223,11 +285,22 @@ namespace PulseCli.Tests
                 ExecutablePath = @"C:\Apps\Code.exe",
                 AppStart = appStart
             });
+            CliApp.IsAppRunning = () => true;
 
             var output = Run("today").Out;
 
             Assert.Contains("Screen time: 1h 0m", output);
             Assert.Contains($"{(now - appStart).Minutes}m", output);
+        }
+
+        [Fact]
+        public void Today_IgnoresLiveSnapshotWhenPulseIsNotRunning()
+        {
+            // Left behind by a Pulse that crashed: that time was never saved.
+            Seed(db => AddScreen(db, DateTime.Today, 600));
+            LiveSnapshot.Write(LiveSnapshot.PathIn(_dir), new LiveSnapshot { WrittenAt = DateTime.Now, ActiveSeconds = 3600 });
+
+            Assert.Contains("Screen time: 10m", Run("today").Out);
         }
 
         [Fact]

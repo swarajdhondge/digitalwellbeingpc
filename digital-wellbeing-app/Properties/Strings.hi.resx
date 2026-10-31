@@ -502,6 +502,9 @@
   <data name="Cli_BadOption" xml:space="preserve"><value>"{0}", "{1}" का विकल्प नहीं है। "pulse help" चलाएँ।</value></data>
   <data name="Cli_NoData" xml:space="preserve"><value>Pulse ने इस PC पर अभी तक कुछ रिकॉर्ड नहीं किया है। Pulse को एक बार खोलें, फिर दोबारा कोशिश करें।</value></data>
   <data name="Cli_DataBusy" xml:space="preserve"><value>अभी Pulse का डेटा नहीं पढ़ा जा सका। थोड़ी देर में फिर कोशिश करें।</value></data>
+  <data name="Cli_DataNeedsApp" xml:space="preserve"><value>Pulse का डेटा नहीं पढ़ा जा सका। Pulse को एक बार शुरू करें: pulse start, फिर दोबारा कोशिश करें।</value></data>
+  <data name="Cli_BadNumber" xml:space="preserve"><value>"{0}" के बाद एक संख्या चाहिए, जैसे: pulse apps -n 5</value></data>
+  <data name="Cli_Failed" xml:space="preserve"><value>कुछ गलत हो गया: {0}</value></data>
   <data name="Cli_StatusRecording" xml:space="preserve"><value>Pulse चल रहा है और रिकॉर्ड कर रहा है।</value></data>
   <data name="Cli_StatusNotRunning" xml:space="preserve"><value>Pulse नहीं चल रहा है, इसलिए कुछ भी रिकॉर्ड नहीं हो रहा।</value></data>
   <data name="Cli_StartHint" xml:space="preserve"><value>इसे शुरू करें: pulse start</value></data>

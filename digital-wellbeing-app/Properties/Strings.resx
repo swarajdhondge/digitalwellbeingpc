@@ -508,6 +508,9 @@ Would you like to update now?</value></data>
   <data name="Cli_BadOption" xml:space="preserve"><value>"{0}" isn't an option for "{1}". Run "pulse help".</value></data>
   <data name="Cli_NoData" xml:space="preserve"><value>Pulse hasn't recorded anything on this PC yet. Open Pulse once, then try again.</value></data>
   <data name="Cli_DataBusy" xml:space="preserve"><value>Couldn't read Pulse's data just now. Try again in a moment.</value></data>
+  <data name="Cli_DataNeedsApp" xml:space="preserve"><value>Couldn't read Pulse's data. Start Pulse once with: pulse start, then try again.</value></data>
+  <data name="Cli_BadNumber" xml:space="preserve"><value>"{0}" needs a number after it, like: pulse apps -n 5</value></data>
+  <data name="Cli_Failed" xml:space="preserve"><value>Something went wrong: {0}</value></data>
   <data name="Cli_StatusRecording" xml:space="preserve"><value>Pulse is running and recording.</value></data>
   <data name="Cli_StatusNotRunning" xml:space="preserve"><value>Pulse isn't running, so nothing is being recorded.</value></data>
   <data name="Cli_StartHint" xml:space="preserve"><value>Start it with: pulse start</value></data>

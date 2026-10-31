@@ -20,6 +20,9 @@ namespace digital_wellbeing_app.Cli
         private const int BarWidth = 24;
         private static readonly TimeSpan StartStopTimeout = TimeSpan.FromSeconds(15);
 
+        /// <summary>Whether the Pulse app is running; replaceable in tests.</summary>
+        internal static Func<bool> IsAppRunning = PulseInstance.IsRunning;
+
         private readonly TextWriter _out;
         private readonly TextWriter _err;
         private readonly bool _color;
@@ -42,13 +45,17 @@ namespace digital_wellbeing_app.Cli
         public int Run(string[] args)
         {
             DatabaseService.OpenReadOnly = true;
-            if (Directory.Exists(DataFolder))
-                Loc.Apply(new SettingsService().LoadLanguage());
-
             var command = args.Length == 0 ? "help" : args[0].ToLowerInvariant();
             var options = args.Skip(1).ToArray();
             try
             {
+                if (Directory.Exists(DataFolder))
+                    Loc.Apply(new SettingsService().LoadLanguage());
+
+                // `pulse today --help` and the like show the help instead of an error.
+                if (options.Any(o => o is "-h" or "--help" or "/?"))
+                    return Help();
+
                 return command switch
                 {
                     "help" or "-h" or "--help" or "/?" => Help(),
@@ -62,9 +69,18 @@ namespace digital_wellbeing_app.Cli
                     _ => Fail(Loc.Format("Cli_UnknownCommand", args[0]))
                 };
             }
-            catch (SQLite.SQLiteException)
+            catch (SQLite.SQLiteException ex) when (ex.Result is SQLite.SQLite3.Result.Busy or SQLite.SQLite3.Result.Locked)
             {
                 return Fail(Loc.Get("Cli_DataBusy"));
+            }
+            catch (SQLite.SQLiteException)
+            {
+                // Data from a newer app version, or left mid-write by a crash: the app fixes it on its next start.
+                return Fail(Loc.Get("Cli_DataNeedsApp"));
+            }
+            catch (Exception ex)
+            {
+                return Fail(Loc.Format("Cli_Failed", ex.Message));
             }
             finally
             {
@@ -102,21 +118,14 @@ namespace digital_wellbeing_app.Cli
 
         private int Status()
         {
-            bool running = PulseInstance.IsRunning();
+            bool running = IsAppRunning();
             WriteColored(Loc.Get(running ? "Cli_StatusRecording" : "Cli_StatusNotRunning"),
                 running ? ConsoleColor.Green : ConsoleColor.Yellow);
             _out.WriteLine(Loc.Format("Settings_VersionFormat", AppVersion));
             _out.WriteLine(Loc.Format("Cli_DataFolder", DataFolder));
 
-            if (File.Exists(DatabasePath))
-            {
-                if (LastSaved() is DateTime saved)
-                    _out.WriteLine(Loc.Format("Cli_LastSaved", FormatWhen(saved)));
-            }
-            else
-            {
-                _out.WriteLine(Loc.Get("Cli_NoData"));
-            }
+            if (File.Exists(DatabasePath) && LastSaved() is DateTime saved)
+                _out.WriteLine(Loc.Format("Cli_LastSaved", FormatWhen(saved)));
 
             if (!running)
                 _out.WriteLine(Loc.Get("Cli_StartHint"));
@@ -189,9 +198,12 @@ namespace digital_wellbeing_app.Cli
             {
                 var option = options[i].ToLowerInvariant();
                 if (option is "--week" or "-w") week = true;
-                else if (option is "-n" or "--top" && i + 1 < options.Length
-                         && int.TryParse(options[i + 1], out var n) && n > 0)
+                else if (option is "-n" or "--top")
                 {
+                    if (i + 1 >= options.Length
+                        || !int.TryParse(options[i + 1], NumberStyles.Integer, CultureInfo.InvariantCulture, out var n)
+                        || n < 1)
+                        return Fail(Loc.Format("Cli_BadNumber", options[i]));
                     count = Math.Min(n, 100);
                     i++;
                 }
@@ -225,7 +237,7 @@ namespace digital_wellbeing_app.Cli
 
         private int Start()
         {
-            if (PulseInstance.IsRunning())
+            if (IsAppRunning())
             {
                 _out.WriteLine(Loc.Get("Cli_AlreadyRunning"));
                 return Ok;
@@ -239,9 +251,11 @@ namespace digital_wellbeing_app.Cli
             try
             {
                 // --startup = the same quiet launch Windows uses at sign-in: tray only, no window.
+                // Shell launch so the app doesn't inherit this console's handles: an inherited
+                // output pipe stays open while the app runs, so `$x = pulse start` never returned.
                 using var _ = Process.Start(new ProcessStartInfo(exe, "--startup")
                 {
-                    UseShellExecute = false,
+                    UseShellExecute = true,
                     WorkingDirectory = AppContext.BaseDirectory
                 });
             }
@@ -250,7 +264,7 @@ namespace digital_wellbeing_app.Cli
                 return Fail(Loc.Format("Cli_StartFailed", ex.Message));
             }
 
-            if (!WaitUntil(PulseInstance.IsRunning, StartStopTimeout))
+            if (!WaitUntil(IsAppRunning, StartStopTimeout))
                 return Fail(Loc.Format("Cli_StartTimeout", (int)StartStopTimeout.TotalSeconds));
 
             WriteColored(Loc.Get("Cli_StatusRecording"), ConsoleColor.Green);
@@ -259,17 +273,18 @@ namespace digital_wellbeing_app.Cli
 
         private int Stop()
         {
-            if (!PulseInstance.IsRunning())
+            if (!IsAppRunning())
             {
                 _out.WriteLine(Loc.Get("Cli_StatusNotRunning"));
                 return Ok;
             }
 
-            if (!PulseInstance.RequestExit())
+            _out.WriteLine(Loc.Get("Cli_Stopping"));
+            // A Pulse that is still starting up isn't listening yet, so keep asking for a while.
+            if (!WaitUntil(() => PulseInstance.RequestExit() || !IsAppRunning(), StartStopTimeout))
                 return Fail(Loc.Get("Cli_StopUnsupported"));
 
-            _out.WriteLine(Loc.Get("Cli_Stopping"));
-            if (!WaitUntil(() => !PulseInstance.IsRunning(), StartStopTimeout))
+            if (!WaitUntil(() => !IsAppRunning(), StartStopTimeout))
                 return Fail(Loc.Format("Cli_StopTimeout", (int)StartStopTimeout.TotalSeconds));
 
             _out.WriteLine(Loc.Get("Cli_Stopped"));
@@ -300,7 +315,9 @@ namespace digital_wellbeing_app.Cli
                 _err.WriteLine(Loc.Get("Cli_NoData"));
                 return NoData;
             }
-            LiveData.Connect(DataFolder, DateTime.Now);
+            // live.json from a Pulse that crashed holds time that was never saved; skip it.
+            if (IsAppRunning())
+                LiveData.Connect(DataFolder, DateTime.Now);
             return command();
         }
 
@@ -315,7 +332,7 @@ namespace digital_wellbeing_app.Cli
 
         private void WriteNotRecordingHint()
         {
-            if (PulseInstance.IsRunning()) return;
+            if (IsAppRunning()) return;
             _out.WriteLine();
             WriteColored(Loc.Get("Cli_NotRecordingHint"), ConsoleColor.Yellow);
         }

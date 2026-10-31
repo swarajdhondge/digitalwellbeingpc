@@ -502,6 +502,9 @@ No se puede deshacer.</value></data>
   <data name="Cli_BadOption" xml:space="preserve"><value>"{0}" no es una opción de "{1}". Ejecuta "pulse help".</value></data>
   <data name="Cli_NoData" xml:space="preserve"><value>Pulse aún no ha registrado nada en este PC. Abre Pulse una vez y vuelve a intentarlo.</value></data>
   <data name="Cli_DataBusy" xml:space="preserve"><value>No se pudieron leer los datos de Pulse en este momento. Vuelve a intentarlo en un momento.</value></data>
+  <data name="Cli_DataNeedsApp" xml:space="preserve"><value>No se pudieron leer los datos de Pulse. Inicia Pulse una vez con: pulse start, y vuelve a intentarlo.</value></data>
+  <data name="Cli_BadNumber" xml:space="preserve"><value>"{0}" necesita un número detrás, por ejemplo: pulse apps -n 5</value></data>
+  <data name="Cli_Failed" xml:space="preserve"><value>Algo salió mal: {0}</value></data>
   <data name="Cli_StatusRecording" xml:space="preserve"><value>Pulse se está ejecutando y registrando.</value></data>
   <data name="Cli_StatusNotRunning" xml:space="preserve"><value>Pulse no se está ejecutando, así que no se registra nada.</value></data>
   <data name="Cli_StartHint" xml:space="preserve"><value>Inícialo con: pulse start</value></data>

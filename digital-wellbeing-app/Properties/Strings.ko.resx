@@ -502,6 +502,9 @@
   <data name="Cli_BadOption" xml:space="preserve"><value>"{0}"은(는) "{1}"의 옵션이 아닙니다. "pulse help"를 실행하세요.</value></data>
   <data name="Cli_NoData" xml:space="preserve"><value>이 PC에서 Pulse가 아직 아무것도 기록하지 않았습니다. Pulse를 한 번 연 다음 다시 시도하세요.</value></data>
   <data name="Cli_DataBusy" xml:space="preserve"><value>지금은 Pulse 데이터를 읽을 수 없습니다. 잠시 후 다시 시도하세요.</value></data>
+  <data name="Cli_DataNeedsApp" xml:space="preserve"><value>Pulse 데이터를 읽을 수 없습니다. Pulse를 한 번 시작한 다음(pulse start) 다시 시도하세요.</value></data>
+  <data name="Cli_BadNumber" xml:space="preserve"><value>"{0}" 뒤에는 숫자가 필요합니다. 예: pulse apps -n 5</value></data>
+  <data name="Cli_Failed" xml:space="preserve"><value>문제가 발생했습니다: {0}</value></data>
   <data name="Cli_StatusRecording" xml:space="preserve"><value>Pulse가 실행 중이며 기록하고 있습니다.</value></data>
   <data name="Cli_StatusNotRunning" xml:space="preserve"><value>Pulse가 실행 중이 아니어서 아무것도 기록되지 않습니다.</value></data>
   <data name="Cli_StartHint" xml:space="preserve"><value>시작하려면: pulse start</value></data>
