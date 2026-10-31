@@ -189,6 +189,20 @@ namespace PulseCli.Tests
             var total = TimeSpan.FromSeconds(expected);
             Assert.Contains($"Total {(int)total.TotalHours}h {total.Minutes}m", output);
             Assert.Equal(7, output.Split('\n').Count(l => l.StartsWith("  ")));
+            Assert.DoesNotContain("last week", output);   // nothing recorded last week to compare with
+        }
+
+        [Fact]
+        public void Week_ComparesWithLastWeekWhenThereIsData()
+        {
+            var monday = ReportService.GetWeekStart(DateTime.Today);
+            Seed(db =>
+            {
+                AddScreen(db, monday.AddDays(-7), 3600);
+                AddScreen(db, DateTime.Today, 1800);
+            });
+
+            Assert.Contains("↓ 50% vs last week", Run("week").Out);
         }
 
         [Fact]

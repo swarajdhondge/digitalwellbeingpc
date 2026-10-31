@@ -181,10 +181,16 @@ namespace digital_wellbeing_app.Cli
                 TimeFormatHelper.FormatCompact(TimeSpan.FromMinutes(totalMinutes)),
                 TimeFormatHelper.FormatCompact(TimeSpan.FromMinutes(totalMinutes / 7.0))));
 
-            var (_, changePercent, improved) = report.GetCurrentWeekSummary();
-            _out.WriteLine(Math.Abs(changePercent) < 1
-                ? Loc.Get("Dashboard_SameAsLastWeek")
-                : Loc.Format("Dashboard_WeeklyChange", improved ? "↓" : "↑", Math.Abs(changePercent).ToString("F0")));
+            // Nothing recorded last week (e.g. the first week with Pulse): there is nothing to compare.
+            var comparison = report.GetWeekOverWeekComparison(weekStart);
+            if (comparison.LastWeekScreenTime > TimeSpan.Zero)
+            {
+                var changePercent = comparison.ScreenTimeChangePercent;
+                _out.WriteLine(Math.Abs(changePercent) < 1
+                    ? Loc.Get("Dashboard_SameAsLastWeek")
+                    : Loc.Format("Dashboard_WeeklyChange", comparison.ScreenTimeImproved ? "↓" : "↑",
+                        Math.Abs(changePercent).ToString("F0")));
+            }
 
             WriteNotRecordingHint();
             return Ok;
