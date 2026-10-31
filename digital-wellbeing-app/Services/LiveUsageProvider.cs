@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using digital_wellbeing_app.CoreLogic;
 using digital_wellbeing_app.Helpers;
 using digital_wellbeing_app.Models;
 
@@ -22,20 +21,23 @@ namespace digital_wellbeing_app.Services
     /// </summary>
     public static class LiveUsageProvider
     {
-        private static AppUsageTracker? AppTracker
-            => (System.Windows.Application.Current as App)?.AppTracker;
+        // Live (not yet saved) data. The GUI points these at its running trackers at startup; the
+        // command-line tool points them at the snapshot the GUI writes. Unset = saved data only.
 
-        private static ScreenTimeTracker? ScreenTracker
-            => (System.Windows.Application.Current as App)?.ScreenTracker;
+        /// <summary>Today's active screen time including saved time, or null when unknown.</summary>
+        public static Func<TimeSpan?> LiveActiveTime { get; set; } = () => null;
 
-        private static SoundExposureManager? SoundTracker
-            => (System.Windows.Application.Current as App)?.SoundExposureMgr;
+        /// <summary>Saved plus live app sessions for a date range, or null to read saved data only.</summary>
+        public static Func<DateTime, DateTime, List<AppUsageSession>?> LiveAppSessionsForRange { get; set; } = (_, _) => null;
+
+        /// <summary>The sound session being recorded, or null.</summary>
+        public static Func<SoundUsageSession?> LiveSoundSession { get; set; } = () => null;
 
         // --- Screen time ---
 
         /// <summary>Today's active screen time, live session included (persisted fallback).</summary>
         public static TimeSpan GetTodayActiveTime()
-            => CombineTodayActiveTime(ScreenTracker?.CurrentActiveTime);
+            => CombineTodayActiveTime(LiveActiveTime());
 
         /// <summary>
         /// Testable core: returns the live active time when supplied, otherwise the persisted
@@ -67,7 +69,7 @@ namespace digital_wellbeing_app.Services
         /// lag the App Usage and Dashboard pages by the periodic-save interval.
         /// </summary>
         public static List<AppUsageSession> GetAppSessionsForRange(DateTime startDate, DateTime endDate)
-            => AppTracker?.GetSessionsForRange(startDate, endDate)
+            => LiveAppSessionsForRange(startDate, endDate)
                 ?? DatabaseService.GetAppUsageSessionsForRange(startDate, endDate).ToList();
 
         /// <summary>
@@ -111,7 +113,7 @@ namespace digital_wellbeing_app.Services
             var listening = sessions.Aggregate(TimeSpan.Zero, (sum, s) => sum + s.ActualListeningDuration);
             var harmful = sessions.Aggregate(TimeSpan.Zero, (sum, s) => sum + s.HarmfulDuration);
 
-            var live = SoundTracker?.CurrentSession;
+            var live = LiveSoundSession();
             if (live != null && live.StartTime.Date == DateTime.Today)
             {
                 listening += live.ActualListeningDuration;

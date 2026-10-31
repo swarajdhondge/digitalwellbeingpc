@@ -487,4 +487,41 @@ Voulez-vous mettre à jour maintenant ?</value></data>
   <data name="Dashboard_PerDayAverage" xml:space="preserve"><value> · {0}/jour en moy.</value></data>
   <data name="Settings_LanguageNote" xml:space="preserve"><value>* Traduit avec l’aide de l’IA, des erreurs sont possibles. </value></data>
   <data name="Settings_LanguageReport" xml:space="preserve"><value>Signaler un problème de traduction</value></data>
+  <data name="Cli_Usage" xml:space="preserve"><value>Utilisation : pulse &lt;commande&gt; [options]</value></data>
+  <data name="Cli_CommandsHeader" xml:space="preserve"><value>Commandes :</value></data>
+  <data name="Cli_Help_Status" xml:space="preserve"><value>Si Pulse enregistre, sa version et son dossier de données</value></data>
+  <data name="Cli_Help_Today" xml:space="preserve"><value>Temps d'écran, objectif et applis principales du jour</value></data>
+  <data name="Cli_Help_Week" xml:space="preserve"><value>Cette semaine jour par jour, comparée à la semaine dernière</value></data>
+  <data name="Cli_Help_Apps" xml:space="preserve"><value>Applis principales du jour (--week pour cette semaine, -n 5 pour le nombre)</value></data>
+  <data name="Cli_Help_Start" xml:space="preserve"><value>Démarrer Pulse dans la zone de notification</value></data>
+  <data name="Cli_Help_Stop" xml:space="preserve"><value>Enregistrer et quitter Pulse</value></data>
+  <data name="Cli_Help_Version" xml:space="preserve"><value>Afficher la version</value></data>
+  <data name="Cli_Help_Help" xml:space="preserve"><value>Afficher cette aide</value></data>
+  <data name="Cli_HelpFooter" xml:space="preserve"><value>Pulse enregistre pendant qu'il s'exécute dans la zone de notification. Cet outil ne fait que lire ces données, et rien ne quitte votre PC.</value></data>
+  <data name="Cli_UnknownCommand" xml:space="preserve"><value>Commande inconnue « {0} ». Exécutez « pulse help » pour voir les commandes.</value></data>
+  <data name="Cli_BadOption" xml:space="preserve"><value>« {0} » n'est pas une option de « {1} ». Exécutez « pulse help ».</value></data>
+  <data name="Cli_NoData" xml:space="preserve"><value>Pulse n'a encore rien enregistré sur ce PC. Ouvrez Pulse une fois, puis réessayez.</value></data>
+  <data name="Cli_DataBusy" xml:space="preserve"><value>Impossible de lire les données de Pulse pour le moment. Réessayez dans un instant.</value></data>
+  <data name="Cli_StatusRecording" xml:space="preserve"><value>Pulse est en cours d'exécution et enregistre.</value></data>
+  <data name="Cli_StatusNotRunning" xml:space="preserve"><value>Pulse n'est pas lancé, donc rien n'est enregistré.</value></data>
+  <data name="Cli_StartHint" xml:space="preserve"><value>Démarrez-le avec : pulse start</value></data>
+  <data name="Cli_NotRecordingHint" xml:space="preserve"><value>Aucun enregistrement en ce moment. Démarrez Pulse avec : pulse start</value></data>
+  <data name="Cli_DataFolder" xml:space="preserve"><value>Données : {0}</value></data>
+  <data name="Cli_LastSaved" xml:space="preserve"><value>Dernier enregistrement : {0}</value></data>
+  <data name="Cli_TopAppsToday" xml:space="preserve"><value>Applis principales du jour</value></data>
+  <data name="Cli_TopAppsWeek" xml:space="preserve"><value>Applis principales de la semaine</value></data>
+  <data name="Cli_ThisWeek" xml:space="preserve"><value>Cette semaine</value></data>
+  <data name="Cli_WeekTotal" xml:space="preserve"><value>Total {0} · {1} par jour en moyenne</value></data>
+  <data name="Cli_NoAppTime" xml:space="preserve"><value>Aucun temps d'appli enregistré pour l'instant.</value></data>
+  <data name="Cli_AlreadyRunning" xml:space="preserve"><value>Pulse est déjà lancé.</value></data>
+  <data name="Cli_AppNotFound" xml:space="preserve"><value>Pulse est introuvable à côté de cet outil. Réinstaller Pulse devrait corriger le problème.</value></data>
+  <data name="Cli_Starting" xml:space="preserve"><value>Démarrage de Pulse dans la zone de notification…</value></data>
+  <data name="Cli_StartFailed" xml:space="preserve"><value>Pulse n'a pas démarré : {0}</value></data>
+  <data name="Cli_StartTimeout" xml:space="preserve"><value>Pulse n'a pas démarré en {0} secondes. Vérifiez la zone de notification.</value></data>
+  <data name="Cli_Stopping" xml:space="preserve"><value>Demande à Pulse d'enregistrer et de quitter…</value></data>
+  <data name="Cli_Stopped" xml:space="preserve"><value>Pulse a enregistré et s'est fermé.</value></data>
+  <data name="Cli_StopUnsupported" xml:space="preserve"><value>Cette version de Pulse ne peut pas être arrêtée depuis la ligne de commande. Utilisez Quitter dans son menu de la zone de notification.</value></data>
+  <data name="Cli_StopTimeout" xml:space="preserve"><value>Pulse ne s'est pas fermé en {0} secondes. Utilisez Quitter dans son menu de la zone de notification.</value></data>
+  <data name="Help_CommandLine" xml:space="preserve"><value>Ligne de commande</value></data>
+  <data name="Help_CommandLineBody" xml:space="preserve"><value>Tapez « pulse help » dans le Terminal ou PowerShell pour voir le temps d'écran du jour, cette semaine et vos applis principales, ou pour démarrer et arrêter Pulse. Il lit les mêmes données sur ce PC.</value></data>
 </root>

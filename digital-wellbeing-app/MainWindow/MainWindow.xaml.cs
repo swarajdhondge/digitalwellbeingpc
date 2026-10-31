@@ -1119,10 +1119,10 @@ namespace digital_wellbeing_app.MainWindow
         }
 
         /// <summary>
-        /// Fully quit Pulse (bypasses close-to-tray). Used by the tray "Exit" item and the
-        /// in-app Exit action.
+        /// Fully quit Pulse (bypasses close-to-tray). Used by the tray "Exit" item, the
+        /// in-app Exit action and `pulse stop`.
         /// </summary>
-        private void ExitApplication()
+        internal void ExitApplication()
         {
             _isExiting = true;
             Close();

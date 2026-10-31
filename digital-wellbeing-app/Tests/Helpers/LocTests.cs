@@ -62,7 +62,13 @@ namespace digital_wellbeing_app.Tests.Helpers
         {
             var xaml = new Regex(@"\{l:Loc\s+([A-Za-z0-9_]+)\}");
             var code = new Regex(@"Loc\.(?:Get|Format)\(\s*""([A-Za-z0-9_]+)""");
-            foreach (var file in Directory.EnumerateFiles(AppDir, "*.*", SearchOption.AllDirectories))
+            // The `pulse` command-line tool (repo/pulse-cli) uses the same resource files.
+            var cliDir = Path.Combine(Path.GetDirectoryName(AppDir)!, "pulse-cli");
+            var files = Directory.EnumerateFiles(AppDir, "*.*", SearchOption.AllDirectories)
+                .Concat(Directory.Exists(cliDir)
+                    ? Directory.EnumerateFiles(cliDir, "*.cs", SearchOption.AllDirectories)
+                    : Enumerable.Empty<string>());
+            foreach (var file in files)
             {
                 if (file.Contains($"{Path.DirectorySeparatorChar}obj{Path.DirectorySeparatorChar}")
                     || file.Contains($"{Path.DirectorySeparatorChar}bin{Path.DirectorySeparatorChar}")

@@ -110,6 +110,12 @@ namespace digital_wellbeing_app.Services
             }
         }
 
+        /// <summary>
+        /// Open the database read-only, without creating or upgrading it. Set by the command-line
+        /// tool before first use; the app itself always opens read-write.
+        /// </summary>
+        public static bool OpenReadOnly { get; set; }
+
         public static SQLiteConnection GetConnection()
         {
             if (_database is null)
@@ -118,9 +124,20 @@ namespace digital_wellbeing_app.Services
                 {
                     if (_database is null)
                     {
-                        _database = new SQLiteConnection(DbPath,
-                            SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create | SQLiteOpenFlags.FullMutex);
-                        InitializeTables();
+                        if (OpenReadOnly)
+                        {
+                            // Waits for the app's writes instead of failing with "database is locked".
+                            _database = new SQLiteConnection(DbPath, SQLiteOpenFlags.ReadOnly | SQLiteOpenFlags.FullMutex)
+                            {
+                                BusyTimeout = TimeSpan.FromSeconds(2)
+                            };
+                        }
+                        else
+                        {
+                            _database = new SQLiteConnection(DbPath,
+                                SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create | SQLiteOpenFlags.FullMutex);
+                            InitializeTables();
+                        }
                     }
                 }
             }

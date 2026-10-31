@@ -1,5 +1,4 @@
 // File: App.xaml.cs
-using System.Security.Principal;
 using System.Threading;
 using Microsoft.Win32;
 using Velopack;
@@ -62,21 +61,17 @@ namespace digital_wellbeing_app
         }
 
         // User-scoped mutex: allows multiple Windows users to each run their own instance
-        private static readonly string MutexName = $"DigitalWellbeingPC_SingleInstance_{GetCurrentUserSid()}";
+        private static readonly string MutexName = Services.PulseInstance.SingleInstanceMutexName;
         private static Mutex? _mutex;
         private static bool _ownsMutex;
 
-        private static string GetCurrentUserSid()
-        {
-            try
-            {
-                return WindowsIdentity.GetCurrent().User?.Value ?? "default";
-            }
-            catch
-            {
-                return "default";
-            }
-        }
+        // `pulse stop` signals this event; Pulse then quits the same way as tray → Exit.
+        private EventWaitHandle? _exitRequest;
+        private RegisteredWaitHandle? _exitRequestWait;
+
+        // Writes live.json every 30 s for the command-line tool.
+        private System.Threading.Timer? _liveSnapshotTimer;
+        private string? _liveSnapshotPath;
 
         public CoreLogic.ScreenTimeTracker ScreenTracker { get; private set; } = null!;
         public CoreLogic.AppUsageTracker AppTracker { get; private set; } = null!;
@@ -89,6 +84,12 @@ namespace digital_wellbeing_app
         protected override void OnStartup(System.Windows.StartupEventArgs e)
         {
             Services.StartupService.DetectStartupLaunch(e.Args);
+
+            // Pages read live (unsaved) totals from the running trackers. Evaluated on each call,
+            // so it falls back to saved data until the trackers below have started.
+            Services.LiveUsageProvider.LiveActiveTime = () => ScreenTracker?.CurrentActiveTime;
+            Services.LiveUsageProvider.LiveAppSessionsForRange = (start, end) => AppTracker?.GetSessionsForRange(start, end);
+            Services.LiveUsageProvider.LiveSoundSession = () => SoundExposureMgr.CurrentSession;
 
             // Global exception handlers - catch unhandled crashes
             DispatcherUnhandledException += OnDispatcherUnhandledException;
@@ -164,6 +165,7 @@ namespace digital_wellbeing_app
             AppTracker.Start();
             AppLimitSvc = new Services.AppLimitService(AppTracker);
             AppLimitSvc.Start();
+            StartCommandLineSupport();
             // StartupUri (handled inside base.OnStartup above) constructs MainWindow before this
             // point, so it's already available to wire the notification callback into.
             if (Current.MainWindow is MainWindow.MainWindow mainWindow)
@@ -346,9 +348,64 @@ namespace digital_wellbeing_app
                 WebsiteUsageSvc.Start();
         }
 
+        /// <summary>Live snapshot + exit request used by the `pulse` command-line tool.</summary>
+        private void StartCommandLineSupport()
+        {
+            try
+            {
+                _liveSnapshotPath = Services.LiveSnapshot.PathIn(
+                    System.IO.Path.GetDirectoryName(Services.DatabaseService.GetDatabaseFilePath())!);
+                _liveSnapshotTimer = new System.Threading.Timer(_ => WriteLiveSnapshot(), null, TimeSpan.Zero, TimeSpan.FromSeconds(30));
+            }
+            catch (Exception ex)
+            {
+                Services.LogService.Warning($"Live snapshot disabled: {ex.Message}");
+            }
+
+            try
+            {
+                _exitRequest = new EventWaitHandle(false, EventResetMode.AutoReset, Services.PulseInstance.ExitRequestEventName);
+                _exitRequestWait = ThreadPool.RegisterWaitForSingleObject(_exitRequest, (_, _) =>
+                    Dispatcher.BeginInvoke(() =>
+                    {
+                        Services.LogService.Info("Exit requested from the command line");
+                        (MainWindow as MainWindow.MainWindow)?.ExitApplication();
+                    }), null, Timeout.Infinite, executeOnlyOnce: true);
+            }
+            catch (Exception ex)
+            {
+                Services.LogService.Warning($"Command-line exit request unavailable: {ex.Message}");
+            }
+        }
+
+        private void WriteLiveSnapshot()
+        {
+            try
+            {
+                if (_liveSnapshotPath == null || ScreenTracker == null || AppTracker == null) return;
+                var app = AppTracker.CurrentSession;
+                Services.LiveSnapshot.Write(_liveSnapshotPath, new Services.LiveSnapshot
+                {
+                    WrittenAt = DateTime.Now,
+                    ActiveSeconds = (int)ScreenTracker.CurrentActiveTime.TotalSeconds,
+                    AppName = app?.AppName,
+                    ExecutablePath = app?.ExecutablePath,
+                    AppStart = app?.StartTime
+                });
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[LiveSnapshot] write failed: {ex.Message}");
+            }
+        }
+
         protected override void OnExit(System.Windows.ExitEventArgs e)
         {
             Services.LogService.Info("App shutting down");
+
+            _exitRequestWait?.Unregister(null);
+            _exitRequest?.Dispose();
+            _liveSnapshotTimer?.Dispose();
 
             // Unsubscribe from system events
             SystemEvents.SessionSwitch -= OnSessionSwitch;
@@ -365,6 +422,7 @@ namespace digital_wellbeing_app
 
             // Close database connection last (after all trackers have saved)
             Services.DatabaseService.CloseConnection();
+            if (_liveSnapshotPath != null) Services.LiveSnapshot.Delete(_liveSnapshotPath);
 
             Services.LogService.Info("App shutdown complete");
 

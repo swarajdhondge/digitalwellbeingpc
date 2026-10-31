@@ -487,4 +487,41 @@
   <data name="Dashboard_PerDayAverage" xml:space="preserve"><value> · 日均 {0}</value></data>
   <data name="Settings_LanguageNote" xml:space="preserve"><value>* 由 AI 辅助翻译，可能存在错误。</value></data>
   <data name="Settings_LanguageReport" xml:space="preserve"><value>报告翻译问题</value></data>
+  <data name="Cli_Usage" xml:space="preserve"><value>用法：pulse &lt;命令&gt; [选项]</value></data>
+  <data name="Cli_CommandsHeader" xml:space="preserve"><value>命令：</value></data>
+  <data name="Cli_Help_Status" xml:space="preserve"><value>Pulse 是否正在记录、版本和数据文件夹</value></data>
+  <data name="Cli_Help_Today" xml:space="preserve"><value>今天的屏幕使用时间、目标和常用应用</value></data>
+  <data name="Cli_Help_Week" xml:space="preserve"><value>本周每天的记录，并与上周比较</value></data>
+  <data name="Cli_Help_Apps" xml:space="preserve"><value>今天的常用应用（--week 查看本周，-n 5 指定数量）</value></data>
+  <data name="Cli_Help_Start" xml:space="preserve"><value>在通知区域启动 Pulse</value></data>
+  <data name="Cli_Help_Stop" xml:space="preserve"><value>保存并退出 Pulse</value></data>
+  <data name="Cli_Help_Version" xml:space="preserve"><value>显示版本</value></data>
+  <data name="Cli_Help_Help" xml:space="preserve"><value>显示此帮助</value></data>
+  <data name="Cli_HelpFooter" xml:space="preserve"><value>Pulse 在通知区域运行时进行记录。此工具只读取这些数据，任何内容都不会离开你的电脑。</value></data>
+  <data name="Cli_UnknownCommand" xml:space="preserve"><value>未知命令“{0}”。运行“pulse help”查看所有命令。</value></data>
+  <data name="Cli_BadOption" xml:space="preserve"><value>“{0}”不是“{1}”的选项。请运行“pulse help”。</value></data>
+  <data name="Cli_NoData" xml:space="preserve"><value>Pulse 还没有在这台电脑上记录任何内容。请先打开一次 Pulse，然后重试。</value></data>
+  <data name="Cli_DataBusy" xml:space="preserve"><value>暂时无法读取 Pulse 的数据。请稍后再试。</value></data>
+  <data name="Cli_StatusRecording" xml:space="preserve"><value>Pulse 正在运行并记录。</value></data>
+  <data name="Cli_StatusNotRunning" xml:space="preserve"><value>Pulse 未运行，因此没有记录任何内容。</value></data>
+  <data name="Cli_StartHint" xml:space="preserve"><value>启动命令：pulse start</value></data>
+  <data name="Cli_NotRecordingHint" xml:space="preserve"><value>当前未在记录。启动 Pulse：pulse start</value></data>
+  <data name="Cli_DataFolder" xml:space="preserve"><value>数据：{0}</value></data>
+  <data name="Cli_LastSaved" xml:space="preserve"><value>上次保存：{0}</value></data>
+  <data name="Cli_TopAppsToday" xml:space="preserve"><value>今天的常用应用</value></data>
+  <data name="Cli_TopAppsWeek" xml:space="preserve"><value>本周的常用应用</value></data>
+  <data name="Cli_ThisWeek" xml:space="preserve"><value>本周</value></data>
+  <data name="Cli_WeekTotal" xml:space="preserve"><value>总计 {0} · 平均每天 {1}</value></data>
+  <data name="Cli_NoAppTime" xml:space="preserve"><value>还没有记录应用使用时间。</value></data>
+  <data name="Cli_AlreadyRunning" xml:space="preserve"><value>Pulse 已在运行。</value></data>
+  <data name="Cli_AppNotFound" xml:space="preserve"><value>在此工具旁边找不到 Pulse。重新安装 Pulse 应可解决此问题。</value></data>
+  <data name="Cli_Starting" xml:space="preserve"><value>正在通知区域启动 Pulse…</value></data>
+  <data name="Cli_StartFailed" xml:space="preserve"><value>Pulse 未能启动：{0}</value></data>
+  <data name="Cli_StartTimeout" xml:space="preserve"><value>Pulse 未在 {0} 秒内启动。请查看通知区域。</value></data>
+  <data name="Cli_Stopping" xml:space="preserve"><value>正在请求 Pulse 保存并退出…</value></data>
+  <data name="Cli_Stopped" xml:space="preserve"><value>Pulse 已保存并退出。</value></data>
+  <data name="Cli_StopUnsupported" xml:space="preserve"><value>此版本的 Pulse 无法从命令行退出。请使用其通知区域菜单中的“退出”。</value></data>
+  <data name="Cli_StopTimeout" xml:space="preserve"><value>Pulse 未在 {0} 秒内退出。请使用其通知区域菜单中的“退出”。</value></data>
+  <data name="Help_CommandLine" xml:space="preserve"><value>命令行</value></data>
+  <data name="Help_CommandLineBody" xml:space="preserve"><value>在终端或 PowerShell 中输入“pulse help”，即可查看今天的屏幕使用时间、本周记录和常用应用，或启动、退出 Pulse。它读取的是这台电脑上的同一份数据。</value></data>
 </root>

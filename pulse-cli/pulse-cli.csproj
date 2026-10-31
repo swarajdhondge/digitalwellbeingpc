@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    `pulse` command-line tool. Ships next to DigitalWellbeing.exe and only READS the data the
+    app records (%LocalAppData%\Pulse). It reuses the app's data, report and formatting code by
+    linking the source files below, so both show the same numbers in the same 14 languages.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0-windows10.0.26100.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>pulse</AssemblyName>
+    <!-- Same root namespace as the app so the linked Strings*.resx keep their resource names. -->
+    <RootNamespace>digital_wellbeing_app</RootNamespace>
+    <Product>Pulse - DigitalWellbeingPC</Product>
+    <Version>2.4.1</Version>
+    <ApplicationIcon>..\digital-wellbeing-app\Resources\Icons\digital-balance-icon.ico</ApplicationIcon>
+    <!-- Tests live in pulse-cli/Tests (their own project). -->
+    <DefaultItemExcludes>$(DefaultItemExcludes);Tests\**</DefaultItemExcludes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="sqlite-net-pcl" Version="1.11.285" />
+    <InternalsVisibleTo Include="pulse-cli.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\digital-wellbeing-app\Models\*.cs" LinkBase="Shared\Models" />
+    <Compile Include="..\digital-wellbeing-app\Services\DatabaseService.cs" LinkBase="Shared\Services" />
+    <Compile Include="..\digital-wellbeing-app\Services\SettingsService.cs" LinkBase="Shared\Services" />
+    <Compile Include="..\digital-wellbeing-app\Services\LogService.cs" LinkBase="Shared\Services" />
+    <Compile Include="..\digital-wellbeing-app\Services\LiveUsageProvider.cs" LinkBase="Shared\Services" />
+    <Compile Include="..\digital-wellbeing-app\Services\LiveSnapshot.cs" LinkBase="Shared\Services" />
+    <Compile Include="..\digital-wellbeing-app\Services\PulseInstance.cs" LinkBase="Shared\Services" />
+    <Compile Include="..\digital-wellbeing-app\Services\ReportService.cs" LinkBase="Shared\Services" />
+    <Compile Include="..\digital-wellbeing-app\Services\GoalService.cs" LinkBase="Shared\Services" />
+    <Compile Include="..\digital-wellbeing-app\Services\AppNameService.cs" LinkBase="Shared\Services" />
+    <Compile Include="..\digital-wellbeing-app\Helpers\TimeFormatHelper.cs" LinkBase="Shared\Helpers" />
+    <Compile Include="..\digital-wellbeing-app\Helpers\AppIdentity.cs" LinkBase="Shared\Helpers" />
+    <EmbeddedResource Include="..\digital-wellbeing-app\Properties\Strings*.resx" LinkBase="Properties" />
+  </ItemGroup>
+
+</Project>

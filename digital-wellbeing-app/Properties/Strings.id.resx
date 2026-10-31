@@ -487,4 +487,41 @@ Perbarui sekarang?</value></data>
   <data name="Dashboard_PerDayAverage" xml:space="preserve"><value> · rata-rata {0}/hari</value></data>
   <data name="Settings_LanguageNote" xml:space="preserve"><value>* Diterjemahkan dengan bantuan AI dan mungkin mengandung kesalahan. </value></data>
   <data name="Settings_LanguageReport" xml:space="preserve"><value>Laporkan masalah terjemahan</value></data>
+  <data name="Cli_Usage" xml:space="preserve"><value>Penggunaan: pulse &lt;perintah&gt; [opsi]</value></data>
+  <data name="Cli_CommandsHeader" xml:space="preserve"><value>Perintah:</value></data>
+  <data name="Cli_Help_Status" xml:space="preserve"><value>Apakah Pulse sedang merekam, versinya, dan folder datanya</value></data>
+  <data name="Cli_Help_Today" xml:space="preserve"><value>Waktu layar, target, dan aplikasi teratas hari ini</value></data>
+  <data name="Cli_Help_Week" xml:space="preserve"><value>Minggu ini per hari, dibandingkan dengan minggu lalu</value></data>
+  <data name="Cli_Help_Apps" xml:space="preserve"><value>Aplikasi teratas hari ini (--week untuk minggu ini, -n 5 untuk jumlahnya)</value></data>
+  <data name="Cli_Help_Start" xml:space="preserve"><value>Mulai Pulse di area notifikasi</value></data>
+  <data name="Cli_Help_Stop" xml:space="preserve"><value>Simpan dan tutup Pulse</value></data>
+  <data name="Cli_Help_Version" xml:space="preserve"><value>Tampilkan versi</value></data>
+  <data name="Cli_Help_Help" xml:space="preserve"><value>Tampilkan bantuan ini</value></data>
+  <data name="Cli_HelpFooter" xml:space="preserve"><value>Pulse merekam saat berjalan di area notifikasi. Alat ini hanya membaca data tersebut, dan tidak ada yang keluar dari PC Anda.</value></data>
+  <data name="Cli_UnknownCommand" xml:space="preserve"><value>Perintah "{0}" tidak dikenal. Jalankan "pulse help" untuk melihat perintah.</value></data>
+  <data name="Cli_BadOption" xml:space="preserve"><value>"{0}" bukan opsi untuk "{1}". Jalankan "pulse help".</value></data>
+  <data name="Cli_NoData" xml:space="preserve"><value>Pulse belum merekam apa pun di PC ini. Buka Pulse sekali, lalu coba lagi.</value></data>
+  <data name="Cli_DataBusy" xml:space="preserve"><value>Data Pulse tidak dapat dibaca saat ini. Coba lagi sebentar lagi.</value></data>
+  <data name="Cli_StatusRecording" xml:space="preserve"><value>Pulse sedang berjalan dan merekam.</value></data>
+  <data name="Cli_StatusNotRunning" xml:space="preserve"><value>Pulse tidak berjalan, jadi tidak ada yang direkam.</value></data>
+  <data name="Cli_StartHint" xml:space="preserve"><value>Mulai dengan: pulse start</value></data>
+  <data name="Cli_NotRecordingHint" xml:space="preserve"><value>Saat ini tidak merekam. Mulai Pulse dengan: pulse start</value></data>
+  <data name="Cli_DataFolder" xml:space="preserve"><value>Data: {0}</value></data>
+  <data name="Cli_LastSaved" xml:space="preserve"><value>Terakhir disimpan: {0}</value></data>
+  <data name="Cli_TopAppsToday" xml:space="preserve"><value>Aplikasi teratas hari ini</value></data>
+  <data name="Cli_TopAppsWeek" xml:space="preserve"><value>Aplikasi teratas minggu ini</value></data>
+  <data name="Cli_ThisWeek" xml:space="preserve"><value>Minggu ini</value></data>
+  <data name="Cli_WeekTotal" xml:space="preserve"><value>Total {0} · rata-rata {1} per hari</value></data>
+  <data name="Cli_NoAppTime" xml:space="preserve"><value>Belum ada waktu aplikasi yang direkam.</value></data>
+  <data name="Cli_AlreadyRunning" xml:space="preserve"><value>Pulse sudah berjalan.</value></data>
+  <data name="Cli_AppNotFound" xml:space="preserve"><value>Pulse tidak ditemukan di samping alat ini. Menginstal ulang Pulse seharusnya memperbaikinya.</value></data>
+  <data name="Cli_Starting" xml:space="preserve"><value>Memulai Pulse di area notifikasi…</value></data>
+  <data name="Cli_StartFailed" xml:space="preserve"><value>Pulse tidak dapat dimulai: {0}</value></data>
+  <data name="Cli_StartTimeout" xml:space="preserve"><value>Pulse tidak dimulai dalam {0} detik. Periksa area notifikasi.</value></data>
+  <data name="Cli_Stopping" xml:space="preserve"><value>Meminta Pulse untuk menyimpan dan menutup…</value></data>
+  <data name="Cli_Stopped" xml:space="preserve"><value>Pulse telah menyimpan dan ditutup.</value></data>
+  <data name="Cli_StopUnsupported" xml:space="preserve"><value>Versi Pulse ini tidak dapat dihentikan dari baris perintah. Gunakan Keluar di menu area notifikasinya.</value></data>
+  <data name="Cli_StopTimeout" xml:space="preserve"><value>Pulse tidak ditutup dalam {0} detik. Gunakan Keluar di menu area notifikasinya.</value></data>
+  <data name="Help_CommandLine" xml:space="preserve"><value>Baris perintah</value></data>
+  <data name="Help_CommandLineBody" xml:space="preserve"><value>Ketik "pulse help" di Terminal atau PowerShell untuk melihat waktu layar hari ini, minggu ini, dan aplikasi teratas Anda, atau untuk memulai dan menghentikan Pulse. Alat ini membaca data yang sama di PC ini.</value></data>
 </root>

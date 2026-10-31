@@ -487,4 +487,41 @@
   <data name="Dashboard_PerDayAverage" xml:space="preserve"><value> · औसत {0}/दिन</value></data>
   <data name="Settings_LanguageNote" xml:space="preserve"><value>* AI की मदद से अनुवादित, इसमें गलतियाँ हो सकती हैं। </value></data>
   <data name="Settings_LanguageReport" xml:space="preserve"><value>अनुवाद की समस्या बताएं</value></data>
+  <data name="Cli_Usage" xml:space="preserve"><value>उपयोग: pulse &lt;कमांड&gt; [विकल्प]</value></data>
+  <data name="Cli_CommandsHeader" xml:space="preserve"><value>कमांड:</value></data>
+  <data name="Cli_Help_Status" xml:space="preserve"><value>Pulse रिकॉर्ड कर रहा है या नहीं, उसका वर्ज़न और डेटा फ़ोल्डर</value></data>
+  <data name="Cli_Help_Today" xml:space="preserve"><value>आज का स्क्रीन टाइम, लक्ष्य और शीर्ष ऐप्स</value></data>
+  <data name="Cli_Help_Week" xml:space="preserve"><value>इस सप्ताह दिन-ब-दिन, पिछले सप्ताह की तुलना में</value></data>
+  <data name="Cli_Help_Apps" xml:space="preserve"><value>आज के शीर्ष ऐप्स (इस सप्ताह के लिए --week, संख्या के लिए -n 5)</value></data>
+  <data name="Cli_Help_Start" xml:space="preserve"><value>Pulse को सूचना क्षेत्र में शुरू करें</value></data>
+  <data name="Cli_Help_Stop" xml:space="preserve"><value>Pulse को सेव करके बंद करें</value></data>
+  <data name="Cli_Help_Version" xml:space="preserve"><value>वर्ज़न दिखाएँ</value></data>
+  <data name="Cli_Help_Help" xml:space="preserve"><value>यह सहायता दिखाएँ</value></data>
+  <data name="Cli_HelpFooter" xml:space="preserve"><value>Pulse सूचना क्षेत्र में चलते समय रिकॉर्ड करता है। यह टूल केवल वह डेटा पढ़ता है, और कुछ भी आपके PC से बाहर नहीं जाता।</value></data>
+  <data name="Cli_UnknownCommand" xml:space="preserve"><value>अज्ञात कमांड "{0}"। कमांड देखने के लिए "pulse help" चलाएँ।</value></data>
+  <data name="Cli_BadOption" xml:space="preserve"><value>"{0}", "{1}" का विकल्प नहीं है। "pulse help" चलाएँ।</value></data>
+  <data name="Cli_NoData" xml:space="preserve"><value>Pulse ने इस PC पर अभी तक कुछ रिकॉर्ड नहीं किया है। Pulse को एक बार खोलें, फिर दोबारा कोशिश करें।</value></data>
+  <data name="Cli_DataBusy" xml:space="preserve"><value>अभी Pulse का डेटा नहीं पढ़ा जा सका। थोड़ी देर में फिर कोशिश करें।</value></data>
+  <data name="Cli_StatusRecording" xml:space="preserve"><value>Pulse चल रहा है और रिकॉर्ड कर रहा है।</value></data>
+  <data name="Cli_StatusNotRunning" xml:space="preserve"><value>Pulse नहीं चल रहा है, इसलिए कुछ भी रिकॉर्ड नहीं हो रहा।</value></data>
+  <data name="Cli_StartHint" xml:space="preserve"><value>इसे शुरू करें: pulse start</value></data>
+  <data name="Cli_NotRecordingHint" xml:space="preserve"><value>अभी रिकॉर्डिंग नहीं हो रही। Pulse शुरू करें: pulse start</value></data>
+  <data name="Cli_DataFolder" xml:space="preserve"><value>डेटा: {0}</value></data>
+  <data name="Cli_LastSaved" xml:space="preserve"><value>आख़िरी बार सेव: {0}</value></data>
+  <data name="Cli_TopAppsToday" xml:space="preserve"><value>आज के शीर्ष ऐप्स</value></data>
+  <data name="Cli_TopAppsWeek" xml:space="preserve"><value>इस सप्ताह के शीर्ष ऐप्स</value></data>
+  <data name="Cli_ThisWeek" xml:space="preserve"><value>इस सप्ताह</value></data>
+  <data name="Cli_WeekTotal" xml:space="preserve"><value>कुल {0} · औसतन {1} प्रतिदिन</value></data>
+  <data name="Cli_NoAppTime" xml:space="preserve"><value>अभी तक कोई ऐप टाइम रिकॉर्ड नहीं हुआ।</value></data>
+  <data name="Cli_AlreadyRunning" xml:space="preserve"><value>Pulse पहले से चल रहा है।</value></data>
+  <data name="Cli_AppNotFound" xml:space="preserve"><value>इस टूल के पास Pulse नहीं मिला। Pulse को दोबारा इंस्टॉल करने से यह ठीक हो जाना चाहिए।</value></data>
+  <data name="Cli_Starting" xml:space="preserve"><value>Pulse को सूचना क्षेत्र में शुरू किया जा रहा है…</value></data>
+  <data name="Cli_StartFailed" xml:space="preserve"><value>Pulse शुरू नहीं हुआ: {0}</value></data>
+  <data name="Cli_StartTimeout" xml:space="preserve"><value>Pulse {0} सेकंड में शुरू नहीं हुआ। सूचना क्षेत्र देखें।</value></data>
+  <data name="Cli_Stopping" xml:space="preserve"><value>Pulse से सेव करके बंद होने को कहा जा रहा है…</value></data>
+  <data name="Cli_Stopped" xml:space="preserve"><value>Pulse सेव करके बंद हो गया।</value></data>
+  <data name="Cli_StopUnsupported" xml:space="preserve"><value>Pulse के इस वर्ज़न को कमांड लाइन से बंद नहीं किया जा सकता। उसके सूचना क्षेत्र मेनू में बाहर निकलें का उपयोग करें।</value></data>
+  <data name="Cli_StopTimeout" xml:space="preserve"><value>Pulse {0} सेकंड में बंद नहीं हुआ। उसके सूचना क्षेत्र मेनू में बाहर निकलें का उपयोग करें।</value></data>
+  <data name="Help_CommandLine" xml:space="preserve"><value>कमांड लाइन</value></data>
+  <data name="Help_CommandLineBody" xml:space="preserve"><value>आज का स्क्रीन टाइम, यह सप्ताह और अपने शीर्ष ऐप्स देखने, या Pulse को शुरू और बंद करने के लिए Terminal या PowerShell में "pulse help" टाइप करें। यह इसी PC का वही डेटा पढ़ता है।</value></data>
 </root>
