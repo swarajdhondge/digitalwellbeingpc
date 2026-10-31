@@ -78,7 +78,8 @@
     <Application
       Id="PulseCli"
       Executable="pulse.exe"
-      EntryPoint="Windows.FullTrustApplication">
+      EntryPoint="Windows.FullTrustApplication"
+      desktop4:SupportsMultipleInstances="true">
       <uap:VisualElements
         DisplayName="Pulse command line"
         Description="Pulse - Digital Wellbeing PC command-line tool."
