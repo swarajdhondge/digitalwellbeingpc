@@ -182,6 +182,8 @@ namespace digital_wellbeing_app.Views.Settings
             try
             {
                 DatabaseService.DeleteDataInRange(from.Value, to.Value);
+                if (from.Value.Date <= System.DateTime.Today && to.Value.Date >= System.DateTime.Today)
+                    ForgetTodayInTrackers();
                 RefreshDbSize();
                 System.Windows.MessageBox.Show(Loc.Get("Settings_RangeDeleted"), Loc.Get("Settings_DataDeletedTitle"),
                     MessageBoxButton.OK, MessageBoxImage.Information);
@@ -191,6 +193,14 @@ namespace digital_wellbeing_app.Views.Settings
                 System.Windows.MessageBox.Show(Loc.Format("Settings_DeleteFailed", ex.Message), Loc.Get("Settings_ErrorTitle"),
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        // The trackers keep today's running totals in memory; start them over too.
+        private static void ForgetTodayInTrackers()
+        {
+            if (System.Windows.Application.Current is not App app) return;
+            app.ScreenTracker?.ForgetToday();
+            app.AppTracker?.RestartCurrentSession();
         }
 
         private void RefreshDbSize()
@@ -361,6 +371,7 @@ namespace digital_wellbeing_app.Views.Settings
                 try
                 {
                     DatabaseService.DeleteAllData();
+                    ForgetTodayInTrackers();
                     RefreshDbSize();
 
                     System.Windows.MessageBox.Show(

@@ -246,6 +246,25 @@ namespace digital_wellbeing_app.CoreLogic
         /// straddle two local-date buckets. Reversed/oversized intervals from a backward jump are
         /// rejected by DatabaseService, so no corrupt row is written.
         /// </summary>
+        /// <summary>After the user deletes today's data: keep the app in use but count it from now,
+        /// so the deleted part of the current session isn't saved back.</summary>
+        public void RestartCurrentSession()
+        {
+            lock (_sessionLock)
+            {
+                if (_currentSession == null) return;
+                var now = Clock();
+                _currentSession = new AppUsageSession
+                {
+                    AppName = _currentSession.AppName,
+                    ExecutablePath = _currentSession.ExecutablePath,
+                    WindowTitle = _currentSession.WindowTitle,
+                    StartTime = now
+                };
+                _lastSaved = now;
+            }
+        }
+
         public void FlushCurrentSession()
         {
             lock (_sessionLock)
