@@ -6,6 +6,7 @@ Pulse on the command line, and more accurate tracking.
 
 ### Features
 - **`pulse` command-line tool.** Installed with the app (Microsoft Store and `Setup.exe`). `pulse today`, `pulse week` and `pulse apps` show the same numbers as the app, in the same language; `pulse start` starts Pulse in the notification area and `pulse stop` saves and quits it; `pulse help` lists everything. It only reads the data Pulse records on your PC.
+- **Choose how often an app limit reminds you.** "Remind me" limits now repeat every 5, 15, 30 or 60 minutes or once a day (15 minutes by default) instead of every 30 seconds.
 
 ### Fixes
 - **Sharper text at display scaling above 100%** (#58). The window shadow was drawn by an effect on the whole window, so all text was rendered through an offscreen bitmap and looked soft, most visibly with Chinese text at 125%. The shadow is now its own layer and layout snaps to whole pixels.
@@ -16,6 +17,12 @@ Pulse on the command line, and more accurate tracking.
 - **App limit warnings show up for the `Setup.exe` install.** Windows was discarding them without showing anything.
 - **Opening Pulse while it runs in the notification area shows its window.** Before, the Start menu or desktop icon did nothing until Pulse was opened from the notification area.
 - **The window fits on smaller screens.** On screens such as 1366×768, or 1920×1080 at 125% scaling, Pulse opened taller than the screen with its title bar out of reach.
+- **Focus history keeps every session.** Each new session replaced the previous one, so history and Insights only ever showed the latest.
+- **Screen Time and App Usage show live numbers.** The Screen Time page stayed at the total from when Pulse started, and "Now using" always said "No app active".
+- **A minimized app stays minimized.** With a "Minimize the app" limit, reopening the app straight away gave it 30 seconds before Pulse minimized it again; it is now 5 seconds, as in Focus sessions.
+- **Deleting today's data starts today over.** Pulse kept showing the deleted total and stopped saving today's screen time until it was restarted.
+- **Restoring a backup quits Pulse properly.** It hid Pulse to the notification area instead of closing it.
+- **The daily goal reads "1 min per day"** instead of "1 minutes per day".
 - **`Setup.exe` works on a PC without .NET.** The GitHub installer now includes the .NET runtime, like the Microsoft Store version, instead of failing with "You must install .NET to run this application".
 
 ## [v2.4.0] - 2026-09-27
