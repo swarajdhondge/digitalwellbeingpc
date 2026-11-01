@@ -252,8 +252,8 @@ namespace digital_wellbeing_app.Tests.Services
             limit.EnforcementLevel = FocusEnforcementLevel.Block;
             limit.RemindEveryMinutes = 0;
             var last = new DateTime(2026, 11, 1, 10, 0, 0);
-            Assert.False(AppLimitService.IsDueAgain(limit, last, last.AddSeconds(20)));
-            Assert.True(AppLimitService.IsDueAgain(limit, last, last.AddSeconds(30)));
+            Assert.False(AppLimitService.IsDueAgain(limit, last, last.AddSeconds(3)));
+            Assert.True(AppLimitService.IsDueAgain(limit, last, last.AddSeconds(5)));
         }
 
         [Fact]

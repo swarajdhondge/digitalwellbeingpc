@@ -22,7 +22,8 @@ namespace digital_wellbeing_app.Services
         private readonly HashSet<string> _appsFailedToBlock = new(StringComparer.OrdinalIgnoreCase);
         private readonly Dictionary<string, DateTime> _lastActionTime = new(StringComparer.OrdinalIgnoreCase);
         private readonly System.Timers.Timer _limitCheckTimer = new(30_000) { AutoReset = true };
-        private static readonly TimeSpan ActionCooldown = TimeSpan.FromSeconds(30);
+        // Same as Focus Block: reopening a minimized app only buys a few seconds.
+        private static readonly TimeSpan MinimizeCooldown = TimeSpan.FromSeconds(5);
         private bool _isDisposed;
         private bool _isStarted;
 
@@ -132,14 +133,14 @@ namespace digital_wellbeing_app.Services
 
         /// <summary>
         /// Whether Pulse should act again for an app that is over its limit. Minimizing repeats
-        /// whenever the app comes back (after a short cooldown); a reminder repeats only as often
+        /// whenever the app comes back (after a few seconds); a reminder repeats only as often
         /// as the user chose for that limit.
         /// </summary>
         public static bool IsDueAgain(AppLimit limit, DateTime? lastAction, DateTime now)
         {
             if (lastAction == null) return true;
             if (limit.EnforcementLevel != FocusEnforcementLevel.Warn)
-                return now - lastAction.Value >= ActionCooldown;
+                return now - lastAction.Value >= MinimizeCooldown;
             var every = limit.RemindEveryMinutes ?? DefaultRemindEveryMinutes;
             return every <= 0
                 ? lastAction.Value.Date != now.Date
