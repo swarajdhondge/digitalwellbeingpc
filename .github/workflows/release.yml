@@ -85,7 +85,7 @@ jobs:
           dotnet-version: '9.0.x'
 
       - name: Install Velopack CLI
-        run: dotnet tool install -g vpk
+        run: dotnet tool install -g vpk --version 1.2.161  # same version as the Velopack package
 
       - name: Stamp version into AssemblyInfo.cs and app.manifest
         shell: pwsh
