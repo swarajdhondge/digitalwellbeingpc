@@ -135,7 +135,7 @@ namespace digital_wellbeing_app
                 // both a legacy Run entry and a packaged StartupTask during sign-in, and older
                 // registrations do not always carry the --startup marker. This launch never shows
                 // UI itself; an interactive one asks the running Pulse, which ignores the request
-                // during its first minute (when those sign-in duplicates arrive).
+                // during the first minute after a sign-in start (when those duplicates arrive).
                 if (!Services.StartupService.IsStartupLaunch)
                     Services.PulseInstance.RequestShow();
                 Shutdown();
@@ -158,14 +158,6 @@ namespace digital_wellbeing_app
             };
             ConfigureLiveChartsTheme(isDark);
 
-            // Construct the shell explicitly instead of using StartupUri. A Windows-startup
-            // activation therefore creates the tray icon and background services without ever
-            // showing, loading, or briefly flashing a window on the desktop/taskbar.
-            var shellWindow = new MainWindow.MainWindow();
-            MainWindow = shellWindow;
-            if (!Services.StartupService.IsStartupLaunch)
-                shellWindow.Show();
-
             // Initialize database & trackers
             Services.DatabaseService.GetConnection();
             // One-time (idempotent) migration: canonicalize app-category keys so Focus Mode
@@ -176,9 +168,19 @@ namespace digital_wellbeing_app
             // AppCategory row yet. Never touches a row that already exists.
             Services.CategoryRuleService.ApplyRulesToUncategorized();
             RunDailyRetentionPurge();
+            // The pages are built with the window and read these trackers, so create them first.
             ScreenTracker = new CoreLogic.ScreenTimeTracker();
-            ScreenTracker.Start();
             AppTracker = new CoreLogic.AppUsageTracker();
+
+            // Construct the shell explicitly instead of using StartupUri. A Windows-startup
+            // activation therefore creates the tray icon and background services without ever
+            // showing, loading, or briefly flashing a window on the desktop/taskbar.
+            var shellWindow = new MainWindow.MainWindow();
+            MainWindow = shellWindow;
+            if (!Services.StartupService.IsStartupLaunch)
+                shellWindow.Show();
+
+            ScreenTracker.Start();
             AppTracker.Start();
             AppLimitSvc = new Services.AppLimitService(AppTracker);
             AppLimitSvc.Start();
@@ -399,7 +401,8 @@ namespace digital_wellbeing_app
                 _showRequest = new EventWaitHandle(false, EventResetMode.AutoReset, Services.PulseInstance.ShowRequestEventName);
                 _showRequestWait = ThreadPool.RegisterWaitForSingleObject(_showRequest, (_, _) =>
                 {
-                    if (_sinceStart.Elapsed < IgnoreShowRequestsAfterStart)
+                    // Only a sign-in start can receive the duplicate activations described above.
+                    if (Services.StartupService.IsStartupLaunch && _sinceStart.Elapsed < IgnoreShowRequestsAfterStart)
                     {
                         Services.LogService.Info("Show request ignored while Pulse is starting");
                         return;
