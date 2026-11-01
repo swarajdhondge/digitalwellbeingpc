@@ -67,5 +67,23 @@ namespace digital_wellbeing_app.Tests.Services
             Assert.True(recovered.EndTime.HasValue);
             Assert.Equal(start.AddMinutes(45), recovered.EndTime!.Value, TimeSpan.FromSeconds(2));
         }
+
+        [Fact]
+        public void EverySession_IsKept()
+        {
+            DatabaseService.DeleteAllData();
+
+            using var svc = new FocusSessionService();
+            svc.StartSession(25);
+            svc.EndSession(true);
+            svc.StartSession(15);
+            svc.EndSession(false);
+            svc.StartSession(45);
+            svc.EndSession(true);
+
+            var sessions = DatabaseService.GetFocusSessionsForDate(DateTime.Today);
+            Assert.Equal(new[] { 25, 15, 45 }, sessions.OrderBy(s => s.StartTime).Select(s => s.PlannedDurationMinutes));
+            Assert.Equal(3, sessions.Select(s => s.Id).Distinct().Count());
+        }
     }
 }

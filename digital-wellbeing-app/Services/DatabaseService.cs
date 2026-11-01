@@ -304,6 +304,13 @@ namespace digital_wellbeing_app.Services
         }
 
         // --- Focus Sessions ---
+        /// <summary>Adds a new session and sets its Id. InsertOrReplace would write the
+        /// unset Id 0 and replace the previous new session.</summary>
+        public static void InsertFocusSession(FocusSession session)
+        {
+            lock (_dbLock) { GetConnection().Insert(session); }
+        }
+
         public static void SaveFocusSession(FocusSession session)
         {
             lock (_dbLock) { GetConnection().InsertOrReplace(session); }
