@@ -25,7 +25,7 @@ _Android-style Digital Wellbeing for Windows — calm, private, and 100% on-devi
 
 - **Screen Time** — Today, weekly, and past-week views; daily totals, longest sessions, weekly averages. Pauses after 5 minutes away unless you're watching or listening.
 - **App Usage** — Top apps ranked by time with icons, plus focus metrics (app switches, average focus).
-- **App Limits** — Daily allowances and unavailable hours per app; remind or minimize when reached.
+- **App Limits** — Daily allowances and unavailable hours per app; remind (as often as you choose) or minimize when reached.
 - **Focus Sessions** — 15/25/45/60/90-min or custom; Warn mode nudges you, Block mode auto-minimizes distractions; full session history.
 - **Hearing Protection** — Estimates listening level from system volume and flags time above 75 dB. Never records audio.
 - **Break Reminders** — 20-20-20-rule reminders; snooze up to 3×; idle time counts as a break automatically.
