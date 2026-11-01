@@ -190,14 +190,18 @@
   <data name="Limits_EditHelp" xml:space="preserve"><value>사용 시간, 일정 또는 시간이 다 되었을 때의 동작을 변경합니다.</value></data>
   <data name="Limits_EditLimit" xml:space="preserve"><value>제한 편집</value></data>
   <data name="Limits_EditTitle" xml:space="preserve"><value>{0} 편집</value></data>
+  <data name="Limits_Every5Minutes" xml:space="preserve"><value>5분마다</value></data>
+  <data name="Limits_EveryHour" xml:space="preserve"><value>1시간마다</value></data>
   <data name="Limits_HowMuchTimeShouldApp" xml:space="preserve"><value>이 앱을 하루에 얼마나 사용할까요?</value></data>
   <data name="Limits_InvalidMinutes" xml:space="preserve"><value>올바른 분 값을 입력하세요.</value></data>
   <data name="Limits_LimitTitle" xml:space="preserve"><value>{0} 제한</value></data>
   <data name="Limits_MinimizeApp" xml:space="preserve"><value>앱 최소화</value></data>
   <data name="Limits_MinutesPerDay" xml:space="preserve"><value>분/일</value></data>
   <data name="Limits_NoAppLimitsYet" xml:space="preserve"><value>아직 앱 제한이 없습니다</value></data>
+  <data name="Limits_OnceADay" xml:space="preserve"><value>하루 한 번</value></data>
   <data name="Limits_OptionalUsefulBedtimeSchoolWork" xml:space="preserve"><value>선택 사항 — 취침, 학교, 업무 시간에 유용합니다.</value></data>
   <data name="Limits_PulseCountsTimeWhileApp" xml:space="preserve"><value>Pulse는 앱이 전면에 있는 동안의 시간을 계산합니다.</value></data>
+  <data name="Limits_RemindAgain" xml:space="preserve"><value>다시 알림</value></data>
   <data name="Limits_RemindMe" xml:space="preserve"><value>알림 받기</value></data>
   <data name="Limits_RemoveLimit" xml:space="preserve"><value>제한 제거</value></data>
   <data name="Limits_SaveChanges" xml:space="preserve"><value>변경 내용 저장</value></data>
@@ -209,7 +213,8 @@
   <data name="Limits_SummaryMinimizeApp" xml:space="preserve"><value>앱 최소화</value></data>
   <data name="Limits_SummaryMinutesPerDay" xml:space="preserve"><value>{0}분/일</value></data>
   <data name="Limits_SummaryPaused" xml:space="preserve"><value>일시 중지됨 · {0}</value></data>
-  <data name="Limits_SummaryReminder" xml:space="preserve"><value>알림</value></data>
+  <data name="Limits_SummaryReminderEvery" xml:space="preserve"><value>{0}분마다 알림</value></data>
+  <data name="Limits_SummaryReminderOnceADay" xml:space="preserve"><value>하루 한 번 알림</value></data>
   <data name="Limits_SummaryUnavailable" xml:space="preserve"><value>사용 불가 {0}~{1}</value></data>
   <data name="Limits_TurnLimitOff" xml:space="preserve"><value>이 제한 켜기 또는 끄기</value></data>
   <data name="Limits_UnavailableFrom" xml:space="preserve"><value>사용 불가 시간</value></data>
@@ -301,10 +306,8 @@
   <data name="Settings_From" xml:space="preserve"><value>시작</value></data>
   <data name="Settings_GentleReminderWhenSTime" xml:space="preserve"><value>하루를 마무리할 시간이 되면 부드럽게 알려 드립니다</value></data>
   <data name="Settings_Github" xml:space="preserve"><value>GitHub</value></data>
-  <data name="Settings_GoalHours" xml:space="preserve"><value>목표: 하루 {0}시간</value></data>
-  <data name="Settings_GoalHoursMinutes" xml:space="preserve"><value>목표: 하루 {0}시간 {1}분</value></data>
-  <data name="Settings_GoalMinutes" xml:space="preserve"><value>목표: 하루 {0}분</value></data>
   <data name="Settings_GoalMustBePositive" xml:space="preserve"><value>목표는 0보다 커야 합니다</value></data>
+  <data name="Settings_GoalPerDay" xml:space="preserve"><value>목표: 하루 {0}</value></data>
   <data name="Settings_Headphones" xml:space="preserve"><value>헤드폰</value></data>
   <data name="Settings_Headsets" xml:space="preserve"><value>헤드셋</value></data>
   <data name="Settings_HealthDown" xml:space="preserve"><value>중지됨</value></data>
@@ -430,6 +433,7 @@
 {0}</value></data>
   <data name="Shell_TurnOffReminders" xml:space="preserve"><value>알림 끄기</value></data>
   <data name="Time_HoursCompact" xml:space="preserve"><value>{0}시간</value></data>
+  <data name="Time_HoursLong" xml:space="preserve"><value>{0}시간</value></data>
   <data name="Time_HoursMinutes" xml:space="preserve"><value>{0}시간 {1}분</value></data>
   <data name="Time_HoursMinutesCompact" xml:space="preserve"><value>{0}시간 {1}분</value></data>
   <data name="Time_HoursMinutesLong" xml:space="preserve"><value>{0}시간 {1}분</value></data>

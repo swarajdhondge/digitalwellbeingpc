@@ -190,14 +190,18 @@ Cette opération est irréversible. Pulse se fermera ensuite - rouvrez-le pour c
   <data name="Limits_EditHelp" xml:space="preserve"><value>Modifiez le quota, les horaires ou ce qui se passe quand le temps est écoulé.</value></data>
   <data name="Limits_EditLimit" xml:space="preserve"><value>MODIFIER LA LIMITE</value></data>
   <data name="Limits_EditTitle" xml:space="preserve"><value>Modifier {0}</value></data>
+  <data name="Limits_Every5Minutes" xml:space="preserve"><value>Toutes les 5 minutes</value></data>
+  <data name="Limits_EveryHour" xml:space="preserve"><value>Toutes les heures</value></data>
   <data name="Limits_HowMuchTimeShouldApp" xml:space="preserve"><value>Combien de temps accorder à cette app chaque jour ?</value></data>
   <data name="Limits_InvalidMinutes" xml:space="preserve"><value>Saisissez un nombre de minutes valide.</value></data>
   <data name="Limits_LimitTitle" xml:space="preserve"><value>Limiter {0}</value></data>
   <data name="Limits_MinimizeApp" xml:space="preserve"><value>Réduire l'app</value></data>
   <data name="Limits_MinutesPerDay" xml:space="preserve"><value>minutes par jour</value></data>
   <data name="Limits_NoAppLimitsYet" xml:space="preserve"><value>Aucune limite d'app pour l'instant</value></data>
+  <data name="Limits_OnceADay" xml:space="preserve"><value>Une fois par jour</value></data>
   <data name="Limits_OptionalUsefulBedtimeSchoolWork" xml:space="preserve"><value>Facultatif — utile pour le coucher, l'école ou les heures de travail.</value></data>
   <data name="Limits_PulseCountsTimeWhileApp" xml:space="preserve"><value>Pulse compte le temps pendant lequel l'app est au premier plan.</value></data>
+  <data name="Limits_RemindAgain" xml:space="preserve"><value>Me le rappeler à nouveau</value></data>
   <data name="Limits_RemindMe" xml:space="preserve"><value>Me rappeler</value></data>
   <data name="Limits_RemoveLimit" xml:space="preserve"><value>Supprimer la limite</value></data>
   <data name="Limits_SaveChanges" xml:space="preserve"><value>Enregistrer</value></data>
@@ -209,7 +213,8 @@ Cette opération est irréversible. Pulse se fermera ensuite - rouvrez-le pour c
   <data name="Limits_SummaryMinimizeApp" xml:space="preserve"><value>Réduire l'app</value></data>
   <data name="Limits_SummaryMinutesPerDay" xml:space="preserve"><value>{0} min/jour</value></data>
   <data name="Limits_SummaryPaused" xml:space="preserve"><value>En pause · {0}</value></data>
-  <data name="Limits_SummaryReminder" xml:space="preserve"><value>Rappel</value></data>
+  <data name="Limits_SummaryReminderEvery" xml:space="preserve"><value>Rappel toutes les {0} min</value></data>
+  <data name="Limits_SummaryReminderOnceADay" xml:space="preserve"><value>Rappel une fois par jour</value></data>
   <data name="Limits_SummaryUnavailable" xml:space="preserve"><value>Indisponible {0}–{1}</value></data>
   <data name="Limits_TurnLimitOff" xml:space="preserve"><value>Activer ou désactiver cette limite</value></data>
   <data name="Limits_UnavailableFrom" xml:space="preserve"><value>Indisponible de</value></data>
@@ -301,10 +306,8 @@ Cette action est irréversible.</value></data>
   <data name="Settings_From" xml:space="preserve"><value>De</value></data>
   <data name="Settings_GentleReminderWhenSTime" xml:space="preserve"><value>Un rappel en douceur quand il est temps de décompresser</value></data>
   <data name="Settings_Github" xml:space="preserve"><value>GitHub</value></data>
-  <data name="Settings_GoalHours" xml:space="preserve"><value>Objectif : {0} heures par jour</value></data>
-  <data name="Settings_GoalHoursMinutes" xml:space="preserve"><value>Objectif : {0} heures {1} minutes par jour</value></data>
-  <data name="Settings_GoalMinutes" xml:space="preserve"><value>Objectif : {0} minutes par jour</value></data>
   <data name="Settings_GoalMustBePositive" xml:space="preserve"><value>L'objectif doit être supérieur à 0</value></data>
+  <data name="Settings_GoalPerDay" xml:space="preserve"><value>Objectif : {0} par jour</value></data>
   <data name="Settings_Headphones" xml:space="preserve"><value>Casque</value></data>
   <data name="Settings_Headsets" xml:space="preserve"><value>Micro-casques</value></data>
   <data name="Settings_HealthDown" xml:space="preserve"><value>Arrêté</value></data>
@@ -430,6 +433,7 @@ Voulez-vous mettre à jour maintenant ?</value></data>
 {0}</value></data>
   <data name="Shell_TurnOffReminders" xml:space="preserve"><value>Désactiver les rappels</value></data>
   <data name="Time_HoursCompact" xml:space="preserve"><value>{0} h</value></data>
+  <data name="Time_HoursLong" xml:space="preserve"><value>{0} h</value></data>
   <data name="Time_HoursMinutes" xml:space="preserve"><value>{0} h {1} min</value></data>
   <data name="Time_HoursMinutesCompact" xml:space="preserve"><value>{0} h {1} min</value></data>
   <data name="Time_HoursMinutesLong" xml:space="preserve"><value>{0} h {1} min</value></data>

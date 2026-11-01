@@ -40,6 +40,10 @@ namespace digital_wellbeing_app.Models
         /// forking a parallel one - the two features react to their own trigger the same way.</summary>
         public FocusEnforcementLevel EnforcementLevel { get; set; } = FocusEnforcementLevel.Warn;
 
+        /// <summary>How often a "Remind me" limit notifies again while the app stays in use:
+        /// minutes between reminders, 0 = once a day, null (limits saved before this existed) = 15.</summary>
+        public int? RemindEveryMinutes { get; set; }
+
         public DateTime LastUpdated { get; set; } = DateTime.Now;
     }
 }

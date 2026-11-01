@@ -190,14 +190,18 @@
   <data name="Limits_EditHelp" xml:space="preserve"><value>更改时长、时间表或时间用完时的操作。</value></data>
   <data name="Limits_EditLimit" xml:space="preserve"><value>编辑限制</value></data>
   <data name="Limits_EditTitle" xml:space="preserve"><value>编辑 {0}</value></data>
+  <data name="Limits_Every5Minutes" xml:space="preserve"><value>每 5 分钟</value></data>
+  <data name="Limits_EveryHour" xml:space="preserve"><value>每小时</value></data>
   <data name="Limits_HowMuchTimeShouldApp" xml:space="preserve"><value>此应用每天可以使用多长时间？</value></data>
   <data name="Limits_InvalidMinutes" xml:space="preserve"><value>请输入有效的分钟数。</value></data>
   <data name="Limits_LimitTitle" xml:space="preserve"><value>限制 {0}</value></data>
   <data name="Limits_MinimizeApp" xml:space="preserve"><value>最小化应用</value></data>
   <data name="Limits_MinutesPerDay" xml:space="preserve"><value>分钟/天</value></data>
   <data name="Limits_NoAppLimitsYet" xml:space="preserve"><value>还没有应用限制</value></data>
+  <data name="Limits_OnceADay" xml:space="preserve"><value>每天一次</value></data>
   <data name="Limits_OptionalUsefulBedtimeSchoolWork" xml:space="preserve"><value>可选——适用于就寝、上学或工作时间。</value></data>
   <data name="Limits_PulseCountsTimeWhileApp" xml:space="preserve"><value>应用在前台时，Pulse 会计时。</value></data>
+  <data name="Limits_RemindAgain" xml:space="preserve"><value>再次提醒</value></data>
   <data name="Limits_RemindMe" xml:space="preserve"><value>提醒我</value></data>
   <data name="Limits_RemoveLimit" xml:space="preserve"><value>移除限制</value></data>
   <data name="Limits_SaveChanges" xml:space="preserve"><value>保存更改</value></data>
@@ -209,7 +213,8 @@
   <data name="Limits_SummaryMinimizeApp" xml:space="preserve"><value>最小化应用</value></data>
   <data name="Limits_SummaryMinutesPerDay" xml:space="preserve"><value>每天 {0} 分钟</value></data>
   <data name="Limits_SummaryPaused" xml:space="preserve"><value>已暂停 · {0}</value></data>
-  <data name="Limits_SummaryReminder" xml:space="preserve"><value>提醒</value></data>
+  <data name="Limits_SummaryReminderEvery" xml:space="preserve"><value>每 {0} 分钟提醒</value></data>
+  <data name="Limits_SummaryReminderOnceADay" xml:space="preserve"><value>每天提醒一次</value></data>
   <data name="Limits_SummaryUnavailable" xml:space="preserve"><value>{0}–{1} 不可用</value></data>
   <data name="Limits_TurnLimitOff" xml:space="preserve"><value>开启或关闭此限制</value></data>
   <data name="Limits_UnavailableFrom" xml:space="preserve"><value>不可用时段：从</value></data>
@@ -301,10 +306,8 @@
   <data name="Settings_From" xml:space="preserve"><value>从</value></data>
   <data name="Settings_GentleReminderWhenSTime" xml:space="preserve"><value>该休息时给你一个温和的提醒</value></data>
   <data name="Settings_Github" xml:space="preserve"><value>GitHub</value></data>
-  <data name="Settings_GoalHours" xml:space="preserve"><value>目标：每天 {0} 小时</value></data>
-  <data name="Settings_GoalHoursMinutes" xml:space="preserve"><value>目标：每天 {0} 小时 {1} 分钟</value></data>
-  <data name="Settings_GoalMinutes" xml:space="preserve"><value>目标：每天 {0} 分钟</value></data>
   <data name="Settings_GoalMustBePositive" xml:space="preserve"><value>目标必须大于 0</value></data>
+  <data name="Settings_GoalPerDay" xml:space="preserve"><value>目标：每天 {0}</value></data>
   <data name="Settings_Headphones" xml:space="preserve"><value>头戴式耳机</value></data>
   <data name="Settings_Headsets" xml:space="preserve"><value>耳麦</value></data>
   <data name="Settings_HealthDown" xml:space="preserve"><value>已停止</value></data>
@@ -430,6 +433,7 @@
 {0}</value></data>
   <data name="Shell_TurnOffReminders" xml:space="preserve"><value>关闭提醒</value></data>
   <data name="Time_HoursCompact" xml:space="preserve"><value>{0}小时</value></data>
+  <data name="Time_HoursLong" xml:space="preserve"><value>{0}小时</value></data>
   <data name="Time_HoursMinutes" xml:space="preserve"><value>{0}小时{1}分</value></data>
   <data name="Time_HoursMinutesCompact" xml:space="preserve"><value>{0}小时{1}分</value></data>
   <data name="Time_HoursMinutesLong" xml:space="preserve"><value>{0}小时{1}分钟</value></data>

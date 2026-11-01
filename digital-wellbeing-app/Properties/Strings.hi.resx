@@ -190,14 +190,18 @@
   <data name="Limits_EditHelp" xml:space="preserve"><value>रोज़ का समय, शेड्यूल, या समय पूरा होने पर क्या हो, यह बदलें।</value></data>
   <data name="Limits_EditLimit" xml:space="preserve"><value>सीमा बदलें</value></data>
   <data name="Limits_EditTitle" xml:space="preserve"><value>{0} बदलें</value></data>
+  <data name="Limits_Every5Minutes" xml:space="preserve"><value>हर 5 मिनट</value></data>
+  <data name="Limits_EveryHour" xml:space="preserve"><value>हर घंटे</value></data>
   <data name="Limits_HowMuchTimeShouldApp" xml:space="preserve"><value>इस ऐप को रोज़ कितना समय मिलना चाहिए?</value></data>
   <data name="Limits_InvalidMinutes" xml:space="preserve"><value>मिनट की सही संख्या डालें।</value></data>
   <data name="Limits_LimitTitle" xml:space="preserve"><value>{0} को सीमित करें</value></data>
   <data name="Limits_MinimizeApp" xml:space="preserve"><value>ऐप को छोटा करें</value></data>
   <data name="Limits_MinutesPerDay" xml:space="preserve"><value>मिनट प्रतिदिन</value></data>
   <data name="Limits_NoAppLimitsYet" xml:space="preserve"><value>अभी तक कोई ऐप सीमा नहीं</value></data>
+  <data name="Limits_OnceADay" xml:space="preserve"><value>दिन में एक बार</value></data>
   <data name="Limits_OptionalUsefulBedtimeSchoolWork" xml:space="preserve"><value>वैकल्पिक — सोने, स्कूल या काम के समय के लिए उपयोगी।</value></data>
   <data name="Limits_PulseCountsTimeWhileApp" xml:space="preserve"><value>Pulse तब तक समय गिनता है जब तक ऐप सामने खुला हो।</value></data>
+  <data name="Limits_RemindAgain" xml:space="preserve"><value>फिर से याद दिलाएं</value></data>
   <data name="Limits_RemindMe" xml:space="preserve"><value>मुझे याद दिलाएं</value></data>
   <data name="Limits_RemoveLimit" xml:space="preserve"><value>सीमा हटाएं</value></data>
   <data name="Limits_SaveChanges" xml:space="preserve"><value>बदलाव सेव करें</value></data>
@@ -209,7 +213,8 @@
   <data name="Limits_SummaryMinimizeApp" xml:space="preserve"><value>ऐप छोटा करें</value></data>
   <data name="Limits_SummaryMinutesPerDay" xml:space="preserve"><value>{0} मि/दिन</value></data>
   <data name="Limits_SummaryPaused" xml:space="preserve"><value>रुका हुआ · {0}</value></data>
-  <data name="Limits_SummaryReminder" xml:space="preserve"><value>रिमाइंडर</value></data>
+  <data name="Limits_SummaryReminderEvery" xml:space="preserve"><value>हर {0} मि में रिमाइंडर</value></data>
+  <data name="Limits_SummaryReminderOnceADay" xml:space="preserve"><value>दिन में एक बार रिमाइंडर</value></data>
   <data name="Limits_SummaryUnavailable" xml:space="preserve"><value>बंद {0}–{1}</value></data>
   <data name="Limits_TurnLimitOff" xml:space="preserve"><value>यह सीमा चालू या बंद करें</value></data>
   <data name="Limits_UnavailableFrom" xml:space="preserve"><value>बंद रहेगा</value></data>
@@ -301,10 +306,8 @@
   <data name="Settings_From" xml:space="preserve"><value>अवधि</value></data>
   <data name="Settings_GentleReminderWhenSTime" xml:space="preserve"><value>आराम करने का समय होने पर एक हल्का रिमाइंडर</value></data>
   <data name="Settings_Github" xml:space="preserve"><value>GitHub</value></data>
-  <data name="Settings_GoalHours" xml:space="preserve"><value>लक्ष्य: रोज़ {0} घंटे</value></data>
-  <data name="Settings_GoalHoursMinutes" xml:space="preserve"><value>लक्ष्य: रोज़ {0} घंटे {1} मिनट</value></data>
-  <data name="Settings_GoalMinutes" xml:space="preserve"><value>लक्ष्य: रोज़ {0} मिनट</value></data>
   <data name="Settings_GoalMustBePositive" xml:space="preserve"><value>लक्ष्य 0 से ज़्यादा होना चाहिए</value></data>
+  <data name="Settings_GoalPerDay" xml:space="preserve"><value>लक्ष्य: रोज़ {0}</value></data>
   <data name="Settings_Headphones" xml:space="preserve"><value>हेडफ़ोन</value></data>
   <data name="Settings_Headsets" xml:space="preserve"><value>हेडसेट</value></data>
   <data name="Settings_HealthDown" xml:space="preserve"><value>बंद</value></data>
@@ -430,6 +433,7 @@
 {0}</value></data>
   <data name="Shell_TurnOffReminders" xml:space="preserve"><value>रिमाइंडर बंद करें</value></data>
   <data name="Time_HoursCompact" xml:space="preserve"><value>{0}घं</value></data>
+  <data name="Time_HoursLong" xml:space="preserve"><value>{0} घंटे</value></data>
   <data name="Time_HoursMinutes" xml:space="preserve"><value>{0} घं {1} मि</value></data>
   <data name="Time_HoursMinutesCompact" xml:space="preserve"><value>{0}घं {1}मि</value></data>
   <data name="Time_HoursMinutesLong" xml:space="preserve"><value>{0} घंटे {1} मिनट</value></data>

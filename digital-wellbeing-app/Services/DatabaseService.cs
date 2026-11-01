@@ -411,6 +411,7 @@ namespace digital_wellbeing_app.Services
                     existing.ScheduleEndHour = limit.ScheduleEndHour;
                     existing.ScheduleEndMinute = limit.ScheduleEndMinute;
                     existing.EnforcementLevel = limit.EnforcementLevel;
+                    existing.RemindEveryMinutes = limit.RemindEveryMinutes;
                     existing.LastUpdated = DateTime.Now;
                     conn.Update(existing);
                 }

@@ -190,14 +190,18 @@ No se puede deshacer. Pulse se cerrará después; vuelve a abrirlo para continua
   <data name="Limits_EditHelp" xml:space="preserve"><value>Cambia el tiempo, el horario o lo que ocurre cuando se acaba el tiempo.</value></data>
   <data name="Limits_EditLimit" xml:space="preserve"><value>EDITAR LÍMITE</value></data>
   <data name="Limits_EditTitle" xml:space="preserve"><value>Editar {0}</value></data>
+  <data name="Limits_Every5Minutes" xml:space="preserve"><value>Cada 5 minutos</value></data>
+  <data name="Limits_EveryHour" xml:space="preserve"><value>Cada hora</value></data>
   <data name="Limits_HowMuchTimeShouldApp" xml:space="preserve"><value>¿Cuánto tiempo al día debe tener esta app?</value></data>
   <data name="Limits_InvalidMinutes" xml:space="preserve"><value>Introduce un número de minutos válido.</value></data>
   <data name="Limits_LimitTitle" xml:space="preserve"><value>Limitar {0}</value></data>
   <data name="Limits_MinimizeApp" xml:space="preserve"><value>Minimizar la app</value></data>
   <data name="Limits_MinutesPerDay" xml:space="preserve"><value>minutos al día</value></data>
   <data name="Limits_NoAppLimitsYet" xml:space="preserve"><value>Aún no hay límites de apps</value></data>
+  <data name="Limits_OnceADay" xml:space="preserve"><value>Una vez al día</value></data>
   <data name="Limits_OptionalUsefulBedtimeSchoolWork" xml:space="preserve"><value>Opcional: útil para la hora de dormir, las clases o el horario laboral.</value></data>
   <data name="Limits_PulseCountsTimeWhileApp" xml:space="preserve"><value>Pulse cuenta el tiempo mientras la app está en primer plano.</value></data>
+  <data name="Limits_RemindAgain" xml:space="preserve"><value>Volver a recordármelo</value></data>
   <data name="Limits_RemindMe" xml:space="preserve"><value>Recordármelo</value></data>
   <data name="Limits_RemoveLimit" xml:space="preserve"><value>Quitar límite</value></data>
   <data name="Limits_SaveChanges" xml:space="preserve"><value>Guardar cambios</value></data>
@@ -209,7 +213,8 @@ No se puede deshacer. Pulse se cerrará después; vuelve a abrirlo para continua
   <data name="Limits_SummaryMinimizeApp" xml:space="preserve"><value>Minimizar app</value></data>
   <data name="Limits_SummaryMinutesPerDay" xml:space="preserve"><value>{0} min/día</value></data>
   <data name="Limits_SummaryPaused" xml:space="preserve"><value>En pausa · {0}</value></data>
-  <data name="Limits_SummaryReminder" xml:space="preserve"><value>Recordatorio</value></data>
+  <data name="Limits_SummaryReminderEvery" xml:space="preserve"><value>Recordatorio cada {0} min</value></data>
+  <data name="Limits_SummaryReminderOnceADay" xml:space="preserve"><value>Recordatorio una vez al día</value></data>
   <data name="Limits_SummaryUnavailable" xml:space="preserve"><value>No disponible {0}–{1}</value></data>
   <data name="Limits_TurnLimitOff" xml:space="preserve"><value>Activar o desactivar este límite</value></data>
   <data name="Limits_UnavailableFrom" xml:space="preserve"><value>No disponible desde</value></data>
@@ -301,10 +306,8 @@ No se puede deshacer.</value></data>
   <data name="Settings_From" xml:space="preserve"><value>Desde</value></data>
   <data name="Settings_GentleReminderWhenSTime" xml:space="preserve"><value>Un recordatorio amable cuando sea hora de desconectar</value></data>
   <data name="Settings_Github" xml:space="preserve"><value>GitHub</value></data>
-  <data name="Settings_GoalHours" xml:space="preserve"><value>Meta: {0} horas al día</value></data>
-  <data name="Settings_GoalHoursMinutes" xml:space="preserve"><value>Meta: {0} horas y {1} minutos al día</value></data>
-  <data name="Settings_GoalMinutes" xml:space="preserve"><value>Meta: {0} minutos al día</value></data>
   <data name="Settings_GoalMustBePositive" xml:space="preserve"><value>La meta debe ser mayor que 0</value></data>
+  <data name="Settings_GoalPerDay" xml:space="preserve"><value>Meta: {0} al día</value></data>
   <data name="Settings_Headphones" xml:space="preserve"><value>Auriculares</value></data>
   <data name="Settings_Headsets" xml:space="preserve"><value>Auriculares con micrófono</value></data>
   <data name="Settings_HealthDown" xml:space="preserve"><value>Detenido</value></data>
@@ -430,6 +433,7 @@ No se puede deshacer.</value></data>
 {0}</value></data>
   <data name="Shell_TurnOffReminders" xml:space="preserve"><value>Desactivar recordatorios</value></data>
   <data name="Time_HoursCompact" xml:space="preserve"><value>{0}h</value></data>
+  <data name="Time_HoursLong" xml:space="preserve"><value>{0} h</value></data>
   <data name="Time_HoursMinutes" xml:space="preserve"><value>{0} h {1} min</value></data>
   <data name="Time_HoursMinutesCompact" xml:space="preserve"><value>{0}h {1}min</value></data>
   <data name="Time_HoursMinutesLong" xml:space="preserve"><value>{0} h {1} min</value></data>

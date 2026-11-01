@@ -197,14 +197,18 @@ This cannot be undone. Pulse will close afterward - reopen it to continue.</valu
   <data name="Limits_EditHelp" xml:space="preserve"><value>Change the allowance, schedule, or what happens when time is up.</value></data>
   <data name="Limits_EditLimit" xml:space="preserve"><value>EDIT LIMIT</value></data>
   <data name="Limits_EditTitle" xml:space="preserve"><value>Edit {0}</value></data>
+  <data name="Limits_Every5Minutes" xml:space="preserve"><value>Every 5 minutes</value></data>
+  <data name="Limits_EveryHour" xml:space="preserve"><value>Every hour</value></data>
   <data name="Limits_HowMuchTimeShouldApp" xml:space="preserve"><value>How much time should this app get each day?</value></data>
   <data name="Limits_InvalidMinutes" xml:space="preserve"><value>Enter a valid number of minutes.</value></data>
   <data name="Limits_LimitTitle" xml:space="preserve"><value>Limit {0}</value></data>
   <data name="Limits_MinimizeApp" xml:space="preserve"><value>Minimize the app</value></data>
   <data name="Limits_MinutesPerDay" xml:space="preserve"><value>minutes per day</value></data>
   <data name="Limits_NoAppLimitsYet" xml:space="preserve"><value>No app limits yet</value></data>
+  <data name="Limits_OnceADay" xml:space="preserve"><value>Once a day</value></data>
   <data name="Limits_OptionalUsefulBedtimeSchoolWork" xml:space="preserve"><value>Optional — useful for bedtime, school, or work hours.</value></data>
   <data name="Limits_PulseCountsTimeWhileApp" xml:space="preserve"><value>Pulse counts time while the app is in the foreground.</value></data>
+  <data name="Limits_RemindAgain" xml:space="preserve"><value>Remind me again</value></data>
   <data name="Limits_RemindMe" xml:space="preserve"><value>Remind me</value></data>
   <data name="Limits_RemoveLimit" xml:space="preserve"><value>Remove limit</value></data>
   <data name="Limits_SaveChanges" xml:space="preserve"><value>Save changes</value></data>
@@ -216,7 +220,8 @@ This cannot be undone. Pulse will close afterward - reopen it to continue.</valu
   <data name="Limits_SummaryMinimizeApp" xml:space="preserve"><value>Minimize app</value></data>
   <data name="Limits_SummaryMinutesPerDay" xml:space="preserve"><value>{0} min/day</value></data>
   <data name="Limits_SummaryPaused" xml:space="preserve"><value>Paused · {0}</value></data>
-  <data name="Limits_SummaryReminder" xml:space="preserve"><value>Reminder</value></data>
+  <data name="Limits_SummaryReminderEvery" xml:space="preserve"><value>Reminder every {0} min</value></data>
+  <data name="Limits_SummaryReminderOnceADay" xml:space="preserve"><value>Reminder once a day</value></data>
   <data name="Limits_SummaryUnavailable" xml:space="preserve"><value>Unavailable {0}–{1}</value></data>
   <data name="Limits_TurnLimitOff" xml:space="preserve"><value>Turn this limit on or off</value></data>
   <data name="Limits_UnavailableFrom" xml:space="preserve"><value>Unavailable from</value></data>
@@ -308,10 +313,8 @@ This cannot be undone.</value></data>
   <data name="Settings_From" xml:space="preserve"><value>From</value></data>
   <data name="Settings_GentleReminderWhenSTime" xml:space="preserve"><value>A gentle reminder when it's time to wind down</value></data>
   <data name="Settings_Github" xml:space="preserve"><value>GitHub</value></data>
-  <data name="Settings_GoalHours" xml:space="preserve"><value>Goal: {0} hours per day</value></data>
-  <data name="Settings_GoalHoursMinutes" xml:space="preserve"><value>Goal: {0} hours {1} minutes per day</value></data>
-  <data name="Settings_GoalMinutes" xml:space="preserve"><value>Goal: {0} minutes per day</value></data>
   <data name="Settings_GoalMustBePositive" xml:space="preserve"><value>Goal must be greater than 0</value></data>
+  <data name="Settings_GoalPerDay" xml:space="preserve"><value>Goal: {0} per day</value></data>
   <data name="Settings_Headphones" xml:space="preserve"><value>Headphones</value></data>
   <data name="Settings_Headsets" xml:space="preserve"><value>Headsets</value></data>
   <data name="Settings_HealthDown" xml:space="preserve"><value>Down</value></data>
@@ -439,6 +442,7 @@ Would you like to update now?</value></data>
 {0}</value></data>
   <data name="Shell_TurnOffReminders" xml:space="preserve"><value>Turn off reminders</value></data>
   <data name="Time_HoursCompact" xml:space="preserve"><value>{0}h</value></data>
+  <data name="Time_HoursLong" xml:space="preserve"><value>{0} hr</value></data>
   <data name="Time_HoursMinutes" xml:space="preserve"><value>{0} h {1} m</value></data>
   <data name="Time_HoursMinutesCompact" xml:space="preserve"><value>{0}h {1}m</value></data>
   <data name="Time_HoursMinutesLong" xml:space="preserve"><value>{0} hr {1} min</value></data>

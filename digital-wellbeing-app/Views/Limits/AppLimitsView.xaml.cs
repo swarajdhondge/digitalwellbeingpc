@@ -168,7 +168,13 @@ namespace digital_wellbeing_app.Views.Limits
             if (limit.ScheduleEnabled)
                 parts.Add(Loc.Format("Limits_SummaryUnavailable", FormatTimeDisplay(limit.ScheduleStartHour, limit.ScheduleStartMinute), FormatTimeDisplay(limit.ScheduleEndHour, limit.ScheduleEndMinute)));
 
-            parts.Add(limit.EnforcementLevel == FocusEnforcementLevel.Warn ? Loc.Get("Limits_SummaryReminder") : Loc.Get("Limits_SummaryMinimizeApp"));
+            if (limit.EnforcementLevel != FocusEnforcementLevel.Warn)
+                parts.Add(Loc.Get("Limits_SummaryMinimizeApp"));
+            else
+            {
+                var every = limit.RemindEveryMinutes ?? AppLimitService.DefaultRemindEveryMinutes;
+                parts.Add(every <= 0 ? Loc.Get("Limits_SummaryReminderOnceADay") : Loc.Format("Limits_SummaryReminderEvery", every));
+            }
             var summary = string.Join(" · ", parts);
             return limit.IsEnabled ? summary : Loc.Format("Limits_SummaryPaused", summary);
         }
@@ -232,6 +238,7 @@ namespace digital_wellbeing_app.Views.Limits
                 SaveLimitButton.Content = Loc.Get("Limits_SaveChanges");
                 DailyLimitTextBox.Text = existing.DailyLimitMinutes.ToString();
                 SetEnforcement(existing.EnforcementLevel);
+                SelectRemindEvery(existing.RemindEveryMinutes ?? AppLimitService.DefaultRemindEveryMinutes);
                 ScheduleToggle.IsChecked = existing.ScheduleEnabled;
                 SchedulePanel.Visibility = existing.ScheduleEnabled ? Visibility.Visible : Visibility.Collapsed;
                 SelectTimeInComboBox(LimitStartTimeComboBox, existing.ScheduleStartHour, existing.ScheduleStartMinute);
@@ -247,6 +254,7 @@ namespace digital_wellbeing_app.Views.Limits
                 SaveLimitButton.Content = Loc.Get("Limits_AddLimit2");
                 DailyLimitTextBox.Text = "60";
                 SetEnforcement(FocusEnforcementLevel.Warn);
+                SelectRemindEvery(AppLimitService.DefaultRemindEveryMinutes);
                 ScheduleToggle.IsChecked = false;
                 SchedulePanel.Visibility = Visibility.Collapsed;
                 SelectTimeInComboBox(LimitStartTimeComboBox, 9, 0);
@@ -272,12 +280,24 @@ namespace digital_wellbeing_app.Views.Limits
             ValidationText.Visibility = Visibility.Collapsed;
             DailyLimitTextBox.Text = "60";
             SetEnforcement(FocusEnforcementLevel.Warn);
+            SelectRemindEvery(AppLimitService.DefaultRemindEveryMinutes);
             ScheduleToggle.IsChecked = false;
             SchedulePanel.Visibility = Visibility.Collapsed;
             SelectTimeInComboBox(LimitStartTimeComboBox, 9, 0);
             SelectTimeInComboBox(LimitEndTimeComboBox, 17, 0);
             _editingLimitEnabled = true;
         }
+
+        private void SelectRemindEvery(int minutes)
+        {
+            RemindEveryComboBox.SelectedItem = RemindEveryComboBox.Items.Cast<ComboBoxItem>()
+                .FirstOrDefault(i => i.Tag?.ToString() == minutes.ToString())
+                ?? RemindEveryComboBox.Items.Cast<ComboBoxItem>().First(i => i.Tag?.ToString() == AppLimitService.DefaultRemindEveryMinutes.ToString());
+        }
+
+        private int SelectedRemindEvery() =>
+            RemindEveryComboBox.SelectedItem is ComboBoxItem { Tag: var tag } && int.TryParse(tag?.ToString(), out var m)
+                ? m : AppLimitService.DefaultRemindEveryMinutes;
 
         private void DailyPreset_Click(object sender, RoutedEventArgs e)
         {
@@ -303,6 +323,8 @@ namespace digital_wellbeing_app.Views.Limits
             LimitWarnBtn.Foreground = level == FocusEnforcementLevel.Warn ? accentFg : ink;
             LimitBlockBtn.Background = level == FocusEnforcementLevel.Block ? accentBg : card2;
             LimitBlockBtn.Foreground = level == FocusEnforcementLevel.Block ? accentFg : ink;
+            // how often to remind only applies to reminders; minimizing happens every time
+            ReminderFrequencyPanel.Visibility = level == FocusEnforcementLevel.Warn ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void ScheduleToggle_Changed(object sender, RoutedEventArgs e)
@@ -345,6 +367,7 @@ namespace digital_wellbeing_app.Views.Limits
                 ScheduleEndHour = endHour,
                 ScheduleEndMinute = endMinute,
                 EnforcementLevel = _selectedEnforcement,
+                RemindEveryMinutes = SelectedRemindEvery(),
                 LastUpdated = DateTime.Now
             };
 

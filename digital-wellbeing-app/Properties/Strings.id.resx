@@ -190,14 +190,18 @@ Tindakan ini tidak dapat dibatalkan. Pulse akan ditutup setelahnya - buka kembal
   <data name="Limits_EditHelp" xml:space="preserve"><value>Ubah jatah, jadwal, atau apa yang terjadi saat waktu habis.</value></data>
   <data name="Limits_EditLimit" xml:space="preserve"><value>EDIT BATAS</value></data>
   <data name="Limits_EditTitle" xml:space="preserve"><value>Edit {0}</value></data>
+  <data name="Limits_Every5Minutes" xml:space="preserve"><value>Setiap 5 menit</value></data>
+  <data name="Limits_EveryHour" xml:space="preserve"><value>Setiap jam</value></data>
   <data name="Limits_HowMuchTimeShouldApp" xml:space="preserve"><value>Berapa lama waktu untuk aplikasi ini setiap hari?</value></data>
   <data name="Limits_InvalidMinutes" xml:space="preserve"><value>Masukkan jumlah menit yang valid.</value></data>
   <data name="Limits_LimitTitle" xml:space="preserve"><value>Batasi {0}</value></data>
   <data name="Limits_MinimizeApp" xml:space="preserve"><value>Minimalkan aplikasi</value></data>
   <data name="Limits_MinutesPerDay" xml:space="preserve"><value>menit per hari</value></data>
   <data name="Limits_NoAppLimitsYet" xml:space="preserve"><value>Belum ada batas aplikasi</value></data>
+  <data name="Limits_OnceADay" xml:space="preserve"><value>Sekali sehari</value></data>
   <data name="Limits_OptionalUsefulBedtimeSchoolWork" xml:space="preserve"><value>Opsional — berguna untuk jam tidur, sekolah, atau kerja.</value></data>
   <data name="Limits_PulseCountsTimeWhileApp" xml:space="preserve"><value>Pulse menghitung waktu selama aplikasi berada di latar depan.</value></data>
+  <data name="Limits_RemindAgain" xml:space="preserve"><value>Ingatkan lagi</value></data>
   <data name="Limits_RemindMe" xml:space="preserve"><value>Ingatkan saya</value></data>
   <data name="Limits_RemoveLimit" xml:space="preserve"><value>Hapus batas</value></data>
   <data name="Limits_SaveChanges" xml:space="preserve"><value>Simpan perubahan</value></data>
@@ -209,7 +213,8 @@ Tindakan ini tidak dapat dibatalkan. Pulse akan ditutup setelahnya - buka kembal
   <data name="Limits_SummaryMinimizeApp" xml:space="preserve"><value>Minimalkan aplikasi</value></data>
   <data name="Limits_SummaryMinutesPerDay" xml:space="preserve"><value>{0} mnt/hari</value></data>
   <data name="Limits_SummaryPaused" xml:space="preserve"><value>Dijeda · {0}</value></data>
-  <data name="Limits_SummaryReminder" xml:space="preserve"><value>Pengingat</value></data>
+  <data name="Limits_SummaryReminderEvery" xml:space="preserve"><value>Pengingat setiap {0} mnt</value></data>
+  <data name="Limits_SummaryReminderOnceADay" xml:space="preserve"><value>Pengingat sekali sehari</value></data>
   <data name="Limits_SummaryUnavailable" xml:space="preserve"><value>Tidak tersedia {0}–{1}</value></data>
   <data name="Limits_TurnLimitOff" xml:space="preserve"><value>Aktifkan atau nonaktifkan batas ini</value></data>
   <data name="Limits_UnavailableFrom" xml:space="preserve"><value>Tidak tersedia dari</value></data>
@@ -301,10 +306,8 @@ Tindakan ini tidak dapat dibatalkan.</value></data>
   <data name="Settings_From" xml:space="preserve"><value>Dari</value></data>
   <data name="Settings_GentleReminderWhenSTime" xml:space="preserve"><value>Pengingat lembut saat waktunya bersantai</value></data>
   <data name="Settings_Github" xml:space="preserve"><value>GitHub</value></data>
-  <data name="Settings_GoalHours" xml:space="preserve"><value>Target: {0} jam per hari</value></data>
-  <data name="Settings_GoalHoursMinutes" xml:space="preserve"><value>Target: {0} jam {1} menit per hari</value></data>
-  <data name="Settings_GoalMinutes" xml:space="preserve"><value>Target: {0} menit per hari</value></data>
   <data name="Settings_GoalMustBePositive" xml:space="preserve"><value>Target harus lebih dari 0</value></data>
+  <data name="Settings_GoalPerDay" xml:space="preserve"><value>Target: {0} per hari</value></data>
   <data name="Settings_Headphones" xml:space="preserve"><value>Headphone</value></data>
   <data name="Settings_Headsets" xml:space="preserve"><value>Headset</value></data>
   <data name="Settings_HealthDown" xml:space="preserve"><value>Mati</value></data>
@@ -430,6 +433,7 @@ Perbarui sekarang?</value></data>
 {0}</value></data>
   <data name="Shell_TurnOffReminders" xml:space="preserve"><value>Matikan pengingat</value></data>
   <data name="Time_HoursCompact" xml:space="preserve"><value>{0}j</value></data>
+  <data name="Time_HoursLong" xml:space="preserve"><value>{0} jam</value></data>
   <data name="Time_HoursMinutes" xml:space="preserve"><value>{0} j {1} m</value></data>
   <data name="Time_HoursMinutesCompact" xml:space="preserve"><value>{0}j {1}m</value></data>
   <data name="Time_HoursMinutesLong" xml:space="preserve"><value>{0} jam {1} mnt</value></data>

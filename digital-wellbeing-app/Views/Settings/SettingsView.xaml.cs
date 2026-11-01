@@ -297,7 +297,11 @@ namespace digital_wellbeing_app.Views.Settings
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
 
-                System.Windows.Application.Current.Shutdown();
+                // a real exit, not close-to-tray (which would only hide the window)
+                if (System.Windows.Application.Current.MainWindow is digital_wellbeing_app.MainWindow.MainWindow main)
+                    main.ExitApplication();
+                else
+                    System.Windows.Application.Current.Shutdown();
             }
             catch (System.Exception ex)
             {
@@ -466,13 +470,12 @@ namespace digital_wellbeing_app.Views.Settings
         {
             var hours = totalMinutes / 60;
             var mins = totalMinutes % 60;
-            
-            if (hours > 0 && mins > 0)
-                CurrentGoalText.Text = Loc.Format("Settings_GoalHoursMinutes", hours, mins);
-            else if (hours > 0)
-                CurrentGoalText.Text = Loc.Format("Settings_GoalHours", hours);
-            else
-                CurrentGoalText.Text = Loc.Format("Settings_GoalMinutes", mins);
+
+            // "1 hr 30 min" style avoids "1 minutes" / "1 hours" in every language
+            var amount = hours > 0 && mins > 0 ? Loc.Format("Time_HoursMinutesLong", hours, mins)
+                       : hours > 0 ? Loc.Format("Time_HoursLong", hours)
+                       : Loc.Format("Time_MinutesLong", mins);
+            CurrentGoalText.Text = Loc.Format("Settings_GoalPerDay", amount);
         }
 
         #endregion

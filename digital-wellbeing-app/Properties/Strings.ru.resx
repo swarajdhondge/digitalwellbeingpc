@@ -190,14 +190,18 @@
   <data name="Limits_EditHelp" xml:space="preserve"><value>Измените лимит, расписание или действие по истечении времени.</value></data>
   <data name="Limits_EditLimit" xml:space="preserve"><value>ИЗМЕНИТЬ ЛИМИТ</value></data>
   <data name="Limits_EditTitle" xml:space="preserve"><value>Изменить: {0}</value></data>
+  <data name="Limits_Every5Minutes" xml:space="preserve"><value>Каждые 5 минут</value></data>
+  <data name="Limits_EveryHour" xml:space="preserve"><value>Каждый час</value></data>
   <data name="Limits_HowMuchTimeShouldApp" xml:space="preserve"><value>Сколько времени в день отвести этому приложению?</value></data>
   <data name="Limits_InvalidMinutes" xml:space="preserve"><value>Введите допустимое число минут.</value></data>
   <data name="Limits_LimitTitle" xml:space="preserve"><value>Лимит: {0}</value></data>
   <data name="Limits_MinimizeApp" xml:space="preserve"><value>Свернуть приложение</value></data>
   <data name="Limits_MinutesPerDay" xml:space="preserve"><value>минут в день</value></data>
   <data name="Limits_NoAppLimitsYet" xml:space="preserve"><value>Лимитов пока нет</value></data>
+  <data name="Limits_OnceADay" xml:space="preserve"><value>Раз в день</value></data>
   <data name="Limits_OptionalUsefulBedtimeSchoolWork" xml:space="preserve"><value>Необязательно — удобно для сна, учебы или работы.</value></data>
   <data name="Limits_PulseCountsTimeWhileApp" xml:space="preserve"><value>Pulse считает время, пока приложение находится на переднем плане.</value></data>
+  <data name="Limits_RemindAgain" xml:space="preserve"><value>Напоминать снова</value></data>
   <data name="Limits_RemindMe" xml:space="preserve"><value>Напомнить</value></data>
   <data name="Limits_RemoveLimit" xml:space="preserve"><value>Удалить лимит</value></data>
   <data name="Limits_SaveChanges" xml:space="preserve"><value>Сохранить изменения</value></data>
@@ -209,7 +213,8 @@
   <data name="Limits_SummaryMinimizeApp" xml:space="preserve"><value>Сворачивать</value></data>
   <data name="Limits_SummaryMinutesPerDay" xml:space="preserve"><value>{0} мин/день</value></data>
   <data name="Limits_SummaryPaused" xml:space="preserve"><value>Пауза · {0}</value></data>
-  <data name="Limits_SummaryReminder" xml:space="preserve"><value>Напоминание</value></data>
+  <data name="Limits_SummaryReminderEvery" xml:space="preserve"><value>Напоминание каждые {0} мин</value></data>
+  <data name="Limits_SummaryReminderOnceADay" xml:space="preserve"><value>Напоминание раз в день</value></data>
   <data name="Limits_SummaryUnavailable" xml:space="preserve"><value>Недоступно {0}–{1}</value></data>
   <data name="Limits_TurnLimitOff" xml:space="preserve"><value>Включить или выключить этот лимит</value></data>
   <data name="Limits_UnavailableFrom" xml:space="preserve"><value>Недоступно с</value></data>
@@ -301,10 +306,8 @@
   <data name="Settings_From" xml:space="preserve"><value>С</value></data>
   <data name="Settings_GentleReminderWhenSTime" xml:space="preserve"><value>Мягкое напоминание, когда пора готовиться ко сну</value></data>
   <data name="Settings_Github" xml:space="preserve"><value>GitHub</value></data>
-  <data name="Settings_GoalHours" xml:space="preserve"><value>Цель: {0} ч в день</value></data>
-  <data name="Settings_GoalHoursMinutes" xml:space="preserve"><value>Цель: {0} ч {1} мин в день</value></data>
-  <data name="Settings_GoalMinutes" xml:space="preserve"><value>Цель: {0} мин в день</value></data>
   <data name="Settings_GoalMustBePositive" xml:space="preserve"><value>Цель должна быть больше 0</value></data>
+  <data name="Settings_GoalPerDay" xml:space="preserve"><value>Цель: {0} в день</value></data>
   <data name="Settings_Headphones" xml:space="preserve"><value>Наушники</value></data>
   <data name="Settings_Headsets" xml:space="preserve"><value>Гарнитуры</value></data>
   <data name="Settings_HealthDown" xml:space="preserve"><value>Не работает</value></data>
@@ -430,6 +433,7 @@
 {0}</value></data>
   <data name="Shell_TurnOffReminders" xml:space="preserve"><value>Выключить напоминания</value></data>
   <data name="Time_HoursCompact" xml:space="preserve"><value>{0} ч</value></data>
+  <data name="Time_HoursLong" xml:space="preserve"><value>{0} ч</value></data>
   <data name="Time_HoursMinutes" xml:space="preserve"><value>{0} ч {1} мин</value></data>
   <data name="Time_HoursMinutesCompact" xml:space="preserve"><value>{0} ч {1} мин</value></data>
   <data name="Time_HoursMinutesLong" xml:space="preserve"><value>{0} ч {1} мин</value></data>

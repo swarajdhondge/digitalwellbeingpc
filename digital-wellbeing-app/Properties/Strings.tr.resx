@@ -190,14 +190,18 @@ Bu işlem geri alınamaz. Pulse ardından kapanacak - devam etmek için yeniden 
   <data name="Limits_EditHelp" xml:space="preserve"><value>Süreyi, zamanlamayı veya süre dolduğunda ne olacağını değiştirin.</value></data>
   <data name="Limits_EditLimit" xml:space="preserve"><value>SINIRI DÜZENLE</value></data>
   <data name="Limits_EditTitle" xml:space="preserve"><value>Düzenle: {0}</value></data>
+  <data name="Limits_Every5Minutes" xml:space="preserve"><value>5 dakikada bir</value></data>
+  <data name="Limits_EveryHour" xml:space="preserve"><value>Saatte bir</value></data>
   <data name="Limits_HowMuchTimeShouldApp" xml:space="preserve"><value>Bu uygulama her gün ne kadar süre alsın?</value></data>
   <data name="Limits_InvalidMinutes" xml:space="preserve"><value>Geçerli bir dakika sayısı girin.</value></data>
   <data name="Limits_LimitTitle" xml:space="preserve"><value>Sınırla: {0}</value></data>
   <data name="Limits_MinimizeApp" xml:space="preserve"><value>Uygulamayı simge durumuna küçült</value></data>
   <data name="Limits_MinutesPerDay" xml:space="preserve"><value>dakika/gün</value></data>
   <data name="Limits_NoAppLimitsYet" xml:space="preserve"><value>Henüz uygulama sınırı yok</value></data>
+  <data name="Limits_OnceADay" xml:space="preserve"><value>Günde bir kez</value></data>
   <data name="Limits_OptionalUsefulBedtimeSchoolWork" xml:space="preserve"><value>İsteğe bağlı — uyku, okul veya iş saatleri için kullanışlı.</value></data>
   <data name="Limits_PulseCountsTimeWhileApp" xml:space="preserve"><value>Pulse, uygulama ön plandayken geçen süreyi sayar.</value></data>
+  <data name="Limits_RemindAgain" xml:space="preserve"><value>Tekrar hatırlat</value></data>
   <data name="Limits_RemindMe" xml:space="preserve"><value>Bana hatırlat</value></data>
   <data name="Limits_RemoveLimit" xml:space="preserve"><value>Sınırı kaldır</value></data>
   <data name="Limits_SaveChanges" xml:space="preserve"><value>Değişiklikleri kaydet</value></data>
@@ -209,7 +213,8 @@ Bu işlem geri alınamaz. Pulse ardından kapanacak - devam etmek için yeniden 
   <data name="Limits_SummaryMinimizeApp" xml:space="preserve"><value>Uygulamayı küçült</value></data>
   <data name="Limits_SummaryMinutesPerDay" xml:space="preserve"><value>{0} dk/gün</value></data>
   <data name="Limits_SummaryPaused" xml:space="preserve"><value>Duraklatıldı · {0}</value></data>
-  <data name="Limits_SummaryReminder" xml:space="preserve"><value>Hatırlatıcı</value></data>
+  <data name="Limits_SummaryReminderEvery" xml:space="preserve"><value>{0} dk'da bir hatırlatıcı</value></data>
+  <data name="Limits_SummaryReminderOnceADay" xml:space="preserve"><value>Günde bir kez hatırlatıcı</value></data>
   <data name="Limits_SummaryUnavailable" xml:space="preserve"><value>Kullanılamaz {0}–{1}</value></data>
   <data name="Limits_TurnLimitOff" xml:space="preserve"><value>Bu sınırı aç veya kapat</value></data>
   <data name="Limits_UnavailableFrom" xml:space="preserve"><value>Kullanılamaz:</value></data>
@@ -301,10 +306,8 @@ Bu işlem geri alınamaz.</value></data>
   <data name="Settings_From" xml:space="preserve"><value>Aralık</value></data>
   <data name="Settings_GentleReminderWhenSTime" xml:space="preserve"><value>Dinlenme zamanı geldiğinde nazik bir hatırlatma</value></data>
   <data name="Settings_Github" xml:space="preserve"><value>GitHub</value></data>
-  <data name="Settings_GoalHours" xml:space="preserve"><value>Hedef: günde {0} saat</value></data>
-  <data name="Settings_GoalHoursMinutes" xml:space="preserve"><value>Hedef: günde {0} saat {1} dakika</value></data>
-  <data name="Settings_GoalMinutes" xml:space="preserve"><value>Hedef: günde {0} dakika</value></data>
   <data name="Settings_GoalMustBePositive" xml:space="preserve"><value>Hedef 0'dan büyük olmalıdır</value></data>
+  <data name="Settings_GoalPerDay" xml:space="preserve"><value>Hedef: günde {0}</value></data>
   <data name="Settings_Headphones" xml:space="preserve"><value>Kulaklıklar</value></data>
   <data name="Settings_Headsets" xml:space="preserve"><value>Mikrofonlu kulaklıklar</value></data>
   <data name="Settings_HealthDown" xml:space="preserve"><value>Çalışmıyor</value></data>
@@ -430,6 +433,7 @@ Bu işlem geri alınamaz.</value></data>
 {0}</value></data>
   <data name="Shell_TurnOffReminders" xml:space="preserve"><value>Hatırlatıcıları kapat</value></data>
   <data name="Time_HoursCompact" xml:space="preserve"><value>{0}sa</value></data>
+  <data name="Time_HoursLong" xml:space="preserve"><value>{0} saat</value></data>
   <data name="Time_HoursMinutes" xml:space="preserve"><value>{0} sa {1} dk</value></data>
   <data name="Time_HoursMinutesCompact" xml:space="preserve"><value>{0}sa {1}dk</value></data>
   <data name="Time_HoursMinutesLong" xml:space="preserve"><value>{0} saat {1} dk</value></data>

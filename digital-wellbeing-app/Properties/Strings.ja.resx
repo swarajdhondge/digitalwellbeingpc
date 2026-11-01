@@ -190,14 +190,18 @@
   <data name="Limits_EditHelp" xml:space="preserve"><value>利用時間、スケジュール、時間になったときの動作を変更します。</value></data>
   <data name="Limits_EditLimit" xml:space="preserve"><value>制限を編集</value></data>
   <data name="Limits_EditTitle" xml:space="preserve"><value>{0} を編集</value></data>
+  <data name="Limits_Every5Minutes" xml:space="preserve"><value>5 分ごと</value></data>
+  <data name="Limits_EveryHour" xml:space="preserve"><value>1 時間ごと</value></data>
   <data name="Limits_HowMuchTimeShouldApp" xml:space="preserve"><value>このアプリを 1 日に何分使えるようにしますか?</value></data>
   <data name="Limits_InvalidMinutes" xml:space="preserve"><value>有効な分数を入力してください。</value></data>
   <data name="Limits_LimitTitle" xml:space="preserve"><value>{0} を制限</value></data>
   <data name="Limits_MinimizeApp" xml:space="preserve"><value>アプリを最小化</value></data>
   <data name="Limits_MinutesPerDay" xml:space="preserve"><value>分/日</value></data>
   <data name="Limits_NoAppLimitsYet" xml:space="preserve"><value>アプリの制限はまだありません</value></data>
+  <data name="Limits_OnceADay" xml:space="preserve"><value>1 日 1 回</value></data>
   <data name="Limits_OptionalUsefulBedtimeSchoolWork" xml:space="preserve"><value>任意 — 就寝時間、学校、仕事の時間帯に便利です。</value></data>
   <data name="Limits_PulseCountsTimeWhileApp" xml:space="preserve"><value>Pulse はアプリが前面にある間の時間をカウントします。</value></data>
+  <data name="Limits_RemindAgain" xml:space="preserve"><value>再通知</value></data>
   <data name="Limits_RemindMe" xml:space="preserve"><value>通知する</value></data>
   <data name="Limits_RemoveLimit" xml:space="preserve"><value>制限を削除</value></data>
   <data name="Limits_SaveChanges" xml:space="preserve"><value>変更を保存</value></data>
@@ -209,7 +213,8 @@
   <data name="Limits_SummaryMinimizeApp" xml:space="preserve"><value>アプリを最小化</value></data>
   <data name="Limits_SummaryMinutesPerDay" xml:space="preserve"><value>{0} 分/日</value></data>
   <data name="Limits_SummaryPaused" xml:space="preserve"><value>一時停止中 · {0}</value></data>
-  <data name="Limits_SummaryReminder" xml:space="preserve"><value>通知</value></data>
+  <data name="Limits_SummaryReminderEvery" xml:space="preserve"><value>{0} 分ごとに通知</value></data>
+  <data name="Limits_SummaryReminderOnceADay" xml:space="preserve"><value>1 日 1 回通知</value></data>
   <data name="Limits_SummaryUnavailable" xml:space="preserve"><value>利用不可 {0}～{1}</value></data>
   <data name="Limits_TurnLimitOff" xml:space="preserve"><value>この制限をオンまたはオフにする</value></data>
   <data name="Limits_UnavailableFrom" xml:space="preserve"><value>利用不可の時間帯</value></data>
@@ -301,10 +306,8 @@
   <data name="Settings_From" xml:space="preserve"><value>開始</value></data>
   <data name="Settings_GentleReminderWhenSTime" xml:space="preserve"><value>一日を締めくくる時間になったら、そっとお知らせします</value></data>
   <data name="Settings_Github" xml:space="preserve"><value>GitHub</value></data>
-  <data name="Settings_GoalHours" xml:space="preserve"><value>目標: 1 日 {0} 時間</value></data>
-  <data name="Settings_GoalHoursMinutes" xml:space="preserve"><value>目標: 1 日 {0} 時間 {1} 分</value></data>
-  <data name="Settings_GoalMinutes" xml:space="preserve"><value>目標: 1 日 {0} 分</value></data>
   <data name="Settings_GoalMustBePositive" xml:space="preserve"><value>目標は 0 より大きい値にしてください</value></data>
+  <data name="Settings_GoalPerDay" xml:space="preserve"><value>目標: 1 日 {0}</value></data>
   <data name="Settings_Headphones" xml:space="preserve"><value>ヘッドホン</value></data>
   <data name="Settings_Headsets" xml:space="preserve"><value>ヘッドセット</value></data>
   <data name="Settings_HealthDown" xml:space="preserve"><value>停止</value></data>
@@ -430,6 +433,7 @@
 {0}</value></data>
   <data name="Shell_TurnOffReminders" xml:space="preserve"><value>リマインダーをオフにする</value></data>
   <data name="Time_HoursCompact" xml:space="preserve"><value>{0}時間</value></data>
+  <data name="Time_HoursLong" xml:space="preserve"><value>{0}時間</value></data>
   <data name="Time_HoursMinutes" xml:space="preserve"><value>{0}時間{1}分</value></data>
   <data name="Time_HoursMinutesCompact" xml:space="preserve"><value>{0}時間{1}分</value></data>
   <data name="Time_HoursMinutesLong" xml:space="preserve"><value>{0}時間{1}分</value></data>
