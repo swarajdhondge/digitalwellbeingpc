@@ -60,7 +60,7 @@ var rng = new Random(20260705);
 // ---- App catalogue (drives categories + usage) ---------------------------------
 var apps = new AppDef[]
 {
-    new("Code.exe",    "Visual Studio Code", @"C:\Users\Alex\AppData\Local\Programs\Microsoft VS Code\Code.exe", AppCategoryType.Work,          Weight: 6),
+    new("Code.exe",    "Visual Studio Code", @"C:\Program Files\Microsoft VS Code\Code.exe",                     AppCategoryType.Work,          Weight: 6),
     new("chrome.exe",  "Google Chrome",      @"C:\Program Files\Google\Chrome\Application\chrome.exe",           AppCategoryType.Uncategorized, Weight: 5),
     new("Teams.exe",   "Microsoft Teams",    @"C:\Users\Alex\AppData\Local\Microsoft\Teams\Teams.exe",          AppCategoryType.Work,          Weight: 3),
     new("slack.exe",   "Slack",              @"C:\Users\Alex\AppData\Local\slack\slack.exe",                    AppCategoryType.Work,          Weight: 2),
