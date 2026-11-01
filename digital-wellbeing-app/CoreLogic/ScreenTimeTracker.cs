@@ -331,6 +331,36 @@ namespace digital_wellbeing_app.CoreLogic
             _continuousSessionSeconds += addedSeconds;
         }
 
+        /// <summary>
+        /// After the user deletes today's data: start today over from zero and recreate today's
+        /// record, so the deleted time doesn't come back and new time keeps being saved.
+        /// </summary>
+        public void ForgetToday()
+        {
+            lock (_stateLock)
+            {
+                var now = Clock();
+                _activeTime = TimeSpan.Zero;
+                _sessionStartTime = now;
+                if (_currentSegmentStart != null) _currentSegmentStart = now;
+                _currentSegmentAccumulated = 0;
+                _continuousSessionStart = now;
+                _continuousSessionSeconds = 0;
+                _sessionCount = 1;
+
+                var db = DatabaseService.GetConnection();
+                var todayKey = now.ToString("yyyy-MM-dd");
+                if (db.Table<ScreenTimePeriod>().FirstOrDefault(x => x.SessionDate == todayKey) == null)
+                    db.Insert(new ScreenTimePeriod
+                    {
+                        SessionDate = todayKey,
+                        SessionStartTime = now.ToString("o"),
+                        LastRecordedTime = now.ToString("o"),
+                        AccumulatedActiveSeconds = 0
+                    });
+            }
+        }
+
         private void CheckDayRollover()
         {
             try

@@ -205,7 +205,7 @@ namespace digital_wellbeing_app.Services
             _lastHeartbeatUtc = DateTime.UtcNow;
 
             // Persist immediately so crash recovery can find it
-            DatabaseService.SaveFocusSession(_currentSession);
+            DatabaseService.InsertFocusSession(_currentSession);
 
             // Clear session-specific data from previous sessions
             _sessionOverrideApps.Clear();

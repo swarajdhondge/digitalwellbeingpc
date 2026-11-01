@@ -174,31 +174,46 @@ namespace digital_wellbeing_app.Services
 
         private void OnTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
+            var idleThresholdSeconds = TestMode ? 20 : IdleThresholdMinutes * 60;
+            Evaluate(DateTime.Now, WindowsIdleTimeHelper.IsUserIdle(idleThresholdSeconds));
+        }
+
+        /// <summary>
+        /// One timer tick's decision, separated from the timer and the OS idle query so tests can
+        /// drive it directly.
+        /// </summary>
+        /// <param name="now">Current time.</param>
+        /// <param name="userIdle">Whether the user has had no input for the idle threshold.</param>
+        public void Evaluate(DateTime now, bool userIdle)
+        {
             if (!IsEnabled)
                 return;
+
+            // Being away counts as the break - also when a reminder is still waiting unanswered.
+            // Checked before the pending guard: otherwise an unseen reminder stays pending forever
+            // and no later reminder can ever fire (issue #60).
+            if (userIdle)
+            {
+                bool wasPending = _breakPending;
+                _lastBreakTime = now;
+                _snoozeUntil = null;
+                SnoozeCount = 0;
+                _breakPending = false;
+                if (wasPending)
+                    BreakDismissed?.Invoke();
+                return;
+            }
 
             // Don't fire new notification if one is already pending
             if (_breakPending)
                 return;
 
             // Check if currently snoozed
-            if (_snoozeUntil.HasValue && DateTime.Now < _snoozeUntil.Value)
+            if (_snoozeUntil.HasValue && now < _snoozeUntil.Value)
                 return;
-
-            // Check if user has been idle - idle time counts as a break!
-            var idleThresholdSeconds = TestMode ? 20 : IdleThresholdMinutes * 60;
-            if (WindowsIdleTimeHelper.IsUserIdle(idleThresholdSeconds))
-            {
-                // User is idle - reset timer, they're taking a natural break
-                _lastBreakTime = DateTime.Now;
-                _snoozeUntil = null;
-                SnoozeCount = 0;
-                _breakPending = false;
-                return;
-            }
 
             // Check if break interval has passed
-            var timeSinceLastBreak = DateTime.Now - _lastBreakTime;
+            var timeSinceLastBreak = now - _lastBreakTime;
             
             // TEST MODE: Use seconds instead of minutes
             bool intervalPassed = TestMode 

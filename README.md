@@ -25,7 +25,7 @@ _Android-style Digital Wellbeing for Windows — calm, private, and 100% on-devi
 
 - **Screen Time** — Today, weekly, and past-week views; daily totals, longest sessions, weekly averages. Pauses after 5 minutes away unless you're watching or listening.
 - **App Usage** — Top apps ranked by time with icons, plus focus metrics (app switches, average focus).
-- **App Limits** — Daily allowances and unavailable hours per app; remind or minimize when reached.
+- **App Limits** — Daily allowances and unavailable hours per app; remind (as often as you choose) or minimize when reached.
 - **Focus Sessions** — 15/25/45/60/90-min or custom; Warn mode nudges you, Block mode auto-minimizes distractions; full session history.
 - **Hearing Protection** — Estimates listening level from system volume and flags time above 75 dB. Never records audio.
 - **Break Reminders** — 20-20-20-rule reminders; snooze up to 3×; idle time counts as a break automatically.
@@ -33,6 +33,7 @@ _Android-style Digital Wellbeing for Windows — calm, private, and 100% on-devi
 - **Daily Goals** — Set a screen-time limit and track it with a dashboard progress ring.
 - **Weekly Reports** — Daily averages, peak usage times, top apps, and a week-over-week comparison.
 - **Your data** — CSV export, local backup and restore, and delete by date range. Optional website tracking stores hostnames only.
+- **Command line** — `pulse today`, `pulse week` and `pulse apps` in any terminal, plus `pulse start` / `pulse stop`. Installed with the app; reads the same data.
 - **Calm design** — Graphite UI with a signature accent per section; Light, Dark, or Auto.
 - **Your language** — English plus 13 translations\*: 简体中文, 繁體中文, Español, हिन्दी, Português (Brasil), Русский, 日本語, Deutsch, Français, 한국어, Italiano, Türkçe, Bahasa Indonesia. Follows Windows, or pick one in Settings.
   <br><sub>\* Translated with AI assistance and may contain mistakes. [Report a translation issue](https://github.com/swarajdhondge/digitalwellbeingpc/issues/new?template=translation.yml) or see [CONTRIBUTING.md](CONTRIBUTING.md#translations).</sub>
@@ -84,6 +85,28 @@ dotnet run --project digital-wellbeing-app
 ```
 
 Requires the [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0) and Windows 10/11.
+
+---
+
+## Command line
+
+Pulse installs a `pulse` command next to the app (Microsoft Store and `Setup.exe` alike). Open a new terminal:
+
+```text
+pulse today      today's screen time, goal and top apps
+pulse week       this week day by day, compared with last week
+pulse apps       top apps today (--week for this week, -n 5 for how many)
+pulse status     whether Pulse is recording
+pulse start      start Pulse in the notification area
+pulse stop       save and quit Pulse
+pulse help       all commands
+```
+
+It only reads what Pulse records on your PC, in the same language as the app. The app does the recording.
+
+<p align="center">
+  <img src=".github/screenshots/terminal.png" alt="pulse today and pulse week in Windows Terminal" width="640"/>
+</p>
 
 ---
 

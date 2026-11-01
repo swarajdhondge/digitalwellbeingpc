@@ -11,6 +11,29 @@ namespace digital_wellbeing_app.Tests.CoreLogic
     public class ScreenTimeTrackerExtendedTests : TestBase
     {
         [Fact]
+        public void ForgetToday_StartsFromZeroAndKeepsSaving()
+        {
+            DatabaseService.DeleteAllData();
+            var key = DateTime.Now.ToString("yyyy-MM-dd");
+            DatabaseService.SaveScreenTimePeriod(new ScreenTimePeriod
+            {
+                SessionDate = key, SessionStartTime = DateTime.Today.ToString("o"),
+                LastRecordedTime = DateTime.Now.ToString("o"), AccumulatedActiveSeconds = 3600
+            });
+            var tracker = new ScreenTimeTracker();
+            Assert.True(tracker.CurrentActiveTime.TotalMinutes >= 59);
+
+            // the user deletes today: the record is gone, then the tracker starts over
+            DatabaseService.DeleteDataInRange(DateTime.Today, DateTime.Today);
+            tracker.ForgetToday();
+
+            Assert.True(tracker.CurrentActiveTime.TotalSeconds < 5);
+            var row = DatabaseService.GetConnection().Table<ScreenTimePeriod>().FirstOrDefault(x => x.SessionDate == key);
+            Assert.NotNull(row);
+            Assert.Equal(0, row!.AccumulatedActiveSeconds);
+        }
+
+        [Fact]
         public void Constructor_InitializesState()
         {
             var tracker = new ScreenTimeTracker();

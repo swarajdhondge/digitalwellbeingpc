@@ -150,7 +150,7 @@ Não é possível desfazer. O Pulse será fechado em seguida; abra-o novamente p
   <data name="Help_EverythingStaysDeviceNoAccount" xml:space="preserve"><value>Tudo fica neste dispositivo: sem conta, sem nuvem, sem telemetria. O monitoramento de sites vem desativado por padrão; se você ativá-lo, apenas o nome do host (ex.: youtube.com) é armazenado, nunca URLs completas ou o conteúdo das páginas. Exporte seus dados como CSV ou exclua tudo em Configurações a qualquer momento.</value></data>
   <data name="Help_FocusSessionsWatchEntertainmentApps" xml:space="preserve"><value>As sessões de foco observam os apps de Entretenimento. Avisar mostra uma notificação; Bloquear os minimiza. O Pulse também pode acompanhar as sessões de Foco do Windows, se ativado em Configurações. O Modo descanso adiciona uma borda suave programada quando é hora de encerrar o dia.</value></data>
   <data name="Help_FocusWindDown" xml:space="preserve"><value>Foco e Modo descanso</value></data>
-  <data name="Help_Follows202020Rule" xml:space="preserve"><value>Segue a regra 20-20-20: a cada 20 minutos, olhe para algo a 6 metros (20 pés) de distância por 20 segundos. Adie até 3 vezes; o timer reinicia após 5 minutos longe. Os lembretes aparecem sobre o Pulse, ou como notificação quando o Pulse está na área de notificação.</value></data>
+  <data name="Help_Follows202020Rule" xml:space="preserve"><value>Segue a regra 20-20-20: a cada 20 minutos, olhe para algo a 6 metros (20 pés) de distância por 20 segundos. Adie até 3 vezes; o timer reinicia após 5 minutos longe. Os lembretes aparecem sobre o Pulse quando ele é a janela em uso; caso contrário, também como notificação do Windows.</value></data>
   <data name="Help_LaunchWindowsStartupRunsQuietly" xml:space="preserve"><value>Iniciar com o Windows executa o Pulse discretamente na área de notificação. Fazer backup agora cria um ZIP local com seu banco de dados e suas configurações. Restaurar substitui os dados locais atuais, então faça um backup novo antes e leia a confirmação com atenção.</value></data>
   <data name="Help_Privacy" xml:space="preserve"><value>Privacidade</value></data>
   <data name="Help_RecordsWhichAppHasFocus" xml:space="preserve"><value>Registra qual app está em primeiro plano e por quanto tempo enquanto você usa o PC. Após 5 minutos sem atividade, para de contar, a menos que o app esteja em tela cheia ou reproduzindo áudio. Clicar na área de trabalho ou na barra de tarefas não conta como Explorador de Arquivos. Os nomes dos apps são armazenados, mas os títulos das janelas nunca são salvos no banco de dados, por privacidade. Categorize os apps como Trabalho, Entretenimento ou Neutro para o Foco.</value></data>
@@ -190,14 +190,18 @@ Não é possível desfazer. O Pulse será fechado em seguida; abra-o novamente p
   <data name="Limits_EditHelp" xml:space="preserve"><value>Altere o tempo, o horário ou o que acontece quando o tempo acabar.</value></data>
   <data name="Limits_EditLimit" xml:space="preserve"><value>EDITAR LIMITE</value></data>
   <data name="Limits_EditTitle" xml:space="preserve"><value>Editar {0}</value></data>
+  <data name="Limits_Every5Minutes" xml:space="preserve"><value>A cada 5 minutos</value></data>
+  <data name="Limits_EveryHour" xml:space="preserve"><value>A cada hora</value></data>
   <data name="Limits_HowMuchTimeShouldApp" xml:space="preserve"><value>Quanto tempo este app deve ter por dia?</value></data>
   <data name="Limits_InvalidMinutes" xml:space="preserve"><value>Insira um número de minutos válido.</value></data>
   <data name="Limits_LimitTitle" xml:space="preserve"><value>Limitar {0}</value></data>
   <data name="Limits_MinimizeApp" xml:space="preserve"><value>Minimizar o app</value></data>
   <data name="Limits_MinutesPerDay" xml:space="preserve"><value>minutos por dia</value></data>
   <data name="Limits_NoAppLimitsYet" xml:space="preserve"><value>Nenhum limite de app ainda</value></data>
+  <data name="Limits_OnceADay" xml:space="preserve"><value>Uma vez por dia</value></data>
   <data name="Limits_OptionalUsefulBedtimeSchoolWork" xml:space="preserve"><value>Opcional: útil para a hora de dormir, a escola ou o horário de trabalho.</value></data>
   <data name="Limits_PulseCountsTimeWhileApp" xml:space="preserve"><value>O Pulse conta o tempo enquanto o app está em primeiro plano.</value></data>
+  <data name="Limits_RemindAgain" xml:space="preserve"><value>Lembrar novamente</value></data>
   <data name="Limits_RemindMe" xml:space="preserve"><value>Lembrar-me</value></data>
   <data name="Limits_RemoveLimit" xml:space="preserve"><value>Remover limite</value></data>
   <data name="Limits_SaveChanges" xml:space="preserve"><value>Salvar alterações</value></data>
@@ -209,7 +213,8 @@ Não é possível desfazer. O Pulse será fechado em seguida; abra-o novamente p
   <data name="Limits_SummaryMinimizeApp" xml:space="preserve"><value>Minimizar app</value></data>
   <data name="Limits_SummaryMinutesPerDay" xml:space="preserve"><value>{0} min/dia</value></data>
   <data name="Limits_SummaryPaused" xml:space="preserve"><value>Pausado · {0}</value></data>
-  <data name="Limits_SummaryReminder" xml:space="preserve"><value>Lembrete</value></data>
+  <data name="Limits_SummaryReminderEvery" xml:space="preserve"><value>Lembrete a cada {0} min</value></data>
+  <data name="Limits_SummaryReminderOnceADay" xml:space="preserve"><value>Lembrete uma vez por dia</value></data>
   <data name="Limits_SummaryUnavailable" xml:space="preserve"><value>Indisponível {0}–{1}</value></data>
   <data name="Limits_TurnLimitOff" xml:space="preserve"><value>Ativar ou desativar este limite</value></data>
   <data name="Limits_UnavailableFrom" xml:space="preserve"><value>Indisponível de</value></data>
@@ -301,10 +306,8 @@ Não é possível desfazer.</value></data>
   <data name="Settings_From" xml:space="preserve"><value>De</value></data>
   <data name="Settings_GentleReminderWhenSTime" xml:space="preserve"><value>Um lembrete gentil quando for hora de desacelerar</value></data>
   <data name="Settings_Github" xml:space="preserve"><value>GitHub</value></data>
-  <data name="Settings_GoalHours" xml:space="preserve"><value>Meta: {0} horas por dia</value></data>
-  <data name="Settings_GoalHoursMinutes" xml:space="preserve"><value>Meta: {0} horas e {1} minutos por dia</value></data>
-  <data name="Settings_GoalMinutes" xml:space="preserve"><value>Meta: {0} minutos por dia</value></data>
   <data name="Settings_GoalMustBePositive" xml:space="preserve"><value>A meta deve ser maior que 0</value></data>
+  <data name="Settings_GoalPerDay" xml:space="preserve"><value>Meta: {0} por dia</value></data>
   <data name="Settings_Headphones" xml:space="preserve"><value>Fones de ouvido</value></data>
   <data name="Settings_Headsets" xml:space="preserve"><value>Headsets</value></data>
   <data name="Settings_HealthDown" xml:space="preserve"><value>Parado</value></data>
@@ -430,6 +433,7 @@ Deseja atualizar agora?</value></data>
 {0}</value></data>
   <data name="Shell_TurnOffReminders" xml:space="preserve"><value>Desativar lembretes</value></data>
   <data name="Time_HoursCompact" xml:space="preserve"><value>{0}h</value></data>
+  <data name="Time_HoursLong" xml:space="preserve"><value>{0} h</value></data>
   <data name="Time_HoursMinutes" xml:space="preserve"><value>{0} h {1} min</value></data>
   <data name="Time_HoursMinutesCompact" xml:space="preserve"><value>{0}h {1}min</value></data>
   <data name="Time_HoursMinutesLong" xml:space="preserve"><value>{0} h {1} min</value></data>
@@ -487,4 +491,44 @@ Deseja atualizar agora?</value></data>
   <data name="Dashboard_PerDayAverage" xml:space="preserve"><value> · média de {0}/dia</value></data>
   <data name="Settings_LanguageNote" xml:space="preserve"><value>* Traduzido com ajuda de IA e pode conter erros. </value></data>
   <data name="Settings_LanguageReport" xml:space="preserve"><value>Relatar um problema de tradução</value></data>
+  <data name="Cli_Usage" xml:space="preserve"><value>Uso: pulse &lt;comando&gt; [opções]</value></data>
+  <data name="Cli_CommandsHeader" xml:space="preserve"><value>Comandos:</value></data>
+  <data name="Cli_Help_Status" xml:space="preserve"><value>Se o Pulse está registrando, a versão e a pasta de dados</value></data>
+  <data name="Cli_Help_Today" xml:space="preserve"><value>Tempo de tela, meta e principais apps de hoje</value></data>
+  <data name="Cli_Help_Week" xml:space="preserve"><value>Esta semana dia a dia, comparada com a semana passada</value></data>
+  <data name="Cli_Help_Apps" xml:space="preserve"><value>Principais apps de hoje (--week para esta semana, -n 5 para quantos)</value></data>
+  <data name="Cli_Help_Start" xml:space="preserve"><value>Iniciar o Pulse na área de notificação</value></data>
+  <data name="Cli_Help_Stop" xml:space="preserve"><value>Salvar e fechar o Pulse</value></data>
+  <data name="Cli_Help_Version" xml:space="preserve"><value>Mostrar a versão</value></data>
+  <data name="Cli_Help_Help" xml:space="preserve"><value>Mostrar esta ajuda</value></data>
+  <data name="Cli_HelpFooter" xml:space="preserve"><value>O Pulse registra enquanto é executado na área de notificação. Esta ferramenta apenas lê esses dados, e nada sai do seu PC.</value></data>
+  <data name="Cli_UnknownCommand" xml:space="preserve"><value>Comando desconhecido "{0}". Execute "pulse help" para ver os comandos.</value></data>
+  <data name="Cli_BadOption" xml:space="preserve"><value>"{0}" não é uma opção de "{1}". Execute "pulse help".</value></data>
+  <data name="Cli_NoData" xml:space="preserve"><value>O Pulse ainda não registrou nada neste PC. Abra o Pulse uma vez e tente novamente.</value></data>
+  <data name="Cli_DataBusy" xml:space="preserve"><value>Não foi possível ler os dados do Pulse agora. Tente novamente em instantes.</value></data>
+  <data name="Cli_DataNeedsApp" xml:space="preserve"><value>Não foi possível ler os dados do Pulse. Inicie o Pulse uma vez com: pulse start, e tente novamente.</value></data>
+  <data name="Cli_BadNumber" xml:space="preserve"><value>"{0}" precisa de um número depois, por exemplo: pulse apps -n 5</value></data>
+  <data name="Cli_Failed" xml:space="preserve"><value>Algo deu errado: {0}</value></data>
+  <data name="Cli_StatusRecording" xml:space="preserve"><value>O Pulse está em execução e registrando.</value></data>
+  <data name="Cli_StatusNotRunning" xml:space="preserve"><value>O Pulse não está em execução, então nada está sendo registrado.</value></data>
+  <data name="Cli_StartHint" xml:space="preserve"><value>Inicie com: pulse start</value></data>
+  <data name="Cli_NotRecordingHint" xml:space="preserve"><value>Nenhum registro no momento. Inicie o Pulse com: pulse start</value></data>
+  <data name="Cli_DataFolder" xml:space="preserve"><value>Dados: {0}</value></data>
+  <data name="Cli_LastSaved" xml:space="preserve"><value>Último salvamento: {0}</value></data>
+  <data name="Cli_TopAppsToday" xml:space="preserve"><value>Principais apps de hoje</value></data>
+  <data name="Cli_TopAppsWeek" xml:space="preserve"><value>Principais apps desta semana</value></data>
+  <data name="Cli_ThisWeek" xml:space="preserve"><value>Esta semana</value></data>
+  <data name="Cli_WeekTotal" xml:space="preserve"><value>Total {0} · média de {1} por dia</value></data>
+  <data name="Cli_NoAppTime" xml:space="preserve"><value>Nenhum tempo de app registrado ainda.</value></data>
+  <data name="Cli_AlreadyRunning" xml:space="preserve"><value>O Pulse já está em execução.</value></data>
+  <data name="Cli_AppNotFound" xml:space="preserve"><value>O Pulse não foi encontrado ao lado desta ferramenta. Reinstalar o Pulse deve resolver isso.</value></data>
+  <data name="Cli_Starting" xml:space="preserve"><value>Iniciando o Pulse na área de notificação…</value></data>
+  <data name="Cli_StartFailed" xml:space="preserve"><value>O Pulse não iniciou: {0}</value></data>
+  <data name="Cli_StartTimeout" xml:space="preserve"><value>O Pulse não iniciou em {0} segundos. Verifique a área de notificação.</value></data>
+  <data name="Cli_Stopping" xml:space="preserve"><value>Pedindo ao Pulse para salvar e fechar…</value></data>
+  <data name="Cli_Stopped" xml:space="preserve"><value>O Pulse salvou e foi fechado.</value></data>
+  <data name="Cli_StopUnsupported" xml:space="preserve"><value>Esta versão do Pulse não pode ser fechada pela linha de comando. Use Sair no menu da área de notificação.</value></data>
+  <data name="Cli_StopTimeout" xml:space="preserve"><value>O Pulse não fechou em {0} segundos. Use Sair no menu da área de notificação.</value></data>
+  <data name="Help_CommandLine" xml:space="preserve"><value>Linha de comando</value></data>
+  <data name="Help_CommandLineBody" xml:space="preserve"><value>Digite "pulse help" no Terminal ou no PowerShell para ver o tempo de tela de hoje, esta semana e seus principais apps, ou para iniciar e fechar o Pulse. Ele lê os mesmos dados deste PC.</value></data>
 </root>

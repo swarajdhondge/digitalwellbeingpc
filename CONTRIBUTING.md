@@ -12,6 +12,8 @@ Requires the [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0) and 
 ```powershell
 dotnet run --project digital-wellbeing-app               # run the app
 dotnet test digital-wellbeing-app/Tests/Tests.csproj     # unit tests (must pass)
+dotnet run --project pulse-cli -- today                  # run the command-line tool
+dotnet test pulse-cli/Tests/pulse-cli.Tests.csproj       # its tests (must pass)
 ```
 
 `UITests/` holds FlaUI tests that drive the real app and need an interactive desktop.
@@ -25,6 +27,8 @@ the build folder.
 |---|---|
 | `digital-wellbeing-app/` | WPF app (MVVM: `Views/`, `ViewModels/`, `Models/`; tracking in `CoreLogic/`; data and logic in `Services/`; Win32 interop in `Platform/Windows/`) |
 | `digital-wellbeing-app/Tests/` | xUnit tests, one file per class under test |
+| `pulse-cli/` | `pulse` command-line tool. Reads the app's data; links the app's data, report and formatting code instead of copying it |
+| `pulse-cli/Tests/` | xUnit tests for the command-line tool |
 | `UITests/` | FlaUI UI tests and screenshot capture |
 
 ## Pull requests

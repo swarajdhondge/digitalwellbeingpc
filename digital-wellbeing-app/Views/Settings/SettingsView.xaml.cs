@@ -35,7 +35,7 @@ namespace digital_wellbeing_app.Views.Settings
                 if (!string.IsNullOrEmpty(location))
                 {
                     var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(location);
-                    AboutVersionText.Text = Loc.Format("Settings_VersionFormat", fvi.ProductVersion ?? "2.4.0");
+                    AboutVersionText.Text = Loc.Format("Settings_VersionFormat", fvi.ProductVersion ?? "2.4.1");
                 }
             }
             catch { /* Keep default text from XAML */ }
@@ -182,6 +182,8 @@ namespace digital_wellbeing_app.Views.Settings
             try
             {
                 DatabaseService.DeleteDataInRange(from.Value, to.Value);
+                if (from.Value.Date <= System.DateTime.Today && to.Value.Date >= System.DateTime.Today)
+                    ForgetTodayInTrackers();
                 RefreshDbSize();
                 System.Windows.MessageBox.Show(Loc.Get("Settings_RangeDeleted"), Loc.Get("Settings_DataDeletedTitle"),
                     MessageBoxButton.OK, MessageBoxImage.Information);
@@ -191,6 +193,14 @@ namespace digital_wellbeing_app.Views.Settings
                 System.Windows.MessageBox.Show(Loc.Format("Settings_DeleteFailed", ex.Message), Loc.Get("Settings_ErrorTitle"),
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        // The trackers keep today's running totals in memory; start them over too.
+        private static void ForgetTodayInTrackers()
+        {
+            if (System.Windows.Application.Current is not App app) return;
+            app.ScreenTracker?.ForgetToday();
+            app.AppTracker?.RestartCurrentSession();
         }
 
         private void RefreshDbSize()
@@ -297,7 +307,11 @@ namespace digital_wellbeing_app.Views.Settings
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
 
-                System.Windows.Application.Current.Shutdown();
+                // a real exit, not close-to-tray (which would only hide the window)
+                if (System.Windows.Application.Current.MainWindow is digital_wellbeing_app.MainWindow.MainWindow main)
+                    main.ExitApplication();
+                else
+                    System.Windows.Application.Current.Shutdown();
             }
             catch (System.Exception ex)
             {
@@ -357,6 +371,7 @@ namespace digital_wellbeing_app.Views.Settings
                 try
                 {
                     DatabaseService.DeleteAllData();
+                    ForgetTodayInTrackers();
                     RefreshDbSize();
 
                     System.Windows.MessageBox.Show(
@@ -466,13 +481,12 @@ namespace digital_wellbeing_app.Views.Settings
         {
             var hours = totalMinutes / 60;
             var mins = totalMinutes % 60;
-            
-            if (hours > 0 && mins > 0)
-                CurrentGoalText.Text = Loc.Format("Settings_GoalHoursMinutes", hours, mins);
-            else if (hours > 0)
-                CurrentGoalText.Text = Loc.Format("Settings_GoalHours", hours);
-            else
-                CurrentGoalText.Text = Loc.Format("Settings_GoalMinutes", mins);
+
+            // "1 hr 30 min" style avoids "1 minutes" / "1 hours" in every language
+            var amount = hours > 0 && mins > 0 ? Loc.Format("Time_HoursMinutesLong", hours, mins)
+                       : hours > 0 ? Loc.Format("Time_HoursLong", hours)
+                       : Loc.Format("Time_MinutesLong", mins);
+            CurrentGoalText.Text = Loc.Format("Settings_GoalPerDay", amount);
         }
 
         #endregion
@@ -492,15 +506,12 @@ namespace digital_wellbeing_app.Views.Settings
             BreakReminderSoundPanel.Visibility = enabled ? Visibility.Visible : Visibility.Collapsed;
             SoundToggle.IsChecked = soundEnabled;
 
-            // Set interval selection
-            foreach (System.Windows.Controls.ComboBoxItem item in IntervalComboBox.Items)
-            {
-                if (item.Tag?.ToString() == interval.ToString())
-                {
-                    IntervalComboBox.SelectedItem = item;
-                    break;
-                }
-            }
+            // Set interval selection. The XAML has no default selection on purpose: one would fire
+            // SelectionChanged while the page is built, before this guard is set, and save 20 over
+            // the user's interval on every start. An unknown value shows 20 without saving it.
+            var items = IntervalComboBox.Items.OfType<System.Windows.Controls.ComboBoxItem>().ToList();
+            IntervalComboBox.SelectedItem = items.FirstOrDefault(i => i.Tag?.ToString() == interval.ToString())
+                                            ?? items.FirstOrDefault(i => i.Tag?.ToString() == "20");
 
             _isLoadingBreakReminder = false;
         }

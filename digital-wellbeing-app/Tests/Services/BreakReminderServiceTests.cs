@@ -163,5 +163,96 @@ namespace digital_wellbeing_app.Tests.Services
             Thread.Sleep(200);
             Assert.False(breakFired);
         }
+
+        // ---- Evaluate (one timer tick), driven without the real timer or OS idle state ----
+
+        private static BreakReminderService CreateEnabledService(int intervalMinutes = 20)
+            => new BreakReminderService { IsEnabled = true, IntervalMinutes = intervalMinutes };
+
+        [Fact]
+        public void Evaluate_ActiveBeforeInterval_DoesNotFire()
+        {
+            var svc = CreateEnabledService();
+            int fired = 0;
+            svc.BreakDue += () => fired++;
+
+            svc.Evaluate(DateTime.Now.AddMinutes(19), userIdle: false);
+
+            Assert.Equal(0, fired);
+            Assert.False(svc.IsBreakPending);
+        }
+
+        [Fact]
+        public void Evaluate_ActiveAfterInterval_FiresOnceAndStaysPending()
+        {
+            var svc = CreateEnabledService();
+            int fired = 0;
+            svc.BreakDue += () => fired++;
+
+            svc.Evaluate(DateTime.Now.AddMinutes(21), userIdle: false);
+            svc.Evaluate(DateTime.Now.AddMinutes(22), userIdle: false);
+
+            Assert.Equal(1, fired);
+            Assert.True(svc.IsBreakPending);
+        }
+
+        [Fact]
+        public void Evaluate_IdleWhilePending_ResolvesTheBreak()
+        {
+            // Issue #60: a reminder the user never saw must not block every later reminder.
+            var svc = CreateEnabledService();
+            int dismissed = 0;
+            svc.BreakDismissed += () => dismissed++;
+            svc.Evaluate(DateTime.Now.AddMinutes(21), userIdle: false);
+            Assert.True(svc.IsBreakPending);
+
+            svc.Evaluate(DateTime.Now.AddMinutes(30), userIdle: true);
+
+            Assert.False(svc.IsBreakPending);
+            Assert.Equal(1, dismissed);
+            Assert.Equal(0, svc.SnoozeCount);
+        }
+
+        [Fact]
+        public void Evaluate_AfterIdleResolvesBreak_FiresAgainAfterNextInterval()
+        {
+            var svc = CreateEnabledService();
+            int fired = 0;
+            svc.BreakDue += () => fired++;
+            var start = DateTime.Now;
+
+            svc.Evaluate(start.AddMinutes(21), userIdle: false);  // fires, pending
+            svc.Evaluate(start.AddMinutes(30), userIdle: true);   // away -> resolved, timer restarts
+            svc.Evaluate(start.AddMinutes(45), userIdle: false);  // 15 min since restart -> not yet
+            Assert.Equal(1, fired);
+
+            svc.Evaluate(start.AddMinutes(51), userIdle: false);  // 21 min since restart -> fires
+            Assert.Equal(2, fired);
+        }
+
+        [Fact]
+        public void Evaluate_IdleWithNothingPending_DoesNotRaiseDismissed()
+        {
+            var svc = CreateEnabledService();
+            int dismissed = 0;
+            svc.BreakDismissed += () => dismissed++;
+
+            svc.Evaluate(DateTime.Now.AddMinutes(10), userIdle: true);
+
+            Assert.Equal(0, dismissed);
+        }
+
+        [Fact]
+        public void Evaluate_WhenDisabled_DoesNothing()
+        {
+            var svc = CreateEnabledService();
+            svc.IsEnabled = false;
+            int fired = 0;
+            svc.BreakDue += () => fired++;
+
+            svc.Evaluate(DateTime.Now.AddMinutes(60), userIdle: false);
+
+            Assert.Equal(0, fired);
+        }
     }
 }

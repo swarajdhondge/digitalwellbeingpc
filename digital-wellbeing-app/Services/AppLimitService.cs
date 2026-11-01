@@ -22,7 +22,8 @@ namespace digital_wellbeing_app.Services
         private readonly HashSet<string> _appsFailedToBlock = new(StringComparer.OrdinalIgnoreCase);
         private readonly Dictionary<string, DateTime> _lastActionTime = new(StringComparer.OrdinalIgnoreCase);
         private readonly System.Timers.Timer _limitCheckTimer = new(30_000) { AutoReset = true };
-        private static readonly TimeSpan ActionCooldown = TimeSpan.FromSeconds(30);
+        // Same as Focus Block: reopening a minimized app only buys a few seconds.
+        private static readonly TimeSpan MinimizeCooldown = TimeSpan.FromSeconds(5);
         private bool _isDisposed;
         private bool _isStarted;
 
@@ -103,9 +104,9 @@ namespace digital_wellbeing_app.Services
                     .Sum(s => s.Duration.TotalSeconds);
                 if (!HasReachedLimit(limit, now, usedSeconds)) return;
 
-                if (_lastActionTime.TryGetValue(key, out var last) && DateTime.Now - last < ActionCooldown)
+                if (!IsDueAgain(limit, _lastActionTime.TryGetValue(key, out var last) ? last : null, now))
                     return;
-                _lastActionTime[key] = DateTime.Now;
+                _lastActionTime[key] = now;
 
                 if (limit.EnforcementLevel != FocusEnforcementLevel.Warn && !_appsFailedToBlock.Contains(key))
                 {
@@ -128,6 +129,24 @@ namespace digital_wellbeing_app.Services
         /// limit row and a point in time (plus, for the daily-cap branch, today's persisted usage),
         /// so it's testable without a live tracker.
         /// </summary>
+        public const int DefaultRemindEveryMinutes = 15;
+
+        /// <summary>
+        /// Whether Pulse should act again for an app that is over its limit. Minimizing repeats
+        /// whenever the app comes back (after a few seconds); a reminder repeats only as often
+        /// as the user chose for that limit.
+        /// </summary>
+        public static bool IsDueAgain(AppLimit limit, DateTime? lastAction, DateTime now)
+        {
+            if (lastAction == null) return true;
+            if (limit.EnforcementLevel != FocusEnforcementLevel.Warn)
+                return now - lastAction.Value >= MinimizeCooldown;
+            var every = limit.RemindEveryMinutes ?? DefaultRemindEveryMinutes;
+            return every <= 0
+                ? lastAction.Value.Date != now.Date
+                : now - lastAction.Value >= TimeSpan.FromMinutes(every);
+        }
+
         public static bool IsLimitExceeded(AppLimit limit, DateTime now, int liveUsageSeconds = 0)
             => HasReachedLimit(limit, now,
                 DatabaseService.GetAppUsageSecondsForDate(limit.AppIdentifier, now.Date) + Math.Max(0, liveUsageSeconds));

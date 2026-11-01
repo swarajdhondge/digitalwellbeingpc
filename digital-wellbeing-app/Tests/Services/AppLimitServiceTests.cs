@@ -217,5 +217,56 @@ namespace digital_wellbeing_app.Tests.Services
             // No exception is the primary assertion here; DB state confirms the reload path ran.
             Assert.NotNull(DatabaseService.GetAppLimit("livereload"));
         }
+        // --- How often Pulse acts again ---
+
+        [Theory]
+        [InlineData(null, 14, false)]   // older limits: every 15 minutes
+        [InlineData(null, 15, true)]
+        [InlineData(5, 4, false)]
+        [InlineData(5, 5, true)]
+        [InlineData(60, 59, false)]
+        [InlineData(60, 60, true)]
+        public void Reminder_RepeatsAtTheChosenInterval(int? every, int minutesLater, bool due)
+        {
+            var limit = MakeLimit();
+            limit.RemindEveryMinutes = every;
+            var last = new DateTime(2026, 11, 1, 10, 0, 0);
+            Assert.Equal(due, AppLimitService.IsDueAgain(limit, last, last.AddMinutes(minutesLater)));
+        }
+
+        [Fact]
+        public void Reminder_OnceADay_WaitsForTomorrow()
+        {
+            var limit = MakeLimit();
+            limit.RemindEveryMinutes = 0;
+            var last = new DateTime(2026, 11, 1, 10, 0, 0);
+            Assert.True(AppLimitService.IsDueAgain(limit, null, last));
+            Assert.False(AppLimitService.IsDueAgain(limit, last, last.AddHours(13)));
+            Assert.True(AppLimitService.IsDueAgain(limit, last, new DateTime(2026, 11, 2, 0, 1, 0)));
+        }
+
+        [Fact]
+        public void Minimize_RepeatsAfterTheShortCooldown_WhateverTheReminderSetting()
+        {
+            var limit = MakeLimit();
+            limit.EnforcementLevel = FocusEnforcementLevel.Block;
+            limit.RemindEveryMinutes = 0;
+            var last = new DateTime(2026, 11, 1, 10, 0, 0);
+            Assert.False(AppLimitService.IsDueAgain(limit, last, last.AddSeconds(3)));
+            Assert.True(AppLimitService.IsDueAgain(limit, last, last.AddSeconds(5)));
+        }
+
+        [Fact]
+        public void SaveAppLimit_KeepsTheReminderSetting()
+        {
+            var limit = MakeLimit("remindapp", dailyMinutes: 30);
+            limit.RemindEveryMinutes = 30;
+            DatabaseService.SaveAppLimit(limit);
+            Assert.Equal(30, DatabaseService.GetAppLimit("remindapp")!.RemindEveryMinutes);
+
+            limit.RemindEveryMinutes = 0;
+            DatabaseService.SaveAppLimit(limit);
+            Assert.Equal(0, DatabaseService.GetAppLimit("remindapp")!.RemindEveryMinutes);
+        }
     }
 }

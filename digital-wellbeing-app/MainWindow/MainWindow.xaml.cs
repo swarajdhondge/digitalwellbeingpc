@@ -83,7 +83,7 @@ namespace digital_wellbeing_app.MainWindow
                     Background = System.Windows.Media.Brushes.Black;
                     WindowBorder.Margin = new Thickness(0);
                     WindowBorder.CornerRadius = new CornerRadius(0);
-                    WindowBorder.Effect = null;
+                    WindowShadow.Visibility = Visibility.Collapsed;
                 }
             }
             catch { /* never let screenshot mode break startup */ }
@@ -95,7 +95,7 @@ namespace digital_wellbeing_app.MainWindow
                 if (!string.IsNullOrEmpty(location))
                 {
                     var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(location);
-                    SidebarVersionText.Text = $"v{fvi.ProductVersion ?? "2.4.0"}";
+                    SidebarVersionText.Text = $"v{fvi.ProductVersion ?? "2.4.1"}";
                 }
             }
             catch { /* Keep default text from XAML */ }
@@ -129,6 +129,7 @@ namespace digital_wellbeing_app.MainWindow
             RefreshThemeToggleIcon();
 
             // Restore saved window position/size
+            FitToWorkArea();
             RestoreWindowState();
 
             // Handle maximize state for proper corner radius
@@ -546,126 +547,58 @@ namespace digital_wellbeing_app.MainWindow
 
         private void OnBreakDue()
         {
-            System.Diagnostics.Debug.WriteLine("OnBreakDue triggered!");
             // Show break notification on UI thread
             Dispatcher.Invoke(() =>
             {
-                // Check if app is visible or minimized/hidden
-                bool isMinimized = WindowState == WindowState.Minimized || !IsVisible;
-                System.Diagnostics.Debug.WriteLine($"isMinimized: {isMinimized}, WindowState: {WindowState}, IsVisible: {IsVisible}");
-                
-                if (isMinimized)
-                {
-                    // Show balloon notification from system tray (balloon has its own sound)
-                    _breakNotificationPending = true;
-                    ShowFallbackBalloon();
-                }
-                else
-                {
-                    // Show centered overlay
+                bool windowShown = IsVisible && WindowState != WindowState.Minimized;
+                // An open Pulse window isn't one the user is looking at: with another app in
+                // front, the in-window overlay alone goes unseen and the break sits pending until
+                // Pulse is opened again (issue #60). Only skip the notification when Pulse is
+                // the window in front. Asked from Windows: WPF's IsActive was seen to stay true after
+                // another app had been brought to the front.
+                bool pulseInFront = windowShown
+                    && Platform.Windows.NativeMethods.GetForegroundWindow() == new WindowInteropHelper(this).Handle;
+                Services.LogService.Info($"Break due (window shown: {windowShown}, Pulse in front: {pulseInFront})");
+
+                // Overlay waits in the window, so it's there whenever the user switches back.
+                if (windowShown)
                     ShowBreakOverlay();
-                    
+
+                if (pulseInFront)
+                {
                     // Play system sound if enabled (only for overlay, balloon has its own)
                     if (_breakReminderService?.SoundEnabled == true)
                     {
                         System.Media.SystemSounds.Asterisk.Play();
                     }
                 }
-            });
-        }
-
-        private ToastNotification? _currentToast;
-        private const string APP_ID = "DigitalWellbeing";
-
-        private void ShowToastNotification()
-        {
-            System.Diagnostics.Debug.WriteLine("ShowToastNotification called - attempting to show toast");
-            try
-            {
-                // Create toast XML with action buttons
-                string toastXml = $@"
-                    <toast activationType='foreground' launch='action=open'>
-                        <visual>
-                            <binding template='ToastGeneric'>
-                                <text>{System.Security.SecurityElement.Escape(Loc.Get("Shell_TimeBreak"))}</text>
-                                <text>{System.Security.SecurityElement.Escape(Loc.Get("Break_FollowRule"))}</text>
-                            </binding>
-                        </visual>
-                        <actions>
-                            <action content='{System.Security.SecurityElement.Escape(Loc.Get("Shell_Snooze5Min"))}' arguments='action=snooze' activationType='foreground'/>
-                            <action content='{System.Security.SecurityElement.Escape(Loc.Get("Shell_Dismiss"))}' arguments='action=dismiss' activationType='foreground'/>
-                        </actions>
-                        <audio src='ms-winsoundevent:Notification.Default'/>
-                    </toast>";
-
-                var xmlDoc = new XmlDocument();
-                xmlDoc.LoadXml(toastXml);
-
-                _currentToast = new ToastNotification(xmlDoc);
-                
-                // Handle toast activation (button clicks or toast click)
-                _currentToast.Activated += Toast_Activated;
-                _currentToast.Dismissed += Toast_Dismissed;
-
-                // Show the toast
-                ToastNotificationManager.CreateToastNotifier(APP_ID).Show(_currentToast);
-            }
-            catch (Exception ex)
-            {
-                // Fallback to balloon tip if toast fails
-                System.Diagnostics.Debug.WriteLine($"Toast error: {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
-                ShowFallbackBalloon();
-            }
-            System.Diagnostics.Debug.WriteLine("ShowToastNotification completed");
-        }
-
-        private void Toast_Activated(ToastNotification sender, object args)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                _breakNotificationPending = false;
-                
-                // Parse the arguments to determine action
-                string arguments = "";
-                if (args is Windows.UI.Notifications.ToastActivatedEventArgs toastArgs)
-                {
-                    arguments = toastArgs.Arguments;
-                }
-
-                if (arguments.Contains("snooze"))
-                {
-                    _breakReminderService?.Snooze(5);
-                }
-                else if (arguments.Contains("dismiss"))
-                {
-                    _breakReminderService?.Dismiss();
-                }
                 else
                 {
-                    // Default click - open app with overlay
-                    Show();
-                    WindowState = WindowState.Normal;
-                    Activate();
-                    Topmost = true;
-                    Topmost = false;
-                    ShowBreakOverlay();
+                    // Show balloon notification from system tray (balloon has its own sound)
+                    _breakNotificationPending = true;
+                    ShowFallbackBalloon();
                 }
             });
         }
 
-        private void Toast_Dismissed(ToastNotification sender, ToastDismissedEventArgs args)
+        /// <summary>
+        /// Windows only shows a toast sent under this process's own app identity: the Store
+        /// package's, or the one Velopack gives the Setup.exe install (its Start menu shortcut
+        /// carries the same ID). A toast under any other ID is stored but never shown, so without
+        /// an identity this throws and the caller falls back to the tray balloon.
+        /// </summary>
+        private static ToastNotifier CreateToastNotifier()
         {
-            // Only auto-dismiss if user swiped away (not if they clicked a button)
-            if (args.Reason == ToastDismissalReason.UserCanceled && _breakNotificationPending)
-            {
-                Dispatcher.Invoke(() =>
-                {
-                    _breakNotificationPending = false;
-                    _breakReminderService?.Dismiss();
-                });
-            }
+            if (Services.PackagedAppInfo.IsPackaged)
+                return ToastNotificationManager.CreateToastNotifier();
+            if (GetCurrentProcessExplicitAppUserModelID(out var appId) == 0 && !string.IsNullOrEmpty(appId))
+                return ToastNotificationManager.CreateToastNotifier(appId);
+            throw new InvalidOperationException("No app identity for notifications");
         }
+
+        [System.Runtime.InteropServices.DllImport("shell32.dll")]
+        private static extern int GetCurrentProcessExplicitAppUserModelID(
+            [System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.LPWStr)] out string appId);
 
         private void ShowFallbackBalloon()
         {
@@ -718,7 +651,7 @@ namespace digital_wellbeing_app.MainWindow
                     NavigateToLimits();
                 });
 
-                ToastNotificationManager.CreateToastNotifier(APP_ID).Show(toast);
+                CreateToastNotifier().Show(toast);
             }
             catch (Exception ex)
             {
@@ -757,18 +690,6 @@ namespace digital_wellbeing_app.MainWindow
             // This prevents the timer from restarting when balloon auto-closes
         }
 
-        private void ClearToastNotifications()
-        {
-            try
-            {
-                ToastNotificationManager.History.Clear(APP_ID);
-            }
-            catch
-            {
-                // Ignore errors
-            }
-        }
-
         private void OnBreakDismissed()
         {
             // Hide notification on UI thread
@@ -776,7 +697,6 @@ namespace digital_wellbeing_app.MainWindow
             {
                 BreakOverlay.Visibility = Visibility.Collapsed;
                 _breakNotificationPending = false;
-                ClearToastNotifications();
             });
         }
 
@@ -955,7 +875,7 @@ namespace digital_wellbeing_app.MainWindow
             _trayIcon.BalloonTipClosed += TrayIcon_BalloonTipClosed;
         }
 
-        private void ShowWindow()
+        internal void ShowWindow()
         {
             ShowInTaskbar = true;
             Show();
@@ -1114,10 +1034,10 @@ namespace digital_wellbeing_app.MainWindow
         }
 
         /// <summary>
-        /// Fully quit Pulse (bypasses close-to-tray). Used by the tray "Exit" item and the
-        /// in-app Exit action.
+        /// Fully quit Pulse (bypasses close-to-tray). Used by the tray "Exit" item, the
+        /// in-app Exit action and `pulse stop`.
         /// </summary>
-        private void ExitApplication()
+        internal void ExitApplication()
         {
             _isExiting = true;
             Close();
@@ -1167,6 +1087,18 @@ namespace digital_wellbeing_app.MainWindow
             {
                 // If restore fails, just use default position/size
             }
+        }
+
+        /// <summary>
+        /// The default size (1220×870) is taller than the screen on common setups, such as
+        /// 1366×768, or 1920×1080 at 125% scaling. Centered, its title bar then sits above the
+        /// screen and the window can't be moved. Shrink it to the work area (not below the minimum).
+        /// </summary>
+        private void FitToWorkArea()
+        {
+            var area = SystemParameters.WorkArea;
+            if (Height > area.Height) Height = Math.Max(MinHeight, area.Height);
+            if (Width > area.Width) Width = Math.Max(MinWidth, area.Width);
         }
 
         /// <summary>

@@ -161,7 +161,7 @@
                         <ComboBox x:Name="IntervalComboBox" SelectionChanged="IntervalComboBox_SelectionChanged"
                                   Background="{DynamicResource Card2}" Foreground="{DynamicResource Ink}" BorderThickness="0" Padding="12,8">
                             <ComboBoxItem Content="{l:Loc Settings_Every15Minutes}" Tag="15"/>
-                            <ComboBoxItem Content="{l:Loc Settings_Every20MinutesRecommended}" Tag="20" IsSelected="True"/>
+                            <ComboBoxItem Content="{l:Loc Settings_Every20MinutesRecommended}" Tag="20"/>
                             <ComboBoxItem Content="{l:Loc Settings_Every30Minutes}" Tag="30"/>
                             <ComboBoxItem Content="{l:Loc Settings_Every45Minutes}" Tag="45"/>
                             <ComboBoxItem Content="{l:Loc Settings_Every60Minutes}" Tag="60"/>

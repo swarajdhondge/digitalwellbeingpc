@@ -150,7 +150,7 @@ Tindakan ini tidak dapat dibatalkan. Pulse akan ditutup setelahnya - buka kembal
   <data name="Help_EverythingStaysDeviceNoAccount" xml:space="preserve"><value>Semuanya tetap di perangkat ini — tanpa akun, tanpa cloud, tanpa telemetri. Pelacakan situs web nonaktif secara default — jika Anda mengaktifkannya, hanya nama host (misalnya youtube.com) yang disimpan, tidak pernah URL lengkap atau isi halaman. Ekspor data Anda sebagai CSV atau hapus semuanya dari Pengaturan kapan saja.</value></data>
   <data name="Help_FocusSessionsWatchEntertainmentApps" xml:space="preserve"><value>Sesi fokus memantau aplikasi Hiburan. Peringatkan menampilkan notifikasi; Blokir meminimalkannya. Pulse juga dapat mengikuti sesi Fokus Windows jika diaktifkan di Pengaturan. Mode Santai menambahkan bingkai lembut terjadwal saat waktunya menyelesaikan aktivitas.</value></data>
   <data name="Help_FocusWindDown" xml:space="preserve"><value>Fokus &amp; Mode Santai</value></data>
-  <data name="Help_Follows202020Rule" xml:space="preserve"><value>Mengikuti aturan 20-20-20: setiap 20 menit, lihat sejauh 6 meter selama 20 detik. Tunda hingga 3 kali; timer diatur ulang setelah 5 menit menjauh. Pengingat muncul di atas Pulse, atau sebagai notifikasi saat Pulse berada di area notifikasi.</value></data>
+  <data name="Help_Follows202020Rule" xml:space="preserve"><value>Mengikuti aturan 20-20-20: setiap 20 menit, lihat sejauh 6 meter selama 20 detik. Tunda hingga 3 kali; timer diatur ulang setelah 5 menit menjauh. Pengingat muncul di atas Pulse saat Anda sedang menggunakannya; jika tidak, juga muncul sebagai notifikasi Windows.</value></data>
   <data name="Help_LaunchWindowsStartupRunsQuietly" xml:space="preserve"><value>Jalankan saat Windows dimulai akan berjalan diam-diam di area notifikasi. Cadangkan sekarang membuat ZIP lokal berisi database dan pengaturan Anda. Pulihkan akan mengganti data lokal saat ini, jadi buat cadangan baru terlebih dahulu dan baca konfirmasinya dengan cermat.</value></data>
   <data name="Help_Privacy" xml:space="preserve"><value>Privasi</value></data>
   <data name="Help_RecordsWhichAppHasFocus" xml:space="preserve"><value>Mencatat aplikasi mana yang sedang aktif dan berapa lama saat Anda menggunakan PC. Setelah 5 menit tanpa input, pencatatan berhenti, kecuali aplikasi tersebut dalam layar penuh atau memutar audio. Mengklik desktop atau taskbar tidak dihitung sebagai File Explorer. Nama aplikasi disimpan, tetapi judul jendela tidak pernah disimpan ke database demi privasi. Kategorikan aplikasi sebagai Kerja, Hiburan, atau Netral untuk Fokus.</value></data>
@@ -190,14 +190,18 @@ Tindakan ini tidak dapat dibatalkan. Pulse akan ditutup setelahnya - buka kembal
   <data name="Limits_EditHelp" xml:space="preserve"><value>Ubah jatah, jadwal, atau apa yang terjadi saat waktu habis.</value></data>
   <data name="Limits_EditLimit" xml:space="preserve"><value>EDIT BATAS</value></data>
   <data name="Limits_EditTitle" xml:space="preserve"><value>Edit {0}</value></data>
+  <data name="Limits_Every5Minutes" xml:space="preserve"><value>Setiap 5 menit</value></data>
+  <data name="Limits_EveryHour" xml:space="preserve"><value>Setiap jam</value></data>
   <data name="Limits_HowMuchTimeShouldApp" xml:space="preserve"><value>Berapa lama waktu untuk aplikasi ini setiap hari?</value></data>
   <data name="Limits_InvalidMinutes" xml:space="preserve"><value>Masukkan jumlah menit yang valid.</value></data>
   <data name="Limits_LimitTitle" xml:space="preserve"><value>Batasi {0}</value></data>
   <data name="Limits_MinimizeApp" xml:space="preserve"><value>Minimalkan aplikasi</value></data>
   <data name="Limits_MinutesPerDay" xml:space="preserve"><value>menit per hari</value></data>
   <data name="Limits_NoAppLimitsYet" xml:space="preserve"><value>Belum ada batas aplikasi</value></data>
+  <data name="Limits_OnceADay" xml:space="preserve"><value>Sekali sehari</value></data>
   <data name="Limits_OptionalUsefulBedtimeSchoolWork" xml:space="preserve"><value>Opsional — berguna untuk jam tidur, sekolah, atau kerja.</value></data>
   <data name="Limits_PulseCountsTimeWhileApp" xml:space="preserve"><value>Pulse menghitung waktu selama aplikasi berada di latar depan.</value></data>
+  <data name="Limits_RemindAgain" xml:space="preserve"><value>Ingatkan lagi</value></data>
   <data name="Limits_RemindMe" xml:space="preserve"><value>Ingatkan saya</value></data>
   <data name="Limits_RemoveLimit" xml:space="preserve"><value>Hapus batas</value></data>
   <data name="Limits_SaveChanges" xml:space="preserve"><value>Simpan perubahan</value></data>
@@ -209,7 +213,8 @@ Tindakan ini tidak dapat dibatalkan. Pulse akan ditutup setelahnya - buka kembal
   <data name="Limits_SummaryMinimizeApp" xml:space="preserve"><value>Minimalkan aplikasi</value></data>
   <data name="Limits_SummaryMinutesPerDay" xml:space="preserve"><value>{0} mnt/hari</value></data>
   <data name="Limits_SummaryPaused" xml:space="preserve"><value>Dijeda · {0}</value></data>
-  <data name="Limits_SummaryReminder" xml:space="preserve"><value>Pengingat</value></data>
+  <data name="Limits_SummaryReminderEvery" xml:space="preserve"><value>Pengingat setiap {0} mnt</value></data>
+  <data name="Limits_SummaryReminderOnceADay" xml:space="preserve"><value>Pengingat sekali sehari</value></data>
   <data name="Limits_SummaryUnavailable" xml:space="preserve"><value>Tidak tersedia {0}–{1}</value></data>
   <data name="Limits_TurnLimitOff" xml:space="preserve"><value>Aktifkan atau nonaktifkan batas ini</value></data>
   <data name="Limits_UnavailableFrom" xml:space="preserve"><value>Tidak tersedia dari</value></data>
@@ -301,10 +306,8 @@ Tindakan ini tidak dapat dibatalkan.</value></data>
   <data name="Settings_From" xml:space="preserve"><value>Dari</value></data>
   <data name="Settings_GentleReminderWhenSTime" xml:space="preserve"><value>Pengingat lembut saat waktunya bersantai</value></data>
   <data name="Settings_Github" xml:space="preserve"><value>GitHub</value></data>
-  <data name="Settings_GoalHours" xml:space="preserve"><value>Target: {0} jam per hari</value></data>
-  <data name="Settings_GoalHoursMinutes" xml:space="preserve"><value>Target: {0} jam {1} menit per hari</value></data>
-  <data name="Settings_GoalMinutes" xml:space="preserve"><value>Target: {0} menit per hari</value></data>
   <data name="Settings_GoalMustBePositive" xml:space="preserve"><value>Target harus lebih dari 0</value></data>
+  <data name="Settings_GoalPerDay" xml:space="preserve"><value>Target: {0} per hari</value></data>
   <data name="Settings_Headphones" xml:space="preserve"><value>Headphone</value></data>
   <data name="Settings_Headsets" xml:space="preserve"><value>Headset</value></data>
   <data name="Settings_HealthDown" xml:space="preserve"><value>Mati</value></data>
@@ -430,6 +433,7 @@ Perbarui sekarang?</value></data>
 {0}</value></data>
   <data name="Shell_TurnOffReminders" xml:space="preserve"><value>Matikan pengingat</value></data>
   <data name="Time_HoursCompact" xml:space="preserve"><value>{0}j</value></data>
+  <data name="Time_HoursLong" xml:space="preserve"><value>{0} jam</value></data>
   <data name="Time_HoursMinutes" xml:space="preserve"><value>{0} j {1} m</value></data>
   <data name="Time_HoursMinutesCompact" xml:space="preserve"><value>{0}j {1}m</value></data>
   <data name="Time_HoursMinutesLong" xml:space="preserve"><value>{0} jam {1} mnt</value></data>
@@ -487,4 +491,44 @@ Perbarui sekarang?</value></data>
   <data name="Dashboard_PerDayAverage" xml:space="preserve"><value> · rata-rata {0}/hari</value></data>
   <data name="Settings_LanguageNote" xml:space="preserve"><value>* Diterjemahkan dengan bantuan AI dan mungkin mengandung kesalahan. </value></data>
   <data name="Settings_LanguageReport" xml:space="preserve"><value>Laporkan masalah terjemahan</value></data>
+  <data name="Cli_Usage" xml:space="preserve"><value>Penggunaan: pulse &lt;perintah&gt; [opsi]</value></data>
+  <data name="Cli_CommandsHeader" xml:space="preserve"><value>Perintah:</value></data>
+  <data name="Cli_Help_Status" xml:space="preserve"><value>Apakah Pulse sedang merekam, versinya, dan folder datanya</value></data>
+  <data name="Cli_Help_Today" xml:space="preserve"><value>Waktu layar, target, dan aplikasi teratas hari ini</value></data>
+  <data name="Cli_Help_Week" xml:space="preserve"><value>Minggu ini per hari, dibandingkan dengan minggu lalu</value></data>
+  <data name="Cli_Help_Apps" xml:space="preserve"><value>Aplikasi teratas hari ini (--week untuk minggu ini, -n 5 untuk jumlahnya)</value></data>
+  <data name="Cli_Help_Start" xml:space="preserve"><value>Mulai Pulse di area notifikasi</value></data>
+  <data name="Cli_Help_Stop" xml:space="preserve"><value>Simpan dan tutup Pulse</value></data>
+  <data name="Cli_Help_Version" xml:space="preserve"><value>Tampilkan versi</value></data>
+  <data name="Cli_Help_Help" xml:space="preserve"><value>Tampilkan bantuan ini</value></data>
+  <data name="Cli_HelpFooter" xml:space="preserve"><value>Pulse merekam saat berjalan di area notifikasi. Alat ini hanya membaca data tersebut, dan tidak ada yang keluar dari PC Anda.</value></data>
+  <data name="Cli_UnknownCommand" xml:space="preserve"><value>Perintah "{0}" tidak dikenal. Jalankan "pulse help" untuk melihat perintah.</value></data>
+  <data name="Cli_BadOption" xml:space="preserve"><value>"{0}" bukan opsi untuk "{1}". Jalankan "pulse help".</value></data>
+  <data name="Cli_NoData" xml:space="preserve"><value>Pulse belum merekam apa pun di PC ini. Buka Pulse sekali, lalu coba lagi.</value></data>
+  <data name="Cli_DataBusy" xml:space="preserve"><value>Data Pulse tidak dapat dibaca saat ini. Coba lagi sebentar lagi.</value></data>
+  <data name="Cli_DataNeedsApp" xml:space="preserve"><value>Data Pulse tidak dapat dibaca. Mulai Pulse sekali dengan: pulse start, lalu coba lagi.</value></data>
+  <data name="Cli_BadNumber" xml:space="preserve"><value>"{0}" perlu diikuti angka, misalnya: pulse apps -n 5</value></data>
+  <data name="Cli_Failed" xml:space="preserve"><value>Terjadi kesalahan: {0}</value></data>
+  <data name="Cli_StatusRecording" xml:space="preserve"><value>Pulse sedang berjalan dan merekam.</value></data>
+  <data name="Cli_StatusNotRunning" xml:space="preserve"><value>Pulse tidak berjalan, jadi tidak ada yang direkam.</value></data>
+  <data name="Cli_StartHint" xml:space="preserve"><value>Mulai dengan: pulse start</value></data>
+  <data name="Cli_NotRecordingHint" xml:space="preserve"><value>Saat ini tidak merekam. Mulai Pulse dengan: pulse start</value></data>
+  <data name="Cli_DataFolder" xml:space="preserve"><value>Data: {0}</value></data>
+  <data name="Cli_LastSaved" xml:space="preserve"><value>Terakhir disimpan: {0}</value></data>
+  <data name="Cli_TopAppsToday" xml:space="preserve"><value>Aplikasi teratas hari ini</value></data>
+  <data name="Cli_TopAppsWeek" xml:space="preserve"><value>Aplikasi teratas minggu ini</value></data>
+  <data name="Cli_ThisWeek" xml:space="preserve"><value>Minggu ini</value></data>
+  <data name="Cli_WeekTotal" xml:space="preserve"><value>Total {0} · rata-rata {1} per hari</value></data>
+  <data name="Cli_NoAppTime" xml:space="preserve"><value>Belum ada waktu aplikasi yang direkam.</value></data>
+  <data name="Cli_AlreadyRunning" xml:space="preserve"><value>Pulse sudah berjalan.</value></data>
+  <data name="Cli_AppNotFound" xml:space="preserve"><value>Pulse tidak ditemukan di samping alat ini. Menginstal ulang Pulse seharusnya memperbaikinya.</value></data>
+  <data name="Cli_Starting" xml:space="preserve"><value>Memulai Pulse di area notifikasi…</value></data>
+  <data name="Cli_StartFailed" xml:space="preserve"><value>Pulse tidak dapat dimulai: {0}</value></data>
+  <data name="Cli_StartTimeout" xml:space="preserve"><value>Pulse tidak dimulai dalam {0} detik. Periksa area notifikasi.</value></data>
+  <data name="Cli_Stopping" xml:space="preserve"><value>Meminta Pulse untuk menyimpan dan menutup…</value></data>
+  <data name="Cli_Stopped" xml:space="preserve"><value>Pulse telah menyimpan dan ditutup.</value></data>
+  <data name="Cli_StopUnsupported" xml:space="preserve"><value>Versi Pulse ini tidak dapat dihentikan dari baris perintah. Gunakan Keluar di menu area notifikasinya.</value></data>
+  <data name="Cli_StopTimeout" xml:space="preserve"><value>Pulse tidak ditutup dalam {0} detik. Gunakan Keluar di menu area notifikasinya.</value></data>
+  <data name="Help_CommandLine" xml:space="preserve"><value>Baris perintah</value></data>
+  <data name="Help_CommandLineBody" xml:space="preserve"><value>Ketik "pulse help" di Terminal atau PowerShell untuk melihat waktu layar hari ini, minggu ini, dan aplikasi teratas Anda, atau untuk memulai dan menghentikan Pulse. Alat ini membaca data yang sama di PC ini.</value></data>
 </root>

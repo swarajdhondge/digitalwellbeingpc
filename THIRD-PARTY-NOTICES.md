@@ -10,14 +10,14 @@ corresponding NuGet/npm package and is available at the linked source.
 
 | Component | Version | License | Project |
 |---|---|---|---|
-| MaterialDesignThemes | 5.2.1 | MIT | https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit |
-| MaterialDesignColors | 5.2.1 | MIT | https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit |
-| LiveChartsCore.SkiaSharpView.WPF | 2.0.0-rc3.3 | MIT | https://github.com/beto-rodriguez/LiveCharts2 |
-| sqlite-net-pcl | 1.9.172 | MIT | https://github.com/praeclarum/sqlite-net |
-| NAudio | 2.1.0 | MIT | https://github.com/naudio/NAudio |
-| Velopack | 0.0.* | MIT | https://github.com/velopack/velopack |
-| System.Drawing.Common | 6.0.0 | MIT | https://github.com/dotnet/runtime |
-| System.IO.FileSystem.AccessControl | 5.0.0 | MIT | https://github.com/dotnet/runtime |
+| MaterialDesignThemes | 5.4.0 | MIT | https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit |
+| MaterialDesignColors | 5.4.0 | MIT | https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit |
+| LiveChartsCore.SkiaSharpView.WPF | 2.0.5 | MIT | https://github.com/beto-rodriguez/LiveCharts2 |
+| sqlite-net-pcl | 1.11.285 | MIT | https://github.com/praeclarum/sqlite-net |
+| NAudio | 3.3.0 | MIT | https://github.com/naudio/NAudio |
+| Velopack | 1.2.161 | MIT | https://github.com/velopack/velopack |
+| System.Drawing.Common | 9.0.22 | MIT | https://github.com/dotnet/runtime |
+| OpenTK.redist.glfw (GLFW) | 3.3.8.39 | zlib | https://www.glfw.org |
 
 ## Tests
 

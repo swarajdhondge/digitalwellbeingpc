@@ -110,6 +110,12 @@ namespace digital_wellbeing_app.Services
             }
         }
 
+        /// <summary>
+        /// Open the database read-only, without creating or upgrading it. Set by the command-line
+        /// tool before first use; the app itself always opens read-write.
+        /// </summary>
+        public static bool OpenReadOnly { get; set; }
+
         public static SQLiteConnection GetConnection()
         {
             if (_database is null)
@@ -118,9 +124,20 @@ namespace digital_wellbeing_app.Services
                 {
                     if (_database is null)
                     {
-                        _database = new SQLiteConnection(DbPath,
-                            SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create | SQLiteOpenFlags.FullMutex);
-                        InitializeTables();
+                        if (OpenReadOnly)
+                        {
+                            // Waits for the app's writes instead of failing with "database is locked".
+                            _database = new SQLiteConnection(DbPath, SQLiteOpenFlags.ReadOnly | SQLiteOpenFlags.FullMutex)
+                            {
+                                BusyTimeout = TimeSpan.FromSeconds(2)
+                            };
+                        }
+                        else
+                        {
+                            _database = new SQLiteConnection(DbPath,
+                                SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create | SQLiteOpenFlags.FullMutex);
+                            InitializeTables();
+                        }
                     }
                 }
             }
@@ -287,6 +304,13 @@ namespace digital_wellbeing_app.Services
         }
 
         // --- Focus Sessions ---
+        /// <summary>Adds a new session and sets its Id. InsertOrReplace would write the
+        /// unset Id 0 and replace the previous new session.</summary>
+        public static void InsertFocusSession(FocusSession session)
+        {
+            lock (_dbLock) { GetConnection().Insert(session); }
+        }
+
         public static void SaveFocusSession(FocusSession session)
         {
             lock (_dbLock) { GetConnection().InsertOrReplace(session); }
@@ -387,6 +411,7 @@ namespace digital_wellbeing_app.Services
                     existing.ScheduleEndHour = limit.ScheduleEndHour;
                     existing.ScheduleEndMinute = limit.ScheduleEndMinute;
                     existing.EnforcementLevel = limit.EnforcementLevel;
+                    existing.RemindEveryMinutes = limit.RemindEveryMinutes;
                     existing.LastUpdated = DateTime.Now;
                     conn.Update(existing);
                 }

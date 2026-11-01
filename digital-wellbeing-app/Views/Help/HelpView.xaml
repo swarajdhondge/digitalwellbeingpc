@@ -113,6 +113,19 @@
                                        Text="{l:Loc Help_Follows202020Rule}"/>
                         </StackPanel>
                     </Border>
+                    <!-- Command line (steel) -->
+                    <Border Style="{StaticResource FaqCard}" Background="{StaticResource Accent.Settings.Soft}">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Border Style="{StaticResource FaqIcon}" Background="{StaticResource Accent.Settings.Soft}">
+                                    <md:PackIcon Kind="Console" Width="18" Height="18" Foreground="{StaticResource Accent.Settings}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <TextBlock Text="{l:Loc Help_CommandLine}" Style="{StaticResource FaqTitle}"/>
+                            </StackPanel>
+                            <TextBlock Style="{StaticResource FaqBody}"
+                                       Text="{l:Loc Help_CommandLineBody}"/>
+                        </StackPanel>
+                    </Border>
                 </StackPanel>
 
                 <!-- RIGHT COLUMN -->

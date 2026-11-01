@@ -210,6 +210,19 @@
                             </StackPanel>
                         </Button>
                     </Grid>
+                    <StackPanel x:Name="ReminderFrequencyPanel" Orientation="Horizontal" Margin="32,-10,0,24">
+                        <TextBlock Text="{l:Loc Limits_RemindAgain}" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <ComboBox x:Name="RemindEveryComboBox" MinWidth="170"
+                                  Foreground="{DynamicResource Ink}" Background="{DynamicResource Card2}"
+                                  BorderBrush="{DynamicResource Border2}"
+                                  AutomationProperties.AutomationId="RemindEveryComboBox">
+                            <ComboBoxItem Content="{l:Loc Limits_Every5Minutes}" Tag="5"/>
+                            <ComboBoxItem Content="{l:Loc Settings_Every15Minutes}" Tag="15"/>
+                            <ComboBoxItem Content="{l:Loc Settings_Every30Minutes}" Tag="30"/>
+                            <ComboBoxItem Content="{l:Loc Limits_EveryHour}" Tag="60"/>
+                            <ComboBoxItem Content="{l:Loc Limits_OnceADay}" Tag="0"/>
+                        </ComboBox>
+                    </StackPanel>
 
                     <TextBlock x:Name="ValidationText" Foreground="{StaticResource Danger}" Visibility="Collapsed"
                                Margin="32,0,0,12" TextWrapping="Wrap"/>

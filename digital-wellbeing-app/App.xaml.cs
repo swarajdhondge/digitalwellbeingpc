@@ -1,5 +1,4 @@
 // File: App.xaml.cs
-using System.Security.Principal;
 using System.Threading;
 using Microsoft.Win32;
 using Velopack;
@@ -16,8 +15,14 @@ namespace digital_wellbeing_app
         {
             // Velopack can fast-exit for install/update hooks, so it must run before WPF
             // initializes. Store/MSIX installations are updated by Microsoft Store instead.
+            // The install/update/uninstall hooks keep `pulse` (installed next to this exe) on the
+            // user's PATH.
             if (!Services.PackagedAppInfo.IsPackaged)
-                VelopackApp.Build().Run();
+                VelopackApp.Build()
+                    .OnAfterInstallFastCallback(_ => Services.CommandLinePath.Add(AppContext.BaseDirectory))
+                    .OnAfterUpdateFastCallback(_ => Services.CommandLinePath.Add(AppContext.BaseDirectory))
+                    .OnBeforeUninstallFastCallback(_ => Services.CommandLinePath.Remove(AppContext.BaseDirectory))
+                    .Run();
 
             var app = new App();
             app.InitializeComponent();
@@ -62,21 +67,25 @@ namespace digital_wellbeing_app
         }
 
         // User-scoped mutex: allows multiple Windows users to each run their own instance
-        private static readonly string MutexName = $"DigitalWellbeingPC_SingleInstance_{GetCurrentUserSid()}";
+        private static readonly string MutexName = Services.PulseInstance.SingleInstanceMutexName;
         private static Mutex? _mutex;
         private static bool _ownsMutex;
 
-        private static string GetCurrentUserSid()
-        {
-            try
-            {
-                return WindowsIdentity.GetCurrent().User?.Value ?? "default";
-            }
-            catch
-            {
-                return "default";
-            }
-        }
+        // `pulse stop` signals this event; Pulse then quits the same way as tray → Exit.
+        private EventWaitHandle? _exitRequest;
+        private RegisteredWaitHandle? _exitRequestWait;
+
+        // Opening Pulse (Start menu, desktop icon) while it runs in the notification area signals
+        // this event; Pulse then shows its window. Ignored for the first minute, when duplicate
+        // sign-in launches arrive, so Windows startup never puts a window on the desktop.
+        private EventWaitHandle? _showRequest;
+        private RegisteredWaitHandle? _showRequestWait;
+        private static readonly TimeSpan IgnoreShowRequestsAfterStart = TimeSpan.FromMinutes(1);
+        private readonly System.Diagnostics.Stopwatch _sinceStart = System.Diagnostics.Stopwatch.StartNew();
+
+        // Writes live.json every 30 s for the command-line tool.
+        private System.Threading.Timer? _liveSnapshotTimer;
+        private string? _liveSnapshotPath;
 
         public CoreLogic.ScreenTimeTracker ScreenTracker { get; private set; } = null!;
         public CoreLogic.AppUsageTracker AppTracker { get; private set; } = null!;
@@ -89,6 +98,12 @@ namespace digital_wellbeing_app
         protected override void OnStartup(System.Windows.StartupEventArgs e)
         {
             Services.StartupService.DetectStartupLaunch(e.Args);
+
+            // Pages read live (unsaved) totals from the running trackers. Evaluated on each call,
+            // so it falls back to saved data until the trackers below have started.
+            Services.LiveUsageProvider.LiveActiveTime = () => ScreenTracker?.CurrentActiveTime;
+            Services.LiveUsageProvider.LiveAppSessionsForRange = (start, end) => AppTracker?.GetSessionsForRange(start, end);
+            Services.LiveUsageProvider.LiveSoundSession = () => SoundExposureMgr.CurrentSession;
 
             // Global exception handlers - catch unhandled crashes
             DispatcherUnhandledException += OnDispatcherUnhandledException;
@@ -114,12 +129,15 @@ namespace digital_wellbeing_app
             {
                 Services.LogService.Info(Services.StartupService.IsStartupLaunch
                     ? "Silent startup activation ignored because Pulse is already running"
-                    : "Interactive launch ignored because Pulse is already running");
+                    : "Interactive launch: asking the running Pulse to show its window");
 
                 // Duplicate activations must never put UI on the desktop. Windows can invoke
                 // both a legacy Run entry and a packaged StartupTask during sign-in, and older
-                // registrations do not always carry the --startup marker. Silently exiting here
-                // keeps system startup quiet regardless of which activation wins the race.
+                // registrations do not always carry the --startup marker. This launch never shows
+                // UI itself; an interactive one asks the running Pulse, which ignores the request
+                // during the first minute after a sign-in start (when those duplicates arrive).
+                if (!Services.StartupService.IsStartupLaunch)
+                    Services.PulseInstance.RequestShow();
                 Shutdown();
                 return;
             }
@@ -140,14 +158,6 @@ namespace digital_wellbeing_app
             };
             ConfigureLiveChartsTheme(isDark);
 
-            // Construct the shell explicitly instead of using StartupUri. A Windows-startup
-            // activation therefore creates the tray icon and background services without ever
-            // showing, loading, or briefly flashing a window on the desktop/taskbar.
-            var shellWindow = new MainWindow.MainWindow();
-            MainWindow = shellWindow;
-            if (!Services.StartupService.IsStartupLaunch)
-                shellWindow.Show();
-
             // Initialize database & trackers
             Services.DatabaseService.GetConnection();
             // One-time (idempotent) migration: canonicalize app-category keys so Focus Mode
@@ -158,12 +168,23 @@ namespace digital_wellbeing_app
             // AppCategory row yet. Never touches a row that already exists.
             Services.CategoryRuleService.ApplyRulesToUncategorized();
             RunDailyRetentionPurge();
+            // The pages are built with the window and read these trackers, so create them first.
             ScreenTracker = new CoreLogic.ScreenTimeTracker();
-            ScreenTracker.Start();
             AppTracker = new CoreLogic.AppUsageTracker();
+
+            // Construct the shell explicitly instead of using StartupUri. A Windows-startup
+            // activation therefore creates the tray icon and background services without ever
+            // showing, loading, or briefly flashing a window on the desktop/taskbar.
+            var shellWindow = new MainWindow.MainWindow();
+            MainWindow = shellWindow;
+            if (!Services.StartupService.IsStartupLaunch)
+                shellWindow.Show();
+
+            ScreenTracker.Start();
             AppTracker.Start();
             AppLimitSvc = new Services.AppLimitService(AppTracker);
             AppLimitSvc.Start();
+            StartCommandLineSupport();
             // StartupUri (handled inside base.OnStartup above) constructs MainWindow before this
             // point, so it's already available to wire the notification callback into.
             if (Current.MainWindow is MainWindow.MainWindow mainWindow)
@@ -346,9 +367,85 @@ namespace digital_wellbeing_app
                 WebsiteUsageSvc.Start();
         }
 
+        /// <summary>Live snapshot + exit request used by the `pulse` command-line tool.</summary>
+        private void StartCommandLineSupport()
+        {
+            try
+            {
+                _liveSnapshotPath = Services.LiveSnapshot.PathIn(
+                    System.IO.Path.GetDirectoryName(Services.DatabaseService.GetDatabaseFilePath())!);
+                _liveSnapshotTimer = new System.Threading.Timer(_ => WriteLiveSnapshot(), null, TimeSpan.Zero, TimeSpan.FromSeconds(30));
+            }
+            catch (Exception ex)
+            {
+                Services.LogService.Warning($"Live snapshot disabled: {ex.Message}");
+            }
+
+            try
+            {
+                _exitRequest = new EventWaitHandle(false, EventResetMode.AutoReset, Services.PulseInstance.ExitRequestEventName);
+                _exitRequestWait = ThreadPool.RegisterWaitForSingleObject(_exitRequest, (_, _) =>
+                    Dispatcher.BeginInvoke(() =>
+                    {
+                        Services.LogService.Info("Exit requested from the command line");
+                        (MainWindow as MainWindow.MainWindow)?.ExitApplication();
+                    }), null, Timeout.Infinite, executeOnlyOnce: true);
+            }
+            catch (Exception ex)
+            {
+                Services.LogService.Warning($"Command-line exit request unavailable: {ex.Message}");
+            }
+
+            try
+            {
+                _showRequest = new EventWaitHandle(false, EventResetMode.AutoReset, Services.PulseInstance.ShowRequestEventName);
+                _showRequestWait = ThreadPool.RegisterWaitForSingleObject(_showRequest, (_, _) =>
+                {
+                    // Only a sign-in start can receive the duplicate activations described above.
+                    if (Services.StartupService.IsStartupLaunch && _sinceStart.Elapsed < IgnoreShowRequestsAfterStart)
+                    {
+                        Services.LogService.Info("Show request ignored while Pulse is starting");
+                        return;
+                    }
+                    Dispatcher.BeginInvoke(() => (MainWindow as MainWindow.MainWindow)?.ShowWindow());
+                }, null, Timeout.Infinite, executeOnlyOnce: false);
+            }
+            catch (Exception ex)
+            {
+                Services.LogService.Warning($"Show request unavailable: {ex.Message}");
+            }
+        }
+
+        private void WriteLiveSnapshot()
+        {
+            try
+            {
+                if (_liveSnapshotPath == null || ScreenTracker == null || AppTracker == null) return;
+                var app = AppTracker.CurrentSession;
+                Services.LiveSnapshot.Write(_liveSnapshotPath, new Services.LiveSnapshot
+                {
+                    WrittenAt = DateTime.Now,
+                    ActiveSeconds = (int)ScreenTracker.CurrentActiveTime.TotalSeconds,
+                    AppName = app?.AppName,
+                    ExecutablePath = app?.ExecutablePath,
+                    AppStart = app?.StartTime
+                });
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[LiveSnapshot] write failed: {ex.Message}");
+            }
+        }
+
         protected override void OnExit(System.Windows.ExitEventArgs e)
         {
             Services.LogService.Info("App shutting down");
+
+            _exitRequestWait?.Unregister(null);
+            _exitRequest?.Dispose();
+            _showRequestWait?.Unregister(null);
+            _showRequest?.Dispose();
+            _liveSnapshotTimer?.Dispose();
 
             // Unsubscribe from system events
             SystemEvents.SessionSwitch -= OnSessionSwitch;
@@ -365,6 +462,7 @@ namespace digital_wellbeing_app
 
             // Close database connection last (after all trackers have saved)
             Services.DatabaseService.CloseConnection();
+            if (_liveSnapshotPath != null) Services.LiveSnapshot.Delete(_liveSnapshotPath);
 
             Services.LogService.Info("App shutdown complete");
 
