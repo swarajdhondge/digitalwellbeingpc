@@ -3,9 +3,9 @@ using System.Reflection;
 // Single source of the app version (GenerateAssemblyInfo is off to avoid the WPF temp-project
 // duplicate-attribute issue). CI patches these three lines from the git tag on release
 // (see .github/workflows/release.yml -> .github/scripts/stamp-version.ps1).
-[assembly: AssemblyVersion("2.4.2.0")]
-[assembly: AssemblyFileVersion("2.4.2.0")]
-[assembly: AssemblyInformationalVersion("2.4.2")]
+[assembly: AssemblyVersion("2.4.1.0")]
+[assembly: AssemblyFileVersion("2.4.1.0")]
+[assembly: AssemblyInformationalVersion("2.4.1")]
 [assembly: AssemblyTitle("Pulse")]
 [assembly: AssemblyProduct("Pulse - DigitalWellbeingPC")]
 [assembly: AssemblyCompany("Swaraj Dhondge")]

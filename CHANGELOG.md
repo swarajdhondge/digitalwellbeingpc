@@ -1,10 +1,5 @@
 # Changelog
 
-## [v2.4.2] - 2026-11-01
-
-### Fixes
-- **The Microsoft Store package is accepted.** The `pulse` command was declared as a second, hidden app, which the Store rejects. It is now an alias of Pulse itself, so `pulse` works the same in any terminal.
-
 ## [v2.4.1] - 2026-11-01
 
 Pulse on the command line, and more accurate tracking.
