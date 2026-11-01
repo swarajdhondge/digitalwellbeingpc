@@ -31,10 +31,16 @@
   </Resources>
 
   <Applications>
+    <!--
+      SupportsMultipleInstances: each `pulse` command (the alias below) runs as its own process
+      instead of being handed to a running Pulse. Pulse itself stays single-instance through its
+      own mutex.
+    -->
     <Application
       Id="Pulse"
       Executable="DigitalWellbeing.exe"
-      EntryPoint="Windows.FullTrustApplication">
+      EntryPoint="Windows.FullTrustApplication"
+      desktop4:SupportsMultipleInstances="true">
       <uap:VisualElements
         DisplayName="Pulse - Digital Wellbeing PC"
         Description="Pulse - Digital Wellbeing PC. Track and improve your screen-time habits."
@@ -68,26 +74,11 @@
             Enabled="false"
             DisplayName="Pulse - Digital Wellbeing PC" />
         </uap5:Extension>
-      </Extensions>
-    </Application>
-
-    <!--
-      `pulse` command-line tool: no Start menu entry; the alias puts `pulse` on PATH in any new
-      terminal. It only reads the data the app above records.
-    -->
-    <Application
-      Id="PulseCli"
-      Executable="pulse.exe"
-      EntryPoint="Windows.FullTrustApplication"
-      desktop4:SupportsMultipleInstances="true">
-      <uap:VisualElements
-        DisplayName="Pulse command line"
-        Description="Pulse - Digital Wellbeing PC command-line tool."
-        BackgroundColor="transparent"
-        Square150x150Logo="Images\Square150x150Logo.png"
-        Square44x44Logo="Images\Square44x44Logo.png"
-        AppListEntry="none" />
-      <Extensions>
+        <!--
+          `pulse` command-line tool: the alias puts `pulse` on PATH in any new terminal. It belongs
+          to this app rather than a second, hidden one, which the Store would treat as a headless
+          app. It only reads the data Pulse records.
+        -->
         <uap5:Extension
           Category="windows.appExecutionAlias"
           Executable="pulse.exe"
@@ -98,6 +89,7 @@
         </uap5:Extension>
       </Extensions>
     </Application>
+
   </Applications>
 
   <Capabilities>
