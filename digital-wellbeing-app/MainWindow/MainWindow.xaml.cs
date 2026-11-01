@@ -547,7 +547,6 @@ namespace digital_wellbeing_app.MainWindow
 
         private void OnBreakDue()
         {
-            System.Diagnostics.Debug.WriteLine("OnBreakDue triggered!");
             // Show break notification on UI thread
             Dispatcher.Invoke(() =>
             {
@@ -555,9 +554,11 @@ namespace digital_wellbeing_app.MainWindow
                 // An open Pulse window isn't one the user is looking at: with another app in
                 // front, the in-window overlay alone goes unseen and the break sits pending until
                 // Pulse is opened again (issue #60). Only skip the notification when Pulse is
-                // the active window.
-                bool pulseInFront = windowShown && IsActive;
-                System.Diagnostics.Debug.WriteLine($"windowShown: {windowShown}, pulseInFront: {pulseInFront}");
+                // the window in front. Asked from Windows: WPF's IsActive was seen to stay true after
+                // another app had been brought to the front.
+                bool pulseInFront = windowShown
+                    && Platform.Windows.NativeMethods.GetForegroundWindow() == new WindowInteropHelper(this).Handle;
+                Services.LogService.Info($"Break due (window shown: {windowShown}, Pulse in front: {pulseInFront})");
 
                 // Overlay waits in the window, so it's there whenever the user switches back.
                 if (windowShown)
