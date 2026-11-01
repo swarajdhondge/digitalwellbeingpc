@@ -20,6 +20,8 @@
       -GifWidth <int>                 README gif width in px (default 960)
       -GifFps <int>                   README gif framerate (default 15)
       -NoGif                          produce only the mp4, skip the gif
+      -SiteDir <path>                 site checkout; if set, copy demo.mp4 into
+                                      <SiteDir>\public\demo (default: skip)
 
   This is a LOCAL pre-release step: GitHub's hosted Windows runners can't reliably
   screen-record a GUI window, so run it on this interactive desktop.
@@ -51,7 +53,8 @@ param(
     [int]$Fps = 30,
     [int]$GifWidth = 960,
     [int]$GifFps = 15,
-    [switch]$NoGif
+    [switch]$NoGif,
+    [string]$SiteDir
 )
 
 $ErrorActionPreference = 'Stop'
@@ -148,12 +151,17 @@ if (-not $NoGif) {
     Write-Host "Wrote $gif ($([math]::Round((Get-Item $gif).Length / 1MB, 2)) MB)" -ForegroundColor Green
 }
 
-# --- 5. Refresh the marketing-site copy ----------------------------------------
+# --- 5. Copy demo.mp4 to the website (only when -SiteDir is given) ------------
 # The site hero plays this same-origin (GitHub release assets are octet-stream and won't
 # play inline). README uses .github/demo/demo.gif directly. Commit both after recording.
-$siteDemo = Join-Path $repoRoot 'pulse\public\demo'
-New-Item -ItemType Directory -Force -Path $siteDemo | Out-Null
-Copy-Item $mp4 (Join-Path $siteDemo 'demo.mp4') -Force
-Write-Host "Copied demo.mp4 -> pulse/public/demo/" -ForegroundColor DarkGray
+if ($SiteDir) {
+    $siteDemo = Join-Path $SiteDir 'public\demo'
+    New-Item -ItemType Directory -Force -Path $siteDemo | Out-Null
+    Copy-Item $mp4 (Join-Path $siteDemo 'demo.mp4') -Force
+    Write-Host "Copied demo.mp4 -> $siteDemo" -ForegroundColor DarkGray
+}
+else {
+    Write-Host 'No -SiteDir given; skipping the website copy.' -ForegroundColor DarkGray
+}
 
-Write-Host "Done. Demo assets in $OutDir (+ pulse/public/demo/demo.mp4). Commit them." -ForegroundColor Green
+Write-Host "Done. Demo assets in $OutDir. Commit them." -ForegroundColor Green

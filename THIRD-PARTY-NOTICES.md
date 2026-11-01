@@ -28,18 +28,6 @@ corresponding NuGet/npm package and is available at the linked source.
 | Microsoft.NET.Test.Sdk | MIT | https://github.com/microsoft/vstest |
 | FlaUI (UI tests) | MIT | https://github.com/FlaUI/FlaUI |
 
-## Marketing site (`pulse/`)
-
-The Next.js site depends on a number of MIT- and Apache-2.0-licensed npm
-packages. The authoritative, per-package list (with resolved versions and SPDX
-license identifiers) is `pulse/package-lock.json`. Notable direct dependencies:
-
-| Component | License | Project |
-|---|---|---|
-| Next.js | MIT | https://github.com/vercel/next.js |
-| React / React DOM | MIT | https://github.com/facebook/react |
-| Tailwind CSS | MIT | https://github.com/tailwindlabs/tailwindcss |
-
 MIT and Apache-2.0 are both permissive licenses compatible with GPL-3.0 as used
 here (Pulse is the combined/derivative work distributed under GPL-3.0; the
 components retain their own permissive licenses).
