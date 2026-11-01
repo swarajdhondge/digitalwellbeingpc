@@ -24,6 +24,7 @@ Pulse on the command line, and more accurate tracking.
 - **Restoring a backup quits Pulse properly.** It hid Pulse to the notification area instead of closing it.
 - **The daily goal reads "1 min per day"** instead of "1 minutes per day".
 - **`Setup.exe` works on a PC without .NET.** The GitHub installer now includes the .NET runtime, like the Microsoft Store version, instead of failing with "You must install .NET to run this application".
+- **Up-to-date libraries.** NAudio, Material Design, Velopack and the other libraries Pulse uses are on their latest stable versions.
 
 ## [v2.4.0] - 2026-09-27
 
