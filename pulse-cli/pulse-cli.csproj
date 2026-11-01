@@ -15,7 +15,7 @@
     <!-- Same root namespace as the app so the linked Strings*.resx keep their resource names. -->
     <RootNamespace>digital_wellbeing_app</RootNamespace>
     <Product>Pulse - DigitalWellbeingPC</Product>
-    <Version>2.4.1</Version>
+    <Version>2.4.2</Version>
     <ApplicationIcon>..\digital-wellbeing-app\Resources\Icons\digital-balance-icon.ico</ApplicationIcon>
     <!-- Tests live in pulse-cli/Tests (their own project). -->
     <DefaultItemExcludes>$(DefaultItemExcludes);Tests\**</DefaultItemExcludes>
