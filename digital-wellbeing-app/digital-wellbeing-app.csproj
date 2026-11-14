@@ -36,7 +36,7 @@
 
   <ItemGroup>
     <PackageReference Include="sqlite-net-pcl" Version="1.11.285" />
-    <PackageReference Include="System.Drawing.Common" Version="9.0.22" />
+    <PackageReference Include="System.Drawing.Common" Version="9.0.23" />
     <PackageReference Include="NAudio" Version="3.3.0" />
     <PackageReference Include="MaterialDesignThemes" Version="5.4.0" />
     <PackageReference Include="MaterialDesignColors" Version="5.4.0" />
