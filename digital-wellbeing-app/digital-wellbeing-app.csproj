@@ -40,7 +40,7 @@
     <PackageReference Include="NAudio" Version="3.3.0" />
     <PackageReference Include="MaterialDesignThemes" Version="5.4.0" />
     <PackageReference Include="MaterialDesignColors" Version="5.4.0" />
-    <PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.0.5" />
+    <PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.2.0" />
     <!-- SkiaSharp's OpenTK dependency otherwise selects a prerelease native runtime.
          OpenTK 4.3 only accepts the 3.3 line, so 3.3.8.39 is the newest usable stable. -->
     <PackageReference Include="OpenTK.redist.glfw" Version="3.3.8.39" />
