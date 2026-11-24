@@ -20,6 +20,9 @@ public sealed class AppSession : IDisposable
     public Window Window { get; }
     public string ShotDir { get; }
 
+    private static readonly string DataDir =
+        Path.Combine(Path.GetTempPath(), $"dw-uidata-{Environment.ProcessId}");
+
     public AppSession()
     {
         // The app uses a per-user single-instance mutex; make sure nothing is running.
@@ -33,13 +36,19 @@ public sealed class AppSession : IDisposable
                   ?? Path.Combine(Path.GetTempPath(), "dw-uishots");
         Directory.CreateDirectory(ShotDir);
 
-        // Force dark theme for comparison shots (the design's default). The app reads
-        // theme.json from its working directory, so pin both to the exe folder.
-        var exeDir = Path.GetDirectoryName(exe)!;
-        try { File.WriteAllText(Path.Combine(exeDir, "theme.json"), "{\"Mode\":\"Dark\"}"); }
+        // Fresh data folder so tests never touch real Pulse data. One folder per test process:
+        // SoakTests relaunches the app inside one test and needs the first run's data.
+        Directory.CreateDirectory(DataDir);
+
+        // Force dark theme for comparison shots (the design's default). ThemeService reads
+        // theme.json from the data folder.
+        try { File.WriteAllText(Path.Combine(DataDir, "theme.json"), "{\"Mode\":\"Dark\"}"); }
         catch { /* ignore */ }
 
-        App = Application.Launch(new ProcessStartInfo(exe) { WorkingDirectory = exeDir });
+        var exeDir = Path.GetDirectoryName(exe)!;
+        var startInfo = new ProcessStartInfo(exe) { WorkingDirectory = exeDir };
+        startInfo.Environment["PULSE_DATA_DIR"] = DataDir;
+        App = Application.Launch(startInfo);
         Automation = new UIA3Automation();
         Window = App.GetMainWindow(Automation, TimeSpan.FromSeconds(30))
                  ?? throw new InvalidOperationException("Main window did not appear within 30s.");
