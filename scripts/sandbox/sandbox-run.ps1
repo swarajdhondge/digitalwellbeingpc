@@ -152,7 +152,7 @@ function Check-Msix {
   [Environment]::SetEnvironmentVariable('PULSE_TEST_MODE', '1', 'Machine'); Start-Sleep 2
   New-Item -ItemType Directory -Force $pdir | Out-Null; Write-Settings @{ FirstRunCompleted = $true }
   $w = Wait-Toast 60 {
-    $mgr = New-Object ApplicationActivationManager; $procId = 0
+    $mgr = [IApplicationActivationManager](New-Object ApplicationActivationManager); $procId = [uint32]0
     [void]$mgr.ActivateApplication("$($pk.PackageFamilyName)!$appId", '--test-notify goal', 0, [ref]$procId)
   }
   Shot 'msix-toast'
