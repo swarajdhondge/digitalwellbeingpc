@@ -16,6 +16,7 @@ corresponding NuGet/npm package and is available at the linked source.
 | sqlite-net-pcl | 1.11.285 | MIT | https://github.com/praeclarum/sqlite-net |
 | NAudio | 3.3.0 | MIT | https://github.com/naudio/NAudio |
 | Velopack | 1.2.161 | MIT | https://github.com/velopack/velopack |
+| Microsoft.Toolkit.Uwp.Notifications | 7.1.3 | MIT | https://github.com/CommunityToolkit/WindowsCommunityToolkit |
 | System.Drawing.Common | 9.0.22 | MIT | https://github.com/dotnet/runtime |
 | OpenTK.redist.glfw (GLFW) | 3.3.8.39 | zlib | https://www.glfw.org |
 
