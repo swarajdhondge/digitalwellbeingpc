@@ -9,8 +9,7 @@ namespace digital_wellbeing_app.Services
     /// Traffic-light health status per tracker, built from the heartbeats each tracker writes on
     /// its own throttled cadence. Diagnostic aid for troubleshooting, not a strict alerting system:
     /// a "Stale"/"Down" tracker can be entirely normal right after a screen lock or sleep, since
-    /// ScreenTimeTracker/AppUsageTracker pause then (SoundExposureManager currently doesn't - see
-    /// the open note in docs/roadmap-handoff.md).
+    /// ScreenTimeTracker/AppUsageTracker pause then (SoundExposureManager currently does not).
     /// </summary>
     public static class TrackingHealthService
     {

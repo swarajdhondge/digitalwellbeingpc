@@ -637,6 +637,41 @@ namespace digital_wellbeing_app.MainWindow
             action?.Invoke();
         }
 
+        /// <summary>
+        /// Test runs only (see <see cref="Services.TestNotifyRequest"/>): shows one alert at once,
+        /// through the same <see cref="ShowNotification"/> call and launch argument as the real alert.
+        /// </summary>
+        public void ShowTestNotification(string action)
+        {
+            switch (action)
+            {
+                case Services.NotificationRouting.Goal:
+                    ShowGoalReachedNotification(60, TimeSpan.FromMinutes(61));
+                    break;
+                case Services.NotificationRouting.Limit:
+                    ShowAppLimitNotification("Test app", Models.FocusEnforcementLevel.Warn);
+                    break;
+                case Services.NotificationRouting.Break:
+                    _breakNotificationPending = true;   // as in a real due break, so the click opens the overlay
+                    ShowNotification(Loc.Get("Shell_TimeBreak"), Loc.Get("Break_FollowRule"), action);
+                    break;
+                case Services.NotificationRouting.WindDown:
+                    ShowWindDownNotification();
+                    break;
+                case Services.NotificationRouting.Focus:
+                    _currentDistractingApp = "Test app";   // as in a real warning, so the click opens the overlay
+                    ShowNotification(Loc.Get("Notify_DistractingAppTitle"),
+                        Loc.Format("Notify_DistractingAppBody", "Test app", "10:00"), action);
+                    break;
+                case Services.NotificationRouting.Hearing:
+                    ShowNotification(Loc.Get("Notify_HearingAlertTitle"), Loc.Get("Notify_HearingAlertBody"), action);
+                    break;
+                case Services.NotificationRouting.Hint:
+                    ShowNotification(Loc.Get("Tray_StillRunningTitle"), Loc.Get("Tray_StillRunningBody"), action);
+                    break;
+            }
+        }
+
         private void ShowAppLimitNotification(string appName, Models.FocusEnforcementLevel level)
         {
             var body = level == Models.FocusEnforcementLevel.Warn

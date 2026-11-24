@@ -17,7 +17,7 @@ namespace digital_wellbeing_app.Platform.Windows
     /// event with signature <c>(FocusSessionManager sender, object args)</c>. That doc doesn't call
     /// out an MSIX-only restriction, but earlier research flagged that some <c>Windows.UI.Shell</c>
     /// surfaces have needed package identity to *function* even when they compile - unconfirmed for
-    /// this specific API either way (see open spike in docs/roadmap-handoff.md).
+    /// this specific API either way.
     /// </summary>
     public sealed class WindowsFocusIntegration : IWindowsFocusSource, IDisposable
     {

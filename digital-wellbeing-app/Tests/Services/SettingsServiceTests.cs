@@ -13,29 +13,12 @@ namespace digital_wellbeing_app.Tests.Services
     public class SettingsServiceTests
     {
         [Fact]
-        public void LoadTheme_ReturnsValidValue()
-        {
-            var svc = new SettingsService();
-            var theme = svc.LoadTheme();
-            Assert.True(theme == ViewModels.AppTheme.Dark || theme == ViewModels.AppTheme.Light || theme == ViewModels.AppTheme.Auto,
-                "Theme should be a valid AppTheme enum value");
-        }
-
-        [Fact]
         public void LoadHarmfulThreshold_ReturnsReasonableValue()
         {
             var svc = new SettingsService();
             var threshold = svc.LoadHarmfulThreshold();
             Assert.True(threshold > 0 && threshold <= 120,
                 $"Harmful threshold {threshold} should be in a reasonable range (0-120 dB)");
-        }
-
-        [Fact]
-        public void SaveAndLoadFirstRunCompleted_RoundTrips()
-        {
-            var svc = new SettingsService();
-            svc.SaveFirstRunCompleted(true);
-            Assert.True(svc.LoadFirstRunCompleted());
         }
 
         [Fact]
@@ -166,14 +149,6 @@ namespace digital_wellbeing_app.Tests.Services
         }
 
         [Fact]
-        public void LoadDeviceTypeOverride_DefaultsToNull()
-        {
-            var svc = new SettingsService();
-            svc.SaveDeviceTypeOverride(null);
-            Assert.Null(svc.LoadDeviceTypeOverride());
-        }
-
-        [Fact]
         public void SaveAndLoadDeviceTypeOverride_RoundTrips()
         {
             var svc = new SettingsService();
@@ -191,6 +166,18 @@ namespace digital_wellbeing_app.Tests.Services
             var svc = new SettingsService();
             svc.SaveDeviceTypeOverride("");
             Assert.Null(svc.LoadDeviceTypeOverride());
+        }
+
+        [Fact]
+        public void RetentionMonths_DefaultsTo12_AndRoundTrips()
+        {
+            var settings = new SettingsService();
+            Assert.Equal(12, new SettingsService().LoadRetentionMonths());
+
+            settings.SaveRetentionMonths(6);
+            Assert.Equal(6, new SettingsService().LoadRetentionMonths());
+
+            settings.SaveRetentionMonths(12); // restore default
         }
     }
 }

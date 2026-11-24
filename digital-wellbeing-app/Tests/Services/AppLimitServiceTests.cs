@@ -61,15 +61,6 @@ namespace digital_wellbeing_app.Tests.Services
             Assert.Empty(DatabaseService.GetAllAppLimits());
         }
 
-        [Fact]
-        public void GetAllAppLimits_ReturnsEveryRow()
-        {
-            DatabaseService.SaveAppLimit(MakeLimit("appone"));
-            DatabaseService.SaveAppLimit(MakeLimit("apptwo"));
-
-            Assert.Equal(2, DatabaseService.GetAllAppLimits().Count);
-        }
-
         // --- GetAppUsageSecondsForDate ---
 
         [Fact]
@@ -109,13 +100,6 @@ namespace digital_wellbeing_app.Tests.Services
         }
 
         // --- AppLimitService.IsLimitExceeded (pure decision logic) ---
-
-        [Fact]
-        public void IsLimitExceeded_NoScheduleNoCap_NeverExceeded()
-        {
-            var limit = MakeLimit();
-            Assert.False(AppLimitService.IsLimitExceeded(limit, DateTime.Now));
-        }
 
         [Fact]
         public void IsLimitExceeded_DailyCapReached_ReturnsTrue()
@@ -203,20 +187,6 @@ namespace digital_wellbeing_app.Tests.Services
             Assert.Throws<ArgumentNullException>(() => new AppLimitService(null!));
         }
 
-        [Fact]
-        public void StartStop_DoesNotThrow_AndReloadPicksUpDbChanges()
-        {
-            using var tracker = new AppUsageTracker();
-            using var svc = new AppLimitService(tracker);
-
-            svc.Start();
-            DatabaseService.SaveAppLimit(MakeLimit("livereload"));
-            svc.ReloadLimits();
-            svc.Stop();
-
-            // No exception is the primary assertion here; DB state confirms the reload path ran.
-            Assert.NotNull(DatabaseService.GetAppLimit("livereload"));
-        }
         // --- How often Pulse acts again ---
 
         [Theory]

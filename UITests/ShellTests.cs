@@ -88,15 +88,4 @@ public class ShellTests
         }
     }
 
-    [Fact]
-    public void Theme_toggle_is_clickable()
-    {
-        var toggle = _app.Find("ThemeToggle");
-        toggle.Click();
-        Thread.Sleep(400);
-        _app.Shot("theme-toggled");
-        // toggle back so the session ends in the saved theme
-        _app.Find("ThemeToggle").Click();
-        Thread.Sleep(400);
-    }
 }

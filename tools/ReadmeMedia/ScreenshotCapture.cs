@@ -7,7 +7,7 @@ using FlaUI.Core.Tools;
 using FlaUI.UIA3;
 using Xunit;
 
-namespace DigitalWellbeing.UITests;
+namespace DigitalWellbeing.ReadmeMedia;
 
 /// <summary>
 /// Phase 3 "screenshot pipeline": launches the built Pulse app at a fixed
@@ -17,12 +17,12 @@ namespace DigitalWellbeing.UITests;
 /// <c>dashboard-light.png</c> for light).
 ///
 /// This is intentionally self-contained (it does NOT reuse the shared
-/// <see cref="AppSession"/> fixture) because it needs precise control over the
+/// UITests AppSession fixture) because it needs precise control over the
 /// window size and the starting theme — the shared fixture maximizes and pins
 /// dark. It follows the same FlaUI patterns as AppSession/ShellTests.
 ///
 /// Run it opt-in, after building the app and seeding a fixture DB:
-///     dotnet test UITests\UITests.csproj \
+///     dotnet test tools\ReadmeMedia\ReadmeMedia.csproj \
 ///         --filter "FullyQualifiedName~ScreenshotCapture"
 ///
 /// Environment overrides:

@@ -62,7 +62,7 @@ $repoRoot = Split-Path -Parent $PSScriptRoot
 
 $appProject    = Join-Path $repoRoot 'digital-wellbeing-app\digital-wellbeing-app.csproj'
 $seederProject = Join-Path $repoRoot 'tools\FixtureSeeder\FixtureSeeder.csproj'
-$uiTestProject = Join-Path $repoRoot 'UITests\UITests.csproj'
+$mediaProject = Join-Path $repoRoot 'tools\ReadmeMedia\ReadmeMedia.csproj'
 
 if (-not $OutDir) { $OutDir = Join-Path $repoRoot '.github\demo' }
 New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
@@ -112,7 +112,7 @@ $env:PULSE_DEMO_OUT = $mp4
 $env:PULSE_DEMO_FPS = "$Fps"
 $env:PULSE_DATA_DIR = $captureDataDir
 try {
-    dotnet test $uiTestProject -c Debug --nologo `
+    dotnet test $mediaProject -c Debug --nologo `
         --filter 'FullyQualifiedName~DemoTour'
     if ($LASTEXITCODE -ne 0) {
         throw 'Demo tour failed. See the Quick Heal note at the top of this script.'

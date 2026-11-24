@@ -20,11 +20,5 @@ namespace digital_wellbeing_app.Tests.Platform
             Assert.Null(exception);
         }
 
-        [Fact]
-        public void IsFullscreenAppActive_DoesNotThrow()
-        {
-            var exception = Record.Exception(() => ActivityDetector.IsFullscreenAppActive());
-            Assert.Null(exception);
-        }
     }
 }

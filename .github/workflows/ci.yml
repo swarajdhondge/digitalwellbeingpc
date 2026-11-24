@@ -49,7 +49,7 @@ jobs:
           app=false
           while IFS= read -r file; do
             case "$file" in
-              DigitalWellbeing.sln|digital-wellbeing-app/*|UITests/*|tools/FixtureSeeder/*|.github/workflows/ci.yml)
+              DigitalWellbeing.sln|digital-wellbeing-app/*|UITests/*|tools/FixtureSeeder/*|tools/ReadmeMedia/*|.github/workflows/ci.yml)
                 app=true
                 ;;
             esac

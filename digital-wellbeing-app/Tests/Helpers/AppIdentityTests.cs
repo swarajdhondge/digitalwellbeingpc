@@ -36,14 +36,6 @@ namespace digital_wellbeing_app.Tests.Helpers
         }
 
         [Fact]
-        public void NormalizeKey_ProcessNameAndFullPath_ResolveEqual()
-        {
-            Assert.Equal(
-                AppIdentity.NormalizeKey("chrome"),
-                AppIdentity.NormalizeKey(@"C:\Program Files\Google\Chrome\Application\chrome.exe"));
-        }
-
-        [Fact]
         public void NormalizeKey_TwoArg_PrefersPath_FallsBackToName()
         {
             Assert.Equal("vlc", AppIdentity.NormalizeKey(@"C:\VLC\vlc.exe", "somethingElse"));

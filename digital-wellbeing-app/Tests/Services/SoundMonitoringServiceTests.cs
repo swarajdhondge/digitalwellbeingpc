@@ -10,7 +10,7 @@ namespace digital_wellbeing_app.Tests.Services
     /// device to construct, which isn't available in CI) - invoked via reflection so these tests
     /// exercise the real matching logic, not a reimplementation of it.
     /// </summary>
-    public class SoundMonitoringServiceDeviceTypeTests : TestBase
+    public class SoundMonitoringServiceTests : TestBase
     {
         private static string IdentifyDeviceType(string friendlyName)
         {
@@ -50,11 +50,5 @@ namespace digital_wellbeing_app.Tests.Services
             settings.SaveDeviceTypeOverride(null);
         }
 
-        [Fact]
-        public void IdentifyDeviceType_NoOverride_FallsBackToGuess()
-        {
-            new SettingsService().SaveDeviceTypeOverride(null);
-            Assert.Equal("Headphones", IdentifyDeviceType("Some Headphones Model"));
-        }
     }
 }

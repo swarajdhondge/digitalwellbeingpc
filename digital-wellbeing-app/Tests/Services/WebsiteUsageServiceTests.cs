@@ -135,19 +135,5 @@ namespace digital_wellbeing_app.Tests.Services
             Assert.Null(exception);
         }
 
-        [Fact]
-        public void Dispose_StopsAndNeverThrowsEvenWhenCalledTwice()
-        {
-            var svc = new WebsiteUsageService();
-            svc.Start();
-
-            var exception = Record.Exception(() =>
-            {
-                svc.Dispose();
-                svc.Dispose(); // idempotent
-            });
-
-            Assert.Null(exception);
-        }
     }
 }

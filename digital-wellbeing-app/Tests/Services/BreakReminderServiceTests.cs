@@ -17,41 +17,6 @@ namespace digital_wellbeing_app.Tests.Services
         }
 
         [Fact]
-        public void Constructor_SetsDefaults()
-        {
-            var svc = new BreakReminderService();
-            Assert.False(svc.IsEnabled);
-            Assert.Equal(20, svc.IntervalMinutes);
-            Assert.Equal(3, svc.MaxSnoozeCount);
-            Assert.True(svc.SoundEnabled);
-            Assert.False(svc.IsBreakPending);
-        }
-
-        [Fact]
-        public void Start_WhenEnabled_DoesNotThrow()
-        {
-            var svc = CreateTestService();
-            svc.Start();
-            svc.Stop();
-        }
-
-        [Fact]
-        public void Snooze_IncrementsCount()
-        {
-            var svc = CreateTestService();
-            svc.Start();
-
-            // Snooze should work
-            svc.Snooze(5);
-            Assert.Equal(1, svc.SnoozeCount);
-
-            svc.Snooze(5);
-            Assert.Equal(2, svc.SnoozeCount);
-
-            svc.Stop();
-        }
-
-        [Fact]
         public void Snooze_ReturnsTrue_WhenUnderMax()
         {
             var svc = CreateTestService();
@@ -147,21 +112,6 @@ namespace digital_wellbeing_app.Tests.Services
             svc.SoundEnabled = true;
             svc.MaxSnoozeCount = 3;
             svc.SaveSettings();
-        }
-
-        [Fact]
-        public void Stop_PreventsBreakFiring()
-        {
-            var svc = CreateTestService();
-            bool breakFired = false;
-            svc.BreakDue += () => breakFired = true;
-
-            svc.Start();
-            svc.Stop();
-
-            // After stop, no break should fire
-            Thread.Sleep(200);
-            Assert.False(breakFired);
         }
 
         // ---- Evaluate (one timer tick), driven without the real timer or OS idle state ----

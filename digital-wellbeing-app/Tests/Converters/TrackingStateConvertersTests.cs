@@ -3,7 +3,7 @@ using System.Windows.Media;
 using digital_wellbeing_app.Converters;
 using Xunit;
 
-namespace digital_wellbeing_app.Tests.Helpers
+namespace digital_wellbeing_app.Tests.Converters
 {
     public class TrackingStateConvertersTests
     {
