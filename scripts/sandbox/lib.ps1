@@ -12,7 +12,7 @@ $cliExe  = Join-Path $appDir 'current\pulse.exe'
 
 Add-Type -AssemblyName System.Drawing, System.Windows.Forms, UIAutomationClient, UIAutomationTypes
 Add-Type @"
-using System; using System.Runtime.InteropServices;
+using System; using System.Runtime.InteropServices; using System.Runtime.CompilerServices;
 public class W {
   [DllImport("user32.dll")] public static extern bool SetProcessDPIAware();
   [DllImport("user32.dll")] public static extern bool SetCursorPos(int x, int y);
@@ -45,7 +45,10 @@ public class W {
 public interface IApplicationActivationManager {
   int ActivateApplication([In, MarshalAs(UnmanagedType.LPWStr)] string appUserModelId, [In, MarshalAs(UnmanagedType.LPWStr)] string arguments, [In] int options, out uint processId);
 }
-[ComImport, Guid("45BA127D-10A8-46EA-8AB7-56EA9078943C")] public class ApplicationActivationManager { }
+[ComImport, Guid("45BA127D-10A8-46EA-8AB7-56EA9078943C")] public class ApplicationActivationManager : IApplicationActivationManager {
+  [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+  public extern int ActivateApplication([In, MarshalAs(UnmanagedType.LPWStr)] string appUserModelId, [In, MarshalAs(UnmanagedType.LPWStr)] string arguments, [In] int options, out uint processId);
+}
 "@
 [W]::SetProcessDPIAware() | Out-Null
 $scr = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
