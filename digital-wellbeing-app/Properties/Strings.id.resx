@@ -330,7 +330,7 @@ Tindakan ini tidak dapat dibatalkan.</value></data>
   <data name="Settings_LogFile" xml:space="preserve"><value>File log</value></data>
   <data name="Settings_NoAccountNoCloudNo" xml:space="preserve"><value>Tanpa akun, tanpa cloud, tanpa telemetri. Semuanya tetap di PC ini.</value></data>
   <data name="Settings_NoGoalSet" xml:space="preserve"><value>Belum ada target</value></data>
-  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>Notifikasi muncul di bilah judul. Anda dapat menunda atau menutupnya.</value></data>
+  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>Pulse menampilkan notifikasi Windows, atau pengingat di jendelanya saat Anda sedang memakainya. Anda dapat menunda atau menutupnya.</value></data>
   <data name="Settings_OffDefaultWhenPulseReads" xml:space="preserve"><value>Nonaktif secara default. Saat aktif, Pulse membaca bilah alamat browser keluarga Chrome/Edge/Firefox untuk mencatat situs yang Anda buka (misalnya youtube.com) — tidak pernah URL lengkap, kata pencarian, atau isi halaman.</value></data>
   <data name="Settings_Open" xml:space="preserve"><value>Buka</value></data>
   <data name="Settings_OpenFolderFailed" xml:space="preserve"><value>Tidak dapat membuka folder: {0}</value></data>

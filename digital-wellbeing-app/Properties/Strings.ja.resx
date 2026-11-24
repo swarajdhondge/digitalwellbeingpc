@@ -330,7 +330,7 @@
   <data name="Settings_LogFile" xml:space="preserve"><value>ログ ファイル</value></data>
   <data name="Settings_NoAccountNoCloudNo" xml:space="preserve"><value>アカウント、クラウド、テレメトリはありません。すべてこの PC 内に保存されます。</value></data>
   <data name="Settings_NoGoalSet" xml:space="preserve"><value>目標未設定</value></data>
-  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>通知はタイトル バーに表示されます。スヌーズまたは閉じることができます。</value></data>
+  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>Pulse は Windows の通知を表示します。Pulse を使用中は、ウィンドウ内にリマインダーを表示します。スヌーズまたは閉じることができます。</value></data>
   <data name="Settings_OffDefaultWhenPulseReads" xml:space="preserve"><value>既定ではオフです。オンにすると、Pulse は Chrome/Edge/Firefox 系ブラウザーのアドレス バーを読み取り、表示中のサイト (例: youtube.com) を記録します。完全な URL、検索語句、ページの内容は記録しません。</value></data>
   <data name="Settings_Open" xml:space="preserve"><value>開く</value></data>
   <data name="Settings_OpenFolderFailed" xml:space="preserve"><value>フォルダーを開けませんでした: {0}</value></data>

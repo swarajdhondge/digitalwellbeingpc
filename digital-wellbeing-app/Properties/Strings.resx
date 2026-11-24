@@ -339,7 +339,7 @@ This cannot be undone.</value></data>
   <data name="Settings_LogFile" xml:space="preserve"><value>Log file</value></data>
   <data name="Settings_NoAccountNoCloudNo" xml:space="preserve"><value>No account, no cloud, no telemetry. Everything stays on this PC.</value></data>
   <data name="Settings_NoGoalSet" xml:space="preserve"><value>No goal set</value></data>
-  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>Notifications appear in the title bar. You can snooze or dismiss them.</value></data>
+  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>Pulse shows a Windows notification, or a reminder in its window when you are using it. You can snooze or dismiss it.</value></data>
   <data name="Settings_OffDefaultWhenPulseReads" xml:space="preserve"><value>Off by default. When on, Pulse reads the address bar of Chrome/Edge/Firefox-family browsers to log which site you're on (e.g. youtube.com) — never the full URL, search terms, or page content.</value></data>
   <data name="Settings_Open" xml:space="preserve"><value>Open</value></data>
   <data name="Settings_OpenFolderFailed" xml:space="preserve"><value>Could not open folder: {0}</value></data>

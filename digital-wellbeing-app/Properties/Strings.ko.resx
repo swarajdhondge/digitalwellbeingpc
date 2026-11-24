@@ -330,7 +330,7 @@
   <data name="Settings_LogFile" xml:space="preserve"><value>로그 파일</value></data>
   <data name="Settings_NoAccountNoCloudNo" xml:space="preserve"><value>계정, 클라우드, 원격 분석이 없습니다. 모든 데이터는 이 PC에만 저장됩니다.</value></data>
   <data name="Settings_NoGoalSet" xml:space="preserve"><value>목표 없음</value></data>
-  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>알림은 제목 표시줄에 나타납니다. 다시 알림을 설정하거나 닫을 수 있습니다.</value></data>
+  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>Pulse는 Windows 알림을 표시하며, Pulse를 사용 중일 때는 창 안에 알림을 표시합니다. 다시 알림을 설정하거나 닫을 수 있습니다.</value></data>
   <data name="Settings_OffDefaultWhenPulseReads" xml:space="preserve"><value>기본적으로 꺼져 있습니다. 켜면 Pulse가 Chrome/Edge/Firefox 계열 브라우저의 주소 표시줄을 읽어 방문 중인 사이트(예: youtube.com)를 기록합니다. 전체 URL, 검색어, 페이지 내용은 기록하지 않습니다.</value></data>
   <data name="Settings_Open" xml:space="preserve"><value>열기</value></data>
   <data name="Settings_OpenFolderFailed" xml:space="preserve"><value>폴더를 열 수 없습니다: {0}</value></data>

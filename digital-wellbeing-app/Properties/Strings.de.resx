@@ -330,7 +330,7 @@ Dies kann nicht rückgängig gemacht werden.</value></data>
   <data name="Settings_LogFile" xml:space="preserve"><value>Protokolldatei</value></data>
   <data name="Settings_NoAccountNoCloudNo" xml:space="preserve"><value>Kein Konto, keine Cloud, keine Telemetrie. Alles bleibt auf diesem PC.</value></data>
   <data name="Settings_NoGoalSet" xml:space="preserve"><value>Kein Ziel festgelegt</value></data>
-  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>Benachrichtigungen erscheinen in der Titelleiste. Sie können sie schlummern lassen oder verwerfen.</value></data>
+  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>Pulse zeigt eine Windows-Benachrichtigung oder, wenn du Pulse gerade nutzt, eine Erinnerung im Fenster. Du kannst sie verschieben oder schließen.</value></data>
   <data name="Settings_OffDefaultWhenPulseReads" xml:space="preserve"><value>Standardmäßig aus. Wenn aktiviert, liest Pulse die Adressleiste von Browsern der Chrome-/Edge-/Firefox-Familie, um die besuchte Website zu erfassen (z. B. youtube.com) – nie die vollständige URL, Suchbegriffe oder Seiteninhalte.</value></data>
   <data name="Settings_Open" xml:space="preserve"><value>Öffnen</value></data>
   <data name="Settings_OpenFolderFailed" xml:space="preserve"><value>Ordner konnte nicht geöffnet werden: {0}</value></data>

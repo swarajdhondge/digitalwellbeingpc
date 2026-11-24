@@ -330,7 +330,7 @@ Não é possível desfazer.</value></data>
   <data name="Settings_LogFile" xml:space="preserve"><value>Arquivo de log</value></data>
   <data name="Settings_NoAccountNoCloudNo" xml:space="preserve"><value>Sem conta, sem nuvem, sem telemetria. Tudo fica neste PC.</value></data>
   <data name="Settings_NoGoalSet" xml:space="preserve"><value>Nenhuma meta definida</value></data>
-  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>As notificações aparecem na barra de título. Você pode adiá-las ou dispensá-las.</value></data>
+  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>O Pulse mostra uma notificação do Windows ou, se você estiver usando o app, um lembrete na janela. Você pode adiar ou dispensar.</value></data>
   <data name="Settings_OffDefaultWhenPulseReads" xml:space="preserve"><value>Desativado por padrão. Quando ativado, o Pulse lê a barra de endereços de navegadores da família Chrome/Edge/Firefox para registrar em qual site você está (ex.: youtube.com), nunca a URL completa, termos de pesquisa ou o conteúdo da página.</value></data>
   <data name="Settings_Open" xml:space="preserve"><value>Abrir</value></data>
   <data name="Settings_OpenFolderFailed" xml:space="preserve"><value>Não foi possível abrir a pasta: {0}</value></data>

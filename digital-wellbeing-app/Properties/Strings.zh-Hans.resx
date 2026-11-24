@@ -330,7 +330,7 @@
   <data name="Settings_LogFile" xml:space="preserve"><value>日志文件</value></data>
   <data name="Settings_NoAccountNoCloudNo" xml:space="preserve"><value>无需账户、不上云、无遥测。所有数据都保留在这台电脑上。</value></data>
   <data name="Settings_NoGoalSet" xml:space="preserve"><value>未设置目标</value></data>
-  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>通知显示在标题栏中。你可以稍后提醒或关闭它们。</value></data>
+  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>Pulse 会显示 Windows 通知；使用 Pulse 时，则在其窗口中显示提醒。你可以稍后提醒或关闭它。</value></data>
   <data name="Settings_OffDefaultWhenPulseReads" xml:space="preserve"><value>默认关闭。开启后，Pulse 会读取 Chrome/Edge/Firefox 系列浏览器的地址栏，记录你正在访问的网站（例如 youtube.com）——绝不记录完整网址、搜索词或页面内容。</value></data>
   <data name="Settings_Open" xml:space="preserve"><value>打开</value></data>
   <data name="Settings_OpenFolderFailed" xml:space="preserve"><value>无法打开文件夹：{0}</value></data>

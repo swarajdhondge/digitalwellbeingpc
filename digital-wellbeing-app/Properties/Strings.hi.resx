@@ -330,7 +330,7 @@
   <data name="Settings_LogFile" xml:space="preserve"><value>लॉग फ़ाइल</value></data>
   <data name="Settings_NoAccountNoCloudNo" xml:space="preserve"><value>न अकाउंट, न क्लाउड, न टेलीमेट्री। सब कुछ इसी PC पर रहता है।</value></data>
   <data name="Settings_NoGoalSet" xml:space="preserve"><value>कोई लक्ष्य सेट नहीं</value></data>
-  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>सूचनाएं टाइटल बार में दिखती हैं। आप उन्हें स्नूज़ या खारिज कर सकते हैं।</value></data>
+  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>Pulse एक Windows सूचना दिखाता है, या जब आप उसका उपयोग कर रहे हों तो उसकी विंडो में एक रिमाइंडर दिखाता है। आप उसे स्नूज़ या खारिज कर सकते हैं।</value></data>
   <data name="Settings_OffDefaultWhenPulseReads" xml:space="preserve"><value>डिफ़ॉल्ट रूप से बंद। चालू होने पर, Pulse Chrome/Edge/Firefox जैसे ब्राउज़र का एड्रेस बार पढ़कर यह लॉग करता है कि आप किस साइट पर हैं (जैसे youtube.com) — कभी पूरा URL, सर्च शब्द या पेज का कंटेंट नहीं।</value></data>
   <data name="Settings_Open" xml:space="preserve"><value>खोलें</value></data>
   <data name="Settings_OpenFolderFailed" xml:space="preserve"><value>फ़ोल्डर नहीं खुल सका: {0}</value></data>

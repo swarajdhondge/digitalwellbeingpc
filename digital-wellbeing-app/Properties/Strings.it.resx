@@ -330,7 +330,7 @@ L'operazione non può essere annullata.</value></data>
   <data name="Settings_LogFile" xml:space="preserve"><value>File di log</value></data>
   <data name="Settings_NoAccountNoCloudNo" xml:space="preserve"><value>Nessun account, nessun cloud, nessuna telemetria. Tutto resta su questo PC.</value></data>
   <data name="Settings_NoGoalSet" xml:space="preserve"><value>Nessun obiettivo impostato</value></data>
-  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>Le notifiche compaiono nella barra del titolo. Puoi rinviarle o ignorarle.</value></data>
+  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>Pulse mostra una notifica di Windows oppure, se lo stai usando, un promemoria nella sua finestra. Puoi rimandarlo o chiuderlo.</value></data>
   <data name="Settings_OffDefaultWhenPulseReads" xml:space="preserve"><value>Disattivato per impostazione predefinita. Se attivo, Pulse legge la barra degli indirizzi dei browser della famiglia Chrome/Edge/Firefox per registrare il sito che stai visitando (ad es. youtube.com), mai l'URL completo, i termini di ricerca o il contenuto della pagina.</value></data>
   <data name="Settings_Open" xml:space="preserve"><value>Apri</value></data>
   <data name="Settings_OpenFolderFailed" xml:space="preserve"><value>Impossibile aprire la cartella: {0}</value></data>

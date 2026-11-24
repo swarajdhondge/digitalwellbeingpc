@@ -330,7 +330,7 @@
   <data name="Settings_LogFile" xml:space="preserve"><value>Файл журнала</value></data>
   <data name="Settings_NoAccountNoCloudNo" xml:space="preserve"><value>Без учетной записи, облака и телеметрии. Все остается на этом компьютере.</value></data>
   <data name="Settings_NoGoalSet" xml:space="preserve"><value>Цель не задана</value></data>
-  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>Уведомления появляются в строке заголовка. Их можно отложить или закрыть.</value></data>
+  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>Pulse показывает уведомление Windows или, если вы работаете в Pulse, напоминание в его окне. Вы можете отложить его или закрыть.</value></data>
   <data name="Settings_OffDefaultWhenPulseReads" xml:space="preserve"><value>По умолчанию выключено. Если включить, Pulse считывает адресную строку браузеров семейства Chrome/Edge/Firefox, чтобы записать, на каком вы сайте (например, youtube.com), — но никогда не полный URL, поисковые запросы или содержимое страницы.</value></data>
   <data name="Settings_Open" xml:space="preserve"><value>Открыть</value></data>
   <data name="Settings_OpenFolderFailed" xml:space="preserve"><value>Не удалось открыть папку: {0}</value></data>

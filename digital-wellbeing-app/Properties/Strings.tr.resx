@@ -330,7 +330,7 @@ Bu işlem geri alınamaz.</value></data>
   <data name="Settings_LogFile" xml:space="preserve"><value>Günlük dosyası</value></data>
   <data name="Settings_NoAccountNoCloudNo" xml:space="preserve"><value>Hesap yok, bulut yok, telemetri yok. Her şey bu bilgisayarda kalır.</value></data>
   <data name="Settings_NoGoalSet" xml:space="preserve"><value>Hedef belirlenmedi</value></data>
-  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>Bildirimler başlık çubuğunda görünür. Onları erteleyebilir veya kapatabilirsiniz.</value></data>
+  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>Pulse bir Windows bildirimi gösterir veya onu kullanırken penceresinde bir hatırlatma gösterir. Erteleyebilir veya kapatabilirsiniz.</value></data>
   <data name="Settings_OffDefaultWhenPulseReads" xml:space="preserve"><value>Varsayılan olarak kapalıdır. Açıkken Pulse, hangi sitede olduğunuzu (ör. youtube.com) kaydetmek için Chrome/Edge/Firefox ailesi tarayıcıların adres çubuğunu okur — asla tam URL'yi, arama terimlerini veya sayfa içeriğini değil.</value></data>
   <data name="Settings_Open" xml:space="preserve"><value>Aç</value></data>
   <data name="Settings_OpenFolderFailed" xml:space="preserve"><value>Klasör açılamadı: {0}</value></data>
