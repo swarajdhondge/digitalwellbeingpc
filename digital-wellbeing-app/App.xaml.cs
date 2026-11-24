@@ -21,7 +21,12 @@ namespace digital_wellbeing_app
                 VelopackApp.Build()
                     .OnAfterInstallFastCallback(_ => Services.CommandLinePath.Add(AppContext.BaseDirectory))
                     .OnAfterUpdateFastCallback(_ => Services.CommandLinePath.Add(AppContext.BaseDirectory))
-                    .OnBeforeUninstallFastCallback(_ => Services.CommandLinePath.Remove(AppContext.BaseDirectory))
+                    .OnBeforeUninstallFastCallback(_ =>
+                    {
+                        Services.CommandLinePath.Remove(AppContext.BaseDirectory);
+                        // Remove the toast registration (app ID and COM activator) from the user's registry.
+                        Microsoft.Toolkit.Uwp.Notifications.ToastNotificationManagerCompat.Uninstall();
+                    })
                     .Run();
 
             var app = new App();

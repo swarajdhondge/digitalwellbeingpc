@@ -3,9 +3,11 @@
   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
   xmlns:uap5="http://schemas.microsoft.com/appx/manifest/uap/windows10/5"
+  xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10"
+  xmlns:com="http://schemas.microsoft.com/appx/manifest/com/windows10"
   xmlns:desktop4="http://schemas.microsoft.com/appx/manifest/desktop/windows10/4"
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
-  IgnorableNamespaces="uap uap5 desktop4 rescap">
+  IgnorableNamespaces="uap uap5 desktop com desktop4 rescap">
 
   <!-- REAL Microsoft Store identity for Pulse - Digital Wellbeing PC. Do not alter. -->
   <Identity
@@ -60,6 +62,22 @@
       </uap:VisualElements>
 
       <Extensions>
+        <!--
+          Clicks on a notification that has moved to the Notification Center. Windows starts (or
+          finds) Pulse through this COM class and Pulse opens the matching page. The toast
+          toolkit reads these entries, so the executable and the argument must stay exactly as
+          they are.
+        -->
+        <desktop:Extension Category="windows.toastNotificationActivation">
+          <desktop:ToastNotificationActivation ToastActivatorCLSID="FAC08368-4643-4DA0-AFB5-F05A1F4E7F04" />
+        </desktop:Extension>
+        <com:Extension Category="windows.comServer">
+          <com:ComServer>
+            <com:ExeServer Executable="DigitalWellbeing.exe" Arguments="-ToastActivated" DisplayName="Pulse notification activator">
+              <com:Class Id="FAC08368-4643-4DA0-AFB5-F05A1F4E7F04" DisplayName="Pulse notification activator" />
+            </com:ExeServer>
+          </com:ComServer>
+        </com:Extension>
         <!--
           "Launch at startup" registered through the OS (replaces the HKCU\Run key
           that StartupService uses in the unpackaged build). Disabled by default;

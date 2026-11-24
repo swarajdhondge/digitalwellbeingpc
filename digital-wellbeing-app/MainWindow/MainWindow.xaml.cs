@@ -21,8 +21,7 @@ using digital_wellbeing_app.Views.Sound;
 using digital_wellbeing_app.Views.Welcome;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Win32;
-using Windows.UI.Notifications;
-using Windows.Data.Xml.Dom;
+using Microsoft.Toolkit.Uwp.Notifications;
 
 namespace digital_wellbeing_app.MainWindow
 {
@@ -93,12 +92,13 @@ namespace digital_wellbeing_app.MainWindow
                 if (!string.IsNullOrEmpty(location))
                 {
                     var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(location);
-                    SidebarVersionText.Text = $"v{fvi.ProductVersion ?? "2.4.1"}";
+                    SidebarVersionText.Text = $"v{fvi.ProductVersion ?? "2.5.0"}";
                 }
             }
             catch { /* Keep default text from XAML */ }
 
             InitTrayIcon();
+            RegisterToastActivation();
             InitBreakReminder();
             InitFocusSession();
             InitWindDown();
@@ -209,7 +209,7 @@ namespace digital_wellbeing_app.MainWindow
         {
             if (!new Services.SettingsService().LoadHearingAlertsEnabled()) return;
             Dispatcher.Invoke(() => ShowNotification(
-                Loc.Get("Notify_HearingAlertTitle"), Loc.Get("Notify_HearingAlertBody"), NavigateToSound));
+                Loc.Get("Notify_HearingAlertTitle"), Loc.Get("Notify_HearingAlertBody"), Services.NotificationRouting.Hearing));
         }
 
         private void OnDistractingAppDetected(string appName, string executablePath)
@@ -237,7 +237,7 @@ namespace digital_wellbeing_app.MainWindow
 
             // Clicking the notification brings Pulse forward and shows the overlay
             ShowNotification(Loc.Get("Notify_DistractingAppTitle"), Loc.Format("Notify_DistractingAppBody", appName, timeText),
-                () => FocusWarningOverlay.Visibility = Visibility.Visible);
+                Services.NotificationRouting.Focus);
         }
 
         private void OnFocusSessionEnded(bool completed)
@@ -310,7 +310,7 @@ namespace digital_wellbeing_app.MainWindow
             }
             catch { /* ignore - show notification without summary */ }
 
-            ShowNotification(Loc.Get("WindDown_NotifyTitle"), Loc.Format("WindDown_NotifyBody", summary), NavigateToSettings);
+            ShowNotification(Loc.Get("WindDown_NotifyTitle"), Loc.Format("WindDown_NotifyBody", summary), Services.NotificationRouting.WindDown);
         }
 
         private void UpdateWindDownVisual(bool active)
@@ -411,7 +411,7 @@ namespace digital_wellbeing_app.MainWindow
             var currentFormatted = Loc.Format("Goal_HoursMinutes", (int)currentTime.TotalHours, currentTime.Minutes);
 
             ShowNotification(Loc.Get("Goal_ReachedTitle"), Loc.Format("Goal_ReachedBody", currentFormatted, goalFormatted),
-                NavigateToDashboard);
+                Services.NotificationRouting.Goal);
         }
 
         #endregion
@@ -522,13 +522,7 @@ namespace digital_wellbeing_app.MainWindow
                 else
                 {
                     _breakNotificationPending = true;
-                    ShowNotification(Loc.Get("Shell_TimeBreak"), Loc.Get("Break_FollowRule"), () =>
-                    {
-                        // Ignore a click on a reminder that was snoozed or dismissed meanwhile
-                        if (!_breakNotificationPending) return;
-                        _breakNotificationPending = false;
-                        ShowBreakOverlay();
-                    });
+                    ShowNotification(Loc.Get("Shell_TimeBreak"), Loc.Get("Break_FollowRule"), Services.NotificationRouting.Break);
                 }
             });
         }
@@ -537,58 +531,86 @@ namespace digital_wellbeing_app.MainWindow
         /// Windows only shows a toast sent under this process's own app identity: the Store
         /// package's, or the one Velopack gives the Setup.exe install (its Start menu shortcut
         /// carries the same ID). A toast under any other ID is stored but never shown, so without
-        /// an identity this throws and the caller falls back to the tray balloon.
+        /// an identity this is false and the alert goes to the tray balloon.
         /// </summary>
-        private static ToastNotifier CreateToastNotifier()
-        {
-            if (Services.PackagedAppInfo.IsPackaged)
-                return ToastNotificationManager.CreateToastNotifier();
-            if (GetCurrentProcessExplicitAppUserModelID(out var appId) == 0 && !string.IsNullOrEmpty(appId))
-                return ToastNotificationManager.CreateToastNotifier(appId);
-            throw new InvalidOperationException("No app identity for notifications");
-        }
+        private static bool HasToastIdentity()
+            => Services.PackagedAppInfo.IsPackaged
+               || (GetCurrentProcessExplicitAppUserModelID(out var appId) == 0 && !string.IsNullOrEmpty(appId));
 
         [System.Runtime.InteropServices.DllImport("shell32.dll")]
         private static extern int GetCurrentProcessExplicitAppUserModelID(
             [System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.LPWStr)] out string appId);
 
         /// <summary>
-        /// The one way Pulse tells the user something: a Windows toast, or a tray balloon when
-        /// there is no app identity. Clicking it brings Pulse forward, then runs
-        /// <paramref name="onClick"/> (if any). Text is escaped here, so callers pass plain text.
+        /// A toast that has left the screen sits in the Notification Center, and a click there is
+        /// not delivered to the toast object. Windows hands it to a COM activator registered for
+        /// the app instead (and starts Pulse first if it is not running). The toolkit registers
+        /// that activator when this handler is added, so it is added once, at startup.
         /// </summary>
-        private void ShowNotification(string title, string body, Action? onClick = null)
+        private void RegisterToastActivation()
         {
-            void Activated()
-            {
-                Show();
-                WindowState = WindowState.Normal;
-                Activate();
-                Topmost = true;
-                Topmost = false;
-                onClick?.Invoke();
-            }
-
             try
             {
-                string toastXml = $@"
-                    <toast activationType='foreground'>
-                        <visual>
-                            <binding template='ToastGeneric'>
-                                <text>{System.Security.SecurityElement.Escape(title)}</text>
-                                <text>{System.Security.SecurityElement.Escape(body)}</text>
-                            </binding>
-                        </visual>
-                        <audio src='ms-winsoundevent:Notification.Default'/>
-                    </toast>";
+                if (HasToastIdentity())
+                    ToastNotificationManagerCompat.OnActivated += OnToastActivated;
+            }
+            catch (Exception ex)
+            {
+                Services.LogService.Warning($"Toast activation not registered: {ex.Message}");
+            }
+        }
 
-                var xmlDoc = new XmlDocument();
-                xmlDoc.LoadXml(toastXml);
+        // Runs on a COM thread: hand over to the UI thread.
+        private void OnToastActivated(ToastNotificationActivatedEventArgsCompat e)
+        {
+            var args = ToastArguments.Parse(e.Argument);
+            args.TryGetValue(Services.NotificationRouting.ArgumentName, out string? action);
+            Dispatcher.BeginInvoke(() => HandleNotificationClick(action));
+        }
 
-                var toast = new ToastNotification(xmlDoc);
-                toast.Activated += (s, args) => Dispatcher.Invoke(Activated);
+        /// <summary>Brings Pulse forward, then does what the clicked alert is for.</summary>
+        private void HandleNotificationClick(string? action)
+        {
+            Show();
+            WindowState = WindowState.Normal;
+            Activate();
+            Topmost = true;
+            Topmost = false;
 
-                CreateToastNotifier().Show(toast);
+            switch (Services.NotificationRouting.Resolve(action, _breakNotificationPending, !string.IsNullOrEmpty(_currentDistractingApp)))
+            {
+                case Services.NotificationTarget.Dashboard: NavigateToDashboard(); break;
+                case Services.NotificationTarget.Limits: NavigateToLimits(); break;
+                case Services.NotificationTarget.Settings: NavigateToSettings(); break;
+                case Services.NotificationTarget.Sound: NavigateToSound(); break;
+                case Services.NotificationTarget.BreakOverlay:
+                    _breakNotificationPending = false;
+                    ShowBreakOverlay();
+                    break;
+                case Services.NotificationTarget.FocusOverlay:
+                    FocusWarningOverlay.Visibility = Visibility.Visible;
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// The one way Pulse tells the user something: a Windows toast, or a tray balloon when
+        /// there is no app identity. Clicking it brings Pulse forward and opens the place that
+        /// <paramref name="action"/> names. Text is escaped by the toolkit, so callers pass plain text.
+        /// </summary>
+        private void ShowNotification(string title, string body, string action)
+        {
+            try
+            {
+                if (!HasToastIdentity())
+                    throw new InvalidOperationException("No app identity for notifications");
+
+                new ToastContentBuilder()
+                    .AddArgument(Services.NotificationRouting.ArgumentName, action)
+                    .AddText(title)
+                    .AddText(body)
+                    .AddAudio(new Uri("ms-winsoundevent:Notification.Default"))
+                    .Show();
             }
             catch (Exception ex)
             {
@@ -596,7 +618,7 @@ namespace digital_wellbeing_app.MainWindow
 
                 if (_trayIcon != null)
                 {
-                    _balloonClickAction = Activated;
+                    _balloonClickAction = () => HandleNotificationClick(action);
                     _trayIcon.BalloonTipTitle = title;
                     _trayIcon.BalloonTipText = body;
                     _trayIcon.BalloonTipIcon = ToolTipIcon.Info;
@@ -620,7 +642,7 @@ namespace digital_wellbeing_app.MainWindow
             var body = level == Models.FocusEnforcementLevel.Warn
                 ? Loc.Format("Notify_AppLimitWarn", appName)
                 : Loc.Format("Notify_AppLimitMinimized", appName);
-            ShowNotification(Loc.Get("Notify_AppLimitTitle"), body, NavigateToLimits);
+            ShowNotification(Loc.Get("Notify_AppLimitTitle"), body, Services.NotificationRouting.Limit);
         }
 
         private void OnBreakDismissed()
@@ -986,7 +1008,7 @@ namespace digital_wellbeing_app.MainWindow
                 var settings = new Services.SettingsService();
                 if (settings.LoadCloseToTrayHintShown()) return;
 
-                ShowNotification(Loc.Get("Tray_StillRunningTitle"), Loc.Get("Tray_StillRunningBody"));
+                ShowNotification(Loc.Get("Tray_StillRunningTitle"), Loc.Get("Tray_StillRunningBody"), Services.NotificationRouting.Hint);
 
                 settings.SaveCloseToTrayHintShown(true);
             }

@@ -18,7 +18,7 @@
     <ApplicationIcon>Resources\Icons\digital-balance-icon.ico</ApplicationIcon>
     <Win32Icon>Resources\Icons\digital-balance-icon.ico</Win32Icon>
 
-    <Version>2.4.1</Version>
+    <Version>2.5.0</Version>
     
     <!-- Disable assembly info generation to fix WPF temp project duplicate attribute issue -->
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -45,6 +45,9 @@
          OpenTK 4.3 only accepts the 3.3 line, so 3.3.8.39 is the newest usable stable. -->
     <PackageReference Include="OpenTK.redist.glfw" Version="3.3.8.39" />
     <PackageReference Include="Velopack" Version="1.2.161" />
+    <!-- Toast clicks from the Notification Center reach an unpackaged app only through a registered
+         COM activator; this package registers it (and the MSIX build declares it in its manifest). -->
+    <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
   </ItemGroup>
 
   <ItemGroup>

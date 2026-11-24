@@ -88,16 +88,26 @@ jobs:
       - name: Build solution (Release)
         run: dotnet build DigitalWellbeing.sln -c Release
 
-      - name: UI and soak tests
+      # Run the two test classes one after the other: each one kills every running
+      # DigitalWellbeing process, so running them in parallel makes them kill each other's app.
+      - name: UI tests (shell)
         id: ui-tests
+        timeout-minutes: 10
+        env:
+          DW_APP_EXE: ${{ github.workspace }}\digital-wellbeing-app\bin\Release\net9.0-windows10.0.26100.0\DigitalWellbeing.exe
+          DW_SHOT_DIR: ${{ runner.temp }}\dw-uishots
+        run: dotnet test UITests/UITests.csproj -c Release --no-build --filter "FullyQualifiedName~ShellTests" --logger "trx;LogFileName=ui-tests.trx" --results-directory "${{ runner.temp }}\ui-test-results"
+
+      - name: Soak tests
+        id: soak-tests
         timeout-minutes: 15
         env:
           DW_APP_EXE: ${{ github.workspace }}\digital-wellbeing-app\bin\Release\net9.0-windows10.0.26100.0\DigitalWellbeing.exe
           DW_SHOT_DIR: ${{ runner.temp }}\dw-uishots
-        run: dotnet test UITests/UITests.csproj -c Release --no-build --filter "FullyQualifiedName~ShellTests|FullyQualifiedName~SoakTests" --logger "trx;LogFileName=ui-tests.trx" --results-directory "${{ runner.temp }}\ui-test-results"
+        run: dotnet test UITests/UITests.csproj -c Release --no-build --filter "FullyQualifiedName~SoakTests" --logger "trx;LogFileName=soak-tests.trx" --results-directory "${{ runner.temp }}\ui-test-results"
 
       - name: Upload UI test screenshots and logs
-        if: failure() && steps.ui-tests.outcome == 'failure'
+        if: failure() && (steps.ui-tests.outcome == 'failure' || steps.soak-tests.outcome == 'failure')
         uses: actions/upload-artifact@v7
         with:
           name: ui-test-output
