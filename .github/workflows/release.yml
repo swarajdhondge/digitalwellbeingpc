@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version to build, for example 2.5.0 or 2.5.0-ci.1'
+        description: 'Version to build, x.y.z, for example 2.5.0'
         required: true
         type: string
 
@@ -47,8 +47,7 @@ jobs:
         run: |
           if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
             VERSION="${INPUT_VERSION#v}"
-            # A dry run may carry a pre-release suffix such as 2.5.0-ci.1.
-            PATTERN='^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$'
+            PATTERN='^[0-9]+\.[0-9]+\.[0-9]+$'
           else
             VERSION="${GITHUB_REF_NAME#v}"
             PATTERN='^[0-9]+\.[0-9]+\.[0-9]+$'
