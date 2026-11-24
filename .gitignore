@@ -104,3 +104,6 @@ docs/
 .codex/
 .cursor/
 .playwright-mcp/
+
+# Private agent plans and handoffs (never public)
+work/
