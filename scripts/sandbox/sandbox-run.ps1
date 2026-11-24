@@ -202,10 +202,12 @@ function Check-Upgrade {
   Start-Sleep 8
   $after = (Run-Cli @('apps', '--week')).Text
   Set-Content "$script:dir\upgrade-cli.txt" @('before', $before, 'after', $after)
-  $sameApps = (@($before -split "`n" | Where-Object { $_.Trim() }).Count -eq @($after -split "`n" | Where-Object { $_.Trim() }).Count)
+  # The running Pulse adds its own 0m row after the update, so check that every seeded row is still there and unchanged.
+  $afterRows = @($after -split "`n" | ForEach-Object { $_.Trim() })
+  $sameApps = $true; foreach ($r in @($before -split "`n" | Where-Object { $_ -match '\d+\s*[hm]\b' })) { if ($afterRows -notcontains $r.Trim()) { $sameApps = $false } }
   Write-Result $(if ($v2 -and $v2 -ne $v1) { 'PASS' } else { 'FAIL' }) 'upgrade-version' "$v1 -> $v2, Setup dialog Update button found=$($null -ne $btn), Pulse running=$up"
   $keptSettings = (Get-Content "$pdir\settings.json" -Raw) -match 'Light'
-  Write-Result $(if ($keptSettings -and $sameApps) { 'PASS' } else { 'FAIL' }) 'upgrade-data' "settings kept=$keptSettings, same number of apps in 'pulse apps --week'=$sameApps"
+  Write-Result $(if ($keptSettings -and $sameApps) { 'PASS' } else { 'FAIL' }) 'upgrade-data' "settings kept=$keptSettings, every seeded row of 'pulse apps --week' unchanged=$sameApps"
 }
 
 try {
