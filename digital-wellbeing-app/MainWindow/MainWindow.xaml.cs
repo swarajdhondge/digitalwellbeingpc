@@ -53,8 +53,6 @@ namespace digital_wellbeing_app.MainWindow
         private Platform.Windows.WindowsFocusIntegration? _windowsFocusIntegration;
 
         // Goal notification tracking
-        private bool _goalNotificationShownToday;
-        private string _goalNotificationDate = string.Empty;
         private System.Windows.Threading.DispatcherTimer? _goalCheckTimer;
 
         // True once the user has chosen a real exit (tray "Exit", Windows logoff/shutdown).
@@ -196,8 +194,7 @@ namespace digital_wellbeing_app.MainWindow
         }
 
         /// <summary>
-        /// Wires the hearing-threshold alert to the same tray-balloon pattern Goal/WindDown/Break
-        /// already use. SoundExposureMgr is a property initializer on App (runs during App's own
+        /// Wires the hearing-threshold alert to the shared notification helper. SoundExposureMgr is a property initializer on App (runs during App's own
         /// construction, before OnStartup), so - unlike AppLimitSvc/WebsiteUsageSvc - it's already
         /// available here in MainWindow's constructor, no ordering workaround needed.
         /// </summary>
@@ -210,14 +207,9 @@ namespace digital_wellbeing_app.MainWindow
 
         private void OnHearingThresholdExceeded(object? sender, EventArgs e)
         {
-            Dispatcher.Invoke(() =>
-            {
-                if (_trayIcon == null) return;
-                _trayIcon.BalloonTipTitle = Loc.Get("Notify_HearingAlertTitle");
-                _trayIcon.BalloonTipText = Loc.Get("Notify_HearingAlertBody");
-                _trayIcon.BalloonTipIcon = ToolTipIcon.Warning;
-                _trayIcon.ShowBalloonTip(10000);
-            });
+            if (!new Services.SettingsService().LoadHearingAlertsEnabled()) return;
+            Dispatcher.Invoke(() => ShowNotification(
+                Loc.Get("Notify_HearingAlertTitle"), Loc.Get("Notify_HearingAlertBody"), NavigateToSound));
         }
 
         private void OnDistractingAppDetected(string appName, string executablePath)
@@ -243,38 +235,9 @@ namespace digital_wellbeing_app.MainWindow
             DistractingAppName.Text = appName;
             FocusTimeRemaining.Text = Loc.Format("Shell_FocusTimeRemaining", timeText);
 
-            // Show tray balloon notification (this works without app registration)
-            // The balloon plays its own warning sound, so we don't need to play one manually
-            if (_trayIcon != null)
-            {
-                _trayIcon.BalloonTipTitle = Loc.Get("Notify_DistractingAppTitle");
-                _trayIcon.BalloonTipText = Loc.Format("Notify_DistractingAppBody", appName, timeText);
-                _trayIcon.BalloonTipIcon = ToolTipIcon.Warning;
-                _trayIcon.BalloonTipClicked -= OnFocusWarningBalloonClicked;
-                _trayIcon.BalloonTipClicked += OnFocusWarningBalloonClicked;
-                _trayIcon.ShowBalloonTip(5000);
-            }
-        }
-
-        private void OnFocusWarningBalloonClicked(object? sender, EventArgs e)
-        {
-            // Unsubscribe to prevent multiple handlers
-            if (_trayIcon != null)
-            {
-                _trayIcon.BalloonTipClicked -= OnFocusWarningBalloonClicked;
-            }
-
-            // Show the in-app overlay when user clicks the balloon
-            Dispatcher.Invoke(() =>
-            {
-                // Bring window to front and show overlay
-                if (WindowState == WindowState.Minimized)
-                    WindowState = WindowState.Normal;
-                Show();
-                Activate();
-                
-                FocusWarningOverlay.Visibility = Visibility.Visible;
-            });
+            // Clicking the notification brings Pulse forward and shows the overlay
+            ShowNotification(Loc.Get("Notify_DistractingAppTitle"), Loc.Format("Notify_DistractingAppBody", appName, timeText),
+                () => FocusWarningOverlay.Visibility = Visibility.Visible);
         }
 
         private void OnFocusSessionEnded(bool completed)
@@ -334,8 +297,6 @@ namespace digital_wellbeing_app.MainWindow
 
         private void ShowWindDownNotification()
         {
-            if (_trayIcon == null) return;
-
             // Include daily summary in the notification
             string summary = "";
             try
@@ -349,10 +310,7 @@ namespace digital_wellbeing_app.MainWindow
             }
             catch { /* ignore - show notification without summary */ }
 
-            _trayIcon.BalloonTipTitle = Loc.Get("WindDown_NotifyTitle");
-            _trayIcon.BalloonTipText = Loc.Format("WindDown_NotifyBody", summary);
-            _trayIcon.BalloonTipIcon = ToolTipIcon.Info;
-            _trayIcon.ShowBalloonTip(5000);
+            ShowNotification(Loc.Get("WindDown_NotifyTitle"), Loc.Format("WindDown_NotifyBody", summary), NavigateToSettings);
         }
 
         private void UpdateWindDownVisual(bool active)
@@ -421,17 +379,6 @@ namespace digital_wellbeing_app.MainWindow
         {
             try
             {
-                var today = DateTime.Now.ToString("yyyy-MM-dd");
-
-                // Reset flag on new day
-                if (_goalNotificationDate != today)
-                {
-                    _goalNotificationShownToday = false;
-                    _goalNotificationDate = today;
-                }
-
-                if (_goalNotificationShownToday) return;
-
                 var app = System.Windows.Application.Current as App;
                 if (app?.ScreenTracker == null) return;
 
@@ -440,11 +387,15 @@ namespace digital_wellbeing_app.MainWindow
                 if (goal == null) return;
 
                 var currentTime = app.ScreenTracker.CurrentActiveTime;
-                if (goalService.IsOverGoal(currentTime))
-                {
-                    _goalNotificationShownToday = true;
-                    ShowGoalReachedNotification(goal.Value, currentTime);
-                }
+                if (!goalService.IsOverGoal(currentTime)) return;
+
+                var now = DateTime.Now;
+                if (!Services.GoalService.IsReminderDue(goalService.GoalNotificationsEnabled,
+                        goalService.RemindEveryMinutes, goalService.LastReminder, now))
+                    return;
+
+                goalService.MarkReminded(now);
+                ShowGoalReachedNotification(goal.Value, currentTime);
             }
             catch (Exception ex)
             {
@@ -454,17 +405,13 @@ namespace digital_wellbeing_app.MainWindow
 
         private void ShowGoalReachedNotification(int goalMinutes, TimeSpan currentTime)
         {
-            if (_trayIcon == null) return;
-
             var goalFormatted = goalMinutes >= 60
                 ? Loc.Format("Goal_HoursMinutes", goalMinutes / 60, goalMinutes % 60)
                 : Loc.Format("Goal_Minutes", goalMinutes);
             var currentFormatted = Loc.Format("Goal_HoursMinutes", (int)currentTime.TotalHours, currentTime.Minutes);
 
-            _trayIcon.BalloonTipTitle = Loc.Get("Goal_ReachedTitle");
-            _trayIcon.BalloonTipText = Loc.Format("Goal_ReachedBody", currentFormatted, goalFormatted);
-            _trayIcon.BalloonTipIcon = ToolTipIcon.Info;
-            _trayIcon.ShowBalloonTip(5000);
+            ShowNotification(Loc.Get("Goal_ReachedTitle"), Loc.Format("Goal_ReachedBody", currentFormatted, goalFormatted),
+                NavigateToDashboard);
         }
 
         #endregion
@@ -542,7 +489,7 @@ namespace digital_wellbeing_app.MainWindow
             _breakReminderService.Start();
         }
 
-        // Track if break notification is pending (for when user clicks balloon)
+        // Track if a break notification is still waiting (a click on it only counts while this is set)
         private bool _breakNotificationPending = false;
 
         private void OnBreakDue()
@@ -566,7 +513,7 @@ namespace digital_wellbeing_app.MainWindow
 
                 if (pulseInFront)
                 {
-                    // Play system sound if enabled (only for overlay, balloon has its own)
+                    // Play system sound if enabled (only for overlay, notifications have their own)
                     if (_breakReminderService?.SoundEnabled == true)
                     {
                         System.Media.SystemSounds.Asterisk.Play();
@@ -574,9 +521,14 @@ namespace digital_wellbeing_app.MainWindow
                 }
                 else
                 {
-                    // Show balloon notification from system tray (balloon has its own sound)
                     _breakNotificationPending = true;
-                    ShowFallbackBalloon();
+                    ShowNotification(Loc.Get("Shell_TimeBreak"), Loc.Get("Break_FollowRule"), () =>
+                    {
+                        // Ignore a click on a reminder that was snoozed or dismissed meanwhile
+                        if (!_breakNotificationPending) return;
+                        _breakNotificationPending = false;
+                        ShowBreakOverlay();
+                    });
                 }
             });
         }
@@ -600,34 +552,27 @@ namespace digital_wellbeing_app.MainWindow
         private static extern int GetCurrentProcessExplicitAppUserModelID(
             [System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.LPWStr)] out string appId);
 
-        private void ShowFallbackBalloon()
-        {
-            // Fallback to legacy balloon tip
-            if (_trayIcon != null)
-            {
-                _trayIcon.BalloonTipTitle = Loc.Get("Shell_TimeBreak");
-                _trayIcon.BalloonTipText = Loc.Get("Break_FollowRule");
-                _trayIcon.BalloonTipIcon = ToolTipIcon.Info;
-                _trayIcon.ShowBalloonTip(10000);
-            }
-        }
-
         /// <summary>
-        /// Toast (falling back to a tray balloon) for App Limits - independent of the break-reminder
-        /// toast above so it can't disturb that feature's snooze/dismiss state. Self-contained: its
-        /// own activation handler just brings the app forward onto the Limits page.
+        /// The one way Pulse tells the user something: a Windows toast, or a tray balloon when
+        /// there is no app identity. Clicking it brings Pulse forward, then runs
+        /// <paramref name="onClick"/> (if any). Text is escaped here, so callers pass plain text.
         /// </summary>
-        private void ShowAppLimitNotification(string appName, Models.FocusEnforcementLevel level)
+        private void ShowNotification(string title, string body, Action? onClick = null)
         {
-            var title = Loc.Get("Notify_AppLimitTitle");
-            var body = level == Models.FocusEnforcementLevel.Warn
-                ? Loc.Format("Notify_AppLimitWarn", appName)
-                : Loc.Format("Notify_AppLimitMinimized", appName);
+            void Activated()
+            {
+                Show();
+                WindowState = WindowState.Normal;
+                Activate();
+                Topmost = true;
+                Topmost = false;
+                onClick?.Invoke();
+            }
 
             try
             {
                 string toastXml = $@"
-                    <toast activationType='foreground' launch='action=open-limits'>
+                    <toast activationType='foreground'>
                         <visual>
                             <binding template='ToastGeneric'>
                                 <text>{System.Security.SecurityElement.Escape(title)}</text>
@@ -641,24 +586,17 @@ namespace digital_wellbeing_app.MainWindow
                 xmlDoc.LoadXml(toastXml);
 
                 var toast = new ToastNotification(xmlDoc);
-                toast.Activated += (s, args) => Dispatcher.Invoke(() =>
-                {
-                    Show();
-                    WindowState = WindowState.Normal;
-                    Activate();
-                    Topmost = true;
-                    Topmost = false;
-                    NavigateToLimits();
-                });
+                toast.Activated += (s, args) => Dispatcher.Invoke(Activated);
 
                 CreateToastNotifier().Show(toast);
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[Limits] Toast error: {ex.Message}");
+                Services.LogService.Info($"Toast not available, using tray balloon: {ex.Message}");
 
                 if (_trayIcon != null)
                 {
+                    _balloonClickAction = Activated;
                     _trayIcon.BalloonTipTitle = title;
                     _trayIcon.BalloonTipText = body;
                     _trayIcon.BalloonTipIcon = ToolTipIcon.Info;
@@ -667,27 +605,22 @@ namespace digital_wellbeing_app.MainWindow
             }
         }
 
+        // What a click on the tray balloon does (a balloon has one shared click event)
+        private Action? _balloonClickAction;
+
         private void TrayIcon_BalloonTipClicked(object? sender, EventArgs e)
         {
-            // Fallback balloon clicked
-            if (_breakNotificationPending)
-            {
-                _breakNotificationPending = false;
-                Show();
-                WindowState = WindowState.Normal;
-                Activate();
-                Topmost = true;
-                Topmost = false;
-                ShowBreakOverlay();
-            }
+            var action = _balloonClickAction;
+            _balloonClickAction = null;
+            action?.Invoke();
         }
 
-        private void TrayIcon_BalloonTipClosed(object? sender, EventArgs e)
+        private void ShowAppLimitNotification(string appName, Models.FocusEnforcementLevel level)
         {
-            // Balloon closed (timeout or user clicked X)
-            // DON'T dismiss - keep the notification pending
-            // User must click the balloon or interact with overlay to dismiss
-            // This prevents the timer from restarting when balloon auto-closes
+            var body = level == Models.FocusEnforcementLevel.Warn
+                ? Loc.Format("Notify_AppLimitWarn", appName)
+                : Loc.Format("Notify_AppLimitMinimized", appName);
+            ShowNotification(Loc.Get("Notify_AppLimitTitle"), body, NavigateToLimits);
         }
 
         private void OnBreakDismissed()
@@ -870,9 +803,8 @@ namespace digital_wellbeing_app.MainWindow
             };
             _trayIcon.DoubleClick += (s, e) => ShowWindow();
             
-            // Handle balloon tip events for break reminders
+            // A click on a fallback balloon runs that notification's action
             _trayIcon.BalloonTipClicked += TrayIcon_BalloonTipClicked;
-            _trayIcon.BalloonTipClosed += TrayIcon_BalloonTipClosed;
         }
 
         internal void ShowWindow()
@@ -1044,7 +976,7 @@ namespace digital_wellbeing_app.MainWindow
         }
 
         /// <summary>
-        /// On the very first close-to-tray, show a one-time tray balloon so the user isn't left
+        /// On the very first close-to-tray, show a one-time notification so the user isn't left
         /// wondering why the window vanished but the app didn't quit. Shown once, then never again.
         /// </summary>
         private void ShowCloseToTrayHintOnce()
@@ -1052,12 +984,9 @@ namespace digital_wellbeing_app.MainWindow
             try
             {
                 var settings = new Services.SettingsService();
-                if (settings.LoadCloseToTrayHintShown() || _trayIcon == null) return;
+                if (settings.LoadCloseToTrayHintShown()) return;
 
-                _trayIcon.BalloonTipTitle = Loc.Get("Tray_StillRunningTitle");
-                _trayIcon.BalloonTipText = Loc.Get("Tray_StillRunningBody");
-                _trayIcon.BalloonTipIcon = ToolTipIcon.Info;
-                _trayIcon.ShowBalloonTip(5000);
+                ShowNotification(Loc.Get("Tray_StillRunningTitle"), Loc.Get("Tray_StillRunningBody"));
 
                 settings.SaveCloseToTrayHintShown(true);
             }

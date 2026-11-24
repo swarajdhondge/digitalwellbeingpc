@@ -1,5 +1,14 @@
 # Changelog
 
+## [Unreleased]
+
+### Features
+- **Choose whether and how often Pulse tells you that you reached your daily goal** (#64). Under **Settings → Screen time goal** there is now a "Remind me when I reach my goal" switch (on by default) and a "Remind me again" choice: every 5, 15, 30 or 60 minutes, or once a day (the default). A restart no longer repeats a reminder you already got today, and changing the goal starts it over.
+- **Switch off the loud listening alert.** **Settings → Hearing** has a new "Alert me about loud listening" switch (on by default).
+
+### Fixes
+- **Every Pulse alert is now a Windows notification** (#64). Break, goal, Wind Down, hearing and focus alerts, and the first-close hint, used the old tray balloon, which Windows often hides. They now use the same Windows notification as app limits, and clicking one opens the matching page in Pulse. The tray balloon is only a fallback when Windows cannot show notifications.
+
 ## [v2.4.1] - 2026-11-01
 
 Pulse on the command line, and more accurate tracking.

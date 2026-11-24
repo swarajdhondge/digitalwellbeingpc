@@ -315,6 +315,7 @@ Não é possível desfazer.</value></data>
   <data name="Settings_HealthLastSeen" xml:space="preserve"><value>{0} · visto pela última vez há {1}</value></data>
   <data name="Settings_HealthNotStarted" xml:space="preserve"><value>Não iniciado</value></data>
   <data name="Settings_HealthStale" xml:space="preserve"><value>Atrasado</value></data>
+  <data name="Settings_HearingAlerts" xml:space="preserve"><value>Avisar quando eu ouvir em volume alto</value></data>
   <data name="Settings_HearingLevelsShownPulseAre" xml:space="preserve"><value>Os níveis de audição mostrados no Pulse são estimativas baseadas no volume do sistema, não uma medição sonora calibrada - o Windows não oferece uma API para isso em qualquer hardware.</value></data>
   <data name="Settings_Hours" xml:space="preserve"><value>horas</value></data>
   <data name="Settings_KeepHistory" xml:space="preserve"><value>Manter histórico</value></data>
@@ -329,7 +330,7 @@ Não é possível desfazer.</value></data>
   <data name="Settings_LogFile" xml:space="preserve"><value>Arquivo de log</value></data>
   <data name="Settings_NoAccountNoCloudNo" xml:space="preserve"><value>Sem conta, sem nuvem, sem telemetria. Tudo fica neste PC.</value></data>
   <data name="Settings_NoGoalSet" xml:space="preserve"><value>Nenhuma meta definida</value></data>
-  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>As notificações aparecem na barra de título. Você pode adiá-las ou dispensá-las.</value></data>
+  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>O Pulse mostra uma notificação do Windows ou, se você estiver usando o app, um lembrete na janela. Você pode adiar ou dispensar.</value></data>
   <data name="Settings_OffDefaultWhenPulseReads" xml:space="preserve"><value>Desativado por padrão. Quando ativado, o Pulse lê a barra de endereços de navegadores da família Chrome/Edge/Firefox para registrar em qual site você está (ex.: youtube.com), nunca a URL completa, termos de pesquisa ou o conteúdo da página.</value></data>
   <data name="Settings_Open" xml:space="preserve"><value>Abrir</value></data>
   <data name="Settings_OpenFolderFailed" xml:space="preserve"><value>Não foi possível abrir a pasta: {0}</value></data>
@@ -341,6 +342,7 @@ Não é possível desfazer.</value></data>
   <data name="Settings_PulseGuessesFromAudioDevice" xml:space="preserve"><value>O Pulse deduz isso pelo nome do seu dispositivo de áudio; altere se estiver errado (ex.: se ele não reconhecer seu modelo de fone de ouvido).</value></data>
   <data name="Settings_Purple" xml:space="preserve"><value>Roxo</value></data>
   <data name="Settings_RangeDeleted" xml:space="preserve"><value>O intervalo de datas selecionado foi excluído.</value></data>
+  <data name="Settings_RemindGoalReached" xml:space="preserve"><value>Lembrar-me quando eu atingir minha meta</value></data>
   <data name="Settings_ReminderInterval" xml:space="preserve"><value>Intervalo do lembrete</value></data>
   <data name="Settings_RemoveTrackedDataBetweenTwo" xml:space="preserve"><value>Remover os dados registrados entre duas datas</value></data>
   <data name="Settings_ReplacesCurrentDataCannotUndone" xml:space="preserve"><value>Substitui seus dados atuais; não pode ser desfeito e fecha o Pulse em seguida</value></data>

@@ -182,6 +182,15 @@ namespace digital_wellbeing_app.Services
             SaveToDisk();
         }
 
+        /// <summary>Whether Pulse alerts the user about loud listening. Default on.</summary>
+        public bool LoadHearingAlertsEnabled() => LoadBoolSetting("HearingAlertsEnabled", true);
+
+        public void SaveHearingAlertsEnabled(bool enabled)
+        {
+            _values["HearingAlertsEnabled"] = enabled;
+            SaveToDisk();
+        }
+
         // --- Language ---
         /// <summary>UI language tag such as "zh-Hans"; empty means follow the Windows display language.</summary>
         public string LoadLanguage()

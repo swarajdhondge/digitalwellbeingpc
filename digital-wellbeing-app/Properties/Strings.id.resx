@@ -315,6 +315,7 @@ Tindakan ini tidak dapat dibatalkan.</value></data>
   <data name="Settings_HealthLastSeen" xml:space="preserve"><value>{0} · terakhir terlihat {1} lalu</value></data>
   <data name="Settings_HealthNotStarted" xml:space="preserve"><value>Belum dimulai</value></data>
   <data name="Settings_HealthStale" xml:space="preserve"><value>Tertunda</value></data>
+  <data name="Settings_HearingAlerts" xml:space="preserve"><value>Beri tahu saya saat mendengarkan terlalu keras</value></data>
   <data name="Settings_HearingLevelsShownPulseAre" xml:space="preserve"><value>Tingkat pendengaran yang ditampilkan di Pulse adalah perkiraan berdasarkan volume sistem, bukan pengukuran suara yang dikalibrasi - Windows tidak memiliki API untuk itu pada sembarang perangkat keras.</value></data>
   <data name="Settings_Hours" xml:space="preserve"><value>jam</value></data>
   <data name="Settings_KeepHistory" xml:space="preserve"><value>Simpan riwayat</value></data>
@@ -329,7 +330,7 @@ Tindakan ini tidak dapat dibatalkan.</value></data>
   <data name="Settings_LogFile" xml:space="preserve"><value>File log</value></data>
   <data name="Settings_NoAccountNoCloudNo" xml:space="preserve"><value>Tanpa akun, tanpa cloud, tanpa telemetri. Semuanya tetap di PC ini.</value></data>
   <data name="Settings_NoGoalSet" xml:space="preserve"><value>Belum ada target</value></data>
-  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>Notifikasi muncul di bilah judul. Anda dapat menunda atau menutupnya.</value></data>
+  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>Pulse menampilkan notifikasi Windows, atau pengingat di jendelanya saat Anda sedang memakainya. Anda dapat menunda atau menutupnya.</value></data>
   <data name="Settings_OffDefaultWhenPulseReads" xml:space="preserve"><value>Nonaktif secara default. Saat aktif, Pulse membaca bilah alamat browser keluarga Chrome/Edge/Firefox untuk mencatat situs yang Anda buka (misalnya youtube.com) — tidak pernah URL lengkap, kata pencarian, atau isi halaman.</value></data>
   <data name="Settings_Open" xml:space="preserve"><value>Buka</value></data>
   <data name="Settings_OpenFolderFailed" xml:space="preserve"><value>Tidak dapat membuka folder: {0}</value></data>
@@ -341,6 +342,7 @@ Tindakan ini tidak dapat dibatalkan.</value></data>
   <data name="Settings_PulseGuessesFromAudioDevice" xml:space="preserve"><value>Pulse menebak ini dari nama perangkat audio Anda - ubah jika tebakannya salah (misalnya model headphone Anda tidak dikenali).</value></data>
   <data name="Settings_Purple" xml:space="preserve"><value>Ungu</value></data>
   <data name="Settings_RangeDeleted" xml:space="preserve"><value>Rentang tanggal yang dipilih telah dihapus.</value></data>
+  <data name="Settings_RemindGoalReached" xml:space="preserve"><value>Ingatkan saya saat mencapai target</value></data>
   <data name="Settings_ReminderInterval" xml:space="preserve"><value>Interval pengingat</value></data>
   <data name="Settings_RemoveTrackedDataBetweenTwo" xml:space="preserve"><value>Hapus data yang dilacak di antara dua tanggal</value></data>
   <data name="Settings_ReplacesCurrentDataCannotUndone" xml:space="preserve"><value>Mengganti data Anda saat ini - tidak dapat dibatalkan, dan menutup Pulse setelahnya</value></data>

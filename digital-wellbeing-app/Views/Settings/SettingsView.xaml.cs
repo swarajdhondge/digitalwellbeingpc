@@ -22,6 +22,7 @@ namespace digital_wellbeing_app.Views.Settings
         private bool _isLoadingWindowsFocusIntegration;
         private bool _isLoadingWebsiteTracking;
         private bool _isLoadingDeviceTypeOverride;
+        private bool _isLoadingHearingAlerts;
 
         public SettingsView()
         {
@@ -409,6 +410,8 @@ namespace digital_wellbeing_app.Views.Settings
             var goal = _goalService.GetDailyScreenTimeGoal();
             GoalEnabledCheckBox.IsChecked = goal.HasValue;
             GoalInputPanel.Visibility = goal.HasValue ? Visibility.Visible : Visibility.Collapsed;
+            GoalReminderPanel.Visibility = GoalInputPanel.Visibility;
+            LoadGoalReminderSettings();
 
             if (goal.HasValue)
             {
@@ -432,6 +435,7 @@ namespace digital_wellbeing_app.Views.Settings
 
             bool enabled = GoalEnabledCheckBox.IsChecked == true;
             GoalInputPanel.Visibility = enabled ? Visibility.Visible : Visibility.Collapsed;
+            GoalReminderPanel.Visibility = GoalInputPanel.Visibility;
 
             if (enabled)
             {
@@ -442,6 +446,32 @@ namespace digital_wellbeing_app.Views.Settings
                 _goalService.SetDailyScreenTimeGoal(null);
                 CurrentGoalText.Text = Loc.Get("Settings_NoGoalSet");
             }
+        }
+
+        private void LoadGoalReminderSettings()
+        {
+            GoalRemindCheckBox.IsChecked = _goalService.GoalNotificationsEnabled;
+            GoalRemindEveryPanel.Visibility = _goalService.GoalNotificationsEnabled ? Visibility.Visible : Visibility.Collapsed;
+            var every = _goalService.RemindEveryMinutes.ToString();
+            GoalRemindEveryComboBox.SelectedItem = GoalRemindEveryComboBox.Items.Cast<ComboBoxItem>()
+                .FirstOrDefault(i => i.Tag?.ToString() == every)
+                ?? GoalRemindEveryComboBox.Items.Cast<ComboBoxItem>().First(i => i.Tag?.ToString() == GoalService.DefaultRemindEveryMinutes.ToString());
+        }
+
+        private void GoalRemindCheckBox_Changed(object sender, RoutedEventArgs e)
+        {
+            if (_isLoadingGoal) return;
+
+            bool enabled = GoalRemindCheckBox.IsChecked == true;
+            _goalService.GoalNotificationsEnabled = enabled;
+            GoalRemindEveryPanel.Visibility = enabled ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void GoalRemindEveryComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_isLoadingGoal) return;
+            if (GoalRemindEveryComboBox.SelectedItem is ComboBoxItem { Tag: var tag } && int.TryParse(tag?.ToString(), out var minutes))
+                _goalService.RemindEveryMinutes = minutes;
         }
 
         private void GoalInput_Changed(object sender, System.Windows.Controls.TextChangedEventArgs e)
@@ -911,8 +941,10 @@ namespace digital_wellbeing_app.Views.Settings
         private void LoadHearingSettings()
         {
             _isLoadingDeviceTypeOverride = true;
+            _isLoadingHearingAlerts = true;
             try
             {
+                HearingAlertsCheckBox.IsChecked = _settingsService.LoadHearingAlertsEnabled();
                 var current = _settingsService.LoadDeviceTypeOverride() ?? "";
                 foreach (ComboBoxItem item in DeviceTypeOverrideCombo.Items)
                 {
@@ -924,7 +956,13 @@ namespace digital_wellbeing_app.Views.Settings
                 }
                 DeviceTypeOverrideCombo.SelectedIndex = 0; // "Auto-detect"
             }
-            finally { _isLoadingDeviceTypeOverride = false; }
+            finally { _isLoadingDeviceTypeOverride = false; _isLoadingHearingAlerts = false; }
+        }
+
+        private void HearingAlertsCheckBox_Changed(object sender, RoutedEventArgs e)
+        {
+            if (_isLoadingHearingAlerts) return;
+            _settingsService.SaveHearingAlertsEnabled(HearingAlertsCheckBox.IsChecked == true);
         }
 
         private void DeviceTypeOverrideCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)

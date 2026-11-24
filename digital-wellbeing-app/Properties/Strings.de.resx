@@ -315,6 +315,7 @@ Dies kann nicht rückgängig gemacht werden.</value></data>
   <data name="Settings_HealthLastSeen" xml:space="preserve"><value>{0} · zuletzt vor {1}</value></data>
   <data name="Settings_HealthNotStarted" xml:space="preserve"><value>Nicht gestartet</value></data>
   <data name="Settings_HealthStale" xml:space="preserve"><value>Veraltet</value></data>
+  <data name="Settings_HearingAlerts" xml:space="preserve"><value>Bei lautem Hören benachrichtigen</value></data>
   <data name="Settings_HearingLevelsShownPulseAre" xml:space="preserve"><value>Die in Pulse angezeigten Hörpegel sind Schätzungen auf Basis der Systemlautstärke, keine kalibrierte Schallmessung – Windows bietet dafür keine API für beliebige Hardware.</value></data>
   <data name="Settings_Hours" xml:space="preserve"><value>Stunden</value></data>
   <data name="Settings_KeepHistory" xml:space="preserve"><value>Verlauf behalten</value></data>
@@ -329,7 +330,7 @@ Dies kann nicht rückgängig gemacht werden.</value></data>
   <data name="Settings_LogFile" xml:space="preserve"><value>Protokolldatei</value></data>
   <data name="Settings_NoAccountNoCloudNo" xml:space="preserve"><value>Kein Konto, keine Cloud, keine Telemetrie. Alles bleibt auf diesem PC.</value></data>
   <data name="Settings_NoGoalSet" xml:space="preserve"><value>Kein Ziel festgelegt</value></data>
-  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>Benachrichtigungen erscheinen in der Titelleiste. Sie können sie schlummern lassen oder verwerfen.</value></data>
+  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>Pulse zeigt eine Windows-Benachrichtigung oder, wenn du Pulse gerade nutzt, eine Erinnerung im Fenster. Du kannst sie verschieben oder schließen.</value></data>
   <data name="Settings_OffDefaultWhenPulseReads" xml:space="preserve"><value>Standardmäßig aus. Wenn aktiviert, liest Pulse die Adressleiste von Browsern der Chrome-/Edge-/Firefox-Familie, um die besuchte Website zu erfassen (z. B. youtube.com) – nie die vollständige URL, Suchbegriffe oder Seiteninhalte.</value></data>
   <data name="Settings_Open" xml:space="preserve"><value>Öffnen</value></data>
   <data name="Settings_OpenFolderFailed" xml:space="preserve"><value>Ordner konnte nicht geöffnet werden: {0}</value></data>
@@ -341,6 +342,7 @@ Dies kann nicht rückgängig gemacht werden.</value></data>
   <data name="Settings_PulseGuessesFromAudioDevice" xml:space="preserve"><value>Pulse leitet dies aus dem Namen Ihres Audiogeräts ab – ändern Sie es, falls die Vermutung falsch ist (z. B. wenn Ihr Kopfhörermodell nicht erkannt wird).</value></data>
   <data name="Settings_Purple" xml:space="preserve"><value>Lila</value></data>
   <data name="Settings_RangeDeleted" xml:space="preserve"><value>Der ausgewählte Zeitraum wurde gelöscht.</value></data>
+  <data name="Settings_RemindGoalReached" xml:space="preserve"><value>Erinnere mich, wenn ich mein Ziel erreiche</value></data>
   <data name="Settings_ReminderInterval" xml:space="preserve"><value>Erinnerungsintervall</value></data>
   <data name="Settings_RemoveTrackedDataBetweenTwo" xml:space="preserve"><value>Erfasste Daten eines Zeitraums entfernen</value></data>
   <data name="Settings_ReplacesCurrentDataCannotUndone" xml:space="preserve"><value>Ersetzt Ihre aktuellen Daten – nicht rückgängig zu machen; Pulse wird danach geschlossen</value></data>

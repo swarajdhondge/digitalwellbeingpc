@@ -315,6 +315,7 @@
   <data name="Settings_HealthLastSeen" xml:space="preserve"><value>{0} · 最後活動於 {1}前</value></data>
   <data name="Settings_HealthNotStarted" xml:space="preserve"><value>未啟動</value></data>
   <data name="Settings_HealthStale" xml:space="preserve"><value>延遲</value></data>
+  <data name="Settings_HearingAlerts" xml:space="preserve"><value>音量過大時提醒我</value></data>
   <data name="Settings_HearingLevelsShownPulseAre" xml:space="preserve"><value>Pulse 中顯示的聽力音量是根據系統音量估算的，並非經過校準的聲音測量——Windows 沒有適用於任意硬體的相關 API。</value></data>
   <data name="Settings_Hours" xml:space="preserve"><value>小時</value></data>
   <data name="Settings_KeepHistory" xml:space="preserve"><value>保留歷史紀錄</value></data>
@@ -329,7 +330,7 @@
   <data name="Settings_LogFile" xml:space="preserve"><value>記錄檔</value></data>
   <data name="Settings_NoAccountNoCloudNo" xml:space="preserve"><value>不需要帳戶、不上雲端、沒有遙測。所有資料都保留在這台電腦上。</value></data>
   <data name="Settings_NoGoalSet" xml:space="preserve"><value>未設定目標</value></data>
-  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>通知會顯示在標題列中。您可以延後提醒或關閉它們。</value></data>
+  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>Pulse 會顯示 Windows 通知；使用 Pulse 時，則在其視窗中顯示提醒。您可以延後提醒或關閉它。</value></data>
   <data name="Settings_OffDefaultWhenPulseReads" xml:space="preserve"><value>預設為關閉。開啟後，Pulse 會讀取 Chrome/Edge/Firefox 系列瀏覽器的網址列，記錄您正在瀏覽的網站（例如 youtube.com）——絕不記錄完整網址、搜尋字詞或網頁內容。</value></data>
   <data name="Settings_Open" xml:space="preserve"><value>開啟</value></data>
   <data name="Settings_OpenFolderFailed" xml:space="preserve"><value>無法開啟資料夾：{0}</value></data>
@@ -341,6 +342,7 @@
   <data name="Settings_PulseGuessesFromAudioDevice" xml:space="preserve"><value>Pulse 會根據音訊裝置名稱進行判斷——如果判斷有誤（例如無法辨識您的耳機型號），可以在此變更。</value></data>
   <data name="Settings_Purple" xml:space="preserve"><value>紫色</value></data>
   <data name="Settings_RangeDeleted" xml:space="preserve"><value>已刪除所選日期範圍內的資料。</value></data>
+  <data name="Settings_RemindGoalReached" xml:space="preserve"><value>達到目標時提醒我</value></data>
   <data name="Settings_ReminderInterval" xml:space="preserve"><value>提醒間隔</value></data>
   <data name="Settings_RemoveTrackedDataBetweenTwo" xml:space="preserve"><value>移除兩個日期之間的記錄資料</value></data>
   <data name="Settings_ReplacesCurrentDataCannotUndone" xml:space="preserve"><value>取代目前的資料——無法復原，完成後會關閉 Pulse</value></data>

@@ -315,6 +315,7 @@
   <data name="Settings_HealthLastSeen" xml:space="preserve"><value>{0} · последний отклик {1} назад</value></data>
   <data name="Settings_HealthNotStarted" xml:space="preserve"><value>Не запущен</value></data>
   <data name="Settings_HealthStale" xml:space="preserve"><value>Устарело</value></data>
+  <data name="Settings_HearingAlerts" xml:space="preserve"><value>Предупреждать о громком прослушивании</value></data>
   <data name="Settings_HearingLevelsShownPulseAre" xml:space="preserve"><value>Уровни громкости в Pulse — это оценка по системной громкости, а не калиброванное измерение звука: в Windows нет API для этого на произвольном оборудовании.</value></data>
   <data name="Settings_Hours" xml:space="preserve"><value>часов</value></data>
   <data name="Settings_KeepHistory" xml:space="preserve"><value>Хранить историю</value></data>
@@ -329,7 +330,7 @@
   <data name="Settings_LogFile" xml:space="preserve"><value>Файл журнала</value></data>
   <data name="Settings_NoAccountNoCloudNo" xml:space="preserve"><value>Без учетной записи, облака и телеметрии. Все остается на этом компьютере.</value></data>
   <data name="Settings_NoGoalSet" xml:space="preserve"><value>Цель не задана</value></data>
-  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>Уведомления появляются в строке заголовка. Их можно отложить или закрыть.</value></data>
+  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>Pulse показывает уведомление Windows или, если вы работаете в Pulse, напоминание в его окне. Вы можете отложить его или закрыть.</value></data>
   <data name="Settings_OffDefaultWhenPulseReads" xml:space="preserve"><value>По умолчанию выключено. Если включить, Pulse считывает адресную строку браузеров семейства Chrome/Edge/Firefox, чтобы записать, на каком вы сайте (например, youtube.com), — но никогда не полный URL, поисковые запросы или содержимое страницы.</value></data>
   <data name="Settings_Open" xml:space="preserve"><value>Открыть</value></data>
   <data name="Settings_OpenFolderFailed" xml:space="preserve"><value>Не удалось открыть папку: {0}</value></data>
@@ -341,6 +342,7 @@
   <data name="Settings_PulseGuessesFromAudioDevice" xml:space="preserve"><value>Pulse определяет это по названию аудиоустройства. Если определение неверно (например, модель наушников не распознана), измените его вручную.</value></data>
   <data name="Settings_Purple" xml:space="preserve"><value>Фиолетовый</value></data>
   <data name="Settings_RangeDeleted" xml:space="preserve"><value>Данные за выбранный период удалены.</value></data>
+  <data name="Settings_RemindGoalReached" xml:space="preserve"><value>Напомнить, когда я достигну цели</value></data>
   <data name="Settings_ReminderInterval" xml:space="preserve"><value>Интервал напоминаний</value></data>
   <data name="Settings_RemoveTrackedDataBetweenTwo" xml:space="preserve"><value>Удалить отслеживаемые данные между двумя датами</value></data>
   <data name="Settings_ReplacesCurrentDataCannotUndone" xml:space="preserve"><value>Заменяет текущие данные — отменить нельзя, после этого Pulse закроется</value></data>

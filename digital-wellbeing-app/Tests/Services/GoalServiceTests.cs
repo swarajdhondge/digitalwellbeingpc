@@ -131,5 +131,74 @@ namespace digital_wellbeing_app.Tests.Services
             Assert.False(svc.IsOverGoal(TimeSpan.FromMinutes(30)));
             Assert.Null(svc.GetTimeRemaining(TimeSpan.FromMinutes(30)));
         }
+
+        private static readonly DateTime Noon = new(2026, 11, 24, 12, 0, 0);
+
+        [Fact]
+        public void Reminder_SwitchOff_IsNeverDue()
+        {
+            Assert.False(GoalService.IsReminderDue(false, 0, null, Noon));
+            Assert.False(GoalService.IsReminderDue(false, 15, Noon.AddHours(-5), Noon));
+        }
+
+        [Fact]
+        public void Reminder_FirstTimeToday_IsDue()
+        {
+            Assert.True(GoalService.IsReminderDue(true, 0, null, Noon));
+        }
+
+        [Fact]
+        public void Reminder_OnceADay_DoesNotRepeatSameDay()
+        {
+            Assert.False(GoalService.IsReminderDue(true, 0, Noon.AddHours(-3), Noon));
+        }
+
+        [Fact]
+        public void Reminder_RepeatsAfterChosenInterval()
+        {
+            Assert.False(GoalService.IsReminderDue(true, 30, Noon.AddMinutes(-29), Noon));
+            Assert.True(GoalService.IsReminderDue(true, 30, Noon.AddMinutes(-30), Noon));
+        }
+
+        [Fact]
+        public void Reminder_NewDay_IsDueAgain()
+        {
+            var lateYesterday = new DateTime(2026, 11, 23, 23, 55, 0);
+            var justAfterMidnight = new DateTime(2026, 11, 24, 0, 5, 0);
+            Assert.True(GoalService.IsReminderDue(true, 0, lateYesterday, justAfterMidnight));
+            Assert.True(GoalService.IsReminderDue(true, 60, lateYesterday, justAfterMidnight));
+        }
+
+        [Fact]
+        public void ChangingGoal_ReArmsReminder()
+        {
+            var svc = new GoalService();
+            svc.SetDailyScreenTimeGoal(60);
+            svc.MarkReminded(Noon);
+            Assert.NotNull(svc.LastReminder);
+
+            svc.SetDailyScreenTimeGoal(90);
+            Assert.Null(svc.LastReminder);
+
+            // Cleanup
+            svc.SetDailyScreenTimeGoal(null);
+        }
+
+        [Fact]
+        public void ReminderSettings_DefaultOnceADayAndOn_ThenRoundTrip()
+        {
+            var svc = new GoalService();
+            Assert.True(svc.GoalNotificationsEnabled);
+            Assert.Equal(GoalService.DefaultRemindEveryMinutes, svc.RemindEveryMinutes);
+
+            svc.RemindEveryMinutes = 30;
+            svc.GoalNotificationsEnabled = false;
+            Assert.Equal(30, svc.RemindEveryMinutes);
+            Assert.False(svc.GoalNotificationsEnabled);
+
+            // Cleanup
+            svc.RemindEveryMinutes = GoalService.DefaultRemindEveryMinutes;
+            svc.GoalNotificationsEnabled = true;
+        }
     }
 }

@@ -315,6 +315,7 @@ L'operazione non può essere annullata.</value></data>
   <data name="Settings_HealthLastSeen" xml:space="preserve"><value>{0} · ultimo segnale {1} fa</value></data>
   <data name="Settings_HealthNotStarted" xml:space="preserve"><value>Non avviato</value></data>
   <data name="Settings_HealthStale" xml:space="preserve"><value>Non aggiornato</value></data>
+  <data name="Settings_HearingAlerts" xml:space="preserve"><value>Avvisami in caso di ascolto a volume alto</value></data>
   <data name="Settings_HearingLevelsShownPulseAre" xml:space="preserve"><value>I livelli di ascolto mostrati in Pulse sono stime basate sul volume di sistema, non una misurazione sonora calibrata: Windows non offre un'API per farlo su qualsiasi hardware.</value></data>
   <data name="Settings_Hours" xml:space="preserve"><value>ore</value></data>
   <data name="Settings_KeepHistory" xml:space="preserve"><value>Conserva cronologia</value></data>
@@ -329,7 +330,7 @@ L'operazione non può essere annullata.</value></data>
   <data name="Settings_LogFile" xml:space="preserve"><value>File di log</value></data>
   <data name="Settings_NoAccountNoCloudNo" xml:space="preserve"><value>Nessun account, nessun cloud, nessuna telemetria. Tutto resta su questo PC.</value></data>
   <data name="Settings_NoGoalSet" xml:space="preserve"><value>Nessun obiettivo impostato</value></data>
-  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>Le notifiche compaiono nella barra del titolo. Puoi rinviarle o ignorarle.</value></data>
+  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>Pulse mostra una notifica di Windows oppure, se lo stai usando, un promemoria nella sua finestra. Puoi rimandarlo o chiuderlo.</value></data>
   <data name="Settings_OffDefaultWhenPulseReads" xml:space="preserve"><value>Disattivato per impostazione predefinita. Se attivo, Pulse legge la barra degli indirizzi dei browser della famiglia Chrome/Edge/Firefox per registrare il sito che stai visitando (ad es. youtube.com), mai l'URL completo, i termini di ricerca o il contenuto della pagina.</value></data>
   <data name="Settings_Open" xml:space="preserve"><value>Apri</value></data>
   <data name="Settings_OpenFolderFailed" xml:space="preserve"><value>Impossibile aprire la cartella: {0}</value></data>
@@ -341,6 +342,7 @@ L'operazione non può essere annullata.</value></data>
   <data name="Settings_PulseGuessesFromAudioDevice" xml:space="preserve"><value>Pulse lo deduce dal nome del dispositivo audio: modificalo se la stima è errata (ad es. se non riconosce il modello delle tue cuffie).</value></data>
   <data name="Settings_Purple" xml:space="preserve"><value>Viola</value></data>
   <data name="Settings_RangeDeleted" xml:space="preserve"><value>L'intervallo di date selezionato è stato eliminato.</value></data>
+  <data name="Settings_RemindGoalReached" xml:space="preserve"><value>Ricordami quando raggiungo il mio obiettivo</value></data>
   <data name="Settings_ReminderInterval" xml:space="preserve"><value>Intervallo promemoria</value></data>
   <data name="Settings_RemoveTrackedDataBetweenTwo" xml:space="preserve"><value>Rimuovi i dati monitorati tra due date</value></data>
   <data name="Settings_ReplacesCurrentDataCannotUndone" xml:space="preserve"><value>Sostituisce i dati attuali: non può essere annullato e al termine chiude Pulse</value></data>

@@ -23,6 +23,12 @@ namespace digital_wellbeing_app.Models
         
         /// <summary>Whether goal notifications are enabled</summary>
         public const string GoalNotificationsEnabled = "GoalNotificationsEnabled";
+
+        /// <summary>Minutes between goal reminders (0 = once a day)</summary>
+        public const string GoalRemindEveryMinutes = "GoalRemindEveryMinutes";
+
+        /// <summary>When the goal reminder was last shown (round-trip date/time)</summary>
+        public const string GoalLastReminder = "GoalLastReminder";
     }
 }
 

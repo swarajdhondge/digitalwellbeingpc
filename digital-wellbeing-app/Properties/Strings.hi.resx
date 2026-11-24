@@ -315,6 +315,7 @@
   <data name="Settings_HealthLastSeen" xml:space="preserve"><value>{0} · आखिरी बार {1} पहले</value></data>
   <data name="Settings_HealthNotStarted" xml:space="preserve"><value>शुरू नहीं हुआ</value></data>
   <data name="Settings_HealthStale" xml:space="preserve"><value>रुका हुआ</value></data>
+  <data name="Settings_HearingAlerts" xml:space="preserve"><value>तेज़ आवाज़ में सुनने पर मुझे सूचित करें</value></data>
   <data name="Settings_HearingLevelsShownPulseAre" xml:space="preserve"><value>Pulse में दिखाए गए सुनने के स्तर सिस्टम वॉल्यूम पर आधारित अनुमान हैं, कैलिब्रेट किया गया ध्वनि माप नहीं - Windows में हर हार्डवेयर के लिए इसका कोई API नहीं है।</value></data>
   <data name="Settings_Hours" xml:space="preserve"><value>घंटे</value></data>
   <data name="Settings_KeepHistory" xml:space="preserve"><value>इतिहास रखें</value></data>
@@ -329,7 +330,7 @@
   <data name="Settings_LogFile" xml:space="preserve"><value>लॉग फ़ाइल</value></data>
   <data name="Settings_NoAccountNoCloudNo" xml:space="preserve"><value>न अकाउंट, न क्लाउड, न टेलीमेट्री। सब कुछ इसी PC पर रहता है।</value></data>
   <data name="Settings_NoGoalSet" xml:space="preserve"><value>कोई लक्ष्य सेट नहीं</value></data>
-  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>सूचनाएं टाइटल बार में दिखती हैं। आप उन्हें स्नूज़ या खारिज कर सकते हैं।</value></data>
+  <data name="Settings_NotificationsAppearTitleBarCan" xml:space="preserve"><value>Pulse एक Windows सूचना दिखाता है, या जब आप उसका उपयोग कर रहे हों तो उसकी विंडो में एक रिमाइंडर दिखाता है। आप उसे स्नूज़ या खारिज कर सकते हैं।</value></data>
   <data name="Settings_OffDefaultWhenPulseReads" xml:space="preserve"><value>डिफ़ॉल्ट रूप से बंद। चालू होने पर, Pulse Chrome/Edge/Firefox जैसे ब्राउज़र का एड्रेस बार पढ़कर यह लॉग करता है कि आप किस साइट पर हैं (जैसे youtube.com) — कभी पूरा URL, सर्च शब्द या पेज का कंटेंट नहीं।</value></data>
   <data name="Settings_Open" xml:space="preserve"><value>खोलें</value></data>
   <data name="Settings_OpenFolderFailed" xml:space="preserve"><value>फ़ोल्डर नहीं खुल सका: {0}</value></data>
@@ -341,6 +342,7 @@
   <data name="Settings_PulseGuessesFromAudioDevice" xml:space="preserve"><value>Pulse इसका अंदाज़ा आपके ऑडियो डिवाइस के नाम से लगाता है - अगर अंदाज़ा गलत हो (जैसे वह आपके हेडफ़ोन मॉडल को न पहचाने), तो इसे बदल दें।</value></data>
   <data name="Settings_Purple" xml:space="preserve"><value>बैंगनी</value></data>
   <data name="Settings_RangeDeleted" xml:space="preserve"><value>चुनी गई तारीख की रेंज मिटा दी गई है।</value></data>
+  <data name="Settings_RemindGoalReached" xml:space="preserve"><value>लक्ष्य पूरा होने पर मुझे याद दिलाएँ</value></data>
   <data name="Settings_ReminderInterval" xml:space="preserve"><value>रिमाइंडर का अंतराल</value></data>
   <data name="Settings_RemoveTrackedDataBetweenTwo" xml:space="preserve"><value>दो तारीखों के बीच का ट्रैक किया गया डेटा हटाएं</value></data>
   <data name="Settings_ReplacesCurrentDataCannotUndone" xml:space="preserve"><value>आपका मौजूदा डेटा बदल देता है - इसे वापस नहीं किया जा सकता, और इसके बाद Pulse बंद हो जाता है</value></data>
