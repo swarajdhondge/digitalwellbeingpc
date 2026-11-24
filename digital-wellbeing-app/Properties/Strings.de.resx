@@ -315,6 +315,7 @@ Dies kann nicht rückgängig gemacht werden.</value></data>
   <data name="Settings_HealthLastSeen" xml:space="preserve"><value>{0} · zuletzt vor {1}</value></data>
   <data name="Settings_HealthNotStarted" xml:space="preserve"><value>Nicht gestartet</value></data>
   <data name="Settings_HealthStale" xml:space="preserve"><value>Veraltet</value></data>
+  <data name="Settings_HearingAlerts" xml:space="preserve"><value>Bei lautem Hören benachrichtigen</value></data>
   <data name="Settings_HearingLevelsShownPulseAre" xml:space="preserve"><value>Die in Pulse angezeigten Hörpegel sind Schätzungen auf Basis der Systemlautstärke, keine kalibrierte Schallmessung – Windows bietet dafür keine API für beliebige Hardware.</value></data>
   <data name="Settings_Hours" xml:space="preserve"><value>Stunden</value></data>
   <data name="Settings_KeepHistory" xml:space="preserve"><value>Verlauf behalten</value></data>
@@ -341,6 +342,7 @@ Dies kann nicht rückgängig gemacht werden.</value></data>
   <data name="Settings_PulseGuessesFromAudioDevice" xml:space="preserve"><value>Pulse leitet dies aus dem Namen Ihres Audiogeräts ab – ändern Sie es, falls die Vermutung falsch ist (z. B. wenn Ihr Kopfhörermodell nicht erkannt wird).</value></data>
   <data name="Settings_Purple" xml:space="preserve"><value>Lila</value></data>
   <data name="Settings_RangeDeleted" xml:space="preserve"><value>Der ausgewählte Zeitraum wurde gelöscht.</value></data>
+  <data name="Settings_RemindGoalReached" xml:space="preserve"><value>Erinnere mich, wenn ich mein Ziel erreiche</value></data>
   <data name="Settings_ReminderInterval" xml:space="preserve"><value>Erinnerungsintervall</value></data>
   <data name="Settings_RemoveTrackedDataBetweenTwo" xml:space="preserve"><value>Erfasste Daten eines Zeitraums entfernen</value></data>
   <data name="Settings_ReplacesCurrentDataCannotUndone" xml:space="preserve"><value>Ersetzt Ihre aktuellen Daten – nicht rückgängig zu machen; Pulse wird danach geschlossen</value></data>

@@ -315,6 +315,7 @@
   <data name="Settings_HealthLastSeen" xml:space="preserve"><value>{0} · 最后活动于 {1}前</value></data>
   <data name="Settings_HealthNotStarted" xml:space="preserve"><value>未启动</value></data>
   <data name="Settings_HealthStale" xml:space="preserve"><value>滞后</value></data>
+  <data name="Settings_HearingAlerts" xml:space="preserve"><value>音量过大时提醒我</value></data>
   <data name="Settings_HearingLevelsShownPulseAre" xml:space="preserve"><value>Pulse 中显示的听力音量是根据系统音量估算的，并非经过校准的声音测量——Windows 没有适用于任意硬件的相关 API。</value></data>
   <data name="Settings_Hours" xml:space="preserve"><value>小时</value></data>
   <data name="Settings_KeepHistory" xml:space="preserve"><value>保留历史记录</value></data>
@@ -341,6 +342,7 @@
   <data name="Settings_PulseGuessesFromAudioDevice" xml:space="preserve"><value>Pulse 会根据音频设备名称进行判断——如果判断有误（例如无法识别你的耳机型号），可以在此更改。</value></data>
   <data name="Settings_Purple" xml:space="preserve"><value>紫色</value></data>
   <data name="Settings_RangeDeleted" xml:space="preserve"><value>已删除所选日期范围内的数据。</value></data>
+  <data name="Settings_RemindGoalReached" xml:space="preserve"><value>达到目标时提醒我</value></data>
   <data name="Settings_ReminderInterval" xml:space="preserve"><value>提醒间隔</value></data>
   <data name="Settings_RemoveTrackedDataBetweenTwo" xml:space="preserve"><value>删除两个日期之间的记录数据</value></data>
   <data name="Settings_ReplacesCurrentDataCannotUndone" xml:space="preserve"><value>替换当前数据——无法撤销，完成后会关闭 Pulse</value></data>

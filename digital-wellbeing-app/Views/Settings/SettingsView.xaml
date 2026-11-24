@@ -136,6 +136,33 @@
                         </StackPanel>
                     </StackPanel>
                     <TextBlock x:Name="CurrentGoalText" Style="{StaticResource Pulse.Muted}" Margin="0,10,0,0"/>
+
+                    <StackPanel x:Name="GoalReminderPanel" Visibility="Collapsed" Margin="0,16,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{l:Loc Settings_RemindGoalReached}" Style="{StaticResource Pulse.Body}" VerticalAlignment="Center"/>
+                            <ToggleButton x:Name="GoalRemindCheckBox" Grid.Column="1" Style="{StaticResource Pulse.Switch}"
+                                          AutomationProperties.AutomationId="GoalRemindCheckBox"
+                                          Checked="GoalRemindCheckBox_Changed" Unchecked="GoalRemindCheckBox_Changed" VerticalAlignment="Center"/>
+                        </Grid>
+                        <StackPanel x:Name="GoalRemindEveryPanel" Orientation="Horizontal" Margin="0,12,0,0">
+                            <TextBlock Text="{l:Loc Limits_RemindAgain}" Style="{StaticResource Pulse.Body2}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <ComboBox x:Name="GoalRemindEveryComboBox" MinWidth="170"
+                                      Foreground="{DynamicResource Ink}" Background="{DynamicResource Card2}"
+                                      BorderBrush="{DynamicResource Border2}"
+                                      AutomationProperties.AutomationId="GoalRemindEveryComboBox"
+                                      SelectionChanged="GoalRemindEveryComboBox_SelectionChanged">
+                                <ComboBoxItem Content="{l:Loc Limits_Every5Minutes}" Tag="5"/>
+                                <ComboBoxItem Content="{l:Loc Settings_Every15Minutes}" Tag="15"/>
+                                <ComboBoxItem Content="{l:Loc Settings_Every30Minutes}" Tag="30"/>
+                                <ComboBoxItem Content="{l:Loc Limits_EveryHour}" Tag="60"/>
+                                <ComboBoxItem Content="{l:Loc Limits_OnceADay}" Tag="0"/>
+                            </ComboBox>
+                        </StackPanel>
+                    </StackPanel>
                 </StackPanel>
             </Border>
 
@@ -309,6 +336,17 @@
                             <ComboBoxItem Content="{l:Loc Settings_Headsets}" Tag="Headsets"/>
                             <ComboBoxItem Content="{l:Loc Settings_Speakers}" Tag="Speakers"/>
                         </ComboBox>
+                    </Grid>
+
+                    <Grid Margin="0,16,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{l:Loc Settings_HearingAlerts}" Style="{StaticResource Pulse.Body}" VerticalAlignment="Center"/>
+                        <ToggleButton x:Name="HearingAlertsCheckBox" Grid.Column="1" Style="{StaticResource Pulse.Switch}"
+                                      AutomationProperties.AutomationId="HearingAlertsCheckBox"
+                                      Checked="HearingAlertsCheckBox_Changed" Unchecked="HearingAlertsCheckBox_Changed" VerticalAlignment="Center"/>
                     </Grid>
 
                     <Border Background="{DynamicResource Accent.Soft}" CornerRadius="{StaticResource Radius.SM}" Padding="12,10" Margin="0,14,0,0">

@@ -81,10 +81,62 @@ namespace digital_wellbeing_app.Services
             }
             
             _cacheValid = true;
-            
+
+            // A new goal starts over: the reminder can fire again for it today
+            DeleteSetting(SettingsKeys.GoalLastReminder);
+
             // Notify all subscribers that the goal has changed
             GoalChanged?.Invoke(this, EventArgs.Empty);
         }
+
+        /// <summary>Default for "remind again": once a day.</summary>
+        public const int DefaultRemindEveryMinutes = 0;
+
+        /// <summary>Whether Pulse tells the user when the goal is reached. Default on.</summary>
+        public bool GoalNotificationsEnabled
+        {
+            get => GetSetting(SettingsKeys.GoalNotificationsEnabled) != bool.FalseString;
+            set => SetSetting(SettingsKeys.GoalNotificationsEnabled, value.ToString());
+        }
+
+        /// <summary>Minutes between reminders once the goal is passed; 0 means once a day.</summary>
+        public int RemindEveryMinutes
+        {
+            get => int.TryParse(GetSetting(SettingsKeys.GoalRemindEveryMinutes), out var m) && m >= 0
+                ? m : DefaultRemindEveryMinutes;
+            set => SetSetting(SettingsKeys.GoalRemindEveryMinutes, Math.Max(0, value).ToString());
+        }
+
+        /// <summary>When the reminder last fired, or null if it has not fired since the goal was set.</summary>
+        public DateTime? LastReminder =>
+            DateTime.TryParse(GetSetting(SettingsKeys.GoalLastReminder), null,
+                System.Globalization.DateTimeStyles.RoundtripKind, out var t) ? t : null;
+
+        /// <summary>Saves the time of a reminder, so a restart does not repeat it.</summary>
+        public void MarkReminded(DateTime now) =>
+            SetSetting(SettingsKeys.GoalLastReminder, now.ToString("o"));
+
+        /// <summary>
+        /// Whether a goal reminder should show now, given the user has passed the goal. A new day
+        /// always starts over; within a day the reminder repeats as often as the user chose
+        /// (0 = only the first time that day).
+        /// </summary>
+        public static bool IsReminderDue(bool enabled, int remindEveryMinutes, DateTime? lastReminder, DateTime now)
+        {
+            if (!enabled) return false;
+            if (lastReminder == null || lastReminder.Value.Date != now.Date) return true;
+            return remindEveryMinutes > 0
+                && now - lastReminder.Value >= TimeSpan.FromMinutes(remindEveryMinutes);
+        }
+
+        private static string? GetSetting(string key) =>
+            DatabaseService.GetConnection().Table<UserSettings>().FirstOrDefault(x => x.Key == key)?.Value;
+
+        private static void SetSetting(string key, string value) =>
+            DatabaseService.GetConnection().InsertOrReplace(new UserSettings { Key = key, Value = value });
+
+        private static void DeleteSetting(string key) =>
+            DatabaseService.GetConnection().Delete<UserSettings>(key);
 
         /// <summary>
         /// Gets the current progress toward the daily goal.

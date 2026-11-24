@@ -322,6 +322,7 @@ This cannot be undone.</value></data>
   <data name="Settings_HealthLastSeen" xml:space="preserve"><value>{0} · last seen {1} ago</value></data>
   <data name="Settings_HealthNotStarted" xml:space="preserve"><value>Not started</value></data>
   <data name="Settings_HealthStale" xml:space="preserve"><value>Stale</value></data>
+  <data name="Settings_HearingAlerts" xml:space="preserve"><value>Alert me about loud listening</value></data>
   <data name="Settings_HearingLevelsShownPulseAre" xml:space="preserve"><value>Hearing levels shown in Pulse are estimates based on system volume, not a calibrated sound measurement - Windows has no API for that on arbitrary hardware.</value></data>
   <data name="Settings_Hours" xml:space="preserve"><value>hours</value></data>
   <data name="Settings_KeepHistory" xml:space="preserve"><value>Keep history</value></data>
@@ -350,6 +351,7 @@ This cannot be undone.</value></data>
   <data name="Settings_PulseGuessesFromAudioDevice" xml:space="preserve"><value>Pulse guesses this from your audio device's name - override it if the guess is wrong (e.g. it doesn't recognize your headphone model).</value></data>
   <data name="Settings_Purple" xml:space="preserve"><value>Purple</value></data>
   <data name="Settings_RangeDeleted" xml:space="preserve"><value>The selected date range has been deleted.</value></data>
+  <data name="Settings_RemindGoalReached" xml:space="preserve"><value>Remind me when I reach my goal</value></data>
   <data name="Settings_ReminderInterval" xml:space="preserve"><value>Reminder interval</value></data>
   <data name="Settings_RemoveTrackedDataBetweenTwo" xml:space="preserve"><value>Remove tracked data between two dates</value></data>
   <data name="Settings_ReplacesCurrentDataCannotUndone" xml:space="preserve"><value>Replaces your current data - cannot be undone, and closes Pulse afterward</value></data>

@@ -315,6 +315,7 @@ No se puede deshacer.</value></data>
   <data name="Settings_HealthLastSeen" xml:space="preserve"><value>{0} · visto por última vez hace {1}</value></data>
   <data name="Settings_HealthNotStarted" xml:space="preserve"><value>Sin iniciar</value></data>
   <data name="Settings_HealthStale" xml:space="preserve"><value>Retrasado</value></data>
+  <data name="Settings_HearingAlerts" xml:space="preserve"><value>Avisarme cuando escuche demasiado alto</value></data>
   <data name="Settings_HearingLevelsShownPulseAre" xml:space="preserve"><value>Los niveles de audición que muestra Pulse son estimaciones basadas en el volumen del sistema, no una medición de sonido calibrada: Windows no ofrece una API para eso en cualquier hardware.</value></data>
   <data name="Settings_Hours" xml:space="preserve"><value>horas</value></data>
   <data name="Settings_KeepHistory" xml:space="preserve"><value>Conservar historial</value></data>
@@ -341,6 +342,7 @@ No se puede deshacer.</value></data>
   <data name="Settings_PulseGuessesFromAudioDevice" xml:space="preserve"><value>Pulse lo deduce del nombre de tu dispositivo de audio; cámbialo si se equivoca (p. ej., si no reconoce tu modelo de auriculares).</value></data>
   <data name="Settings_Purple" xml:space="preserve"><value>Morado</value></data>
   <data name="Settings_RangeDeleted" xml:space="preserve"><value>Se ha eliminado el rango de fechas seleccionado.</value></data>
+  <data name="Settings_RemindGoalReached" xml:space="preserve"><value>Recordarme cuando alcance mi objetivo</value></data>
   <data name="Settings_ReminderInterval" xml:space="preserve"><value>Intervalo de recordatorio</value></data>
   <data name="Settings_RemoveTrackedDataBetweenTwo" xml:space="preserve"><value>Eliminar los datos registrados entre dos fechas</value></data>
   <data name="Settings_ReplacesCurrentDataCannotUndone" xml:space="preserve"><value>Reemplaza tus datos actuales; no se puede deshacer y cierra Pulse después</value></data>

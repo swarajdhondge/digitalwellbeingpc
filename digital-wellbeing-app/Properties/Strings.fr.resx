@@ -315,6 +315,7 @@ Cette action est irréversible.</value></data>
   <data name="Settings_HealthLastSeen" xml:space="preserve"><value>{0} · vu il y a {1}</value></data>
   <data name="Settings_HealthNotStarted" xml:space="preserve"><value>Non démarré</value></data>
   <data name="Settings_HealthStale" xml:space="preserve"><value>Obsolète</value></data>
+  <data name="Settings_HearingAlerts" xml:space="preserve"><value>M'alerter en cas d'écoute trop forte</value></data>
   <data name="Settings_HearingLevelsShownPulseAre" xml:space="preserve"><value>Les niveaux d'écoute affichés dans Pulse sont des estimations basées sur le volume système, et non une mesure sonore calibrée - Windows ne fournit aucune API pour cela sur un matériel quelconque.</value></data>
   <data name="Settings_Hours" xml:space="preserve"><value>heures</value></data>
   <data name="Settings_KeepHistory" xml:space="preserve"><value>Conserver l'historique</value></data>
@@ -341,6 +342,7 @@ Cette action est irréversible.</value></data>
   <data name="Settings_PulseGuessesFromAudioDevice" xml:space="preserve"><value>Pulse le déduit du nom de votre appareil audio - modifiez-le si la déduction est erronée (p. ex. s'il ne reconnaît pas votre modèle de casque).</value></data>
   <data name="Settings_Purple" xml:space="preserve"><value>Violet</value></data>
   <data name="Settings_RangeDeleted" xml:space="preserve"><value>La période sélectionnée a été supprimée.</value></data>
+  <data name="Settings_RemindGoalReached" xml:space="preserve"><value>Me prévenir quand j'atteins mon objectif</value></data>
   <data name="Settings_ReminderInterval" xml:space="preserve"><value>Intervalle des rappels</value></data>
   <data name="Settings_RemoveTrackedDataBetweenTwo" xml:space="preserve"><value>Supprimer les données suivies entre deux dates</value></data>
   <data name="Settings_ReplacesCurrentDataCannotUndone" xml:space="preserve"><value>Remplace vos données actuelles - action irréversible, Pulse se ferme ensuite</value></data>

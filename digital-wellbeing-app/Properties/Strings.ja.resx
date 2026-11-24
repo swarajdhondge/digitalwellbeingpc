@@ -315,6 +315,7 @@
   <data name="Settings_HealthLastSeen" xml:space="preserve"><value>{0} · {1} 前に確認</value></data>
   <data name="Settings_HealthNotStarted" xml:space="preserve"><value>未開始</value></data>
   <data name="Settings_HealthStale" xml:space="preserve"><value>応答なし</value></data>
+  <data name="Settings_HearingAlerts" xml:space="preserve"><value>大音量で聴いているときに通知する</value></data>
   <data name="Settings_HearingLevelsShownPulseAre" xml:space="preserve"><value>Pulse に表示される聴覚レベルはシステムの音量に基づく推定値で、校正された音量測定値ではありません。Windows には任意のハードウェアでこれを測定する API がありません。</value></data>
   <data name="Settings_Hours" xml:space="preserve"><value>時間</value></data>
   <data name="Settings_KeepHistory" xml:space="preserve"><value>履歴の保存期間</value></data>
@@ -341,6 +342,7 @@
   <data name="Settings_PulseGuessesFromAudioDevice" xml:space="preserve"><value>Pulse はオーディオ デバイスの名前からこれを推測します。推測が間違っている場合 (ヘッドホンの機種を認識できない場合など) は変更してください。</value></data>
   <data name="Settings_Purple" xml:space="preserve"><value>パープル</value></data>
   <data name="Settings_RangeDeleted" xml:space="preserve"><value>選択した期間のデータを削除しました。</value></data>
+  <data name="Settings_RemindGoalReached" xml:space="preserve"><value>目標に達したときに通知する</value></data>
   <data name="Settings_ReminderInterval" xml:space="preserve"><value>リマインダーの間隔</value></data>
   <data name="Settings_RemoveTrackedDataBetweenTwo" xml:space="preserve"><value>2 つの日付の間の記録データを削除します</value></data>
   <data name="Settings_ReplacesCurrentDataCannotUndone" xml:space="preserve"><value>現在のデータを置き換えます。元に戻せず、完了後に Pulse は終了します</value></data>

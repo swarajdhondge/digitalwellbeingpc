@@ -315,6 +315,7 @@ Bu işlem geri alınamaz.</value></data>
   <data name="Settings_HealthLastSeen" xml:space="preserve"><value>{0} · son görülme {1} önce</value></data>
   <data name="Settings_HealthNotStarted" xml:space="preserve"><value>Başlamadı</value></data>
   <data name="Settings_HealthStale" xml:space="preserve"><value>Güncel değil</value></data>
+  <data name="Settings_HearingAlerts" xml:space="preserve"><value>Yüksek sesle dinlediğimde beni uyar</value></data>
   <data name="Settings_HearingLevelsShownPulseAre" xml:space="preserve"><value>Pulse'ta gösterilen işitme seviyeleri sistem ses düzeyine dayalı tahminlerdir, kalibre edilmiş bir ses ölçümü değildir - Windows'ta her donanım için buna yönelik bir API yoktur.</value></data>
   <data name="Settings_Hours" xml:space="preserve"><value>saat</value></data>
   <data name="Settings_KeepHistory" xml:space="preserve"><value>Geçmişi sakla</value></data>
@@ -341,6 +342,7 @@ Bu işlem geri alınamaz.</value></data>
   <data name="Settings_PulseGuessesFromAudioDevice" xml:space="preserve"><value>Pulse bunu ses cihazınızın adından tahmin eder - tahmin yanlışsa (ör. kulaklık modelinizi tanımıyorsa) değiştirin.</value></data>
   <data name="Settings_Purple" xml:space="preserve"><value>Mor</value></data>
   <data name="Settings_RangeDeleted" xml:space="preserve"><value>Seçilen tarih aralığı silindi.</value></data>
+  <data name="Settings_RemindGoalReached" xml:space="preserve"><value>Hedefime ulaştığımda bana hatırlat</value></data>
   <data name="Settings_ReminderInterval" xml:space="preserve"><value>Hatırlatma aralığı</value></data>
   <data name="Settings_RemoveTrackedDataBetweenTwo" xml:space="preserve"><value>İki tarih arasındaki izlenen verileri kaldır</value></data>
   <data name="Settings_ReplacesCurrentDataCannotUndone" xml:space="preserve"><value>Mevcut verilerinizin yerini alır - geri alınamaz ve ardından Pulse'ı kapatır</value></data>
