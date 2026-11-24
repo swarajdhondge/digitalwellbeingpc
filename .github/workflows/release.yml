@@ -82,6 +82,30 @@ jobs:
       - name: Run command-line tool tests
         run: dotnet test pulse-cli/Tests/pulse-cli.Tests.csproj -c Release
 
+      # UI and soak tests launch the real built exe, so they run here (before a release build),
+      # not on every PR. A failure blocks the release build. AppSession gives the app a temp
+      # data folder (PULSE_DATA_DIR).
+      - name: Build solution (Release)
+        run: dotnet build DigitalWellbeing.sln -c Release
+
+      - name: UI and soak tests
+        id: ui-tests
+        timeout-minutes: 15
+        env:
+          DW_APP_EXE: ${{ github.workspace }}\digital-wellbeing-app\bin\Release\net9.0-windows10.0.26100.0\DigitalWellbeing.exe
+          DW_SHOT_DIR: ${{ runner.temp }}\dw-uishots
+        run: dotnet test UITests/UITests.csproj -c Release --no-build --filter "FullyQualifiedName~ShellTests|FullyQualifiedName~SoakTests" --logger "trx;LogFileName=ui-tests.trx" --results-directory "${{ runner.temp }}\ui-test-results"
+
+      - name: Upload UI test screenshots and logs
+        if: failure() && steps.ui-tests.outcome == 'failure'
+        uses: actions/upload-artifact@v7
+        with:
+          name: ui-test-output
+          path: |
+            ${{ runner.temp }}\dw-uishots
+            ${{ runner.temp }}\ui-test-results
+          if-no-files-found: ignore
+
   # --------------------------------------------------------------------------
   # VELOPACK BUILD (unsigned)
   # Publishes the app and produces the Velopack release set (Setup exe + delta

@@ -84,24 +84,3 @@ jobs:
 
       - name: Command-line tool tests
         run: dotnet test pulse-cli/Tests/pulse-cli.Tests.csproj -c Release --no-build
-
-      # Warn-only until one real run proves it (gate rule); then drop continue-on-error.
-      # AppSession gives the app a temp data folder (PULSE_DATA_DIR).
-      - name: UI tests (shell)
-        id: ui-tests
-        continue-on-error: true
-        timeout-minutes: 10
-        env:
-          DW_APP_EXE: ${{ github.workspace }}\digital-wellbeing-app\bin\Release\net9.0-windows10.0.26100.0\DigitalWellbeing.exe
-          DW_SHOT_DIR: ${{ runner.temp }}\dw-uishots
-        run: dotnet test UITests/UITests.csproj -c Release --no-build --filter "FullyQualifiedName~ShellTests" --logger "trx;LogFileName=ui-tests.trx" --results-directory "${{ runner.temp }}\ui-test-results"
-
-      - name: Upload UI test screenshots and logs
-        if: steps.ui-tests.outcome == 'failure'
-        uses: actions/upload-artifact@v7
-        with:
-          name: ui-test-output
-          path: |
-            ${{ runner.temp }}\dw-uishots
-            ${{ runner.temp }}\ui-test-results
-          if-no-files-found: ignore
