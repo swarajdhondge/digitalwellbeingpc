@@ -90,5 +90,14 @@ namespace digital_wellbeing_app.Tests.Services
             svc.SaveSettings();
         }
 
+        [Fact]
+        public void MarkNotificationShown_SetsFlag()
+        {
+            var svc = new WindDownService();
+            Assert.False(svc.HasNotificationBeenShown);
+
+            svc.MarkNotificationShown();
+            Assert.True(svc.HasNotificationBeenShown);
+        }
     }
 }

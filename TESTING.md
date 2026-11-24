@@ -13,7 +13,7 @@ Test each part at the cheapest level that proves it.
 |---|---|---|
 | Unit | xUnit tests for the app and the `pulse` tool | Every PR (CI) and the release workflow |
 | UI and soak | FlaUI tests that drive the real built app: `ShellTests` (pages, navigation) and `SoakTests` (kill and relaunch with a Focus session) | The release workflow only: on a `v*.*.*` tag, or by hand with the build-only trigger. A failure stops the release |
-| Sandbox release checks | The installed app in a clean Windows Sandbox: install, alerts, upgrade, uninstall | By hand, on the release build, before the release is published |
+| Sandbox release checks | The installed app in a clean Windows Sandbox: install, alerts, upgrade, uninstall | By hand, on the build-only release build, before the tag is pushed (a tag push publishes at once) |
 
 ## How to run each layer
 
@@ -54,13 +54,24 @@ $env:PULSE_TEST_MODE = '1'
 DigitalWellbeing.exe --test-notify goal     # goal, limit, break, winddown, focus, hearing or hint
 ```
 
-The alert goes through the same code and carries the same launch argument as the real one, so a click on it
-behaves the same. The switch does nothing unless `PULSE_TEST_MODE=1` is set. Only the test scripts set it. Pulse
+Each alert has one method in `MainWindow.xaml.cs`. The real call site and the test switch both call it, so the
+alert text and the launch argument are the same and a click on it behaves the same. The switch does nothing unless `PULSE_TEST_MODE=1` is set. Only the test scripts set it. Pulse
 and its installers never do, so a normal launch cannot use it.
 
 ## What each part needs
 
 Level: U = unit test, UI = FlaUI test (release workflow), S = Windows Sandbox check.
+
+Sandbox checks: only a check with a proven date below has run end to end. The others are written but not yet proven.
+
+| Check | First proven |
+|---|---|
+| `smoke` | TODO: date |
+| `alerts` | TODO: date |
+| `tracking` | TODO: date |
+| `ui` | TODO: date |
+| `upgrade` | TODO: date |
+| `msix` | TODO: date |
 
 | Component | What can break | Proof | Level |
 |---|---|---|---|
@@ -89,15 +100,20 @@ Level: U = unit test, UI = FlaUI test (release workflow), S = Windows Sandbox ch
 
 ## Release checklist
 
-1. CI is green on the release branch. The release workflow runs unit, UI and soak tests, then builds Setup.exe.
-2. Run the smoke set on the release build: `-Checks smoke`.
+A tag push builds and publishes the release at once. So run the sandbox checks before you push the tag.
+
+1. CI is green on the release branch.
+2. Run the release workflow (`release.yml`) by hand with the build-only `workflow_dispatch` trigger. It runs the
+   unit, UI and soak tests and builds Setup.exe, and it does not publish. Download the `velopack-releases`
+   artifact. Run the smoke set on its Setup.exe: `-Checks smoke`.
 3. Add the checks for the areas the release diff touches:
    - tracking code (`CoreLogic/`, idle, clock): `tracking`
    - alerts, notifications, `MainWindow` routing: `alerts`
    - pages, navigation, controls: `ui`
    - installer, Velopack, startup, data format: `upgrade` (and check the old data still opens)
    - anything in `digital-wellbeing-app.Package/` or the manifest: `msix`
-4. Fix every `FAIL`, or write down why it is not a bug. Do not publish on a `FAIL`.
+4. Fix every `FAIL`, or write down why it is not a bug. Do not push the tag on a `FAIL`.
+   When all checks pass, push the `v*.*.*` tag. The release then publishes.
 5. Before the Store upload, build the package (`scripts/build-msix.ps1 -Version <x.y.z>`) and run `-Checks msix` on it.
 
 ## After the release
