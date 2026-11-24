@@ -6,6 +6,13 @@ on:
   push:
     tags:
       - 'v*.*.*'
+  # Build-only dry run: builds and uploads the artifact, never publishes or signs.
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to build, for example 2.5.0 or 2.5.0-ci.1'
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -34,11 +41,21 @@ jobs:
     steps:
       - name: Derive version from tag
         id: v
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_VERSION: ${{ inputs.version }}
         run: |
-          VERSION="${GITHUB_REF_NAME#v}"
+          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+            VERSION="${INPUT_VERSION#v}"
+            # A dry run may carry a pre-release suffix such as 2.5.0-ci.1.
+            PATTERN='^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$'
+          else
+            VERSION="${GITHUB_REF_NAME#v}"
+            PATTERN='^[0-9]+\.[0-9]+\.[0-9]+$'
+          fi
           # The version is pasted into later commands, so only accept a plain x.y.z.
-          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "Tag '$GITHUB_REF_NAME' is not vX.Y.Z" >&2
+          if [[ ! "$VERSION" =~ $PATTERN ]]; then
+            echo "Version '$VERSION' (ref '$GITHUB_REF_NAME') is not x.y.z" >&2
             exit 1
           fi
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
@@ -149,6 +166,7 @@ jobs:
   # ==========================================================================
   sign:
     needs: [velopack-build]
+    if: github.event_name == 'push'
     continue-on-error: true
     runs-on: ubuntu-latest
     env:
@@ -183,6 +201,7 @@ jobs:
   # --------------------------------------------------------------------------
   release:
     needs: [version, velopack-build]
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       # NOTE: the demo (demo.mp4/gif) is intentionally NOT attached here. GitHub serves
@@ -235,7 +254,7 @@ jobs:
   # --------------------------------------------------------------------------
   winget:
     needs: [version, release]
-    if: ${{ vars.WINGET_ENABLED == 'true' }}
+    if: ${{ github.event_name == 'push' && vars.WINGET_ENABLED == 'true' }}
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
