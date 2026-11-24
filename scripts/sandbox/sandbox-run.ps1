@@ -124,6 +124,7 @@ function Check-Ui {
   $env:DW_APP_EXE = $appExe; $env:DW_SHOT_DIR = "$script:dir\shots"
   $a = @('vstest', "$inRoot\uit\UITests.dll", '/TestCaseFilter:FullyQualifiedName~ShellTests', '/Logger:trx;LogFileName=uitests.trx', "/ResultsDirectory:$script:dir\trx", '/Logger:console;verbosity=normal')
   $p = Start-Process "$desk\dotnet\dotnet.exe" -ArgumentList $a -RedirectStandardOutput "$script:dir\vstest.out" -RedirectStandardError "$script:dir\vstest.err" -PassThru -WindowStyle Minimized
+  $null = $p.Handle                                # keeps the exit code readable after WaitForExit with a timeout
   if (-not $p.WaitForExit(900000)) { Log 'vstest timeout, killing'; $p.Kill() }
   Write-Result $(if ($p.ExitCode -eq 0) { 'PASS' } else { 'FAIL' }) 'ui' "ShellTests, vstest exit $($p.ExitCode)"
 }
