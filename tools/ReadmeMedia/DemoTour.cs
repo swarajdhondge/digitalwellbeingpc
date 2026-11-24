@@ -6,7 +6,7 @@ using FlaUI.Core.Tools;
 using FlaUI.UIA3;
 using Xunit;
 
-namespace DigitalWellbeing.UITests;
+namespace DigitalWellbeing.ReadmeMedia;
 
 /// <summary>
 /// Automated demo-video driver: launches the built Pulse app in its NORMAL window
@@ -22,7 +22,7 @@ namespace DigitalWellbeing.UITests;
 ///
 /// It is OPT-IN: the [Fact] no-ops unless <c>PULSE_DEMO_OUT</c> is set, so a plain
 /// <c>dotnet test</c> never tries to record. Drive it with:
-///     PULSE_DEMO_OUT=...\demo.mp4 dotnet test UITests\UITests.csproj \
+///     PULSE_DEMO_OUT=...\demo.mp4 dotnet test tools\ReadmeMedia\ReadmeMedia.csproj \
 ///         --filter "FullyQualifiedName~DemoTour"
 ///
 /// Environment overrides:

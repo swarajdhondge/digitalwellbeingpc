@@ -1,0 +1,13 @@
+<Configuration>
+  <VGpu>Disable</VGpu>
+  <Networking>Disable</Networking>
+  <MemoryInMB>{{MEMORY_MB}}</MemoryInMB>
+  <MappedFolders>
+    <MappedFolder><HostFolder>{{SCRIPTS}}</HostFolder><SandboxFolder>C:\Users\WDAGUtilityAccount\Desktop\scripts</SandboxFolder><ReadOnly>true</ReadOnly></MappedFolder>
+    <MappedFolder><HostFolder>{{IN}}</HostFolder><SandboxFolder>C:\Users\WDAGUtilityAccount\Desktop\in</SandboxFolder><ReadOnly>true</ReadOnly></MappedFolder>
+    <MappedFolder><HostFolder>{{OUT}}</HostFolder><SandboxFolder>C:\Users\WDAGUtilityAccount\Desktop\out</SandboxFolder><ReadOnly>false</ReadOnly></MappedFolder>{{DOTNET_FOLDER}}
+  </MappedFolders>
+  <LogonCommand>
+    <Command>powershell -ExecutionPolicy Bypass -File C:\Users\WDAGUtilityAccount\Desktop\scripts\sandbox-run.ps1</Command>
+  </LogonCommand>
+</Configuration>

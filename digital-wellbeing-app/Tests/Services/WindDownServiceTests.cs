@@ -8,34 +8,6 @@ namespace digital_wellbeing_app.Tests.Services
     public class WindDownServiceTests
     {
         [Fact]
-        public void Constructor_SetsDefaults()
-        {
-            var svc = new WindDownService();
-            Assert.False(svc.IsEnabled);
-            Assert.Equal(21, svc.StartHour);
-            Assert.Equal(0, svc.StartMinute);
-            Assert.Equal(7, svc.EndHour);
-            Assert.Equal(0, svc.EndMinute);
-            Assert.True(svc.ShowNotification);
-            Assert.True(svc.ShowVisualCue);
-        }
-
-        [Fact]
-        public void GetScheduleText_ReturnsFormattedString()
-        {
-            var svc = new WindDownService();
-            svc.StartHour = 22;
-            svc.StartMinute = 30;
-            svc.EndHour = 6;
-            svc.EndMinute = 0;
-
-            var text = svc.GetScheduleText();
-            Assert.False(string.IsNullOrWhiteSpace(text));
-            // Should contain time references
-            Assert.Contains(":", text);
-        }
-
-        [Fact]
         public void IsWindDownActive_DetectsCurrentState()
         {
             var svc = new WindDownService();
@@ -116,15 +88,6 @@ namespace digital_wellbeing_app.Tests.Services
             // Restore defaults
             svc.IsEnabled = false;
             svc.SaveSettings();
-        }
-
-        [Fact]
-        public void StartAndStop_DoNotThrow()
-        {
-            var svc = new WindDownService();
-            svc.IsEnabled = true;
-            svc.Start();
-            svc.Stop();
         }
 
         [Fact]

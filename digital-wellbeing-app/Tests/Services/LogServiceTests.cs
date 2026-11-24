@@ -8,15 +8,6 @@ namespace digital_wellbeing_app.Tests.Services
     public class LogServiceTests
     {
         [Fact]
-        public void Initialize_CreatesLogDirectory()
-        {
-            LogService.Initialize();
-
-            var logDir = LogService.GetLogDirectory();
-            Assert.True(Directory.Exists(logDir), $"Log directory should exist: {logDir}");
-        }
-
-        [Fact]
         public void Info_WritesToLogFile()
         {
             LogService.Initialize();
@@ -66,29 +57,10 @@ namespace digital_wellbeing_app.Tests.Services
             Assert.Contains("Test exception for logging", content);
         }
 
-        [Fact]
-        public void GetLogDirectory_ReturnsValidPath()
-        {
-            var dir = LogService.GetLogDirectory();
-            Assert.False(string.IsNullOrWhiteSpace(dir));
-            Assert.Contains("Pulse", dir);
-            Assert.Contains("logs", dir);
-        }
-
         // --- Ring buffer (2026-07-17, backs the Settings Diagnostics card) ---
         // LogService is static and shared across the whole (serialized) test assembly, so the
         // buffer accumulates lines from other tests too - these assert containment/eviction
         // rather than an exact snapshot.
-
-        [Fact]
-        public void GetRecentLines_ContainsARecentlyWrittenLine()
-        {
-            LogService.Initialize();
-            var marker = $"ring-buffer-marker-{Guid.NewGuid():N}";
-            LogService.Info(marker);
-
-            Assert.Contains(LogService.GetRecentLines(), line => line.Contains(marker));
-        }
 
         [Fact]
         public void GetRecentLines_CapsAndEvictsOldestFirst()

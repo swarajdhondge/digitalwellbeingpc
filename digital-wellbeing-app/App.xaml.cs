@@ -190,6 +190,12 @@ namespace digital_wellbeing_app
             AppLimitSvc = new Services.AppLimitService(AppTracker);
             AppLimitSvc.Start();
             StartCommandLineSupport();
+
+            // Test runs only: needs --test-notify plus PULSE_TEST_MODE=1, so it never happens in normal use.
+            var testAlert = Services.TestNotifyRequest.Parse(e.Args,
+                Environment.GetEnvironmentVariable(Services.TestNotifyRequest.ModeVariable));
+            if (testAlert != null)
+                shellWindow.ShowTestNotification(testAlert);
             // StartupUri (handled inside base.OnStartup above) constructs MainWindow before this
             // point, so it's already available to wire the notification callback into.
             if (Current.MainWindow is MainWindow.MainWindow mainWindow)

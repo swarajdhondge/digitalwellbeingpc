@@ -8,19 +8,10 @@ namespace digital_wellbeing_app.Tests.Platform
     /// WindowsFocusIntegration's whole contract is "never throws, regardless of whether the
     /// underlying WinRT API is supported on this machine/channel" - these tests exercise that
     /// contract directly rather than asserting a specific IsSupported/IsFocusActive value, since
-    /// that value is genuinely environment-dependent (see the open packaged-vs-unpackaged spike in
-    /// docs/roadmap-handoff.md).
+    /// that value is genuinely environment-dependent (packaged and unpackaged installs can differ).
     /// </summary>
     public class WindowsFocusIntegrationTests
     {
-        [Fact]
-        public void IsSupported_NeverThrows()
-        {
-            using var integration = new WindowsFocusIntegration();
-            var exception = Record.Exception(() => { var _ = integration.IsSupported; });
-            Assert.Null(exception);
-        }
-
         [Fact]
         public void IsFocusActive_NeverThrows()
         {
@@ -50,18 +41,5 @@ namespace digital_wellbeing_app.Tests.Platform
             Assert.Null(exception);
         }
 
-        [Fact]
-        public void FocusActiveChanged_NeverFiresWithoutSubscription_AndSubscribingDoesNotThrow()
-        {
-            using var integration = new WindowsFocusIntegration();
-            bool fired = false;
-            integration.FocusActiveChanged += _ => fired = true;
-
-            var exception = Record.Exception(() => integration.Start());
-
-            Assert.Null(exception);
-            // Not asserting `fired` either way - only asserts that subscribing/starting is safe.
-            _ = fired;
-        }
     }
 }

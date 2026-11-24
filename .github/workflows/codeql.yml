@@ -45,7 +45,7 @@ jobs:
             csharp=false
             while IFS= read -r file; do
               case "$file" in
-                DigitalWellbeing.sln|digital-wellbeing-app/*|UITests/*|FixtureSeeder/*|.github/workflows/codeql.yml)
+                DigitalWellbeing.sln|digital-wellbeing-app/*|UITests/*|tools/FixtureSeeder/*|tools/ReadmeMedia/*|.github/workflows/codeql.yml)
                   csharp=true
                   ;;
               esac

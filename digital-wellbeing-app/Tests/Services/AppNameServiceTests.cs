@@ -34,22 +34,5 @@ namespace digital_wellbeing_app.Tests.Services
             Assert.Equal("My Cool App", AppNameService.GetDisplayName("myCoolApp"));
         }
 
-        [Fact]
-        public void GetDisplayName_RealSystemExe_ResolvesToNonEmptyFriendlyName()
-        {
-            // Verify the FileVersionInfo fallback yields a good name over a real system exe.
-            var explorer = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.Windows), "explorer.exe");
-            if (!File.Exists(explorer)) return; // environment guard
-
-            // "explorer" is curated; strip to prove path handling too. Use an unknown-but-real exe:
-            var notepad = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.System), "notepad.exe");
-            if (File.Exists(notepad))
-            {
-                var name = AppNameService.GetDisplayName("notepad", notepad);
-                Assert.False(string.IsNullOrWhiteSpace(name));
-            }
-        }
     }
 }

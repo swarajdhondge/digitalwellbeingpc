@@ -47,7 +47,7 @@ $repoRoot = Split-Path -Parent $PSScriptRoot
 
 $appProject    = Join-Path $repoRoot 'digital-wellbeing-app\digital-wellbeing-app.csproj'
 $seederProject = Join-Path $repoRoot 'tools\FixtureSeeder\FixtureSeeder.csproj'
-$uiTestProject = Join-Path $repoRoot 'UITests\UITests.csproj'
+$mediaProject = Join-Path $repoRoot 'tools\ReadmeMedia\ReadmeMedia.csproj'
 
 if (-not $ShotsDir) { $ShotsDir = Join-Path $repoRoot '.github\screenshots' }
 New-Item -ItemType Directory -Force -Path $ShotsDir | Out-Null
@@ -83,7 +83,7 @@ $env:PULSE_APP_EXE  = $exe
 $env:PULSE_SHOTS_DIR = $ShotsDir
 $env:PULSE_DATA_DIR = $captureDataDir
 try {
-    dotnet test $uiTestProject -c Debug --nologo `
+    dotnet test $mediaProject -c Debug --nologo `
         --filter 'FullyQualifiedName~ScreenshotCapture'
     if ($LASTEXITCODE -ne 0) {
         throw 'Screenshot capture failed. See the Quick Heal note at the top of this script.'

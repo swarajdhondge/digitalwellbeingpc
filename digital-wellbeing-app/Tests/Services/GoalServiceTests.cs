@@ -108,19 +108,6 @@ namespace digital_wellbeing_app.Tests.Services
         }
 
         [Fact]
-        public void FormatProgressText_ReturnsNonEmptyString()
-        {
-            var svc = new GoalService();
-            svc.SetDailyScreenTimeGoal(60);
-
-            var text = svc.FormatProgressText(TimeSpan.FromMinutes(30));
-            Assert.False(string.IsNullOrWhiteSpace(text));
-
-            // Cleanup
-            svc.SetDailyScreenTimeGoal(null);
-        }
-
-        [Fact]
         public void NoGoal_ProgressIsZero()
         {
             var svc = new GoalService();

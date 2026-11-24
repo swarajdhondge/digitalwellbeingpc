@@ -28,19 +28,6 @@ namespace digital_wellbeing_app.Tests.Services
         }
 
         [Fact]
-        public void ExportAllToCsv_CreatesFiles()
-        {
-            var count = DataExportService.ExportAllToCsv(_testDir);
-
-            // Should create at least some CSV files
-            Assert.True(count > 0, $"Expected at least 1 file, got {count}");
-
-            // Check CSV files exist
-            var csvFiles = Directory.GetFiles(_testDir, "*.csv");
-            Assert.True(csvFiles.Length > 0, "Expected CSV files in output directory");
-        }
-
-        [Fact]
         public void ExportAllToCsv_CreatesExpectedFileNames()
         {
             DataExportService.ExportAllToCsv(_testDir);

@@ -208,9 +208,11 @@ namespace digital_wellbeing_app.MainWindow
         private void OnHearingThresholdExceeded(object? sender, EventArgs e)
         {
             if (!new Services.SettingsService().LoadHearingAlertsEnabled()) return;
-            Dispatcher.Invoke(() => ShowNotification(
-                Loc.Get("Notify_HearingAlertTitle"), Loc.Get("Notify_HearingAlertBody"), Services.NotificationRouting.Hearing));
+            Dispatcher.Invoke(ShowHearingAlert);
         }
+
+        private void ShowHearingAlert() =>
+            ShowNotification(Loc.Get("Notify_HearingAlertTitle"), Loc.Get("Notify_HearingAlertBody"), Services.NotificationRouting.Hearing);
 
         private void OnDistractingAppDetected(string appName, string executablePath)
         {
@@ -236,6 +238,12 @@ namespace digital_wellbeing_app.MainWindow
             FocusTimeRemaining.Text = Loc.Format("Shell_FocusTimeRemaining", timeText);
 
             // Clicking the notification brings Pulse forward and shows the overlay
+            ShowFocusWarning(appName, timeText);
+        }
+
+        private void ShowFocusWarning(string appName, string timeText)
+        {
+            _currentDistractingApp = appName;   // so the click opens the overlay
             ShowNotification(Loc.Get("Notify_DistractingAppTitle"), Loc.Format("Notify_DistractingAppBody", appName, timeText),
                 Services.NotificationRouting.Focus);
         }
@@ -521,10 +529,15 @@ namespace digital_wellbeing_app.MainWindow
                 }
                 else
                 {
-                    _breakNotificationPending = true;
-                    ShowNotification(Loc.Get("Shell_TimeBreak"), Loc.Get("Break_FollowRule"), Services.NotificationRouting.Break);
+                    ShowBreakNotification();
                 }
             });
+        }
+
+        private void ShowBreakNotification()
+        {
+            _breakNotificationPending = true;   // so the click opens the overlay
+            ShowNotification(Loc.Get("Shell_TimeBreak"), Loc.Get("Break_FollowRule"), Services.NotificationRouting.Break);
         }
 
         /// <summary>
@@ -636,6 +649,41 @@ namespace digital_wellbeing_app.MainWindow
             _balloonClickAction = null;
             action?.Invoke();
         }
+
+        /// <summary>
+        /// Test runs only (see <see cref="Services.TestNotifyRequest"/>): shows one alert at once,
+        /// through the same method as the real alert (each alert has one method that both call).
+        /// </summary>
+        public void ShowTestNotification(string action)
+        {
+            switch (action)
+            {
+                case Services.NotificationRouting.Goal:
+                    ShowGoalReachedNotification(60, TimeSpan.FromMinutes(61));
+                    break;
+                case Services.NotificationRouting.Limit:
+                    ShowAppLimitNotification("Test app", Models.FocusEnforcementLevel.Warn);
+                    break;
+                case Services.NotificationRouting.Break:
+                    ShowBreakNotification();
+                    break;
+                case Services.NotificationRouting.WindDown:
+                    ShowWindDownNotification();
+                    break;
+                case Services.NotificationRouting.Focus:
+                    ShowFocusWarning("Test app", "10:00");
+                    break;
+                case Services.NotificationRouting.Hearing:
+                    ShowHearingAlert();
+                    break;
+                case Services.NotificationRouting.Hint:
+                    ShowCloseToTrayHint();
+                    break;
+            }
+        }
+
+        private void ShowCloseToTrayHint() =>
+            ShowNotification(Loc.Get("Tray_StillRunningTitle"), Loc.Get("Tray_StillRunningBody"), Services.NotificationRouting.Hint);
 
         private void ShowAppLimitNotification(string appName, Models.FocusEnforcementLevel level)
         {
@@ -1008,7 +1056,7 @@ namespace digital_wellbeing_app.MainWindow
                 var settings = new Services.SettingsService();
                 if (settings.LoadCloseToTrayHintShown()) return;
 
-                ShowNotification(Loc.Get("Tray_StillRunningTitle"), Loc.Get("Tray_StillRunningBody"), Services.NotificationRouting.Hint);
+                ShowCloseToTrayHint();
 
                 settings.SaveCloseToTrayHintShown(true);
             }
