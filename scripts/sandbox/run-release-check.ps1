@@ -51,6 +51,7 @@ if ($Setup) { Copy-Item $Setup (Join-Path $in 'new\Setup.exe') }
 
 if ($Previous) {
     if (-not $Repo) { $Repo = ((git -C $repoRoot remote get-url origin) -replace '^.*github\.com[:/]', '' -replace '\.git$', '') }
+    if (-not $Repo) { throw 'Cannot find the GitHub repository from git. Pass -Repo owner/name.' }
     $url = "https://github.com/$Repo/releases/download/$Previous/DigitalWellbeingPC-win-Setup.exe"
     New-Item -ItemType Directory -Force (Join-Path $in 'prev') | Out-Null
     Write-Host "Downloading the previous release: $url"
