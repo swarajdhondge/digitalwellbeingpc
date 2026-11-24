@@ -43,9 +43,9 @@ scripts\sandbox\run-release-check.ps1 -Setup <path to Setup.exe> -Msix <path to 
 ```
 
 Limits of the harness: the Notification Center has no UI Automation tree, so the checks click its newest item and
-its bell by fixed positions (relative to the screen size, which the sandbox sets). A failed `alerts` line with a
+its bell by fixed positions (relative to the screen size, which the sandbox sets). The alert checks need a build that has `--test-notify` (v2.5.0 does not, so use a build from this branch or later). A failed `alerts` line with a
 good screenshot of the toast can mean the position moved on a new Windows build. Look at `*-after-click.png` first.
-`tracking` takes about 20 minutes, because it waits out the 5-minute idle threshold. The `msix` check signs a copy of
+`tracking` takes about 17 minutes, because it waits out the 5-minute idle threshold. The `msix` check signs a copy of
 the package with a throwaway certificate inside the sandbox, so it needs `signtool.exe` from the Windows SDK on the
 host (mapped read-only).
 
@@ -73,12 +73,12 @@ Sandbox checks: only a check with a proven date below has run end to end. The ot
 
 | Check | First proven |
 |---|---|
-| `smoke` | TODO: date |
-| `alerts` | TODO: date |
-| `tracking` | TODO: date |
-| `ui` | TODO: date |
-| `upgrade` | TODO: date |
-| `msix` | TODO: date |
+| `smoke` | 2026-11-25 |
+| `alerts` | 2026-11-25 |
+| `tracking` | 2026-11-25 |
+| `ui` | 2026-11-25 |
+| `upgrade` | 2026-11-25 |
+| `msix` | 2026-11-25 |
 
 | Component | What can break | Proof | Level |
 |---|---|---|---|
