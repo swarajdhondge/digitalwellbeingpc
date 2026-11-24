@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [v2.5.0] - 2026-11-24
 
 ### Features
 - **Choose whether and how often Pulse tells you that you reached your daily goal** (#64). Under **Settings → Screen time goal** there is now a "Remind me when I reach my goal" switch (on by default) and a "Remind me again" choice: every 5, 15, 30 or 60 minutes, or once a day (the default). A restart no longer repeats a reminder you already got today, and changing the goal starts it over.
