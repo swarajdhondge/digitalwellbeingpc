@@ -20,7 +20,7 @@
 #>
 [CmdletBinding()]
 param(
-    [Parameter(Mandatory)][string]$Setup,           # Setup.exe of the build to check
+    [string]$Setup,                                 # Setup.exe of the build to check (not needed for an msix-only run)
     [string]$Previous,                              # release tag of the version before it (for "upgrade"), for example v2.5.0
     [string]$Checks = 'smoke',
     [string]$Msix,                                  # the .msix to check (for "msix")
@@ -40,13 +40,14 @@ $list = @($Checks -split '[,\s]+' | Where-Object { $_ })
 foreach ($c in $list) { if ($c -notin $known) { throw "Unknown check '$c'. Known: $($known -join ', ')" } }
 if ('upgrade' -in $list -and -not $Previous) { throw 'The upgrade check needs -Previous <release tag>.' }
 if ('msix' -in $list -and (-not $Msix -or -not (Test-Path $Msix))) { throw 'The msix check needs -Msix <path to the .msix>.' }
-if (-not (Test-Path $Setup)) { throw "Setup file not found: $Setup" }
+$needSetup = @($list | Where-Object { $_ -ne 'msix' }).Count -gt 0
+if ($needSetup -and (-not $Setup -or -not (Test-Path $Setup))) { throw "Setup file not found: $Setup" }
 if (Get-Process vmmemWindowsSandbox -ErrorAction SilentlyContinue) { throw 'A Windows Sandbox is already running. Wait for it to end.' }
 
 $run = Join-Path $WorkDir (Get-Date -Format 'yyyyMMdd-HHmmss')
 $in = Join-Path $run 'in'; $out = Join-Path $run 'out'
 New-Item -ItemType Directory -Force (Join-Path $in 'new'), $out | Out-Null
-Copy-Item $Setup (Join-Path $in 'new\Setup.exe')
+if ($Setup) { Copy-Item $Setup (Join-Path $in 'new\Setup.exe') }
 
 if ($Previous) {
     if (-not $Repo) { $Repo = ((git -C $repoRoot remote get-url origin) -replace '^.*github\.com[:/]', '' -replace '\.git$', '') }
@@ -56,7 +57,7 @@ if ($Previous) {
     Invoke-WebRequest $url -OutFile (Join-Path $in 'prev\Setup.exe') -UseBasicParsing
 }
 
-$msixName = ''
+$msixName = ''; $msixPublisher = ''; $sdkFolder = ''
 if ('msix' -in $list) {
     New-Item -ItemType Directory -Force (Join-Path $in 'msix') | Out-Null
     Copy-Item $Msix (Join-Path $in 'msix')
@@ -64,8 +65,12 @@ if ('msix' -in $list) {
     $zip = [IO.Compression.ZipFile]::OpenRead((Resolve-Path $Msix))
     try {
         $r = New-Object IO.StreamReader($zip.GetEntry('AppxManifest.xml').Open())
-        $msixName = ([xml]$r.ReadToEnd()).Package.Identity.Name; $r.Close()
+        $id = ([xml]$r.ReadToEnd()).Package.Identity; $msixName = $id.Name; $msixPublisher = $id.Publisher; $r.Close()
     } finally { $zip.Dispose() }
+    # signtool comes from the Windows SDK on this machine, mapped read-only into the sandbox.
+    $st = Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin" -Recurse -Filter signtool.exe -ErrorAction SilentlyContinue | Where-Object { $_.FullName -match '\\x64\\' } | Sort-Object FullName | Select-Object -Last 1
+    if (-not $st) { throw 'The msix check needs signtool.exe from the Windows SDK on this machine.' }
+    $sdkFolder = "`n    <MappedFolder><HostFolder>$(Split-Path (Split-Path $st.FullName))</HostFolder><SandboxFolder>C:\Users\WDAGUtilityAccount\Desktop\sdk</SandboxFolder><ReadOnly>true</ReadOnly></MappedFolder>"
 }
 
 $dotnetFolder = ''
@@ -82,12 +87,12 @@ if ('upgrade' -in $list) {
     if ($LASTEXITCODE -ne 0) { throw 'Fixture seeder publish failed.' }
 }
 
-[ordered]@{ Checks = $list; ExpectedVersion = $ExpectedVersion; MsixName = $msixName } | ConvertTo-Json | Set-Content (Join-Path $in 'job.json') -Encoding UTF8
+[ordered]@{ Checks = $list; ExpectedVersion = $ExpectedVersion; MsixName = $msixName; MsixPublisher = $msixPublisher } | ConvertTo-Json | Set-Content (Join-Path $in 'job.json') -Encoding UTF8
 
 $wsb = Join-Path $run 'pulse-release-check.wsb'
 (Get-Content (Join-Path $sandboxDir 'pulse-sandbox.wsb.template') -Raw).
     Replace('{{MEMORY_MB}}', "$MemoryMB").Replace('{{SCRIPTS}}', $sandboxDir).Replace('{{IN}}', $in).Replace('{{OUT}}', $out).
-    Replace('{{DOTNET_FOLDER}}', $dotnetFolder) | Set-Content $wsb -Encoding UTF8
+    Replace('{{DOTNET_FOLDER}}', $dotnetFolder + $sdkFolder) | Set-Content $wsb -Encoding UTF8
 $launchCmd = Join-Path $run 'launch.cmd'
 "@echo off`r`ncall `"$(Join-Path $sandboxDir 'launch.cmd')`" `"$wsb`"`r`n" | Set-Content $launchCmd -Encoding ASCII
 

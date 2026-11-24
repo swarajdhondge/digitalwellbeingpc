@@ -79,21 +79,42 @@ function Check-Alerts {
   Test-AlertClick 'hint'     'Pulse window in front'   { param($f, $t) $f }
 }
 
+# Screen time in whole minutes from the "Screen Time: 1h 5m" line of 'pulse today'; -1 when the line is missing.
+function Get-ScreenMinutes {
+  $line = ((Run-Cli @('today')).Text -split "`n" | Where-Object { $_ -match ':\s*(\d+\s*h\s*)?\d+\s*m\b' } | Select-Object -First 1)
+  if (-not $line) { return -1 }
+  $h = 0; $m = 0
+  if ($line -match '(\d+)\s*h') { $h = [int]$Matches[1] }
+  if ($line -match '(\d+)\s*m\b') { $m = [int]$Matches[1] }
+  return $h * 60 + $m
+}
+function Keep-Input([int]$seconds) { $t0 = Get-Date; while (((Get-Date) - $t0).TotalSeconds -lt $seconds) { Nudge; Start-Sleep 5 } }
+
 function Check-Tracking {
   if (-not (Test-Path $appExe)) { $null = Install-Pulse "$inRoot\new\Setup.exe" }
   Fresh-State; $null = Start-Pulse; Place-Pulse
-  $t0 = Get-Date; $before = (Run-Cli @('today')).Text
-  while (((Get-Date) - $t0).TotalSeconds -lt 90) { Nudge; Start-Sleep 5 }
-  $after = (Run-Cli @('today')).Text
-  Set-Content "$script:dir\tracking-input.txt" @('before', $before, 'after 90 s of input', $after)
-  Write-Result $(if ($before -ne $after) { 'PASS' } else { 'FAIL' }) 'tracking-input' 'screen time changed after 90 s of input (see tracking-input.txt)'
+  $m0 = Get-ScreenMinutes
+  Keep-Input 300
+  Start-Sleep 35                                   # the running app saves its live count every 30 s
+  $m1 = Get-ScreenMinutes
+  $okIn = ($m0 -ge 0 -and $m1 -ge 0 -and ($m1 - $m0) -ge 4 -and ($m1 - $m0) -le 6)
+  Write-Result $(if ($okIn) { 'PASS' } else { 'FAIL' }) 'tracking-input' "5 min of input counted $($m1 - $m0) min (before $m0, after $m1; expected 4 to 6)"
+  # Idle time below the 5 minute threshold still counts, so wait past the threshold, then check that the count stands still.
+  Start-Sleep 360; $m2 = Get-ScreenMinutes
+  Start-Sleep 180; $m3 = Get-ScreenMinutes
+  $okIdle = ($m2 -ge 0 -and $m3 -eq $m2 -and ($m2 - $m1) -le 5)
+  Write-Result $(if ($okIdle) { 'PASS' } else { 'FAIL' }) 'tracking-idle' "after 6 min idle $m2 min (+$($m2 - $m1) over the input run, at most 5 allowed); 3 min later $m3 min (must be equal)"
+  Set-Content "$script:dir\tracking-minutes.txt" @("start=$m0", "after input=$m1", "after 6 min idle=$m2", "after 9 min idle=$m3")
+  Keep-Input 20
   $held = Jump-Clock ([TimeSpan]::FromHours(26))
   Start-Sleep 20; Nudge
   $day = (Run-Cli @('today')).Text; $week = (Run-Cli @('week')).Text
   Set-Content "$script:dir\tracking-after-jump.txt" @('today', $day, 'week', $week)
+  $mJump = Get-ScreenMinutes
   $errors = @(Pulse-Log | Select-String -Pattern ' ERROR ').Count
   Restore-Clock
-  Write-Result $(if ($held -and $errors -eq 0 -and (Get-Process DigitalWellbeing -ErrorAction SilentlyContinue)) { 'PASS' } else { 'FAIL' }) 'tracking-day-change' "clock jump held=$held, Pulse running, error lines in log=$errors"
+  $okDay = ($held -and $errors -eq 0 -and (Get-Process DigitalWellbeing -ErrorAction SilentlyContinue) -and $mJump -le 2)
+  Write-Result $(if ($okDay) { 'PASS' } else { 'FAIL' }) 'tracking-day-change' "clock jump held=$held, Pulse running, error lines in log=$errors, today after the jump=$mJump min (a new day starts near 0)"
 }
 
 function Check-Ui {
@@ -109,7 +130,19 @@ function Check-Ui {
 
 function Check-Msix {
   $m = Get-ChildItem "$inRoot\msix" -Filter *.msix | Select-Object -First 1
-  try { Add-AppxPackage -Path $m.FullName -AllowUnsigned -ErrorAction Stop } catch { Write-Result 'FAIL' 'msix-install' "$_"; return }
+  # The package is unsigned and carries the Store publisher, so -AllowUnsigned is refused (0x80073D2C). Inside this
+  # sandbox only: make a self-signed certificate with the manifest's publisher, trust it, and sign a copy.
+  try {
+    $cert = New-SelfSignedCertificate -Type Custom -Subject $job.MsixPublisher -KeyUsage DigitalSignature -FriendlyName 'pulse-release-check' `
+      -CertStoreLocation 'Cert:\CurrentUser\My' -TextExtension @('2.5.29.37={text}1.3.6.1.5.5.7.3.3', '2.5.29.19={text}')
+    $cer = Join-Path $env:TEMP 'pulse-check.cer'; Export-Certificate -Cert $cert -FilePath $cer | Out-Null
+    Import-Certificate -FilePath $cer -CertStoreLocation 'Cert:\LocalMachine\TrustedPeople' | Out-Null
+    $signed = Join-Path $env:TEMP 'pulse-signed.msix'; Copy-Item $m.FullName $signed -Force
+    $st = Get-ChildItem "$desk\sdk" -Recurse -Filter signtool.exe | Where-Object { $_.FullName -match '\\x64\\' } | Select-Object -First 1
+    $o = & $st.FullName sign /fd SHA256 /sha1 $cert.Thumbprint /s My $signed 2>&1; Log "signtool: $($o -join ' | ')"
+    if ($LASTEXITCODE -ne 0) { throw "signtool exit $LASTEXITCODE" }
+    Add-AppxPackage -Path $signed -ErrorAction Stop
+  } catch { Write-Result 'FAIL' 'msix-install' "$_"; return }
   $pk = Get-AppxPackage -Name $job.MsixName
   Write-Result $(if ($pk) { 'PASS' } else { 'FAIL' }) 'msix-install' "package $($pk.PackageFullName) signature=$($pk.SignatureKind)"
   if (-not $pk) { return }
